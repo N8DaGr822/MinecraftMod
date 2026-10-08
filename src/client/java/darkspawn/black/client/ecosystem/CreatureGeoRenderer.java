@@ -51,7 +51,10 @@ public final class CreatureGeoRenderer<T extends Mob & AnimatedCreature, R exten
 		snapshots.ifPresent("body", bone -> { bone.skipRender(egg || cage); bone.skipChildrenRender(egg || cage); });
 		snapshots.ifPresent("egg", bone -> { bone.skipRender(!egg); bone.skipChildrenRender(!egg); });
 		snapshots.ifPresent("cage", bone -> { bone.skipRender(!cage); bone.skipChildrenRender(!cage); });
-		snapshots.ifPresent("crest", bone -> bone.setRotY(info.getOrDefaultGeckolibData(CreatureAnimations.SHIELD_ANGLE, 0F)));
+		snapshots.ifPresent("crest", bone -> {
+			bone.skipRender(egg || cage); bone.skipChildrenRender(egg || cage);
+			bone.setRotY(info.getOrDefaultGeckolibData(CreatureAnimations.SHIELD_ANGLE, 0F));
+		});
 		if (!info.getOrDefaultGeckolibData(DataTickets.IS_DEAD_OR_DYING, false) && !egg && !cage
 				&& info.getOrDefaultGeckolibData(CreatureAnimations.WARNING, 0) == 0
 				&& !info.getOrDefaultGeckolibData(CreatureAnimations.ACTIVE, false) && !info.getOrDefaultGeckolibData(CreatureAnimations.HIDING, false)) {
