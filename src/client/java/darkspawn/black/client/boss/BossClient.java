@@ -17,7 +17,7 @@ public final class BossClient {
 		EntityRenderers.register(BossEntities.TREE_SPIRIT, AncientTreeSpiritRenderer::new);
 		EntityRenderers.register(BossEntities.HEARTWOOD_SAPLING, TreeSpiritRenderer::new);
 		EntityRenderers.register(BossEntities.SPIRIT_SEED, context -> new ThrownItemRenderer<>(context, 2, true));
-		EntityRenderers.register(BossEntities.MUTANT_WOLF, MutantWolfRenderer::new);
+		EntityRenderers.register(BossEntities.MUTANT_WOLF, MutantWolfGeoRenderer::new);
 		EntityRenderers.register(BossEntities.FROST_WOLF, MutantWolfRenderer::new);
 		EntityRenderers.register(BossEntities.FROST_SHARD, context -> new ThrownItemRenderer<>(context, 2, true));
 		BossEntities.BIOME_BOSSES.forEach((profile, type) -> EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)));

@@ -1,5 +1,14 @@
 package darkspawn.black.boss;
 
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.constant.DataTickets;
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.util.GeckoLibUtil;
 import com.mojang.serialization.Codec;
 import darkspawn.black.health.BossHearts;
 import java.util.ArrayList;
@@ -18,10 +27,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -39,12 +50,37 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-public final class MutantWolf extends Monster {
+public final class MutantWolf extends Monster implements GeoEntity {
+	public static final int AWAKENING_TICKS = 60;
+	public static final int DEFEAT_TICKS = 60;
+	public static final DataTicket<Integer> ANIMATION_PHASE = DataTickets.create("darkspawn_wolf_phase", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTickets.create("darkspawn_wolf_windup", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTickets.create("darkspawn_wolf_recovery", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_ATTACK = DataTickets.create("darkspawn_wolf_attack", Integer.class);
+	public static final DataTicket<Boolean> ANIMATION_LEAPING = DataTickets.create("darkspawn_wolf_leaping", Boolean.class);
+	public static final DataTicket<Integer> ANIMATION_AWAKENING = DataTickets.create("darkspawn_wolf_awakening", Integer.class);
+	public static final DataTicket<Float> ANIMATION_LIFECYCLE_TIME = DataTickets.create("darkspawn_wolf_lifecycle_time", Float.class);
+	private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.mutant_wolf.idle");
+	private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.mutant_wolf.walk");
+	private static final RawAnimation WRATH_IDLE = RawAnimation.begin().thenLoop("animation.mutant_wolf.wrath_idle");
+	private static final RawAnimation POUNCE = RawAnimation.begin().thenLoop("animation.mutant_wolf.pounce");
+	private static final RawAnimation RECOVER = RawAnimation.begin().thenLoop("animation.mutant_wolf.recovery");
+	private static final RawAnimation AWAKEN = RawAnimation.begin().thenPlayAndHold("animation.mutant_wolf.awaken");
+	private static final RawAnimation DEFEAT = RawAnimation.begin().thenPlayAndHold("animation.mutant_wolf.defeat");
+	private static final RawAnimation[] CHARGES = {
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_wolf.charge_pounce"),
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_wolf.charge_volley"),
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_wolf.charge_burst")
+	};
+	private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 	private static final EntityDataAccessor<Integer> PHASE = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ATTACK_KIND = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> WINDUP = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> RECOVERY = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> LEAPING = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> AWAKENING = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> DEFEAT_TIME = SynchedEntityData.defineId(MutantWolf.class, EntityDataSerializers.INT);
 	private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(),
 			Component.translatable("boss.darkspawn.wolf.phase.1"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
 	private final Set<UUID> participants = new HashSet<>();
@@ -61,6 +97,43 @@ public final class MutantWolf extends Monster {
 		super(type, level);
 		setPersistenceRequired();
 		xpReward = 200;
+	}
+
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
+
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<MutantWolf>("movement", 4, test -> {
+			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)
+					|| test.getDataOrDefault(ANIMATION_AWAKENING, 0) > 0
+					|| test.getDataOrDefault(ANIMATION_WINDUP, 0) > 0
+					|| test.getDataOrDefault(ANIMATION_RECOVERY, 0) > 0
+					|| test.getDataOrDefault(ANIMATION_LEAPING, false)) { return PlayState.STOP; }
+			return test.setAndContinue(test.isMoving() ? WALK : test.getDataOrDefault(ANIMATION_PHASE, 1) == 3 ? WRATH_IDLE : IDLE);
+		}));
+		// Wolf Telegraph: Synced attack identity keeps all viewers on the same crouch, inhale, or howl pose.
+		var action = new AnimationController<MutantWolf>("action", 0, test -> {
+			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)
+					|| test.getDataOrDefault(ANIMATION_AWAKENING, 0) > 0) { return PlayState.STOP; }
+			if (test.getDataOrDefault(ANIMATION_LEAPING, false)) { return test.setAndContinue(POUNCE); }
+			if (test.getDataOrDefault(ANIMATION_WINDUP, 0) > 0) {
+				return test.setAndContinue(CHARGES[Math.clamp(test.getDataOrDefault(ANIMATION_ATTACK, 0), 0, 2)]);
+			}
+			return test.getDataOrDefault(ANIMATION_RECOVERY, 0) > 0 ? test.setAndContinue(RECOVER) : PlayState.STOP;
+		});
+		for (String name : List.of("frost_volley", "frost_burst", "land", "phase_change")) {
+			action.triggerableAnim(name, RawAnimation.begin().thenPlay("animation.mutant_wolf." + name));
+		}
+		controllers.add(action);
+		// Wolf Lifecycle: Saved server clocks keep the reveal and collapse aligned for arriving viewers.
+		controllers.add(new AnimationController<MutantWolf>("lifecycle", 0, test -> {
+			boolean dying = test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false);
+			if (!dying && test.getDataOrDefault(ANIMATION_AWAKENING, 0) == 0) { return PlayState.STOP; }
+			test.setAnimation(dying ? DEFEAT : AWAKEN);
+			test.controller().setAnimationTime(test.getDataOrDefault(ANIMATION_LIFECYCLE_TIME, 0F));
+			return PlayState.CONTINUE;
+		}));
 	}
 
 	public static AttributeSupplier.Builder attributes() {
@@ -80,17 +153,23 @@ public final class MutantWolf extends Monster {
 	protected void defineSynchedData(SynchedEntityData.Builder data) {
 		super.defineSynchedData(data);
 		data.define(PHASE, 1);
+		data.define(ATTACK_KIND, 0);
 		data.define(WINDUP, 0);
 		data.define(RECOVERY, 0);
 		data.define(LEAPING, false);
 		data.define(VARIANT, 0);
+		data.define(AWAKENING, AWAKENING_TICKS);
+		data.define(DEFEAT_TIME, 0);
 	}
 
 	public int phase() { return entityData.get(PHASE); }
+	public int attackKind() { return entityData.get(ATTACK_KIND); }
 	public int windup() { return entityData.get(WINDUP); }
 	public int recovery() { return entityData.get(RECOVERY); }
 	public boolean leaping() { return entityData.get(LEAPING); }
 	public int variant() { return entityData.get(VARIANT); }
+	public int awakening() { return entityData.get(AWAKENING); }
+	public int defeatTime() { return entityData.get(DEFEAT_TIME); }
 
 	public void prepareEncounter(ServerLevel level) {
 		var biome = level.getBiome(blockPosition());
@@ -108,6 +187,7 @@ public final class MutantWolf extends Monster {
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
+		if (isDeadOrDying()) { return; }
 		if (lastActiveTick < 0) {
 			lastActiveTick = level.getGameTime();
 		}
@@ -117,6 +197,21 @@ public final class MutantWolf extends Monster {
 			return;
 		}
 		bossBar.setProgress(getHealth() / getMaxHealth());
+		if (awakening() > 0) {
+			getNavigation().stop();
+			setSpeed(0);
+			setDeltaMovement(0, Math.min(0, getDeltaMovement().y), 0);
+			if (awakening() == AWAKENING_TICKS - 20) {
+				level.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_WARNING, SoundSource.HOSTILE, 4, 0.5F);
+			}
+			if (awakening() % 10 == 0) {
+				level.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + 2, getZ(), 24, 3, 1, 3, 0.05);
+			}
+			entityData.set(AWAKENING, awakening() - 1);
+			// Opening Timing: The reveal occupies the first three seconds of the existing five-second startup.
+			cooldown = Math.max(40, cooldown - 1);
+			return;
+		}
 		int nextPhase = BossPhase.advance(phase(), getHealth(), getMaxHealth());
 		if (nextPhase != phase()) {
 			// Pack Budget: Each crossed phase adds a finite wave, including a hit that skips phase two.
@@ -126,6 +221,7 @@ public final class MutantWolf extends Monster {
 			bossBar.setName(Component.translatable("boss.darkspawn.wolf.phase." + nextPhase));
 			entityData.set(WINDUP, 0);
 			cooldown = 60;
+			triggerAnim("action", "phase_change");
 			level.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_WARNING, SoundSource.HOSTILE, 4, 0.6F);
 		}
 		List<ServerPlayer> nearby = level.players().stream()
@@ -157,8 +253,10 @@ public final class MutantWolf extends Monster {
 					entityData.set(LEAPING, true);
 				} else {
 					if (attack == 2) {
+						triggerAnim("action", "frost_burst");
 						frostBurst(level, nearby, position(), 15);
 					} else {
+						triggerAnim("action", "frost_volley");
 						frostVolley(level, volleyTarget);
 					}
 					finishAttack();
@@ -183,6 +281,7 @@ public final class MutantWolf extends Monster {
 				attack = 1;
 			}
 			entityData.set(WINDUP, 40);
+			entityData.set(ATTACK_KIND, attack);
 			level.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_WARNING, SoundSource.HOSTILE, 4, 0.8F);
 		}
 	}
@@ -207,6 +306,7 @@ public final class MutantWolf extends Monster {
 		getNavigation().stop();
 		setSpeed(0);
 		if (++leapTicks > 1 && onGround()) {
+			triggerAnim("action", "land");
 			frostBurst(level, players, position(), 7);
 			if (phase() == 3) { frostVolley(level, volleyTarget); }
 			finishAttack();
@@ -292,6 +392,7 @@ public final class MutantWolf extends Monster {
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+		if (awakening() > 0 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) { return false; }
 		// Participation: Include the final attacker before death rewards run.
 		if (damage > 0 && source.getEntity() instanceof ServerPlayer player && eligible(player)) {
 			participants.add(player.getUUID());
@@ -317,8 +418,38 @@ public final class MutantWolf extends Monster {
 
 	@Override
 	public void die(DamageSource source) {
-		if (level() instanceof ServerLevel server) { removePack(server); }
+		stopTriggeredAnim("action", null);
+		if (level() instanceof ServerLevel server && !dead && !isRemoved()) {
+			entityData.set(AWAKENING, 0);
+			entityData.set(WINDUP, 0);
+			entityData.set(RECOVERY, 0);
+			entityData.set(LEAPING, false);
+			getNavigation().stop();
+			setSpeed(0);
+			// Airborne Defeat: Cancel horizontal/upward pounce momentum while retaining normal falling physics.
+			setDeltaMovement(0, Math.min(0, getDeltaMovement().y), 0);
+			bossBar.setVisible(false);
+			removePack(server);
+			server.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_DEATH, SoundSource.HOSTILE, 4, 0.5F);
+		}
 		super.die(source);
+	}
+
+	@Override
+	protected void tickDeath() {
+		deathTime++;
+		if (level() instanceof ServerLevel server && !isRemoved()) {
+			entityData.set(DEFEAT_TIME, Math.min(deathTime, DEFEAT_TICKS));
+			if (deathTime == 20 || deathTime == 40) {
+				server.sendParticles(ParticleTypes.SNOWFLAKE, true, false, getX(), getY() + 3, getZ(), 80, 3, 2, 3, 0.1);
+				server.playSound(null, blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.HOSTILE, 3, 0.5F);
+			}
+			// Defeat Removal: Vanilla die() owns rewards; extending the corpse lifetime must not award them again.
+			if (deathTime >= DEFEAT_TICKS) {
+				server.broadcastEntityEvent(this, (byte)60);
+				remove(Entity.RemovalReason.KILLED);
+			}
+		}
 	}
 
 	@Override
@@ -337,6 +468,7 @@ public final class MutantWolf extends Monster {
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
 		output.putInt("darkspawn_phase", phase());
+		output.putInt("darkspawn_awakening", awakening());
 		output.putInt("darkspawn_wolf_variant", variant());
 		output.putLong("darkspawn_last_active_tick", lastActiveTick);
 		output.store("darkspawn_participants", Codec.STRING.listOf(), participants.stream().map(UUID::toString).toList());
@@ -346,6 +478,10 @@ public final class MutantWolf extends Monster {
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+		// Existing Saves: Missing awakening data means an active wolf, never a new summon animation.
+		entityData.set(AWAKENING, Math.clamp(input.getIntOr("darkspawn_awakening", 0), 0, AWAKENING_TICKS));
+		entityData.set(DEFEAT_TIME, Math.clamp(deathTime, 0, DEFEAT_TICKS));
+		if (isDeadOrDying()) { bossBar.setVisible(false); }
 		entityData.set(PHASE, Math.clamp(input.getIntOr("darkspawn_phase", 1), 1, 3));
 		entityData.set(VARIANT, Math.clamp(input.getIntOr("darkspawn_wolf_variant", 0), 0, 2));
 		lastActiveTick = input.getLongOr("darkspawn_last_active_tick", level().getGameTime());
@@ -355,7 +491,7 @@ public final class MutantWolf extends Monster {
 		entityData.set(LEAPING, false);
 		entityData.set(RECOVERY, 0);
 		setDeltaMovement(Vec3.ZERO);
-		cooldown = 100;
+		cooldown = awakening() > 0 ? 40 + awakening() : 100;
 		participants.clear();
 		pack.clear();
 		for (String id : input.read("darkspawn_participants", Codec.STRING.listOf()).orElse(List.of())) {

@@ -143,6 +143,160 @@ public final class BossEncounterGameTest {
 	}
 
 	@GameTest(skyAccess = true)
+	public void wolfAnimationsKeepAttackIdentityWarningsAndRecovery(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		MutantWolf boss = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		boss.setOnGround(true);
+		level.addFreshEntity(boss);
+		try {
+			boolean checkedReload = false;
+			for (int phase = 1; phase <= 3; phase++) {
+				boss.setHealth(boss.getMaxHealth() * (phase == 1 ? 1 : phase == 2 ? 0.6F : 0.3F));
+				boss.customServerAiStep(level);
+				var released = new java.util.HashSet<Integer>();
+				boolean pounced = false;
+				for (int tick = 0; tick < 650; tick++) {
+					int warning = boss.windup(), kind = boss.attackKind();
+					boolean leaping = boss.leaping();
+					boss.commonTick(); boss.customServerAiStep(level);
+					if (warning == 0 && boss.windup() > 0) {
+						helper.assertTrue(boss.windup() == 40, "Wolf animation shortened the two-second warning");
+					}
+					if (warning > 0) {
+						helper.assertTrue(boss.windup() == warning - 1 && boss.attackKind() == kind,
+							"Charge pose identity changed before the committed attack finished");
+						if (boss.windup() == 0) {
+							released.add(kind);
+							if (kind == 0) { helper.assertTrue(boss.leaping(), "Pounce did not select the airborne pose"); pounced = true; }
+							else { helper.assertTrue(boss.recovery() == (phase == 3 ? 20 : 40), "Frost attack lost its recovery window"); }
+						}
+					}
+					if (leaping && !boss.leaping()) {
+						helper.assertTrue(boss.recovery() == (phase == 3 ? 20 : 40), "Landing lost its recovery window");
+					}
+					if (!checkedReload && boss.leaping()) {
+						var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+						boss.saveWithoutId(output);
+						MutantWolf restored = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+						restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
+						helper.assertTrue(restored.windup() == 0 && restored.recovery() == 0 && !restored.leaping(),
+								"Reload resumed an unseen attack pose");
+						restored.discard(); checkedReload = true;
+					}
+				}
+				helper.assertTrue(boss.phase() == phase && released.size() == 3 && pounced,
+						"Wolf did not exercise all attack poses in phase " + phase);
+			}
+			helper.assertTrue(checkedReload, "The airborne reload path was not exercised");
+		} finally {
+			level.getEntitiesOfClass(FrostShard.class, boss.getBoundingBox().inflate(32), shard -> shard.getOwner() == boss).forEach(FrostShard::discard);
+			boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void wolfAwakeningResumesWithoutChangingTheOpeningWarning(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		MutantWolf boss = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		level.addFreshEntity(boss);
+		try {
+			float health = boss.getHealth();
+			helper.assertTrue(boss.awakening() == 60, "New wolf skipped its summon animation");
+			helper.assertTrue(!boss.hurtServer(level, level.damageSources().playerAttack(player), 50), "Summoning wolf accepted ordinary damage");
+			boss.setDeltaMovement(1, 0.5, 1);
+			for (int tick = 0; tick < 20; tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+			helper.assertTrue(boss.getDeltaMovement().equals(Vec3.ZERO), "Wolf moved during its summon pose");
+			var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+			boss.saveWithoutId(output);
+			var saved = output.buildResult();
+			MutantWolf restored = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
+			helper.assertTrue(restored.awakening() == 40, "Reload restarted or skipped a partial summon");
+			for (int tick = 0; tick < 40; tick++) {
+				boss.commonTick(); boss.customServerAiStep(level);
+				restored.commonTick(); restored.customServerAiStep(level);
+				helper.assertTrue(boss.windup() == 0 && !boss.leaping() && restored.windup() == 0, "Wolf attacked while summoning");
+			}
+			helper.assertTrue(boss.awakening() == 0 && restored.awakening() == 0 && boss.getHealth() == health, "Summon failed to finish safely");
+			for (int tick = 0; tick < 39; tick++) {
+				boss.commonTick(); boss.customServerAiStep(level);
+				restored.commonTick(); restored.customServerAiStep(level);
+			}
+			helper.assertTrue(boss.windup() == 0 && restored.windup() == 0, "Wolf attacked before the original startup expired");
+			boss.commonTick(); boss.customServerAiStep(level);
+			restored.commonTick(); restored.customServerAiStep(level);
+			helper.assertTrue(boss.windup() == 40 && restored.windup() == 40, "Reload or awakening changed the opening warning");
+			helper.assertTrue(boss.hurtServer(level, level.damageSources().generic(), 5), "Wolf remained protected after awakening");
+			// Save Compatibility: Existing active wolves must not gain a second protected reveal.
+			saved.remove("darkspawn_awakening");
+			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
+			helper.assertTrue(restored.awakening() == 0, "Old encounter save replayed the summon animation");
+			restored.discard();
+			MutantWolf commanded = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+			helper.assertTrue(commanded.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE), "Summon protection blocked administrative removal");
+			commanded.discard();
+		} finally { boss.discard(); removePlayer(player); }
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void wolfDefeatCancelsPouncesAndResumesWithoutDuplicateRewards(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		MutantWolf boss = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		boss.setOnGround(true);
+		level.addFreshEntity(boss);
+		try {
+			boss.setHealth(boss.getMaxHealth() * 0.6F);
+			for (int tick = 0; tick < 240 && !boss.leaping(); tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+			helper.assertTrue(boss.phase() == 2 && boss.leaping(), "Defeat test did not reach a phase-two pounce");
+			boss.commonTick(); boss.customServerAiStep(level);
+			helper.assertTrue(boss.getDeltaMovement().y > 0, "Pounce had no upward momentum to cancel");
+			var packSave = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+			boss.saveWithoutId(packSave);
+			var packIds = TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), packSave.buildResult())
+					.read("darkspawn_pack", com.mojang.serialization.Codec.STRING.listOf()).orElseThrow();
+			var pack = packIds.stream().map(id -> level.getEntity(UUID.fromString(id))).toList();
+			helper.assertTrue(!pack.isEmpty() && pack.stream().allMatch(entity -> entity instanceof FrostWolf), "Defeat test has no living pack to clean up");
+			var area = boss.getBoundingBox().inflate(32);
+			var previousItems = level.getEntitiesOfClass(ItemEntity.class, area).stream().map(ItemEntity::getUUID).collect(java.util.stream.Collectors.toSet());
+			boss.setOnGround(false);
+			boss.hurtServer(level, level.damageSources().playerAttack(player), 10000);
+			helper.assertTrue(boss.isDeadOrDying() && !boss.isRemoved() && !boss.leaping()
+					&& boss.windup() == 0 && boss.recovery() == 0, "Lethal hit did not replace the pounce with a collapse");
+			helper.assertTrue(boss.getDeltaMovement().equals(Vec3.ZERO), "Defeated wolf retained upward or horizontal pounce momentum");
+			helper.assertTrue(pack.stream().allMatch(net.minecraft.world.entity.Entity::isRemoved), "Pack survived the start of the collapse");
+			var drops = level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID()));
+			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.ALPHA_FANG)).count() == 1, "Defeat must award one Alpha Fang");
+			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.HEARTS.get(BossKind.MUTANT_WOLF))).count() == 1, "Defeat must reserve one wolf heart");
+			boss.die(level.damageSources().playerAttack(player));
+			for (int tick = 0; tick < 20; tick++) { boss.tickDeath(); }
+			helper.assertTrue(!boss.isRemoved() && boss.defeatTime() == 20, "Vanilla death removal cut the collapse short");
+			var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+			boss.saveWithoutId(output);
+			MutantWolf restored = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
+			helper.assertTrue(restored.isDeadOrDying() && restored.defeatTime() == 20 && restored.awakening() == 0, "Reload restarted the defeated wolf's animation");
+			for (int tick = 20; tick < 59; tick++) {
+				boss.tickDeath(); restored.tickDeath(); restored.customServerAiStep(level);
+			}
+			helper.assertTrue(!boss.isRemoved() && !restored.isRemoved(), "Wolf disappeared before its three-second collapse completed");
+			boss.tickDeath(); restored.tickDeath();
+			helper.assertTrue(boss.isRemoved() && restored.isRemoved(), "Completed collapse left a corpse behind");
+			helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID())).size() == drops.size(),
+					"Collapse, repeated death, or reload duplicated the wolf's rewards");
+			drops.forEach(ItemEntity::discard);
+		} finally { boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player); }
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
 	public void treeWarningsMatchTheirDamageAreasAndReachFlyingPlayers(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		var particles = new ArrayList<ClientboundLevelParticlesPacket>();
