@@ -6,7 +6,7 @@ import java.util.Set;
 public final class CreatureAssets {
 	public static final Set<String> BOSSES = Set.of("fossil_tyrant", "thunder_bird", "titan_boa", "baba_yaga", "mountain_titan", "ice_wyrm", "kraken", "cave_crawler", "shadow_creeper_queen", "mycelial_sovereign", "netherborn", "soulbound_colossus", "void_eye");
 	public static final Set<String> MOBS = Set.of("barkling");
-	public static final Set<String> MINIONS = Set.of("mutant_zombie_minion");
+	public static final Set<String> MINIONS = Set.of("mutant_zombie_minion", "fossil_tyrant_minion");
 	public static String texture(String id, String region) {
 		return id.startsWith("warped_") || id.equals("riftling") ? "netherborn_warped" : region;
 	}
