@@ -37,6 +37,12 @@ class Rig {
       for(const [time,values]of frames)a.keyframes.push({channel,uuid:this.uuid(name+'/'+key+'/'+time),time,color:-1,interpolation:'linear',data_points:[Object.fromEntries(['x','y','z'].map((axis,i)=>[axis,String(values[i])]))]});}
     this.model.animations.push({uuid:this.uuid('clip/'+name),name:`animation.${this.entry.id}.${name}`,loop,override:false,length,snapping:20,animators});
   }
+  fitHeight() {
+    const min=Math.min(...this.model.elements.map(c=>c.from[1])),max=Math.max(...this.model.elements.map(c=>c.to[1]));
+    const scale=this.entry.height*16/(max-min);
+    for(const c of this.model.elements){c.from[1]=(c.from[1]-min)*scale;c.to[1]=(c.to[1]-min)*scale;c.origin[1]=(c.origin[1]-min)*scale;}
+    for(const g of this.model.groups)g.origin[1]=(g.origin[1]-min)*scale;
+  }
   save(atlas) {
     const e=this.entry,png=fs.readFileSync(atlas),folder=`art/blockbench/${e.id}`,base=e.id.split('_').map(s=>s[0].toUpperCase()+s.slice(1)).join('');
     fs.mkdirSync(folder,{recursive:true});
