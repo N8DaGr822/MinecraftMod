@@ -134,7 +134,7 @@ function buildShape(r, e) {
   if(skull){bone('jaw',[0,.3,0],'head');box('jaw','jaw',0,.14,-.08,.63,.13,.55);for(let i=0;i<5;i++)box('tooth_'+i,'jaw',(i-2)*.085,.25,-.36,.05,.09,.045);}
   else if(!eyeForm){for(const s of [-1,1])box('wisp_tail_'+s,'body',s*.16,0,.25,.07,.34,.09,3);}
   bone('crest',[0,.5,0],'root');
-  if(eyeForm||id==='shardling'){const count=e.category==='boss'?4:3;for(let i=0;i<count;i++){const a=i*Math.PI*2/count;bone('shield_'+i,[0,.5,0],'crest');box('obsidian_shard_'+i,'shield_'+i,Math.cos(a)*.5,.25,Math.sin(a)*.5,.14,.5,.14,0);box('shard_rune_'+i,'shield_'+i,Math.cos(a)*.5,.37,Math.sin(a)*.5-.076,.035,.18,.018,3);}}
+  if(eyeForm||id==='shardling'){const count=e.category==='boss'?4:3;for(let i=0;i<count;i++){const a=i*Math.PI*2/count+(id==='void_sentinel'?-Math.PI/2:0);bone('shield_'+i,[0,.5,0],'crest');box('obsidian_shard_'+i,'shield_'+i,Math.cos(a)*.5,.25,Math.sin(a)*.5,.14,.5,.14,0);box('shard_rune_'+i,'shield_'+i,Math.cos(a)*.5,.37,Math.sin(a)*.5-.076,.035,.18,.018,3);}}
   break;
  }
  default: throw Error('Missing anatomy '+e.form);

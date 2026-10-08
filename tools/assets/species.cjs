@@ -12,6 +12,7 @@ function details(r,e,shape) {
  const wounds=()=>{for(let i=0;i<3;i++)box('wound_'+i,'body',-.13+i*.11,.46+i*.08,-.203,.07,.11,.025,3);};
  const largeArm=()=>{for(const c of r.model.elements.filter(c=>/^left_arm|^left_fist/.test(c.name))){const x=(c.from[0]+c.to[0])/2;for(const a of [0,2]){const center=(c.from[a]+c.to[a])/2;c.from[a]=center+(c.from[a]-center)*1.75;c.to[a]=center+(c.to[a]-center)*1.75;}c.from[1]-=e.height*2;}};
  if(e.herald&&id!=='void_sentinel')crown();
+ if(e.region==='mutant_wolf'&&!['frostfang','frost_wolf'].includes(id))for(const c of r.model.elements)if(c.color===1)material(c,/mane|tuft/.test(c.name)?2:0);
  switch(id) {
  case 'barkling': case 'heartwood_sapling':box('leaf_canopy','head',0,.92,0,.75,.1,.64,1);box('heartwood_knot','body',0,.56,-.21,.14,.14,.045,3);break;
  case 'hollowed':box('broken_trunk_lip','head',-.14,.98,0,.08,.13,.12);break;
@@ -19,15 +20,15 @@ function details(r,e,shape) {
  case 'herbivore':case 'mossback':growths();break;
  case 'ancient_ent':crown(0);box('ancient_canopy','head',0,.98,0,.9,.13,.65,1);break;
  case 'dire_wolf':box('pack_muzzle_mark','head',0,.76,-.704,.09,.065,.018,3);break;
- case 'ravaged_wolf':for(const c of r.model.elements.filter(c=>/^leg_0_upper|^paw_0/.test(c.name))){c.from[0]-=e.width*.8;c.to[0]+=e.width*.8;}wounds();break;
+ case 'ravaged_wolf':for(const c of r.model.elements.filter(c=>/^leg_0_upper|^paw_0/.test(c.name))){c.from[0]-=e.width*1.2;c.to[0]+=e.width*1.2;}wounds();break;
  case 'frostfang':case 'frost_wolf':for(let i=0;i<4;i++)box('ice_mane_'+i,'body',0,.77,-.22+i*.13,.08,.18,.075,1);break;
- case 'alpha_dire_wolf':crown(1);box('alpha_mane','body',0,.6,-.16,.69,.24,.4,1);break;
+ case 'alpha_dire_wolf':crown(2);box('alpha_mane','body',0,.6,-.16,.69,.24,.4,2);break;
  case 'rotted_zombie':wounds();break;
  case 'brute_zombie':box('brute_shoulders','body',0,.67,0,.85,.16,.4,1);break;
  case 'leaping_zombie':for(const s of [-1,1])box('spring_tendon_'+s,'leg_'+(s===1?0:1),s*.16,.05,.15,.09,.3,.09,3);break;
  case 'mutant_huskling':case 'failed_mutant':case 'mutant_zombie_minion':largeArm();wounds();break;
- case 'bone_raptor':case 'fossil_tyrant_minion':remove(/ribcage|shoulder_mane/);box('dinosaur_spine','body',0,.64,0,.09,.09,.66);for(let i=0;i<5;i++)for(const s of [-1,1])box('exposed_rib_'+i+'_'+s,'body',s*.19,.35,-.25+i*.12,.055,.32,.05);break;
- case 'fossil_scorpion':plates(4,0);break;
+ case 'bone_raptor':case 'fossil_tyrant_minion':remove(/ribcage|shoulder_mane|ear_/);box('dinosaur_spine','body',0,.64,0,.09,.09,.66);box('raptor_skull_crest','head',0,.87,-.34,.08,.13,.27,0);for(let i=0;i<5;i++)for(const s of [-1,1])box('exposed_rib_'+i+'_'+s,'body',s*.19,.35,-.25+i*.12,.055,.32,.05);break;
+ case 'fossil_scorpion':plates(4,0);for(const c of r.model.elements.filter(c=>/^tail_arch|^stinger/.test(c.name))){c.from[1]*=1.4;c.to[1]*=1.4;}for(const g of r.model.groups.filter(g=>/^tail_/.test(g.name)))g.origin[1]*=1.4;break;
  case 'bone_vulture':box('bare_neck','head',0,.53,-.18,.12,.22,.14,0);remove(/crown|crest_/);break;
  case 'fossilized_husk':for(const s of [-1,1])box('sandstone_armour_'+s,s===1?'left_arm':'right_arm',s*.4,.51,-.14,.22,.19,.06,1);break;
  case 'tyrant_skull':box('elongated_fossil_snout','head',0,.32,-.4,.57,.29,.65,0);for(let i=0;i<6;i++)for(const s of [-1,1])box('tyrant_tooth_'+i+'_'+s,'head',s*.22,.2,-.18-i*.09,.045,.17,.045,3);break;
@@ -41,7 +42,7 @@ function details(r,e,shape) {
  case 'brood_serpent':for(const s of [-1,1])box('brood_hood_'+s,'neck',s*.13,.38,-.27,.16,.35,.12,1);break;
  case 'bogling':box('stolen_sack','body',0,.42,.23,.42,.27,.22,1);tusks();break;
  case 'hexed_frog':remove(/tail_|ear_/);for(const s of [-1,1])box('webbed_hindfoot_'+s,'leg_'+(s===1?3:2),s*.25,0,.26,.28,.08,.32,3);break;
- case 'swamp_wisp':case 'lost_soul':for(const c of r.model.elements)if(c.color===0)material(c,3);break;
+ case 'swamp_wisp':case 'lost_soul':for(const c of r.model.elements)if(c.color===0)material(c,id==='swamp_wisp'?2:3);break;
  case 'hexbound':case 'baba_yaga_minion':box('witch_hat_brim','head',0,.98,-.1,.62,.045,.58,2);box('witch_hat_tip','head',0,1.015,-.07,.26,.19,.25,2);box('potion_bottle','left_hand',.42,.37,-.16,.14,.16,.14,3);break;
  case 'babas_familiar':whiskers();box('witch_collar','body',0,.63,-.3,.46,.07,.16,3);break;
  case 'stoneback_goat':box('stone_carapace','body',0,.69,.08,.6,.2,.55,1);break;

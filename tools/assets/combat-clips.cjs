@@ -17,6 +17,7 @@ function clips(r,e) {
   const coils=amount=>names.filter(n=>/^segment_\d+$/.test(n)).forEach((n,i)=>put(n,[0,Math.sin(i*.7)*amount,0]));
   switch(name){
    case 'bite': put('head',[8,0,0]);put('neck',[-15,0,0]);put('jaw',[-38,0,0]);arms([0,-14,12],[0,14,-12]);break;
+   case 'tentacle':names.filter(n=>/^tentacle_\d+$/.test(n)).forEach(n=>put(n,[-6,0,0]));break;
    case 'slam':case 'eruption':case 'faultline':arms([135,0,12],[135,0,-12]);put('head',[12,0,0]);put('body',[5,0,0]);put('leg_0',[35,0,0]);break;
    case 'boulders':arms([35,0,15],[150,-12,-8]);put('head',[0,12,0]);break;
    case 'sweep':put('body',[0,-20,0]);arms([70,-30,18],[65,20,-18]);names.filter(n=>/^tail_\d+$/.test(n)).forEach(n=>put(n,[0,-24,0]));break;
@@ -39,7 +40,7 @@ function clips(r,e) {
   }
   return p;
  }
- const ability={SMASH:'slam',BOULDER:'boulders',POUNCE:'pounce',CHARGE:'charge',WIDOW:'pounce',CONSTRICT:'constrict',SEA_GRAB:'constrict',LIGHTNING:'lightning',DIVE:'charge',SOUL_KEEPER:'soul_cages',SIREN:'hex',VINES:'roots',SPORE:'spores',MYCELIUM:'fungal_growth',BROOD:'brood',POTION:'hex',SHADOW_CLEAVE:'sweep',SENTINEL:'beam',OBSERVE:'beam',MAGMA:'eruption'}[e.behavior]||'bite';
+ const ability=e.form==='TENTACLE'?'tentacle':{SMASH:'slam',BOULDER:'boulders',POUNCE:'pounce',CHARGE:'charge',WIDOW:'pounce',CONSTRICT:'constrict',SEA_GRAB:'constrict',LIGHTNING:'lightning',DIVE:'charge',SOUL_KEEPER:'soul_cages',SIREN:'hex',VINES:'roots',SPORE:'spores',MYCELIUM:'fungal_growth',BROOD:'brood',POTION:'hex',SHADOW_CLEAVE:'sweep',SENTINEL:'beam',OBSERVE:'beam',MAGMA:'eruption'}[e.behavior]||'bite';
  const attackNames=e.category==='boss'?attacks[e.id]||[]:['attack'];
  for(const name of attackNames){const p=pose(name==='attack'?ability:name);
   if(e.category==='boss')r.clip('windup_'+name,2,'hold',Object.entries(p).map(([b,v])=>rot(b,[[0,[0,0,0]],[.7,v],[2,v]])));
