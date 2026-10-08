@@ -1,0 +1,32 @@
+{
+	"parent": "minecraft:recipes/root",
+	"criteria": {
+		"has_breath": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "minecraft:dragon_breath"
+					}
+				]
+			}
+		},
+		"has_the_recipe": {
+			"trigger": "minecraft:recipe_unlocked",
+			"conditions": {
+				"recipes": "darkspawn:ancient_heartwood"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"has_breath",
+			"has_the_recipe"
+		]
+	],
+	"rewards": {
+		"recipes": [
+			"darkspawn:ancient_heartwood"
+		]
+	}
+}

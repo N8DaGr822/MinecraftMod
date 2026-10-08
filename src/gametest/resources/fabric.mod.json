@@ -1,0 +1,9 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn-gametest",
+	"version": "1.0.0",
+	"name": "Darkspawn Server Tests",
+	"environment": "server",
+	"entrypoints": {"fabric-gametest": ["darkspawn.black.boss.BossEncounterGameTest", "darkspawn.black.cooking.CookingGameTest"]},
+	"depends": {"darkspawn": "*", "fabric-gametest-api-v1": "*"}
+}

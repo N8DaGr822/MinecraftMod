@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn",
+	"version": "${version}",
+	"name": "Darkspawn",
+	"description": "Inventory upgrades, 16 post-dragon biome bosses, the Endborn, smithing powers, and permanent boss-heart progression.",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.Darkspawn"
+		],
+		"client": [
+			"darkspawn.black.client.DarkspawnClient"
+		],
+		"fabric-datagen": [
+			"darkspawn.black.client.DarkspawnDataGenerator"
+		]
+	},
+	"mixins": [
+		"darkspawn.mixins.json",
+		{
+			"config": "darkspawn.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

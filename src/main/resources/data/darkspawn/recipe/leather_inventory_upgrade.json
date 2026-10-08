@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SLS",
+		"LCL",
+		"SLS"
+	],
+	"key": {
+		"S": "minecraft:string",
+		"L": "minecraft:leather",
+		"C": "minecraft:chest"
+	},
+	"result": {
+		"id": "darkspawn:leather_inventory_upgrade"
+	}
+}

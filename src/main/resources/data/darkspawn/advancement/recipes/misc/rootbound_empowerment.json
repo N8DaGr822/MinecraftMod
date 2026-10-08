@@ -1,0 +1,32 @@
+{
+	"parent": "minecraft:recipes/root",
+	"criteria": {
+		"has_heartwood": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"items": "darkspawn:living_heartwood"
+					}
+				]
+			}
+		},
+		"has_the_recipe": {
+			"trigger": "minecraft:recipe_unlocked",
+			"conditions": {
+				"recipes": "darkspawn:rootbound_empowerment"
+			}
+		}
+	},
+	"requirements": [
+		[
+			"has_heartwood",
+			"has_the_recipe"
+		]
+	],
+	"rewards": {
+		"recipes": [
+			"darkspawn:rootbound_empowerment"
+		]
+	}
+}

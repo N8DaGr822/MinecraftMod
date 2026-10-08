@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" D ",
+		"DID",
+		" D "
+	],
+	"key": {
+		"D": "minecraft:diamond",
+		"I": "minecraft:iron_ingot"
+	},
+	"result": {
+		"id": "darkspawn:diamond_inventory_upgrade"
+	}
+}

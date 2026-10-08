@@ -1,0 +1,9 @@
+{
+	"parent": "minecraft:recipes/root",
+	"criteria": {
+		"has_material": {"trigger": "minecraft:inventory_changed", "conditions": {"items": [{"items": "minecraft:campfire"}]}},
+		"has_the_recipe": {"trigger": "minecraft:recipe_unlocked", "conditions": {"recipes": "darkspawn:cooking_station"}}
+	},
+	"requirements": [["has_material", "has_the_recipe"]],
+	"rewards": {"recipes": ["darkspawn:cooking_station"]}
+}
