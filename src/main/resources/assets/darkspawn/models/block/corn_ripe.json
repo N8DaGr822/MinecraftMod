@@ -1,0 +1,72 @@
+{
+  "textures": {
+    "fruit": "minecraft:block/yellow_concrete",
+    "particle": "#fruit"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        5,
+        3
+      ],
+      "to": [
+        6,
+        12,
+        6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fruit"
+        },
+        "up": {
+          "texture": "#fruit"
+        },
+        "north": {
+          "texture": "#fruit"
+        },
+        "south": {
+          "texture": "#fruit"
+        },
+        "west": {
+          "texture": "#fruit"
+        },
+        "east": {
+          "texture": "#fruit"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        4,
+        10
+      ],
+      "to": [
+        13,
+        11,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fruit"
+        },
+        "up": {
+          "texture": "#fruit"
+        },
+        "north": {
+          "texture": "#fruit"
+        },
+        "south": {
+          "texture": "#fruit"
+        },
+        "west": {
+          "texture": "#fruit"
+        },
+        "east": {
+          "texture": "#fruit"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "textures": {
+    "fruit": "minecraft:block/stripped_oak_log",
+    "particle": "#fruit"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        -1,
+        2
+      ],
+      "to": [
+        7,
+        3,
+        7
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fruit"
+        },
+        "up": {
+          "texture": "#fruit"
+        },
+        "north": {
+          "texture": "#fruit"
+        },
+        "south": {
+          "texture": "#fruit"
+        },
+        "west": {
+          "texture": "#fruit"
+        },
+        "east": {
+          "texture": "#fruit"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        -1,
+        9
+      ],
+      "to": [
+        14,
+        3,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fruit"
+        },
+        "up": {
+          "texture": "#fruit"
+        },
+        "north": {
+          "texture": "#fruit"
+        },
+        "south": {
+          "texture": "#fruit"
+        },
+        "west": {
+          "texture": "#fruit"
+        },
+        "east": {
+          "texture": "#fruit"
+        }
+      }
+    }
+  ]
+}

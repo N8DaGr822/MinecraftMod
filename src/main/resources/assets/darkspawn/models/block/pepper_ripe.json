@@ -1,0 +1,72 @@
+{
+  "textures": {
+    "fruit": "minecraft:block/red_terracotta",
+    "particle": "#fruit"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        5,
+        8,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fruit"
+        },
+        "up": {
+          "texture": "#fruit"
+        },
+        "north": {
+          "texture": "#fruit"
+        },
+        "south": {
+          "texture": "#fruit"
+        },
+        "west": {
+          "texture": "#fruit"
+        },
+        "east": {
+          "texture": "#fruit"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        2,
+        10
+      ],
+      "to": [
+        12,
+        7,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fruit"
+        },
+        "up": {
+          "texture": "#fruit"
+        },
+        "north": {
+          "texture": "#fruit"
+        },
+        "south": {
+          "texture": "#fruit"
+        },
+        "west": {
+          "texture": "#fruit"
+        },
+        "east": {
+          "texture": "#fruit"
+        }
+      }
+    }
+  ]
+}

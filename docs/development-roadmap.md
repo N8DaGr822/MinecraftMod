@@ -146,6 +146,25 @@ The 14 remaining regions add 74 independently registered creatures/discoveries, 
 - Habitat checks use immediately updated height maps for cover and actual overhead water depth for the rare ocean serpent. They do not depend on queued sky-light updates or a particular world generator's sea-level constant.
 - Manual release checks still include native spawn density, complete traversal/flight/swimming behavior, silhouettes and cues, generated/old-world exploration, and real two-client combat/discovery feedback. Headless tests establish logic and asset validity, not live combat feel or final artwork quality.
 
+## Milestone 3, first increment: ingredients and agriculture
+
+Status: **implemented; full regression build passed; live-client review pending**. After the completed ecosystem roster, the user selected the ingredients/agriculture milestone. This increment supplies the six base crops and butter; biome crop variants remain a later increment. Regional and everyday cuisine is the next delivery milestone.
+
+- Register onion, garlic, tomato, rice, corn, and pepper with separate seeds and the existing eight-age `CropBlock` lifecycle. Reuse native light, farmland hydration, density, bone meal, support removal, and saved block-state behavior. Rice uses ordinary farmland; this increment does not introduce paddies or two-block crop ownership.
+- Each immature crop drops one seed. Ripe crops yield one or two produce, one guaranteed seed, and the normal Fortune-compatible extra-seed roll (two to five seeds total without Fortune). No produce before maturity. Harvesting followed by manual or native farmer replanting makes every crop renewable.
+- Native seed/food integration: farmer planting and pickup tags, chicken food, and compostable components for seeds and produce. Five vegetables are ordinary raw foods with no meal effects; raw rice and butter are ingredients. Existing meals and Well Fed behavior retain their rules.
+- Add six novice farmer offers through Minecraft 26.3's data-driven `villager_trade` registry and additive `farmer/level_1` tag: two emeralds for four seeds, twelve uses, one villager XP, normal price adjustments and restocking. Keep vanilla trades and the native two-offer selection count. Saved offers are not rerolled or injected into existing locked villagers.
+- Add a Cooking Station recipe for one milk bucket to two butter, returning the bucket. Milk plus salt continues to make cheese. Salt, cheese, and Wild Herbs keep their existing renewable sources. The [player guide](../README.md#ingredients-and-agriculture) records several planned dish uses for each new ingredient; those recipes belong to milestone 4.
+- Agriculture is not dragon-gated. Farmer trades work in existing villages, and crops require player planting rather than new world generation. Ordinary crop growth and harvesting remain authoritative on the server with no new tick manager, networking, mixins, or dependencies.
+- Reuse vanilla foliage textures and inventory icons, with distinct ripe produce models and localized names. Custom textures, live-client growth/harvest visuals, trade balance, two-player farming, and existing-world upgrade playtests remain release checks.
+
+### Verification record
+
+- Common/client compilation and six focused agriculture server GameTests passed on 2026-10-08.
+- Full `gradlew.bat build --console=plain`: passed on 2026-10-08 with **55 unit tests and 68 server GameTests**, including eight new agriculture/butter server tests and one crop asset test. This is the combined workspace result, including the concurrent boss animation work. The packaged JAR contains the crop registration, butter recipe, ripe models, and additive farmer trade resources. The Windows runner used the existing process-local socket-directory workaround.
+- Server checks cover all six complete planting/bone-meal/harvest/replant loops, age-dependent loot, native random growth, saved age, seed identity, light/soil rejection without seed loss, chicken/farmer/compost integration, native farmer harvesting/replanting, trade-pool preservation, payment, depleted-stock save/load, and restocking.
+- Two new cooking server tests exercise butter batches, both mouse buttons, repeat-click rejection, full inventories, partial-stack overflow, bucket return, and preserved cheese matching. The recipe decoding suite includes butter; an asset test resolves all growth stages, ripe models, textures, icons, and translations.
+
 ## Decisions to settle at their milestone
 
 - **Custom meal identities:** prototype Hearty (20% slower hunger drain), Hunter's Instinct, Surefooted, Iron Stomach, Deep Breath, and Energized. Define each precisely and test interactions before promising exact percentages.

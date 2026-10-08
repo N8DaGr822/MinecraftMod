@@ -106,6 +106,48 @@ public final class CookingGameTest {
 	}
 
 	@GameTest
+	public void butterCraftingReturnsTwoPortionsAndOneBucket(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		try {
+			for (int button = 0; button <= 1; button++) {
+				CookingMenu menu = new CookingMenu(1, player.getInventory());
+				menu.getSlot(2).set(new ItemStack(Items.MILK_BUCKET));
+				helper.assertTrue(menu.getSlot(4).getItem().is(Cooking.BUTTER) && menu.getSlot(4).getItem().getCount() == 2, "One milk bucket must preview two butter");
+				menu.clicked(4, button, ContainerInput.PICKUP, player);
+				helper.assertTrue(menu.getCarried().is(Cooking.BUTTER) && menu.getCarried().getCount() == 2, "Either mouse button must take the complete butter batch");
+				helper.assertTrue(menu.getSlot(2).getItem().is(Items.BUCKET) && menu.getSlot(2).getItem().getCount() == 1, "Butter must return one empty bucket");
+				menu.setCarried(ItemStack.EMPTY);
+				menu.clicked(4, button, ContainerInput.PICKUP, player);
+				helper.assertTrue(menu.getCarried().isEmpty(), "Repeated clicks must not duplicate butter");
+			}
+			CookingMenu separate = new CookingMenu(2, player.getInventory());
+			separate.getSlot(0).set(new ItemStack(Items.MILK_BUCKET));
+			separate.getSlot(1).set(new ItemStack(Cooking.SALT));
+			helper.assertTrue(separate.getSlot(4).getItem().is(Cooking.CHEESE), "Salted milk must still make the existing cheese recipe");
+		} finally { removePlayer(player); }
+		helper.succeed();
+	}
+
+	@GameTest
+	public void butterShiftClickConservesBatchWithFullOrPartialInventory(GameTestHelper helper) {
+		ServerPlayer player = player(helper);
+		try {
+			for (int i = 0; i < 36; i++) { player.getInventory().setItem(i, new ItemStack(Items.STONE, 64)); }
+			CookingMenu menu = new CookingMenu(1, player.getInventory());
+			menu.getSlot(0).set(new ItemStack(Items.MILK_BUCKET));
+			menu.clicked(4, 0, ContainerInput.QUICK_MOVE, player);
+			helper.assertTrue(menu.getSlot(0).getItem().is(Items.MILK_BUCKET), "A full inventory must leave the milk untouched");
+			player.getInventory().setItem(8, new ItemStack(Cooking.BUTTER, 63));
+			menu.clicked(4, 0, ContainerInput.QUICK_MOVE, player);
+			int dropped = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+					player.getBoundingBox().inflate(3), item -> item.getItem().is(Cooking.BUTTER)).stream().mapToInt(item -> item.getItem().getCount()).sum();
+			helper.assertTrue(count(player, Cooking.BUTTER) + dropped == 65, "A partial stack must retain both crafted portions, dropping only overflow");
+			helper.assertTrue(menu.getSlot(0).getItem().is(Items.BUCKET) && menu.getSlot(4).getItem().isEmpty(), "Partial insertion must consume milk exactly once and return the bucket");
+		} finally { removePlayer(player); }
+		helper.succeed();
+	}
+
+	@GameTest
 	public void fullInventoryAndInvalidRecipesCannotLoseOrCreateItems(GameTestHelper helper) {
 		ServerPlayer player = player(helper);
 		try {

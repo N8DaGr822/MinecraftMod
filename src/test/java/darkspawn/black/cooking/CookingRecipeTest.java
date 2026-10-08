@@ -58,6 +58,7 @@ class CookingRecipeTest {
 	void allPackagedRecipesDecodeAndAcceptReorderedInputs() throws Exception {
 		matches("salt", Cooking.SALT, Items.WATER_BUCKET);
 		matches("cheese", Cooking.CHEESE, Items.MILK_BUCKET, Cooking.SALT);
+		matches("butter", Cooking.BUTTER, Items.MILK_BUCKET);
 		matches("herb_steak", Cooking.HERB_STEAK, Items.COOKED_BEEF, Items.DANDELION);
 		matches("honey_pork", Cooking.HONEY_PORK, Items.COOKED_PORKCHOP, Items.HONEY_BOTTLE);
 		matches("beef_wellington", Cooking.BEEF_WELLINGTON, Items.COOKED_BEEF, Items.WHEAT, Items.RED_MUSHROOM);

@@ -22,6 +22,7 @@ Right-click the station and combine up to four ingredients **in any order**, one
 | --- | --- | --- | --- |
 | Salt | Water bucket | — | Ingredient only |
 | Cheese | Milk bucket + salt | 3 / 3.0 | None |
+| Butter ×2 | Milk bucket | — | Ingredient only |
 | Herb Steak | Cooked beef + dandelion | 8 / 12.8 | Night Vision, 3:00 |
 | Honey Pork | Cooked porkchop + honey bottle | 8 / 12.8 | Regeneration I, 0:15 |
 | Beef Wellington | Cooked beef + wheat + red or brown mushroom | 10 / 16.0 | +3 attack damage, 2:00 |
@@ -35,9 +36,31 @@ Meals stack to 16 and can be eaten at full hunger to change buffs. **Only one We
 
 Meal timers survive saves, reconnects, and dimension changes, pause while offline, and clear on death or when drinking milk. Meal replacement removes only meal-owned effects and attribute modifiers. The five effect variants use vanilla saving and synchronization; vision and breathing checks recognize their dedicated meal effects without overwriting vanilla potion instances. Both client and server must use this updated mod.
 
-Cooking recipes live in `data/darkspawn/recipe` with type `darkspawn:cooking`, support one to four ingredients, and can be overridden by data packs. Meal recipes are station-only; they do not appear in the vanilla crafting-table recipe book. This table is the starter recipe guide. Icons and the station model currently reuse vanilla artwork. Further biome dishes, feasts, boss foods, crops, and food-diversity bonuses are planned in the [development roadmap](docs/development-roadmap.md).
+Cooking recipes live in `data/darkspawn/recipe` with type `darkspawn:cooking`, support one to four ingredients, and can be overridden by data packs. Meal recipes are station-only; they do not appear in the vanilla crafting-table recipe book. This table is the starter recipe guide. Icons and the station model currently reuse vanilla artwork. Further biome dishes, feasts, boss foods, biome crop variants, and food-diversity bonuses are planned in the [development roadmap](docs/development-roadmap.md).
 
 Cooking tests cover recipe decoding and ingredient alternatives, network serialization, rejected recipes, shift-click item conservation, full inventories, container returns, menu closure, independent station sessions, meal replacement, potion preservation, milk, save/load, and effect expiration. The screen's appearance at different GUI scales and real two-client interactions still need live playtesting.
+
+## Ingredients and agriculture
+
+**Onion, garlic, tomato, rice, corn, and pepper** each have a crop and separate seeds. Novice farmers can offer **four seeds for two emeralds**, with twelve purchases before normal restocking. These six offers join the existing randomized novice trade pool; a farmer still selects two novice offers, so finding all six seeds can require several farmers. Existing locked trades are preserved. Seed trades, farming, and butter are available before the dragon fight and work in already-generated worlds without terrain changes.
+
+Plant seeds on farmland with adequate light. Crops use eight growth ages, normal farmland hydration and planting-density growth rules, and bone meal; rice also uses ordinary farmland in this release. Breaking an immature crop returns one seed. A mature crop gives **one or two produce and two to five seeds** before Fortune; Fortune increases the extra-seed roll. Replant manually or let a farmer collect the seeds and use normal harvesting behavior. Breaking the supporting farmland drops the crop normally. Seeds feed chickens, and both seeds and produce can be composted.
+
+| Ingredient | Raw hunger / saturation | Acquisition | Planned dish uses (next cuisine milestone) |
+| --- | --- | --- | --- |
+| Onion | 2 / 1.2 | Onion crop | Hunter's Stew, Bog Gumbo, advanced Woodland Stew |
+| Garlic | 1 / 0.6 | Garlic crop | Garlic bread, roast chicken, savory mushroom dishes |
+| Tomato | 3 / 1.8 | Tomato crop | Vegetable stew, pasta, pizza |
+| Rice | Ingredient only | Rice crop | Seafood bowl, curry, mushroom risotto |
+| Corn | 3 / 1.8 | Corn crop | Cornbread, roasted corn, hearty stew |
+| Pepper | 2 / 1.2 | Pepper crop | Spiced Steak, Tropical Skewer, chili |
+| Butter | Ingredient only | Milk bucket → two butter at the Cooking Station; returns the bucket | Garlic bread, baked potatoes, pastries |
+
+Raw vegetables restore normal food values and do not replace the active meal buff. The original meals keep their existing recipes. The dish examples above are planned uses, not newly craftable meals. Salt, cheese, and Wild Herbs retain their current renewable sources: water, milk plus salt, and Barkling shearing respectively.
+
+Seeds appear under Creative's **Natural Blocks**; produce and butter appear under **Food & Drinks**. For testing, use `/give @s darkspawn:onion_seeds` (or `garlic_seeds`, `tomato_seeds`, `rice_seeds`, `corn_seeds`, `pepper_seeds`), `/give @s darkspawn:butter`, or `/setblock ~ ~ ~ darkspawn:onion_crop[age=7]` above farmland. Each ripe crop has a distinguishing produce model. The growth foliage and inventory icons currently reuse vanilla artwork; custom textures and live-client visual review remain a polish task.
+
+Agriculture tests cover all six planting/growth/harvest/replant loops, bone meal consumption, premature harvesting, light and soil rejection, saved growth age, seed tags and composting, native farmer behavior, additive trades, payment, stock persistence and restocking, and butter batch/container conservation. Biome mutations and regional meals follow in later increments.
 
 ## Inventory sorting
 

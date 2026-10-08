@@ -43,6 +43,7 @@ public class Darkspawn implements ModInitializer {
 		BossEmpowerment.initialize();
 		BossHearts.initialize();
 		Cooking.initialize();
+		darkspawn.black.cooking.Agriculture.initialize();
 		ForestEcosystem.initialize();
 		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
 		darkspawn.black.ecosystem.EcosystemEffects.initialize();

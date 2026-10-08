@@ -35,6 +35,7 @@ public final class Cooking {
 			});
 	public static final Item SALT = register("salt", Item::new);
 	public static final Item WILD_HERBS = register("wild_herbs", Item::new);
+	public static final Item BUTTER = register("butter", Item::new);
 	public static final Item CHEESE = register("cheese", properties -> new Item(properties.food(new FoodProperties.Builder()
 			.nutrition(3).saturationModifier(0.5F).build())));
 	public static final MealItem HERB_STEAK = meal("herb_steak", 8, 0.8F, MealEffects.HERBAL, 180, false);
@@ -70,6 +71,7 @@ public final class Cooking {
 			entries.accept(SALT);
 			entries.accept(WILD_HERBS);
 			entries.accept(CHEESE);
+			entries.accept(BUTTER);
 			entries.accept(HERB_STEAK);
 			entries.accept(HONEY_PORK);
 			entries.accept(BEEF_WELLINGTON);
