@@ -6,7 +6,7 @@ function buildShape(r, e) {
  const box=(name,parent,x,y,z,dx,dy,dz,m=0)=>r.box(name,parent,x*w,y*h,z*w,dx*w,dy*h,dz*w,m);
  r.bone('root');bone('body',[0,.45,0],'root');
  const eye=(parent,x,y,z,size=.04)=>{box('eye_socket_'+x,parent,x,y,z,size*1.6,.07,.025,2);box('eye_'+x,parent,x,y+.018,z-.016,size,.031,.014,3);};
- const head=(x=0,y=.77,z=-.12)=>{bone('head_look',[x,y,z]);bone('head',[x,y,z],'head_look');};
+ const head=(x=0,y=.77,z=-.12,parent='body')=>{bone('head_look',[x,y,z],parent);bone('head',[x,y,z],'head_look');};
  const limb=(name,x,y,z,dx,dy,dz,m=0)=>{bone(name,[x,y,z]);box(name+'_upper',name,x,y-dy,z,dx,dy,dz,m);};
  const horns=(parent,y=.88)=>{for(const s of [-1,1]){box('horn_base_'+s,parent,s*.2,y,-.17,.06,.1,.07,3);box('horn_tip_'+s,parent,s*.22,y+.07,-.15,.035,.07,.045,3);}};
  const cap=(parent,x,y,z,size)=>{box('cap_gills_'+x+'_'+z,parent,x,y,z,size,.055,size,1);box('cap_rim_'+x+'_'+z,parent,x,y+.04,z,size*1.1,.09,size*1.1,0);box('cap_crown_'+x+'_'+z,parent,x,y+.115,z,size*.8,.09,size*.8,0);};
@@ -38,6 +38,7 @@ function buildShape(r, e) {
   if(biped)for(const s of [-1,1]){limb(s===1?'left_arm':'right_arm',s*.3,.7,-.18,.06,.17,.08);box('raptor_claw_'+s,s===1?'left_arm':'right_arm',s*.3,.5,-.22,.035,.08,.09,3);}
   for(let i=0;i<4;i++){bone('tail_'+i,[0,.6-i*.05,.29+i*.13],i?'tail_'+(i-1):'body');box('tail_'+i,'tail_'+i,0,.51-i*.05,.38+i*.13,.16-i*.03,.14-i*.025,.19,1);}
   if(nether){for(const s of [-1,1]){box('tusk_'+s,'head',s*.22,.55,-.55,.07,.44,.065,3);box('tusk_tip_'+s,'head',s*.22,.9,-.58,.043,.1,.05,3);}for(let i=0;i<5;i++)box('dorsal_coal_'+i,'body',0,.74,.2-i*.11,.15,.16,.07,2);}
+  if(id==='netherborn'){bone('blaze_crown',[0,.65,0]);for(let i=0;i<4;i++){const a=i*Math.PI/2;box('blaze_rod_'+i,'blaze_crown',Math.cos(a)*.44,.58,Math.sin(a)*.44,.055,.27,.055,2);}}
   if(wolf){for(let i=0;i<4;i++)box('mane_tuft_'+i,'body',0,.74,.17-i*.09,.18,.15,.08,1);}
   if(/goat|stormstrider|end_grazer/.test(id))horns('head');
   if(id==='hexed_frog'){box('frog_throat','head',0,.47,-.5,.4,.2,.25,3);for(const s of [-1,1])box('raised_eye_'+s,'head',s*.19,.85,-.43,.12,.15,.12,3);}
@@ -62,7 +63,7 @@ function buildShape(r, e) {
    if(ice)box('spine_'+i,'segment_'+i,x,.27+i*.007,z,.04,.13,.04,3);
   }
   bone('neck',[0,.22,-.26]);box('rising_neck','neck',0,.2,-.26,.18,.51,.18,0);box('neck_belly','neck',0,.26,-.355,.12,.42,.02,1);
-  head(0,.72,-.27);box('serpent_skull','head',0,.7,-.31,.29,.24,.3);box('brow','head',0,.9,-.35,.31,.1,.16,ice?1:0);
+  head(0,.72,-.27,'neck');box('serpent_skull','head',0,.7,-.31,.29,.24,.3);box('brow','head',0,.9,-.35,.31,.1,.16,ice?1:0);
   eye('head',-.095,.82,-.468);eye('head',.095,.82,-.468);
   bone('jaw',[0,.72,-.23],'head');box('lower_jaw','jaw',0,.62,-.35,.26,.085,.3,1);for(const s of [-1,1])box('fang_'+s,'head',s*.09,.61,-.455,.033,.14,.034,3);
   box('forked_tongue_base','jaw',0,.708,-.51,.03,.015,.13,2);for(const s of [-1,1])box('tongue_tip_'+s,'jaw',s*.025,.708,-.59,.02,.015,.055,2);
@@ -104,7 +105,7 @@ function buildShape(r, e) {
   box('mantle_lower','body',0,.2,0,.57,.42,.57,0);box('mantle_upper','body',0,.58,.03,.46,.27,.47,0);box('mantle_crown','body',0,.8,.04,.31,.2,.33,1);
   head(0,.4,-.15);for(const s of [-1,1]){box('eye_white_'+s,'head',s*.22,.48,-.285,.16,.12,.055,3);box('eye_pupil_'+s,'head',s*.22,.49,-.32,.035,.09,.014,1);}
   box('beak','body',0,.2,-.29,.15,.22,.13,1);
-  for(let i=0;i<8;i++){const a=i*Math.PI/4,x=Math.cos(a),z=Math.sin(a);bone('tentacle_'+i,[x*.23,.28,z*.23]);for(let j=0;j<3;j++){const name='tentacle_'+i+'_'+j;bone(name,[x*(.25+j*.09),.24-j*.07,z*(.25+j*.09)],j?'tentacle_'+i+'_'+(j-1):'tentacle_'+i);box('tentacle_segment_'+i+'_'+j,name,x*(.29+j*.09),.01+j*.015,z*(.29+j*.09),.14-j*.025,.22-j*.04,.14-j*.025,0);for(let k=0;k<2;k++)box('sucker_'+i+'_'+j+'_'+k,name,x*(.29+j*.09),.065+k*.06,z*(.29+j*.09)-.07,.05,.035,.025,2);}}
+  for(let i=0;i<8;i++){const a=i*Math.PI/4,x=Math.cos(a),z=Math.sin(a);bone('tentacle_'+i,[x*.23,.28,z*.23]);for(let j=0;j<5;j++){const name='tentacle_'+i+'_'+j,y=[.06,0,.02,.06,.15][j],radius=.29+j*.12;bone(name,[x*(radius-.06),y+.15,z*(radius-.06)],j?'tentacle_'+i+'_'+(j-1):'tentacle_'+i);box('tentacle_segment_'+i+'_'+j,name,x*radius,y,z*radius,.18-j*.02,.22-j*.025,.18-j*.02,0);for(let k=0;k<2;k++)box('sucker_'+i+'_'+j+'_'+k,name,x*radius,y+.045+k*.06,z*radius-(.09-j*.01),.045,.035,.025,2);}}
   break;
  }
  case 'FISH': {

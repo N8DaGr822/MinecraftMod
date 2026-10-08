@@ -353,13 +353,16 @@ class BossRosterTest {
 	@Test
 	void completedRegionalBossAssetsCoverEveryAttackAndBake() throws Exception {
 		var loader = new GeckoLibGsonLoader();
+		for (String id : CreatureAssets.BOSSES) { assertNotNull(getClass().getResource("/assets/darkspawn/geckolib/models/entity/" + id + ".geo.json"), id); }
 		for (var profile : BossProfile.values()) {
-			if (!CreatureAssets.BOSSES.contains(profile.id())) { continue; }
+			// Staged Artwork: Bake new resources before enabling their renderer in an individual asset commit.
+			if (profile == BossProfile.MUTANT_ZOMBIE || getClass().getResource("/assets/darkspawn/geckolib/models/entity/" + profile.id() + ".geo.json") == null) { continue; }
 			String path = "/assets/darkspawn/";
 			var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/" + profile.id()), resource(path + "geckolib/models/entity/" + profile.id() + ".geo.json").getAsJsonObject());
 			var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/" + profile.id()), resource(path + "geckolib/animations/entity/" + profile.id() + ".animation.json").getAsJsonObject(), MathParser.create());
 			assertFalse(model.isMissingno(), profile.id());
 			var names = new java.util.HashSet<>(List.of("idle", "walk", "wrath_idle", "charge", "recovery", "phase_change", "death"));
+			if (profile == BossProfile.MYCELIAL_SOVEREIGN) { names.add("awaken"); }
 			for (int phase = 1; phase <= 3; phase++) {
 				for (int variant = 0; variant <= 2; variant++) {
 					for (var attack : profile.attacks(phase, variant)) {
@@ -374,6 +377,7 @@ class BossRosterTest {
 				assertNotNull(animation, profile.id() + ": " + name);
 				assertTrue(animation.length() > 0);
 				if (name.startsWith("windup_")) { assertEquals(2, animation.length(), .001); }
+				if (name.equals("awaken")) { assertEquals(5, animation.length(), .001); }
 				for (var bone : animation.boneAnimations()) { assertTrue(model.getBone(bone.boneName()).isPresent(), bone.boneName()); }
 			}
 			try (var stream = getClass().getResourceAsStream(path + "textures/entity/" + profile.id() + ".png")) {

@@ -13,6 +13,7 @@ import java.util.Locale;
 public final class BiomeBossAnimations {
 	public static final DataTicket<Float> DEATH_TIME = DataTickets.create("darkspawn_biome_death_time", Float.class);
 	public static final DataTicket<Integer> AWAKENING = DataTickets.create("darkspawn_biome_awakening", Integer.class);
+	public static final DataTicket<Float> AGE = DataTickets.create("darkspawn_biome_age", Float.class);
 	private BiomeBossAnimations() { }
 
 	public static void register(BossProfile profile, AnimatableManager.ControllerRegistrar controllers) {
@@ -23,10 +24,12 @@ public final class BiomeBossAnimations {
 		var charge = RawAnimation.begin().thenLoop(prefix + "charge");
 		var recovery = RawAnimation.begin().thenLoop(prefix + "recovery");
 		var death = RawAnimation.begin().thenPlayAndHold(prefix + "death");
+		var awaken = RawAnimation.begin().thenPlayAndHold(prefix + "awaken");
 		var warnings = new EnumMap<BossAttack, RawAnimation>(BossAttack.class);
 		for (var attack : BossAttack.values()) { warnings.put(attack, RawAnimation.begin().thenPlayAndHold(prefix + "windup_" + attack.name().toLowerCase(Locale.ROOT))); }
 		controllers.add(new AnimationController<BiomeBoss>("movement", 3, test -> {
 			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)
+					|| test.getDataOrDefault(AWAKENING, 0) > 0
 					|| test.getDataOrDefault(BiomeBoss.ANIMATION_WINDUP, 0) > 0
 					|| test.getDataOrDefault(BiomeBoss.ANIMATION_RECOVERY, 0) > 0
 					|| test.getDataOrDefault(BiomeBoss.ANIMATION_CHARGING, false)) { return PlayState.STOP; }
@@ -34,6 +37,11 @@ public final class BiomeBossAnimations {
 		}));
 		var action = new AnimationController<BiomeBoss>("action", 0, test -> {
 			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)) { return PlayState.STOP; }
+			if (test.getDataOrDefault(AWAKENING, 0) > 0) {
+				test.setAnimation(awaken);
+				test.controller().setAnimationTime((100 - test.getDataOrDefault(AWAKENING, 0)) / 20.0);
+				return PlayState.CONTINUE;
+			}
 			if (test.getDataOrDefault(BiomeBoss.ANIMATION_CHARGING, false)) { return test.setAndContinue(charge); }
 			int windup = test.getDataOrDefault(BiomeBoss.ANIMATION_WINDUP, 0);
 			if (windup > 0) {

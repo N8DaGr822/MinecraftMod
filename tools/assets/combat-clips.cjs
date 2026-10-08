@@ -5,6 +5,10 @@ function clips(r,e) {
  const alive=(length,speed=1)=>keep([wave('head',0,1.5*speed,length),wave('jaw',0,2*speed,length,-2),...names.filter(n=>/^tail_\d+$|^segment_\d+$/.test(n)).map((n,i)=>wave(n,1,4*speed,length,0,i*.6)),...names.filter(n=>/^tentacle_\d+$/.test(n)).map((n,i)=>wave(n,0,5*speed,length,0,i*.7)),wave('left_wing',2,12*speed,length,6),wave('right_wing',2,-12*speed,length,-6),wave('left_wing_tip',2,8*speed,length),wave('right_wing_tip',2,-8*speed,length)]);
  const gait=(length,amount)=>keep([...alive(length),...names.filter(n=>/^leg_\d+$/.test(n)).map((n,i)=>wave(n,0,amount,length,0,(i%4===0||i%4===3)?0:Math.PI)),wave('left_arm',0,-amount*.55,length),wave('right_arm',0,amount*.55,length)]);
  r.clip('idle',3,'loop',alive(3));r.clip('walk',.9,'loop',gait(.9,24));
+ if(e.id==='mycelial_sovereign')r.clip('awaken',5,'hold',[
+  ['root','scale',[[0,[1,.25,1]],[2.5,[1,.625,1]],[5,[1,1,1]]]],
+  pos('root',[[0,[0,-r.model.elements.find(c=>c.name==='stalk').from[1]/16*.25,0]],[2.5,[0,-r.model.elements.find(c=>c.name==='stalk').from[1]/16*.625,0]],[3.3,[0,0,0]],[5,[0,0,0]]]),
+  ...['left_arm','right_arm','leg_0','leg_1'].map(n=>[n,'scale',[[0,[.001,.001,.001]],[2.5,[.001,.001,.001]],[3.3,[1,1,1]],[5,[1,1,1]]]])]);
  if(e.category==='boss'){r.clip('wrath_idle',1.2,'loop',alive(1.2,2));r.clip('charge',.45,'loop',gait(.45,38));r.clip('recovery',1.5,'loop',keep([wave('head',0,2,1.5,-12),wave('jaw',0,3,1.5,-9)]));}
  function pose(name) {
   let p={};const put=(bone,v)=>{if(has(bone))p[bone]=v;};
@@ -13,7 +17,7 @@ function clips(r,e) {
   const coils=amount=>names.filter(n=>/^segment_\d+$/.test(n)).forEach((n,i)=>put(n,[0,Math.sin(i*.7)*amount,0]));
   switch(name){
    case 'bite': put('head',[8,0,0]);put('neck',[-15,0,0]);put('jaw',[-38,0,0]);arms([0,-14,12],[0,14,-12]);break;
-   case 'slam':case 'eruption':case 'faultline':arms([135,0,12],[135,0,-12]);put('head',[12,0,0]);put('body',[5,0,0]);break;
+   case 'slam':case 'eruption':case 'faultline':arms([135,0,12],[135,0,-12]);put('head',[12,0,0]);put('body',[5,0,0]);put('leg_0',[35,0,0]);break;
    case 'boulders':arms([35,0,15],[150,-12,-8]);put('head',[0,12,0]);break;
    case 'sweep':put('body',[0,-20,0]);arms([70,-30,18],[65,20,-18]);names.filter(n=>/^tail_\d+$/.test(n)).forEach(n=>put(n,[0,-24,0]));break;
    case 'charge':case 'pounce':put('head',[-15,0,0]);put('body',[-6,0,0]);arms([38,0,0]);break;
@@ -41,7 +45,7 @@ function clips(r,e) {
   if(name==='charge'||name==='pounce')continue;
   const impact=Object.fromEntries(Object.entries(p).map(([b,v])=>[b,v.map(a=>-a*.38)]));
   if(name==='bite'&&has('jaw'))impact.jaw=[0,0,0];if(name==='wind'||name==='storm'){impact.left_wing=[0,0,-40];impact.right_wing=[0,0,40];}
-  if(name==='slam'||name==='eruption'||name==='faultline'){if(has('body'))impact.body=[-18,0,0];if(has('left_arm'))impact.left_arm=[20,0,0];if(has('right_arm'))impact.right_arm=[20,0,0];}
+  if(name==='slam'||name==='eruption'||name==='faultline'){if(has('body'))impact.body=[-18,0,0];if(has('left_arm'))impact.left_arm=[20,0,0];if(has('right_arm'))impact.right_arm=[20,0,0];if(has('leg_0'))impact.leg_0=[0,0,0];}
   r.clip(name,.8,'once',Object.entries(impact).map(([b,v])=>rot(b,[[0,p[b]||[0,0,0]],[.18,v],[.8,[0,0,0]]])));
  }
  if(e.category==='boss')r.clip('phase_change',2,'once',Object.entries(pose('brood')).map(([b,v])=>rot(b,[[0,[0,0,0]],[.6,v],[1.4,v],[2,[0,0,0]]])));
