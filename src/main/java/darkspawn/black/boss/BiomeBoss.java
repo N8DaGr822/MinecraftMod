@@ -1,5 +1,14 @@
 package darkspawn.black.boss;
 
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.constant.DataTickets;
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.util.GeckoLibUtil;
 import com.mojang.serialization.Codec;
 import darkspawn.black.health.BossHearts;
 import java.util.ArrayList;
@@ -45,12 +54,31 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class BiomeBoss extends Monster {
+public final class BiomeBoss extends Monster implements GeoEntity {
+	public static final DataTicket<Integer> ANIMATION_PHASE = DataTickets.create("darkspawn_biome_phase", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTickets.create("darkspawn_biome_windup", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTickets.create("darkspawn_biome_recovery", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_ATTACK = DataTickets.create("darkspawn_biome_attack", Integer.class);
+	public static final DataTicket<Boolean> ANIMATION_CHARGING = DataTickets.create("darkspawn_biome_charging", Boolean.class);
+	private static final RawAnimation ZOMBIE_IDLE = RawAnimation.begin().thenLoop("animation.mutant_zombie.idle");
+	private static final RawAnimation ZOMBIE_WALK = RawAnimation.begin().thenLoop("animation.mutant_zombie.walk");
+	private static final RawAnimation ZOMBIE_WRATH = RawAnimation.begin().thenLoop("animation.mutant_zombie.wrath_idle");
+	private static final RawAnimation ZOMBIE_CHARGE = RawAnimation.begin().thenLoop("animation.mutant_zombie.charge");
+	private static final RawAnimation ZOMBIE_RECOVERY = RawAnimation.begin().thenLoop("animation.mutant_zombie.recovery");
+	private static final RawAnimation[] ZOMBIE_WARNINGS = {
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_zombie.windup_slam"),
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_zombie.windup_boulders"),
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_zombie.windup_brood"),
+			RawAnimation.begin().thenPlayAndHold("animation.mutant_zombie.windup_charge")
+	};
+	private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 	private static final EntityDataAccessor<Integer> PHASE = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> WINDUP = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> RECOVERY = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> AWAKENING = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ATTACK = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> CHARGING = SynchedEntityData.defineId(BiomeBoss.class, EntityDataSerializers.BOOLEAN);
 	private final BossProfile profile;
 	private final ServerBossEvent bossBar;
 	private final Set<UUID> participants = new HashSet<>();
@@ -87,6 +115,38 @@ public final class BiomeBoss extends Monster {
 				.add(Attributes.ARMOR, profile == BossProfile.SHADOW_CREEPER_QUEEN ? 18 : 10).add(Attributes.STEP_HEIGHT, 1.5);
 	}
 	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+		// Zombie Assets: Only the zombie uses this rig; other regional bosses retain their existing renderers.
+		if (profile != BossProfile.MUTANT_ZOMBIE) { return; }
+		controllers.add(new AnimationController<BiomeBoss>("movement", 4, test -> {
+			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)
+					|| test.getDataOrDefault(ANIMATION_WINDUP, 0) > 0
+					|| test.getDataOrDefault(ANIMATION_RECOVERY, 0) > 0
+					|| test.getDataOrDefault(ANIMATION_CHARGING, false)) { return PlayState.STOP; }
+			return test.setAndContinue(test.isMoving() ? ZOMBIE_WALK : test.getDataOrDefault(ANIMATION_PHASE, 1) == 3 ? ZOMBIE_WRATH : ZOMBIE_IDLE);
+		}));
+		var action = new AnimationController<BiomeBoss>("action", 0, test -> {
+			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)) { return PlayState.STOP; }
+			if (test.getDataOrDefault(ANIMATION_CHARGING, false)) { return test.setAndContinue(ZOMBIE_CHARGE); }
+			int windup = test.getDataOrDefault(ANIMATION_WINDUP, 0);
+			if (windup > 0) {
+				int kind = test.getDataOrDefault(ANIMATION_ATTACK, BossAttack.SLAM.ordinal());
+				int pose = kind == BossAttack.BOULDERS.ordinal() ? 1 : kind == BossAttack.BROOD.ordinal() ? 2 : kind == BossAttack.CHARGE.ordinal() ? 3 : 0;
+				test.setAnimation(ZOMBIE_WARNINGS[pose]);
+				// Warning Clock: Joining viewers see the current point of the committed two-second windup.
+				test.controller().setAnimationTime((40 - windup) / 20.0);
+				return PlayState.CONTINUE;
+			}
+			return test.getDataOrDefault(ANIMATION_RECOVERY, 0) > 0 ? test.setAndContinue(ZOMBIE_RECOVERY) : PlayState.STOP;
+		});
+		for (String name : new String[] {"slam", "boulders", "brood", "phase_change"}) {
+			action.triggerableAnim(name, RawAnimation.begin().thenPlay("animation.mutant_zombie." + name));
+		}
+		controllers.add(action);
+	}
+	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder data) {
 		super.defineSynchedData(data);
 		data.define(PHASE, 1);
@@ -94,6 +154,8 @@ public final class BiomeBoss extends Monster {
 		data.define(RECOVERY, 0);
 		data.define(VARIANT, 0);
 		data.define(AWAKENING, 0);
+		data.define(ATTACK, BossAttack.SLAM.ordinal());
+		data.define(CHARGING, false);
 	}
 	public BossProfile profile() { return profile; }
 	public int phase() { return entityData.get(PHASE); }
@@ -101,6 +163,8 @@ public final class BiomeBoss extends Monster {
 	public int recovery() { return entityData.get(RECOVERY); }
 	public int variant() { return entityData.get(VARIANT); }
 	public int awakening() { return entityData.get(AWAKENING); }
+	public int attackKind() { return entityData.get(ATTACK); }
+	public boolean charging() { return entityData.get(CHARGING); }
 	private Component phaseName() { return Component.translatable("boss.darkspawn." + profile.id() + ".phase." + phase()); }
 	public static boolean eligible(Player player) { return player.isAlive() && !player.isCreative() && !player.isSpectator(); }
 	public static double scaledHealth(double base, long players) { return base * (1 + 0.5 * (Math.clamp(players, 1, 4) - 1)); }
@@ -148,6 +212,7 @@ public final class BiomeBoss extends Monster {
 			getNavigation().stop();
 			entityData.set(WINDUP, 0);
 			chargeTicks = 0;
+			entityData.set(CHARGING, false);
 			return;
 		}
 		lastActive = level.getGameTime();
@@ -164,6 +229,7 @@ public final class BiomeBoss extends Monster {
 			entityData.set(WINDUP, 0);
 			cooldown = 60;
 			level.playSound(null, blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 2, 0.7F);
+			if (profile == BossProfile.MUTANT_ZOMBIE) { triggerAnim("action", "phase_change"); }
 		}
 		if (chargeTicks > 0) { tickCharge(level); return; }
 		if (recovery() > 0) {
@@ -189,6 +255,7 @@ public final class BiomeBoss extends Monster {
 		if (--cooldown <= 0) {
 			var attacks = profile.attacks(phase(), variant());
 			attack = attacks.get(Math.floorMod(sequence, attacks.size()));
+			entityData.set(ATTACK, attack.ordinal());
 			selectedPlayer = target.getUUID();
 			aimed = target.getEyePosition().add(target.getDeltaMovement().scale(8));
 			marked = floor(level, target.getX(), target.getZ(), target.getY());
@@ -279,6 +346,15 @@ public final class BiomeBoss extends Monster {
 	}
 
 	private void executeAttack(ServerLevel level) {
+		// Attack Release: Animation follows the existing server event without delaying damage or projectiles.
+		if (profile == BossProfile.MUTANT_ZOMBIE) {
+			switch (attack) {
+				case SLAM -> triggerAnim("action", "slam");
+				case BOULDERS -> triggerAnim("action", "boulders");
+				case BROOD -> triggerAnim("action", "brood");
+				default -> { }
+			}
+		}
 		int count = 3 + (phase() - 1) * 2 + (variant() > 0 ? 2 : 0);
 		float damage = profile == BossProfile.SHADOW_CREEPER_QUEEN ? 16 + phase() * 2 : 10 + phase() * 2;
 		switch (attack) {
@@ -455,6 +531,7 @@ public final class BiomeBoss extends Monster {
 		chargeEnd = position().add(delta);
 		if (chargeEnd.distanceToSqr(arena) > 96 * 96) { return; }
 		chargeTicks = 1;
+		entityData.set(CHARGING, true);
 		chargeHits.clear();
 		getNavigation().stop();
 	}
@@ -463,6 +540,7 @@ public final class BiomeBoss extends Monster {
 		setSpeed(0);
 		if (chargeTicks > 28 || chargeTicks > 1 && horizontalCollision) {
 			chargeTicks = 0;
+			entityData.set(CHARGING, false);
 			setDeltaMovement(0, Math.min(0, getDeltaMovement().y), 0);
 			return;
 		}
@@ -603,6 +681,7 @@ public final class BiomeBoss extends Monster {
 	}
 	@Override
 	public void die(DamageSource source) {
+		if (profile == BossProfile.MUTANT_ZOMBIE) { stopTriggeredAnim("action", null); }
 		if (level() instanceof ServerLevel level) { cleanup(level); }
 		super.die(source);
 	}
@@ -654,6 +733,7 @@ public final class BiomeBoss extends Monster {
 		}
 		// Reload Safety: Save encounter progress but restart attacks with a complete warning.
 		entityData.set(WINDUP, 0); entityData.set(RECOVERY, 0);
+		entityData.set(CHARGING, false);
 		chargeTicks = 0; cooldown = 100;
 		setDeltaMovement(Vec3.ZERO);
 		setNoGravity(profile.flying() || profile == BossProfile.KRAKEN);

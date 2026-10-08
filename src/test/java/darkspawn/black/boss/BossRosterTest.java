@@ -311,6 +311,46 @@ class BossRosterTest {
 	}
 
 	@Test
+	void mutantZombieAssetsMatchItsSizeAndEveryPhaseAttack() throws Exception {
+		var loader = new GeckoLibGsonLoader();
+		var geometry = resource("/assets/darkspawn/geckolib/models/entity/mutant_zombie.geo.json").getAsJsonObject();
+		var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/mutant_zombie"), geometry);
+		var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/mutant_zombie"),
+				resource("/assets/darkspawn/geckolib/animations/entity/mutant_zombie.animation.json").getAsJsonObject(), MathParser.create());
+		assertFalse(model.isMissingno());
+		assertTrue(model.getBone("head_look").isPresent());
+		for (String name : List.of("idle", "walk", "wrath_idle", "windup_slam", "windup_boulders", "windup_brood",
+				"windup_charge", "slam", "boulders", "brood", "charge", "recovery", "phase_change")) {
+			var animation = animations.getAnimation("animation.mutant_zombie." + name);
+			assertNotNull(animation, name);
+			assertTrue(animation.length() > 0, name);
+			if (name.startsWith("windup_")) { assertEquals(2, animation.length(), 0.001, "Windups must match the server's warning"); }
+			for (var bone : animation.boneAnimations()) { assertTrue(model.getBone(bone.boneName()).isPresent(), name + ": " + bone.boneName()); }
+		}
+		double height = 0;
+		for (var value : geometry.getAsJsonArray("minecraft:geometry").get(0).getAsJsonObject().getAsJsonArray("bones")) {
+			var bone = value.getAsJsonObject();
+			if (!bone.has("cubes")) { continue; }
+			for (var cubeValue : bone.getAsJsonArray("cubes")) {
+				var cube = cubeValue.getAsJsonObject();
+				var origin = cube.getAsJsonArray("origin"); var size = cube.getAsJsonArray("size");
+				height = Math.max(height, (origin.get(1).getAsDouble() + size.get(1).getAsDouble()) / 16);
+				assertTrue(origin.get(1).getAsDouble() >= 0, "Resting feet must stay above the ground");
+				for (int axis : new int[] {0, 2}) {
+					assertTrue(origin.get(axis).getAsDouble() >= -64 && origin.get(axis).getAsDouble() + size.get(axis).getAsDouble() <= 64,
+							"The resting model must fit the existing eight-block ritual footprint");
+				}
+			}
+		}
+		assertEquals(BossEntities.BIOME_BOSSES.get(BossProfile.MUTANT_ZOMBIE).getDimensions().height(), height, 0.001);
+		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/mutant_zombie.png")) {
+			assertNotNull(stream); var texture = javax.imageio.ImageIO.read(stream); assertNotNull(texture);
+			assertEquals(texture.getWidth(), texture.getHeight());
+		}
+		Class.forName("darkspawn.black.client.boss.MutantZombieRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
+	}
+
+	@Test
 	void beamsHaveFiniteEndpointsAndSoulTheftCannotRemoveTheLastHeart() {
 		assertEquals(4, BiomeBoss.distanceToSegmentSquared(new Vec3(5, 2, 0), Vec3.ZERO, new Vec3(10, 0, 0)));
 		assertEquals(25, BiomeBoss.distanceToSegmentSquared(new Vec3(15, 0, 0), Vec3.ZERO, new Vec3(10, 0, 0)));

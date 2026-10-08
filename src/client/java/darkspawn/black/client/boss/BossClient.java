@@ -3,6 +3,7 @@ package darkspawn.black.client.boss;
 import darkspawn.black.boss.BossEmpowerment;
 import darkspawn.black.boss.BossEntities;
 import darkspawn.black.boss.BossItems;
+import darkspawn.black.boss.BossProfile;
 import darkspawn.black.health.BossHeartItem;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -20,7 +21,10 @@ public final class BossClient {
 		EntityRenderers.register(BossEntities.MUTANT_WOLF, MutantWolfGeoRenderer::new);
 		EntityRenderers.register(BossEntities.FROST_WOLF, MutantWolfRenderer::new);
 		EntityRenderers.register(BossEntities.FROST_SHARD, context -> new ThrownItemRenderer<>(context, 2, true));
-		BossEntities.BIOME_BOSSES.forEach((profile, type) -> EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)));
+		BossEntities.BIOME_BOSSES.forEach((profile, type) -> {
+			if (profile == BossProfile.MUTANT_ZOMBIE) { EntityRenderers.register(type, MutantZombieRenderer::new); }
+			else { EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)); }
+		});
 		BossEntities.MINIONS.forEach((profile, type) -> EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)));
 		EntityRenderers.register(BossEntities.BOSS_BOLT, context -> new ThrownItemRenderer<>(context, 2, true));
 		EntityRenderers.register(BossEntities.BOSS_HAZARD, BossHazardRenderer::new);

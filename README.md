@@ -157,6 +157,14 @@ Keep the `head_look` bone and all `animation.mutant_wolf.*` names when editing. 
 
 Defeat folds the legs beneath the wolf over three seconds, bows its head, and releases snow particles with cracking sounds. The boss bar disappears and the summoned pack is removed immediately. A lethal hit during a pounce cancels horizontal/upward momentum while retaining normal falling physics. Vanilla's sideways death roll is disabled for this authored collapse. Fang and heart rewards still drop once at death; waiting for or reloading the collapse does not duplicate them. The saved death timer resumes the collapse, and synchronized progress supplies both lifecycle poses to arriving viewers.
 
+## Mutant Zombie assets
+
+The [Mutant Zombie project](art/blockbench/mutant_zombie/MutantZombie.bbmodel) is authored at its existing fourteen-block height and eight-block ritual footprint. Its 68 cuboids and 19 bones give it oversized fists, a hunched back, articulated knees and elbows, a moving jaw, and torn teal/purple clothing. The embedded olive-skin/cloth/ivory atlas uses a 512-by-512 UV space; the [texture prompt](art/blockbench/mutant_zombie/texture-prompt.txt) records the built-in image-generation step.
+
+Thirteen GeckoLib clips cover idle, walking, wrath idle, four attack windups, slam, boulder throw, minion call, charging, recovery, and phase-change roar. Slam crouches into a two-fist ground impact. Committed attack identity and charging are synchronized from the server, preserving the existing two-second warnings, phase mechanics, damage, recovery windows, collision dimensions, and rewards. Reloads clear unfinished attack poses. The zombie minion keeps its existing renderer until its own asset pass.
+
+Keep the `head_look` bone and `animation.mutant_zombie.*` names when editing. Export geometry and animations to `src/main/resources/assets/darkspawn/geckolib/models/entity/mutant_zombie.geo.json` and `src/main/resources/assets/darkspawn/geckolib/animations/entity/mutant_zombie.animation.json`, and the texture to `src/main/resources/assets/darkspawn/textures/entity/mutant_zombie.png`. Custom summon/defeat sequences are not added by this combat-asset pass. Check attack visibility, foot contact, and animation timing in Minecraft before release.
+
 ## Remaining biome bosses
 
 All 16 boss families are implemented. The 14 encounters below join the Tree Spirit and Mutated Wolf. Each has a distinct animated model, three phases, a craftable summon, a smithing reward, and its own permanent-heart identity. All 16 regional ecosystems now have playable creature rosters and discovery rewards; the Endborn also remain available. Client visuals, natural population balance, and multiplayer combat still need playtesting.
@@ -296,7 +304,7 @@ For direct testing, use `/summon darkspawn:barkling`, `/summon darkspawn:hollowe
 
 The [development roadmap](docs/development-roadmap.md) sequences regional ecosystems, agriculture, meals, boss cuisine, progression rewards, Chef trades, feasts, cookbook discovery, and equipment powers. Later structures, journals, rematches, legendary items, and the Nexus are saved in its [deferred backlog](docs/development-roadmap.md#deferred-expansion-backlog). The original briefs are preserved under `docs/`.
 
-Models are custom animated cuboid silhouettes. The Endborn, Ancient Tree Spirit, and Mutant Wolf use custom Blockbench textures and GeckoLib animations; other creatures currently use vanilla textures, sounds, and item icons. They still need visual and balance iteration in a live client; headless checks do not establish combat feel or art polish.
+Models are custom animated cuboid silhouettes. The Endborn, Ancient Tree Spirit, Mutant Wolf, and Mutant Zombie use custom Blockbench textures and GeckoLib animations; other creatures currently use vanilla textures, sounds, and item icons. They still need visual and balance iteration in a live client; headless checks do not establish combat feel or art polish.
 
 Forest playtest checklist: compare a pre-dragon world with a post-dragon forest by day and night; check all four silhouettes and root warning visibility at normal particle settings; shear a Barkling twice and again after five minutes; repeat with a full inventory and a second player; reload during regrowth; dodge roots and test cover/elevation; obtain the Ent's summon and craft/eat the stew. Natural encounter frequency and two-client feedback remain manual release checks.
 

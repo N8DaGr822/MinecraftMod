@@ -89,6 +89,58 @@ public final class BossEncounterGameTest {
 	}
 
 	@GameTest(skyAccess = true)
+	public void zombieAnimationsPreservePhaseAttacksChargeAndReload(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		BiomeBoss boss = new BiomeBoss(BossEntities.BIOME_BOSSES.get(BossProfile.MUTANT_ZOMBIE), level, BossProfile.MUTANT_ZOMBIE);
+		boss.setPos(player.position().add(20, 0, 0));
+		level.addFreshEntity(boss);
+		try {
+			boolean reloadedWarning = false, reloadedCharge = false, finishedCharge = false;
+			for (int phase = 1; phase <= 3; phase++) {
+				boss.setHealth(boss.getMaxHealth() * (phase == 1 ? 1 : phase == 2 ? 0.6F : 0.3F));
+				boss.customServerAiStep(level);
+				var released = new java.util.HashSet<Integer>();
+				for (int tick = 0; tick < 800; tick++) {
+					int warning = boss.windup(), kind = boss.attackKind();
+					boolean charging = boss.charging();
+					boss.commonTick(); boss.customServerAiStep(level);
+					if (warning == 0 && boss.windup() > 0) { helper.assertTrue(boss.windup() == 40, "Zombie lost its two-second warning"); }
+					if (warning > 0) {
+						helper.assertTrue(boss.windup() == warning - 1 && boss.attackKind() == kind, "Zombie changed its committed attack pose");
+						if (boss.windup() == 0) {
+							released.add(kind);
+							helper.assertTrue(boss.recovery() == (phase == 3 ? 25 : 40), "Animation changed zombie recovery timing");
+							if (kind == BossAttack.CHARGE.ordinal()) { helper.assertTrue(boss.charging(), "Charge did not select its running pose"); }
+						}
+					}
+					if (charging && !boss.charging()) { finishedCharge = true; }
+					if (!reloadedWarning && boss.windup() > 0 || !reloadedCharge && boss.charging()) {
+						var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+						boss.saveWithoutId(output);
+						BiomeBoss restored = new BiomeBoss(BossEntities.BIOME_BOSSES.get(BossProfile.MUTANT_ZOMBIE), level, BossProfile.MUTANT_ZOMBIE);
+						restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
+						helper.assertTrue(restored.windup() == 0 && restored.recovery() == 0 && !restored.charging(), "Reload retained an unseen zombie attack");
+						helper.assertTrue(restored.phase() == boss.phase() && restored.getHealth() == boss.getHealth(), "Reload changed zombie progression");
+						reloadedWarning |= boss.windup() > 0; reloadedCharge |= boss.charging(); restored.discard();
+					}
+				}
+				for (BossAttack attack : BossProfile.MUTANT_ZOMBIE.attacks(phase, 0)) { helper.assertTrue(released.contains(attack.ordinal()), "Missing zombie attack: " + attack); }
+			}
+			helper.assertTrue(reloadedWarning && reloadedCharge && finishedCharge, "Charge completion and both reload paths must be exercised");
+			for (int tick = 0; tick < 600 && !boss.charging(); tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+			helper.assertTrue(boss.charging(), "No charge to cancel when players leave");
+			player.teleportTo(player.getX() + 200, player.getY(), player.getZ());
+			boss.customServerAiStep(level);
+			helper.assertTrue(!boss.charging() && boss.windup() == 0, "Zombie attack pose remained active without players");
+		} finally {
+			level.getEntitiesOfClass(BossBolt.class, boss.getBoundingBox().inflate(64), bolt -> bolt.getOwner() == boss).forEach(BossBolt::discard);
+			boss.discard(); removePlayer(player);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
 	public void treeAnimationsPreserveAttackWarningsRecoveryAndReload(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = player(helper);
