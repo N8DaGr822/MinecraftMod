@@ -10,14 +10,13 @@ function details(r,e,shape) {
  const whiskers=()=>{for(const s of [-1,1])box('whisker_'+s,'head',s*.23,.7,-.6,.19,.015,.015,3);};
  const tusks=()=>{for(const s of [-1,1])box('cheek_tusk_'+s,'head',s*.2,.67,-.31,.05,.15,.05,3);};
  const wounds=()=>{for(let i=0;i<3;i++)box('wound_'+i,'body',-.13+i*.11,.46+i*.08,-.203,.07,.11,.025,3);};
- const largeArm=()=>{for(const c of r.model.elements.filter(c=>/^left_arm|^left_fist/.test(c.name))){const x=(c.from[0]+c.to[0])/2;for(const a of [0,2]){const center=(c.from[a]+c.to[a])/2;c.from[a]=center+(c.from[a]-center)*1.75;c.to[a]=center+(c.to[a]-center)*1.75;}c.from[1]-=e.height*2;}};
+ const largeArm=()=>{for(const c of r.model.elements.filter(c=>/^left_arm|^left_fist/.test(c.name))){for(const a of [0,2]){const center=(c.from[a]+c.to[a])/2;c.from[a]=center+(c.from[a]-center)*1.75;c.to[a]=center+(c.to[a]-center)*1.75;}c.from[1]-=e.height*2;}};
  if(e.herald&&id!=='void_sentinel')crown();
  if(e.region==='mutant_wolf'&&!['frostfang','frost_wolf'].includes(id))for(const c of r.model.elements)if(c.color===1)material(c,/mane|tuft/.test(c.name)?2:0);
  switch(id) {
  case 'barkling': case 'heartwood_sapling':box('leaf_canopy','head',0,.92,0,.75,.1,.64,1);box('heartwood_knot','body',0,.56,-.21,.14,.14,.045,3);break;
  case 'hollowed':box('broken_trunk_lip','head',-.14,.98,0,.08,.13,.12);break;
  case 'rootcrawler':remove(/abdomen_plate/);for(let i=0;i<5;i++)box('root_fibre_'+i,'body',(i-2)*.08,.7,.2,.035,.25,.04,0);break;
- case 'herbivore':case 'mossback':growths();break;
  case 'ancient_ent':crown(0);box('ancient_canopy','head',0,.98,0,.9,.13,.65,1);break;
  case 'dire_wolf':box('pack_muzzle_mark','head',0,.76,-.704,.09,.065,.018,3);break;
  case 'ravaged_wolf':for(const c of r.model.elements.filter(c=>/^leg_0_upper|^paw_0/.test(c.name))){c.from[0]-=e.width*1.2;c.to[0]+=e.width*1.2;}wounds();break;
@@ -80,7 +79,7 @@ function details(r,e,shape) {
  case 'warped_wisp':for(let i=0;i<4;i++)box('wisp_spike_'+i,'head',(i-1.5)*.15,.89,0,.04,.17,.05,2);break;
  case 'riftling':box('rift_ring_top','head',0,1,0,.85,.08,.1,2);for(const s of [-1,1])box('rift_ring_side_'+s,'head',s*.39,.15,0,.08,.88,.1,2);break;
  case 'ash_ghoul':box('ash_hood','head',0,.87,.035,.53,.16,.42,1);wounds();break;
- case 'magma_brute':box('magma_core','body',0,.46,-.21,.29,.28,.04,2);break;
+ case 'magma_brute':remove(/sternum/);box('magma_core','body',0,.46,-.25,.29,.28,.04,2);break;
  case 'infernal_hoglin':plates(5,2);break;
  case 'crimson_spawn':growths();box('crimson_ridge','body',0,.83,0,.21,.2,.45,0);break;
  case 'warped_spawn':for(const s of [-1,1])box('warped_shoulder_'+s,s===1?'left_arm':'right_arm',s*.4,.75,0,.22,.15,.32,2);break;
