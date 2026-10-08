@@ -353,6 +353,7 @@ class BossRosterTest {
 	@Test
 	void completedRegionalBossAssetsCoverEveryAttackAndBake() throws Exception {
 		var loader = new GeckoLibGsonLoader();
+		assertEquals(java.util.Arrays.stream(BossProfile.values()).filter(profile -> profile != BossProfile.MUTANT_ZOMBIE).map(BossProfile::id).collect(java.util.stream.Collectors.toSet()), CreatureAssets.BOSSES);
 		for (String id : CreatureAssets.BOSSES) { assertNotNull(getClass().getResource("/assets/darkspawn/geckolib/models/entity/" + id + ".geo.json"), id); }
 		for (var profile : BossProfile.values()) {
 			// Staged Artwork: Bake new resources before enabling their renderer in an individual asset commit.
@@ -395,6 +396,7 @@ class BossRosterTest {
 		for (var kind : darkspawn.black.ecosystem.RegionalKind.values()) { textures.put(kind.id(), CreatureAssets.texture(kind.id(), kind.region.id())); }
 		for (var profile : BossProfile.values()) { textures.put(profile.id() + "_minion", profile.id()); }
 		textures.put("heartwood_sapling", "forest_creatures"); textures.put("frost_wolf", "mutant_wolf");
+		assertEquals(textures.keySet(), Stream.concat(CreatureAssets.MOBS.stream(), CreatureAssets.MINIONS.stream()).collect(java.util.stream.Collectors.toSet()), "Every registered ecosystem creature and minion needs a completed asset");
 		var loader = new GeckoLibGsonLoader();
 		for (var entry : textures.entrySet()) {
 			String id = entry.getKey(), path = "/assets/darkspawn/";
@@ -410,6 +412,21 @@ class BossRosterTest {
 				for (var bone : animation.boneAnimations()) { assertTrue(model.getBone(bone.boneName()).isPresent(), id + ": " + bone.boneName()); }
 			}
 			if (id.endsWith("_minion")) { assertTrue(model.getBone("egg").isPresent(), id); assertTrue(model.getBone("cage").isPresent(), id); }
+			if (id.equals("void_sentinel")) {
+				var bones = resource(path + "geckolib/models/entity/" + id + ".geo.json").getAsJsonObject().getAsJsonArray("minecraft:geometry").get(0).getAsJsonObject().getAsJsonArray("bones");
+				int shields = 0;
+				for (var value : bones) {
+					var bone = value.getAsJsonObject(); String name = bone.get("name").getAsString();
+					if (!name.startsWith("shield_")) { continue; }
+					var cube = bone.getAsJsonArray("cubes").get(0).getAsJsonObject();
+					var origin = cube.getAsJsonArray("origin"); var size = cube.getAsJsonArray("size");
+					double x = -(origin.get(0).getAsDouble() + size.get(0).getAsDouble() / 2), z = -(origin.get(2).getAsDouble() + size.get(2).getAsDouble() / 2);
+					double radius = Math.hypot(x, z), angle = Integer.parseInt(name.substring(7)) * Math.PI * 2 / 3;
+					// Shield Alignment: Renderer body rotation is 180 degrees at yaw zero; match server protection sectors.
+					assertEquals(Math.sin(angle), x / radius, .001); assertEquals(Math.cos(angle), z / radius, .001); shields++;
+				}
+				assertEquals(3, shields);
+			}
 			try (var stream = getClass().getResourceAsStream(path + "textures/entity/" + entry.getValue() + ".png")) { assertNotNull(stream, id); assertNotNull(javax.imageio.ImageIO.read(stream), id); }
 		}
 		Class.forName("darkspawn.black.client.ecosystem.CreatureGeoRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
