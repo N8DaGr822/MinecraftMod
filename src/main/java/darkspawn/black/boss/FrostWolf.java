@@ -14,7 +14,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public final class FrostWolf extends Monster {
+public final class FrostWolf extends Monster implements AnimatedCreature {
+	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	private UUID owner;
 	private long expiresAt = -1;
 

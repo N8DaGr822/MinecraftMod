@@ -20,7 +20,9 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-public final class BossMinion extends Monster {
+public final class BossMinion extends Monster implements AnimatedCreature {
+	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	public enum Role { MELEE, HEALER, TURRET, EGG, GUARD, SOUL_CAGE, TENTACLE }
 	private static final EntityDataAccessor<Integer> ROLE = SynchedEntityData.defineId(BossMinion.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> WINDUP = SynchedEntityData.defineId(BossMinion.class, EntityDataSerializers.INT);
@@ -104,6 +106,7 @@ public final class BossMinion extends Monster {
 			if (tickCount % 5 == 0) { BiomeBoss.ring(level, targetPoint, role() == Role.TENTACLE ? 5 : 2, boss.boltKind()); }
 			entityData.set(WINDUP, windup() - 1);
 			if (windup() == 0) {
+				animateAttack();
 				if (role() == Role.TENTACLE) { boss.strikeArea(level, targetPoint, 5, 8, 14, BossBolt.Kind.PHYSICAL, true); }
 				else { boss.fireFrom(level, position().add(0, 1.5, 0), targetPoint, 1, boss.boltKind()); }
 				cooldown = 80;

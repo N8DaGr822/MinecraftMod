@@ -2,6 +2,8 @@ package darkspawn.black.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import darkspawn.black.Darkspawn;
+import darkspawn.black.boss.CreatureAssets;
+import darkspawn.black.client.ecosystem.CreatureGeoRenderer;
 import darkspawn.black.inventory.SortInventoryPayload;
 import darkspawn.black.inventory.InventoryExpansion;
 import darkspawn.black.inventory.InventoryTierPayload;
@@ -32,14 +34,14 @@ public class DarkspawnClient implements ClientModInitializer {
 		darkspawn.black.client.boss.BossClient.initialize();
 		darkspawn.black.ecosystem.ForestEcosystem.MOBS.forEach((kind, type) ->
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
-						context -> new darkspawn.black.client.ecosystem.ForestMobRenderer(context, kind)));
+						context -> CreatureAssets.MOBS.contains(kind.id) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, "forest_creatures") : new darkspawn.black.client.ecosystem.ForestMobRenderer(context, kind)));
 		darkspawn.black.ecosystem.TaigaEcosystem.WOLVES.forEach((kind, type) ->
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
-						context -> new darkspawn.black.client.ecosystem.TaigaWolfRenderer(context, kind)));
+						context -> CreatureAssets.MOBS.contains(kind.id) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, "mutant_wolf") : new darkspawn.black.client.ecosystem.TaigaWolfRenderer(context, kind)));
 		MenuScreens.register(Cooking.MENU, CookingScreen::new);
 		darkspawn.black.ecosystem.RegionalEcosystems.MOBS.forEach((kind, type) ->
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
-						context -> new darkspawn.black.client.ecosystem.RegionalMobRenderer(context, kind)));
+						context -> CreatureAssets.MOBS.contains(kind.id()) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, CreatureAssets.texture(kind.id(), kind.region.id())) : new darkspawn.black.client.ecosystem.RegionalMobRenderer(context, kind)));
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
 			if (stack.getItem() instanceof MealItem meal) {
 				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));

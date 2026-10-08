@@ -44,7 +44,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class ForestMob extends Monster implements RangedAttackMob {
+public final class ForestMob extends Monster implements RangedAttackMob, darkspawn.black.boss.AnimatedCreature {
+	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	public enum Kind {
 		BARKLING("barkling", 0.65F, 1.1F, 16, 0.24, 3, 0),
 		HOLLOWED("hollowed", 0.85F, 2.3F, 36, 0.18, 6, 12),
@@ -157,6 +159,7 @@ public final class ForestMob extends Monster implements RangedAttackMob {
 		}
 		entityData.set(WINDUP, windup() - 1);
 		if (windup() != 0) { return; }
+		animateAttack();
 		level.sendParticles(ParticleTypes.CRIT, strikePosition.x, strikePosition.y + 0.5, strikePosition.z, 45, radius / 2, 0.6, radius / 2, 0.1);
 		for (Player player : level.getEntitiesOfClass(Player.class, new AABB(strikePosition, strikePosition).inflate(radius, 2.5, radius))) {
 			double dx = player.getX() - strikePosition.x;
@@ -183,6 +186,7 @@ public final class ForestMob extends Monster implements RangedAttackMob {
 	@Override
 	public void performRangedAttack(LivingEntity target, float distanceFactor) {
 		if (kind != Kind.BARKLING || !(level() instanceof ServerLevel level)) { return; }
+		animateAttack();
 		BossBolt stick = new BossBolt(BossEntities.BOSS_BOLT, level);
 		stick.configure(this, BossBolt.Kind.PHYSICAL, 3);
 		stick.setItem(new ItemStack(Items.STICK));

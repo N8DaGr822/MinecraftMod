@@ -9,7 +9,8 @@
       "width": 16,
       "height": 28,
       "preserve": true,
-      "modelScale": 1.5555555555555556
+      "modelScale": 1.5555555555555556,
+      "texture": "ancient_tree_spirit"
     },
     {
       "id": "mutant_wolf",
@@ -18,7 +19,8 @@
       "form": "WOLF",
       "width": 10,
       "height": 9,
-      "preserve": true
+      "preserve": true,
+      "texture": "mutant_wolf"
     },
     {
       "id": "mutant_zombie",
@@ -27,7 +29,8 @@
       "form": "HUMANOID",
       "width": 8,
       "height": 14,
-      "preserve": true
+      "preserve": true,
+      "texture": "mutant_zombie"
     },
     {
       "id": "mutant_zombie_minion",
@@ -35,7 +38,8 @@
       "region": "mutant_zombie",
       "form": "HUMANOID",
       "width": 1.44,
-      "height": 2.52
+      "height": 2.52,
+      "texture": "mutant_zombie"
     },
     {
       "id": "fossil_tyrant",
@@ -44,7 +48,8 @@
       "form": "BIPED",
       "width": 12,
       "height": 14,
-      "preserve": false
+      "preserve": false,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "fossil_tyrant_minion",
@@ -52,7 +57,8 @@
       "region": "fossil_tyrant",
       "form": "BIPED",
       "width": 2.16,
-      "height": 2.52
+      "height": 2.52,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "thunder_bird",
@@ -61,7 +67,8 @@
       "form": "BIRD",
       "width": 12,
       "height": 8,
-      "preserve": false
+      "preserve": false,
+      "texture": "thunder_bird"
     },
     {
       "id": "thunder_bird_minion",
@@ -69,7 +76,8 @@
       "region": "thunder_bird",
       "form": "BIRD",
       "width": 2.16,
-      "height": 1.44
+      "height": 1.44,
+      "texture": "thunder_bird"
     },
     {
       "id": "titan_boa",
@@ -78,7 +86,8 @@
       "form": "SERPENT",
       "width": 14,
       "height": 7,
-      "preserve": false
+      "preserve": false,
+      "texture": "titan_boa"
     },
     {
       "id": "titan_boa_minion",
@@ -86,7 +95,8 @@
       "region": "titan_boa",
       "form": "SERPENT",
       "width": 2.52,
-      "height": 1.26
+      "height": 1.26,
+      "texture": "titan_boa"
     },
     {
       "id": "baba_yaga",
@@ -95,15 +105,17 @@
       "form": "HOUSE",
       "width": 10,
       "height": 15,
-      "preserve": false
+      "preserve": false,
+      "texture": "baba_yaga"
     },
     {
       "id": "baba_yaga_minion",
       "category": "minion",
       "region": "baba_yaga",
-      "form": "HOUSE",
+      "form": "HUMANOID",
       "width": 1.7999999999999998,
-      "height": 2.6999999999999997
+      "height": 2.6999999999999997,
+      "texture": "baba_yaga"
     },
     {
       "id": "mountain_titan",
@@ -112,7 +124,8 @@
       "form": "HUMANOID",
       "width": 12,
       "height": 20,
-      "preserve": false
+      "preserve": false,
+      "texture": "mountain_titan"
     },
     {
       "id": "mountain_titan_minion",
@@ -120,7 +133,8 @@
       "region": "mountain_titan",
       "form": "HUMANOID",
       "width": 2.16,
-      "height": 3.5999999999999996
+      "height": 3.5999999999999996,
+      "texture": "mountain_titan"
     },
     {
       "id": "ice_wyrm",
@@ -129,7 +143,8 @@
       "form": "SERPENT",
       "width": 14,
       "height": 10,
-      "preserve": false
+      "preserve": false,
+      "texture": "ice_wyrm"
     },
     {
       "id": "ice_wyrm_minion",
@@ -137,7 +152,8 @@
       "region": "ice_wyrm",
       "form": "SERPENT",
       "width": 2.52,
-      "height": 1.7999999999999998
+      "height": 1.7999999999999998,
+      "texture": "ice_wyrm"
     },
     {
       "id": "kraken",
@@ -146,15 +162,17 @@
       "form": "KRAKEN",
       "width": 12,
       "height": 9,
-      "preserve": false
+      "preserve": false,
+      "texture": "kraken"
     },
     {
       "id": "kraken_minion",
       "category": "minion",
       "region": "kraken",
-      "form": "KRAKEN",
+      "form": "TENTACLE",
       "width": 3,
-      "height": 12
+      "height": 12,
+      "texture": "kraken"
     },
     {
       "id": "cave_crawler",
@@ -163,7 +181,8 @@
       "form": "ARTHROPOD",
       "width": 10,
       "height": 5,
-      "preserve": false
+      "preserve": false,
+      "texture": "cave_crawler"
     },
     {
       "id": "cave_crawler_minion",
@@ -171,7 +190,8 @@
       "region": "cave_crawler",
       "form": "ARTHROPOD",
       "width": 1.7999999999999998,
-      "height": 0.8999999999999999
+      "height": 0.8999999999999999,
+      "texture": "cave_crawler"
     },
     {
       "id": "shadow_creeper_queen",
@@ -180,7 +200,8 @@
       "form": "QUEEN",
       "width": 12,
       "height": 18,
-      "preserve": false
+      "preserve": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_creeper_queen_minion",
@@ -188,7 +209,8 @@
       "region": "shadow_creeper_queen",
       "form": "QUEEN",
       "width": 2.16,
-      "height": 3.2399999999999998
+      "height": 3.2399999999999998,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "mycelial_sovereign",
@@ -197,7 +219,8 @@
       "form": "MUSHROOM",
       "width": 14,
       "height": 20,
-      "preserve": false
+      "preserve": false,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "mycelial_sovereign_minion",
@@ -205,7 +228,8 @@
       "region": "mycelial_sovereign",
       "form": "MUSHROOM",
       "width": 2.52,
-      "height": 3.5999999999999996
+      "height": 3.5999999999999996,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "netherborn",
@@ -214,7 +238,8 @@
       "form": "QUADRUPED",
       "width": 12,
       "height": 14,
-      "preserve": false
+      "preserve": false,
+      "texture": "netherborn"
     },
     {
       "id": "netherborn_minion",
@@ -222,7 +247,8 @@
       "region": "netherborn",
       "form": "QUADRUPED",
       "width": 2.16,
-      "height": 2.52
+      "height": 2.52,
+      "texture": "netherborn"
     },
     {
       "id": "soulbound_colossus",
@@ -231,7 +257,8 @@
       "form": "SKELETON",
       "width": 12,
       "height": 22,
-      "preserve": false
+      "preserve": false,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "soulbound_colossus_minion",
@@ -239,7 +266,8 @@
       "region": "soulbound_colossus",
       "form": "SKELETON",
       "width": 2.16,
-      "height": 3.96
+      "height": 3.96,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "void_eye",
@@ -248,7 +276,8 @@
       "form": "EYE",
       "width": 10,
       "height": 10,
-      "preserve": false
+      "preserve": false,
+      "texture": "void_eye"
     },
     {
       "id": "void_eye_minion",
@@ -256,7 +285,8 @@
       "region": "void_eye",
       "form": "EYE",
       "width": 1.7999999999999998,
-      "height": 1.7999999999999998
+      "height": 1.7999999999999998,
+      "texture": "void_eye"
     },
     {
       "id": "endborn",
@@ -265,7 +295,8 @@
       "form": "HUMANOID",
       "width": 1.4,
       "height": 4.6,
-      "preserve": true
+      "preserve": true,
+      "texture": "endborn"
     },
     {
       "id": "heartwood_sapling",
@@ -273,7 +304,8 @@
       "region": "ancient_tree_spirit",
       "form": "TREE",
       "width": 1.6,
-      "height": 2.88
+      "height": 2.88,
+      "texture": "forest_creatures"
     },
     {
       "id": "frost_wolf",
@@ -281,7 +313,8 @@
       "region": "mutant_wolf",
       "form": "WOLF",
       "width": 1.5,
-      "height": 1.35
+      "height": 1.35,
+      "texture": "mutant_wolf"
     },
     {
       "id": "barkling",
@@ -290,7 +323,8 @@
       "form": "TREE",
       "width": 0.65,
       "height": 1.1,
-      "kind": "BARKLING"
+      "kind": "BARKLING",
+      "texture": "forest_creatures"
     },
     {
       "id": "hollowed",
@@ -299,7 +333,8 @@
       "form": "TREE",
       "width": 0.85,
       "height": 2.3,
-      "kind": "HOLLOWED"
+      "kind": "HOLLOWED",
+      "texture": "forest_creatures"
     },
     {
       "id": "rootcrawler",
@@ -308,7 +343,8 @@
       "form": "ARTHROPOD",
       "width": 1.2,
       "height": 0.55,
-      "kind": "ROOTCRAWLER"
+      "kind": "ROOTCRAWLER",
+      "texture": "forest_creatures"
     },
     {
       "id": "ancient_ent",
@@ -317,7 +353,8 @@
       "form": "TREE",
       "width": 1.8,
       "height": 3.8,
-      "kind": "ANCIENT_ENT"
+      "kind": "ANCIENT_ENT",
+      "texture": "forest_creatures"
     },
     {
       "id": "dire_wolf",
@@ -326,7 +363,8 @@
       "form": "WOLF",
       "width": 0.9,
       "height": 1.25,
-      "kind": "DIRE"
+      "kind": "DIRE",
+      "texture": "mutant_wolf"
     },
     {
       "id": "frostfang",
@@ -335,7 +373,8 @@
       "form": "WOLF",
       "width": 0.9,
       "height": 1.25,
-      "kind": "FROSTFANG"
+      "kind": "FROSTFANG",
+      "texture": "mutant_wolf"
     },
     {
       "id": "ravaged_wolf",
@@ -344,7 +383,8 @@
       "form": "WOLF",
       "width": 1.15,
       "height": 1.5,
-      "kind": "RAVAGED"
+      "kind": "RAVAGED",
+      "texture": "mutant_wolf"
     },
     {
       "id": "alpha_dire_wolf",
@@ -353,7 +393,8 @@
       "form": "WOLF",
       "width": 1.35,
       "height": 1.8,
-      "kind": "ALPHA"
+      "kind": "ALPHA",
+      "texture": "mutant_wolf"
     },
     {
       "id": "rotted_zombie",
@@ -365,7 +406,8 @@
       "movement": "GROUND",
       "behavior": "MELEE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mutant_zombie"
     },
     {
       "id": "brute_zombie",
@@ -377,7 +419,8 @@
       "movement": "GROUND",
       "behavior": "SMASH",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mutant_zombie"
     },
     {
       "id": "leaping_zombie",
@@ -389,7 +432,8 @@
       "movement": "GROUND",
       "behavior": "POUNCE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mutant_zombie"
     },
     {
       "id": "mutant_huskling",
@@ -401,7 +445,8 @@
       "movement": "GROUND",
       "behavior": "BOULDER",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mutant_zombie"
     },
     {
       "id": "failed_mutant",
@@ -413,7 +458,8 @@
       "movement": "GROUND",
       "behavior": "SMASH",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "mutant_zombie"
     },
     {
       "id": "bone_raptor",
@@ -425,7 +471,8 @@
       "movement": "GROUND",
       "behavior": "POUNCE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "fossil_scorpion",
@@ -437,7 +484,8 @@
       "movement": "GROUND",
       "behavior": "POISON",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "bone_vulture",
@@ -449,7 +497,8 @@
       "movement": "AIR",
       "behavior": "SCAVENGE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "fossilized_husk",
@@ -461,7 +510,8 @@
       "movement": "GROUND",
       "behavior": "MELEE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "tyrant_skull",
@@ -473,7 +523,8 @@
       "movement": "STILL",
       "behavior": "FOSSIL",
       "temper": "PASSIVE",
-      "herald": true
+      "herald": true,
+      "texture": "fossil_tyrant"
     },
     {
       "id": "storm_finch",
@@ -485,7 +536,8 @@
       "movement": "AIR",
       "behavior": "STATIC",
       "temper": "PASSIVE",
-      "herald": false
+      "herald": false,
+      "texture": "thunder_bird"
     },
     {
       "id": "shocktalon",
@@ -497,7 +549,8 @@
       "movement": "AIR",
       "behavior": "DIVE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "thunder_bird"
     },
     {
       "id": "stormstrider",
@@ -509,7 +562,8 @@
       "movement": "GROUND",
       "behavior": "STATIC",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "thunder_bird"
     },
     {
       "id": "thunder_roc",
@@ -521,7 +575,8 @@
       "movement": "AIR",
       "behavior": "LIGHTNING",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "thunder_bird"
     },
     {
       "id": "tree_viper",
@@ -533,7 +588,8 @@
       "movement": "CLIMB",
       "behavior": "POISON",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "titan_boa"
     },
     {
       "id": "constrictor",
@@ -545,7 +601,8 @@
       "movement": "GROUND",
       "behavior": "CONSTRICT",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "titan_boa"
     },
     {
       "id": "jungle_stalker",
@@ -557,7 +614,8 @@
       "movement": "GROUND",
       "behavior": "AMBUSH",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "titan_boa"
     },
     {
       "id": "brood_serpent",
@@ -569,7 +627,8 @@
       "movement": "GROUND",
       "behavior": "CONSTRICT",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "titan_boa"
     },
     {
       "id": "bogling",
@@ -581,7 +640,8 @@
       "movement": "GROUND",
       "behavior": "THIEF",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "baba_yaga"
     },
     {
       "id": "hexed_frog",
@@ -593,7 +653,8 @@
       "movement": "GROUND",
       "behavior": "HEX",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "baba_yaga"
     },
     {
       "id": "swamp_wisp",
@@ -605,7 +666,8 @@
       "movement": "AIR",
       "behavior": "GUIDE",
       "temper": "PASSIVE",
-      "herald": false
+      "herald": false,
+      "texture": "baba_yaga"
     },
     {
       "id": "hexbound",
@@ -617,7 +679,8 @@
       "movement": "GROUND",
       "behavior": "POTION",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "baba_yaga"
     },
     {
       "id": "babas_familiar",
@@ -629,7 +692,8 @@
       "movement": "GROUND",
       "behavior": "GUIDE",
       "temper": "PASSIVE",
-      "herald": true
+      "herald": true,
+      "texture": "baba_yaga"
     },
     {
       "id": "stoneback_goat",
@@ -641,7 +705,8 @@
       "movement": "GROUND",
       "behavior": "CHARGE",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "mountain_titan"
     },
     {
       "id": "crag_crawler",
@@ -653,7 +718,8 @@
       "movement": "GROUND",
       "behavior": "AMBUSH",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mountain_titan"
     },
     {
       "id": "stoneborn",
@@ -665,7 +731,8 @@
       "movement": "GROUND",
       "behavior": "BOULDER",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mountain_titan"
     },
     {
       "id": "titan_spawn",
@@ -677,7 +744,8 @@
       "movement": "GROUND",
       "behavior": "BOULDER",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "mountain_titan"
     },
     {
       "id": "frostling",
@@ -689,7 +757,8 @@
       "movement": "GROUND",
       "behavior": "FROST",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "ice_wyrm"
     },
     {
       "id": "frozen_husk",
@@ -701,7 +770,8 @@
       "movement": "GROUND",
       "behavior": "THAW",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "ice_wyrm"
     },
     {
       "id": "icefang",
@@ -713,7 +783,8 @@
       "movement": "GROUND",
       "behavior": "FROST",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "ice_wyrm"
     },
     {
       "id": "young_wyrm",
@@ -725,7 +796,8 @@
       "movement": "GROUND",
       "behavior": "ICE_BREATH",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "ice_wyrm"
     },
     {
       "id": "abyssal_fish",
@@ -737,7 +809,8 @@
       "movement": "WATER",
       "behavior": "MELEE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "kraken"
     },
     {
       "id": "giant_crab",
@@ -749,7 +822,8 @@
       "movement": "WATER",
       "behavior": "SMASH",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "kraken"
     },
     {
       "id": "siren",
@@ -761,7 +835,8 @@
       "movement": "WATER",
       "behavior": "SIREN",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "kraken"
     },
     {
       "id": "leviathan_spawn",
@@ -773,7 +848,8 @@
       "movement": "WATER",
       "behavior": "SEA_GRAB",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "kraken"
     },
     {
       "id": "cave_skitterer",
@@ -785,7 +861,8 @@
       "movement": "CLIMB",
       "behavior": "MELEE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "cave_crawler"
     },
     {
       "id": "web_spitter",
@@ -797,7 +874,8 @@
       "movement": "CLIMB",
       "behavior": "WEB",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "cave_crawler"
     },
     {
       "id": "brood_carrier",
@@ -809,7 +887,8 @@
       "movement": "CLIMB",
       "behavior": "BROOD",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "cave_crawler"
     },
     {
       "id": "tunnel_widow",
@@ -821,7 +900,8 @@
       "movement": "CLIMB",
       "behavior": "WIDOW",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "cave_crawler"
     },
     {
       "id": "shadow_drone",
@@ -833,7 +913,8 @@
       "movement": "GROUND",
       "behavior": "DARK_BURST",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_stalker",
@@ -845,7 +926,8 @@
       "movement": "GROUND",
       "behavior": "STALK",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_spitter",
@@ -857,7 +939,8 @@
       "movement": "GROUND",
       "behavior": "ACID",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_guardian",
@@ -869,7 +952,8 @@
       "movement": "GROUND",
       "behavior": "SHOCKWAVE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_larva",
@@ -881,7 +965,8 @@
       "movement": "GROUND",
       "behavior": "LARVA",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_egg",
@@ -893,7 +978,8 @@
       "movement": "STILL",
       "behavior": "EGG",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "shadow_praetorian",
@@ -905,7 +991,8 @@
       "movement": "GROUND",
       "behavior": "SHADOW_CLEAVE",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "shadow_creeper_queen"
     },
     {
       "id": "sporeling",
@@ -917,7 +1004,8 @@
       "movement": "GROUND",
       "behavior": "HIVE",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "mycelium_crawler",
@@ -929,7 +1017,8 @@
       "movement": "GROUND",
       "behavior": "AMBUSH",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "infected_mooshroom",
@@ -941,7 +1030,8 @@
       "movement": "GROUND",
       "behavior": "SPORE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "sporewalker",
@@ -953,7 +1043,8 @@
       "movement": "GROUND",
       "behavior": "SPORE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "mycelial_guardian",
@@ -965,7 +1056,8 @@
       "movement": "GROUND",
       "behavior": "MYCELIUM",
       "temper": "NEUTRAL",
-      "herald": true
+      "herald": true,
+      "texture": "mycelial_sovereign"
     },
     {
       "id": "crimson_ravager",
@@ -977,7 +1069,8 @@
       "movement": "GROUND",
       "behavior": "CHARGE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn"
     },
     {
       "id": "fungal_imp",
@@ -989,7 +1082,8 @@
       "movement": "GROUND",
       "behavior": "BUFF",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn"
     },
     {
       "id": "bloodroot",
@@ -1001,7 +1095,8 @@
       "movement": "STILL",
       "behavior": "VINES",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn"
     },
     {
       "id": "warped_stalker",
@@ -1013,7 +1108,8 @@
       "movement": "GROUND",
       "behavior": "STARE",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn_warped"
     },
     {
       "id": "warped_wisp",
@@ -1025,7 +1121,8 @@
       "movement": "AIR",
       "behavior": "BLINK_SPORE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn_warped"
     },
     {
       "id": "riftling",
@@ -1037,7 +1134,8 @@
       "movement": "AIR",
       "behavior": "RIFT",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn_warped"
     },
     {
       "id": "ash_ghoul",
@@ -1049,7 +1147,8 @@
       "movement": "GROUND",
       "behavior": "FIRE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn"
     },
     {
       "id": "magma_brute",
@@ -1061,7 +1160,8 @@
       "movement": "GROUND",
       "behavior": "MAGMA",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn"
     },
     {
       "id": "infernal_hoglin",
@@ -1073,7 +1173,8 @@
       "movement": "GROUND",
       "behavior": "CHARGE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "netherborn"
     },
     {
       "id": "crimson_spawn",
@@ -1085,7 +1186,8 @@
       "movement": "GROUND",
       "behavior": "CHARGE",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "netherborn"
     },
     {
       "id": "warped_spawn",
@@ -1097,7 +1199,8 @@
       "movement": "GROUND",
       "behavior": "BLINK_SPORE",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "netherborn_warped"
     },
     {
       "id": "infernal_spawn",
@@ -1109,7 +1212,8 @@
       "movement": "GROUND",
       "behavior": "MAGMA",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "netherborn"
     },
     {
       "id": "lost_soul",
@@ -1121,7 +1225,8 @@
       "movement": "AIR",
       "behavior": "SOUL_TOUCH",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "bonewalker",
@@ -1133,7 +1238,8 @@
       "movement": "GROUND",
       "behavior": "REBUILD",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "soulflame_skull",
@@ -1145,7 +1251,8 @@
       "movement": "AIR",
       "behavior": "SOUL_BOLT",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "tormented",
@@ -1157,7 +1264,8 @@
       "movement": "STILL",
       "behavior": "VINES",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "soul_keeper",
@@ -1169,7 +1277,8 @@
       "movement": "GROUND",
       "behavior": "SOUL_KEEPER",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "soulbound_colossus"
     },
     {
       "id": "voidling",
@@ -1181,7 +1290,8 @@
       "movement": "AIR",
       "behavior": "BLINK",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "void_eye"
     },
     {
       "id": "end_grazer",
@@ -1193,7 +1303,8 @@
       "movement": "GROUND",
       "behavior": "GRAZE",
       "temper": "PASSIVE",
-      "herald": false
+      "herald": false,
+      "texture": "void_eye"
     },
     {
       "id": "shardling",
@@ -1205,7 +1316,8 @@
       "movement": "AIR",
       "behavior": "DODGE",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "void_eye"
     },
     {
       "id": "void_ray",
@@ -1217,7 +1329,8 @@
       "movement": "AIR",
       "behavior": "MELEE",
       "temper": "NEUTRAL",
-      "herald": false
+      "herald": false,
+      "texture": "void_eye"
     },
     {
       "id": "watcher",
@@ -1229,7 +1342,8 @@
       "movement": "AIR",
       "behavior": "OBSERVE",
       "temper": "HOSTILE",
-      "herald": false
+      "herald": false,
+      "texture": "void_eye"
     },
     {
       "id": "void_sentinel",
@@ -1241,7 +1355,8 @@
       "movement": "AIR",
       "behavior": "SENTINEL",
       "temper": "HOSTILE",
-      "herald": true
+      "herald": true,
+      "texture": "void_eye"
     }
   ]
 }

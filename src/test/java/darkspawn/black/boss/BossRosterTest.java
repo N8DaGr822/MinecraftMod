@@ -388,6 +388,34 @@ class BossRosterTest {
 	}
 
 	@Test
+	void completedMobAssetsBakeAndSupportEveryControllerState() throws Exception {
+		var textures = new java.util.LinkedHashMap<String, String>();
+		for (var kind : darkspawn.black.ecosystem.ForestMob.Kind.values()) { textures.put(kind.id, "forest_creatures"); }
+		for (var kind : darkspawn.black.ecosystem.TaigaWolf.Kind.values()) { textures.put(kind.id, "mutant_wolf"); }
+		for (var kind : darkspawn.black.ecosystem.RegionalKind.values()) { textures.put(kind.id(), CreatureAssets.texture(kind.id(), kind.region.id())); }
+		for (var profile : BossProfile.values()) { textures.put(profile.id() + "_minion", profile.id()); }
+		textures.put("heartwood_sapling", "forest_creatures"); textures.put("frost_wolf", "mutant_wolf");
+		var loader = new GeckoLibGsonLoader();
+		for (var entry : textures.entrySet()) {
+			String id = entry.getKey(), path = "/assets/darkspawn/";
+			var geometry = getClass().getResource(path + "geckolib/models/entity/" + id + ".geo.json");
+			if (CreatureAssets.MOBS.contains(id) || CreatureAssets.MINIONS.contains(id)) { assertNotNull(geometry, id); }
+			if (geometry == null) { continue; } // Bake staged projects before their individual registration commits.
+			var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/" + id), resource(path + "geckolib/models/entity/" + id + ".geo.json").getAsJsonObject());
+			var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/" + id), resource(path + "geckolib/animations/entity/" + id + ".animation.json").getAsJsonObject(), MathParser.create());
+			assertFalse(model.isMissingno(), id);
+			for (String clip : List.of("idle", "walk", "attack", "warning", "active", "hide", "death")) {
+				var animation = animations.getAnimation("animation." + id + "." + clip);
+				assertNotNull(animation, id + ": " + clip); assertTrue(animation.length() > 0);
+				for (var bone : animation.boneAnimations()) { assertTrue(model.getBone(bone.boneName()).isPresent(), id + ": " + bone.boneName()); }
+			}
+			if (id.endsWith("_minion")) { assertTrue(model.getBone("egg").isPresent(), id); assertTrue(model.getBone("cage").isPresent(), id); }
+			try (var stream = getClass().getResourceAsStream(path + "textures/entity/" + entry.getValue() + ".png")) { assertNotNull(stream, id); assertNotNull(javax.imageio.ImageIO.read(stream), id); }
+		}
+		Class.forName("darkspawn.black.client.ecosystem.CreatureGeoRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
+	}
+
+	@Test
 	void beamsHaveFiniteEndpointsAndSoulTheftCannotRemoveTheLastHeart() {
 		assertEquals(4, BiomeBoss.distanceToSegmentSquared(new Vec3(5, 2, 0), Vec3.ZERO, new Vec3(10, 0, 0)));
 		assertEquals(25, BiomeBoss.distanceToSegmentSquared(new Vec3(15, 0, 0), Vec3.ZERO, new Vec3(10, 0, 0)));

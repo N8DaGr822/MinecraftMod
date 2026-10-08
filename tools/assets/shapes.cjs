@@ -11,6 +11,14 @@ function buildShape(r, e) {
  const horns=(parent,y=.88)=>{for(const s of [-1,1]){box('horn_base_'+s,parent,s*.2,y,-.17,.06,.1,.07,3);box('horn_tip_'+s,parent,s*.22,y+.07,-.15,.035,.07,.045,3);}};
  const cap=(parent,x,y,z,size)=>{box('cap_gills_'+x+'_'+z,parent,x,y,z,size,.055,size,1);box('cap_rim_'+x+'_'+z,parent,x,y+.04,z,size*1.1,.09,size*1.1,0);box('cap_crown_'+x+'_'+z,parent,x,y+.115,z,size*.8,.09,size*.8,0);};
  switch(e.form) {
+ case 'TENTACLE': {
+  for(let i=0;i<8;i++){const x=Math.sin(i*.35)*.2,z=i*.02,thickness=.8-i*.075;
+   bone('tentacle_'+i,[x,i*.11,z],i?'tentacle_'+(i-1):'body');
+   box('tentacle_tower_'+i,'tentacle_'+i,x,i*.11,z,thickness,.15,thickness,0);
+   for(const s of [-1,1])box('sucker_'+i+'_'+s,'tentacle_'+i,x+s*thickness*.25,i*.11+.03,z-thickness*.52,thickness*.22,.05,.08,2);
+  }
+  head(.12,.85,.14,'tentacle_7');box('tentacle_hook','head',.12,.88,.08,.25,.12,.35,0);break;
+ }
  case 'HUMANOID': case 'SKELETON': case 'TREE': {
   const skeletal=e.form==='SKELETON'||/bonewalker|soul_keeper|tormented/.test(id),tree=e.form==='TREE';
   box('pelvis','body',0,.3,0,.45,.14,.3,tree?0:2);
@@ -126,7 +134,7 @@ function buildShape(r, e) {
   if(skull){bone('jaw',[0,.3,0],'head');box('jaw','jaw',0,.14,-.08,.63,.13,.55);for(let i=0;i<5;i++)box('tooth_'+i,'jaw',(i-2)*.085,.25,-.36,.05,.09,.045);}
   else if(!eyeForm){for(const s of [-1,1])box('wisp_tail_'+s,'body',s*.16,0,.25,.07,.34,.09,3);}
   bone('crest',[0,.5,0],'root');
-  if(eyeForm||id==='shardling'){for(let i=0;i<4;i++){const a=i*Math.PI/2;bone('shield_'+i,[0,.5,0],'crest');box('obsidian_shard_'+i,'shield_'+i,Math.cos(a)*.5,.25,Math.sin(a)*.5,.14,.5,.14,0);box('shard_rune_'+i,'shield_'+i,Math.cos(a)*.5,.37,Math.sin(a)*.5-.076,.035,.18,.018,3);}}
+  if(eyeForm||id==='shardling'){const count=e.category==='boss'?4:3;for(let i=0;i<count;i++){const a=i*Math.PI*2/count;bone('shield_'+i,[0,.5,0],'crest');box('obsidian_shard_'+i,'shield_'+i,Math.cos(a)*.5,.25,Math.sin(a)*.5,.14,.5,.14,0);box('shard_rune_'+i,'shield_'+i,Math.cos(a)*.5,.37,Math.sin(a)*.5-.076,.035,.18,.018,3);}}
   break;
  }
  default: throw Error('Missing anatomy '+e.form);

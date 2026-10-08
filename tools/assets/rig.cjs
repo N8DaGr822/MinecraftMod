@@ -46,14 +46,25 @@ class Rig {
   save(atlas) {
     const e=this.entry,png=fs.readFileSync(atlas),folder=`art/blockbench/${e.id}`,base=e.id.split('_').map(s=>s[0].toUpperCase()+s.slice(1)).join('');
     fs.mkdirSync(folder,{recursive:true});
-    this.model.textures=[{path:'',name:e.id+'.png',folder:'entity',namespace:'darkspawn',id:'0',uuid:this.uuid('texture'),width:png.readUInt32BE(16),height:png.readUInt32BE(20),uv_width:2048,uv_height:2048,particle:false,use_as_default:true,mode:'bitmap',saved:true,source:'data:image/png;base64,'+png.toString('base64')}];
+    this.model.textures=[{path:'',name:(e.texture||e.id)+'.png',folder:'entity',namespace:'darkspawn',id:'0',uuid:this.uuid('texture'),width:png.readUInt32BE(16),height:png.readUInt32BE(20),uv_width:2048,uv_height:2048,particle:false,use_as_default:true,mode:'bitmap',saved:true,source:'data:image/png;base64,'+png.toString('base64')}];
     const extent=Math.max(e.width,e.height)*2.5;
     this.model.visible_box=[extent,extent,e.height/2];
     this.model.editor_state={save_path:'',export_path:'',saved:true,mode:'edit',tool:'move_tool',previews:{main:{position:[e.height*22,e.height*17,-e.height*26],target:[0,e.height*8,0],projection:'perspective'}}};
     fs.writeFileSync(`${folder}/${base}.bbmodel`,JSON.stringify(this.model,null,2)+'\n');
-    fs.copyFileSync(atlas,`src/main/resources/assets/darkspawn/textures/entity/${e.id}.png`);
+    const destination=`src/main/resources/assets/darkspawn/textures/entity/${e.texture||e.id}.png`;
+    if(path.resolve(atlas)!==path.resolve(destination))fs.copyFileSync(atlas,destination);
     exportModel(this.model);
     return {id:e.id,cubes:this.model.elements.length,bones:this.model.groups.length,clips:this.model.animations.length};
+  }
+}
+
+// Small creatures need larger atlas footprints than bosses to keep material detail visible.
+function materialUVs(r) {
+  const density=Math.max(1,24/r.entry.height);
+  r.model.meta.box_uv=false;
+  for(const c of r.model.elements){const [w,h,d]=c.to.map((v,i)=>v-c.from[i]),u=c.uv_offset[0],v=c.uv_offset[1];
+    c.box_uv=false;
+    for(const [face,sw,sh]of [['north',w,h],['south',w,h],['east',d,h],['west',d,h],['up',w,d],['down',w,d]])c.faces[face].uv=[u,v,u+Math.min(sw*density,950),v+Math.min(sh*density,950)];
   }
 }
 
@@ -63,7 +74,7 @@ function exportModel(model) {
   function visit(node,parent){const g=byGroup.get(node.uuid),b={name:g.name,pivot:flip(g.origin)};if(parent)b.parent=parent;
     if(g.rotation?.some(v=>v))b.rotation=rot(g.rotation);
     const cubes=node.children.filter(c=>typeof c==='string').map(c=>byCube.get(c));
-    if(cubes.length)b.cubes=cubes.map(c=>{if(!c.box_uv)throw Error('Use Box UV for this exporter: '+c.name);const out={origin:[-c.to[0],c.from[1],c.from[2]],size:c.to.map((v,i)=>v-c.from[i]),uv:c.uv_offset};if(c.rotation?.some(v=>v)){out.pivot=flip(c.origin);out.rotation=rot(c.rotation);}return out;});
+    if(cubes.length)b.cubes=cubes.map(c=>{const uv=c.box_uv?c.uv_offset:Object.fromEntries(Object.entries(c.faces).map(([face,f])=>{const [u,v,U,V]=f.uv;if(![u,v,U,V].every(Number.isFinite))throw Error('Non-numeric face UV: '+c.name);return[face,{uv:[u,v],uv_size:[U-u,V-v]}];}));const out={origin:[-c.to[0],c.from[1],c.from[2]],size:c.to.map((v,i)=>v-c.from[i]),uv};if(c.rotation?.some(v=>v)){out.pivot=flip(c.origin);out.rotation=rot(c.rotation);}return out;});
     bones.push(b);for(const child of node.children)if(typeof child!=='string')visit(child,g.name);
   }
   model.outliner.forEach(n=>visit(n));
@@ -79,5 +90,5 @@ function exportModel(model) {
 const rotation=(bone,frames)=>[bone,'rotation',frames];
 const position=(bone,frames)=>[bone,'position',frames.map(([t,v])=>[t,v.map(n=>n*16)])];
 const wave=(bone,axis,amount,length,base=0,phase=0)=>rotation(bone,[0,.25,.5,.75,1].map(t=>[t*length,[0,0,0].map((v,i)=>i===axis?base+Math.sin(t*Math.PI*2+phase)*amount:0)]));
-module.exports={Rig,exportModel,rotation,position,wave};
-if(require.main===module){const file=process.argv[2];if(!file)throw Error('Usage: node tools/assets/rig.cjs path/to/Creature.bbmodel');const model=JSON.parse(fs.readFileSync(file,'utf8'));exportModel(model);const match=model.textures[0].source.match(/^data:image\/png;base64,(.+)$/);if(!match)throw Error('Project must embed a PNG texture');fs.writeFileSync(`src/main/resources/assets/darkspawn/textures/entity/${model.model_identifier}.png`,Buffer.from(match[1],'base64'));}
+module.exports={Rig,exportModel,materialUVs,rotation,position,wave};
+if(require.main===module){const file=process.argv[2];if(!file)throw Error('Usage: node tools/assets/rig.cjs path/to/Creature.bbmodel');const model=JSON.parse(fs.readFileSync(file,'utf8'));if(!/^[a-z_]+$/.test(model.model_identifier)||!(/^[a-z_]+\.png$/).test(model.textures[0].name))throw Error('Invalid resource identifier');exportModel(model);const match=model.textures[0].source.match(/^data:image\/png;base64,(.+)$/);if(!match)throw Error('Project must embed a PNG texture');fs.writeFileSync(`src/main/resources/assets/darkspawn/textures/entity/${model.textures[0].name}`,Buffer.from(match[1],'base64'));}

@@ -39,8 +39,9 @@ function clips(r,e) {
   }
   return p;
  }
+ const ability={SMASH:'slam',BOULDER:'boulders',POUNCE:'pounce',CHARGE:'charge',WIDOW:'pounce',CONSTRICT:'constrict',SEA_GRAB:'constrict',LIGHTNING:'lightning',DIVE:'charge',SOUL_KEEPER:'soul_cages',SIREN:'hex',VINES:'roots',SPORE:'spores',MYCELIUM:'fungal_growth',BROOD:'brood',POTION:'hex',SHADOW_CLEAVE:'sweep',SENTINEL:'beam',OBSERVE:'beam',MAGMA:'eruption'}[e.behavior]||'bite';
  const attackNames=e.category==='boss'?attacks[e.id]||[]:['attack'];
- for(const name of attackNames){const p=pose(name==='attack'?({SMASH:'slam',BOULDER:'boulders',POUNCE:'pounce',CHARGE:'charge',CONSTRICT:'constrict',LIGHTNING:'lightning',DIVE:'charge',SOUL_KEEPER:'soul_cages'}[e.behavior]||'bite'):name);
+ for(const name of attackNames){const p=pose(name==='attack'?ability:name);
   if(e.category==='boss')r.clip('windup_'+name,2,'hold',Object.entries(p).map(([b,v])=>rot(b,[[0,[0,0,0]],[.7,v],[2,v]])));
   if(name==='charge'||name==='pounce')continue;
   const impact=Object.fromEntries(Object.entries(p).map(([b,v])=>[b,v.map(a=>-a*.38)]));
@@ -50,8 +51,10 @@ function clips(r,e) {
  }
  if(e.category==='boss')r.clip('phase_change',2,'once',Object.entries(pose('brood')).map(([b,v])=>rot(b,[[0,[0,0,0]],[.6,v],[1.4,v],[2,[0,0,0]]])));
  else {
-  r.clip('warning',1.5,'loop',Object.entries(pose(e.behavior==='SMASH'?'slam':'bite')).map(([b,v])=>rot(b,[[0,v],[1.5,v]])));
-  r.clip('active',.5,'loop',gait(.5,38));r.clip('hide',1,'hold',[['body','scale',[[0,[1,.55,1]]]]]);
+  r.clip('warning',1.5,'loop',Object.entries(pose(ability)).map(([b,v])=>rot(b,[[0,v],[1.5,v]])));
+  const moving=['POUNCE','CHARGE','DIVE','WIDOW'].includes(e.behavior)||e.form==='WOLF';
+  r.clip('active',.75,moving?'loop':'hold',moving?gait(.75,38):Object.entries(pose(ability)).map(([b,v])=>rot(b,[[0,v],[.18,v.map(n=>-n*.38)],[.75,[0,0,0]]])));
+  r.clip('hide',1,'hold',[['body','scale',[[0,[1,.55,1]]]]]);
  }
  r.clip('death',1,'hold',keep([rot('body',[[0,[0,0,0]],[.7,[0,0,55]],[1,[0,0,65]]]),pos('body',[[0,[0,0,0]],[1,[0,-e.height*.22,0]]]),rot('head',[[0,[0,0,0]],[1,[-22,0,0]]]) ]));
 }

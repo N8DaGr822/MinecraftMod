@@ -58,7 +58,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class RegionalMob extends Monster implements RangedAttackMob {
+public final class RegionalMob extends Monster implements RangedAttackMob, darkspawn.black.boss.AnimatedCreature {
+	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	private static final EntityDataAccessor<Integer> WARNING = SynchedEntityData.defineId(RegionalMob.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> HIDING = SynchedEntityData.defineId(RegionalMob.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> CLIMBING = SynchedEntityData.defineId(RegionalMob.class, EntityDataSerializers.BOOLEAN);
@@ -325,6 +327,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob {
 	private double strikeRadius() { return kind.herald() ? 2.5 : 1.5; }
 	private void executeAttack(ServerLevel level) {
 		if (mark == null) { return; }
+		animateAttack();
 		entityData.set(ACTIVE, 15);
 		if (kind.behavior == RegionalKind.Behavior.POUNCE || kind.behavior == RegionalKind.Behavior.DIVE
 				|| kind.behavior == RegionalKind.Behavior.CHARGE || kind.behavior == RegionalKind.Behavior.WIDOW) {

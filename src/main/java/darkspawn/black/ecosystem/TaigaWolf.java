@@ -42,7 +42,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class TaigaWolf extends Monster {
+public final class TaigaWolf extends Monster implements darkspawn.black.boss.AnimatedCreature {
+	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
+	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	public enum Kind {
 		DIRE("dire_wolf", 0.9F, 1.25F, 28, 0.29, 5, 10),
 		FROSTFANG("frostfang", 0.9F, 1.25F, 30, 0.28, 5, 3),

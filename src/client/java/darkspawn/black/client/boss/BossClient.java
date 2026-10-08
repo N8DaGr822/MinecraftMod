@@ -5,6 +5,7 @@ import darkspawn.black.boss.BossEntities;
 import darkspawn.black.boss.BossItems;
 import darkspawn.black.boss.BossProfile;
 import darkspawn.black.boss.CreatureAssets;
+import darkspawn.black.client.ecosystem.CreatureGeoRenderer;
 import darkspawn.black.health.BossHeartItem;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -17,17 +18,22 @@ public final class BossClient {
 
 	public static void initialize() {
 		EntityRenderers.register(BossEntities.TREE_SPIRIT, AncientTreeSpiritRenderer::new);
-		EntityRenderers.register(BossEntities.HEARTWOOD_SAPLING, TreeSpiritRenderer::new);
+		if (CreatureAssets.MINIONS.contains("heartwood_sapling")) { EntityRenderers.register(BossEntities.HEARTWOOD_SAPLING, context -> new CreatureGeoRenderer<>(context, BossEntities.HEARTWOOD_SAPLING, .6F, "forest_creatures")); }
+		else { EntityRenderers.register(BossEntities.HEARTWOOD_SAPLING, TreeSpiritRenderer::new); }
 		EntityRenderers.register(BossEntities.SPIRIT_SEED, context -> new ThrownItemRenderer<>(context, 2, true));
 		EntityRenderers.register(BossEntities.MUTANT_WOLF, MutantWolfGeoRenderer::new);
-		EntityRenderers.register(BossEntities.FROST_WOLF, MutantWolfRenderer::new);
+		if (CreatureAssets.MINIONS.contains("frost_wolf")) { EntityRenderers.register(BossEntities.FROST_WOLF, context -> new CreatureGeoRenderer<>(context, BossEntities.FROST_WOLF, .6F, "mutant_wolf")); }
+		else { EntityRenderers.register(BossEntities.FROST_WOLF, MutantWolfRenderer::new); }
 		EntityRenderers.register(BossEntities.FROST_SHARD, context -> new ThrownItemRenderer<>(context, 2, true));
 		BossEntities.BIOME_BOSSES.forEach((profile, type) -> {
 			if (profile == BossProfile.MUTANT_ZOMBIE) { EntityRenderers.register(type, MutantZombieRenderer::new); }
 			else if (CreatureAssets.BOSSES.contains(profile.id())) { EntityRenderers.register(type, context -> new BiomeBossGeoRenderer<>(context, profile)); }
 			else { EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)); }
 		});
-		BossEntities.MINIONS.forEach((profile, type) -> EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)));
+		BossEntities.MINIONS.forEach((profile, type) -> {
+			if (CreatureAssets.MINIONS.contains(profile.id() + "_minion")) { EntityRenderers.register(type, context -> new CreatureGeoRenderer<>(context, type, .6F, profile.id())); }
+			else { EntityRenderers.register(type, context -> new BiomeBossRenderer(context, profile)); }
+		});
 		EntityRenderers.register(BossEntities.BOSS_BOLT, context -> new ThrownItemRenderer<>(context, 2, true));
 		EntityRenderers.register(BossEntities.BOSS_HAZARD, BossHazardRenderer::new);
 		EntityRenderers.register(BossEntities.VOID_PLATFORM, VoidPlatformRenderer::new);
