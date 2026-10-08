@@ -76,6 +76,8 @@ public final class BossBolt extends ThrowableItemProjectile {
 	protected float getAirDrag() { return 1; }
 	@Override
 	protected boolean canHitEntity(Entity entity) {
+		if (getOwner() instanceof darkspawn.black.ecosystem.RegionalMob owner
+				&& entity instanceof darkspawn.black.ecosystem.RegionalMob other && owner.kind().region == other.kind().region) { return false; }
 		if (getOwner() instanceof BiomeBoss boss && boss.ownsSummon(entity)) { return false; }
 		return !(entity instanceof BiomeBoss) && !(entity instanceof BossMinion) && !(entity instanceof AncientTreeSpirit)
 				&& !(entity instanceof MutantWolf) && super.canHitEntity(entity);
@@ -91,6 +93,7 @@ public final class BossBolt extends ThrowableItemProjectile {
 		if (level() instanceof ServerLevel server && hit.getEntity() instanceof LivingEntity target
 				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), damage)) {
 			BossEffects.apply(target, kind());
+			if (getOwner() instanceof darkspawn.black.ecosystem.RegionalMob owner) { owner.onProjectileHit(target); }
 		}
 	}
 	@Override

@@ -40,7 +40,8 @@ public final class HeartwoodSapling extends Monster {
 		if (tickCount % 40 == 0 && distanceToSqr(boss) < 48 * 48) {
 			boss.heal(boss.forestVariant() == 1 ? 6 : 4);
 			level.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + 2, getZ(), 12, 0.5, 1, 0.5, 0.1);
-			level.sendParticles(ParticleTypes.HAPPY_VILLAGER, boss.getX(), boss.getY() + 10, boss.getZ(), 15, 1, 2, 1, 0.1);
+			level.sendParticles(ParticleTypes.HAPPY_VILLAGER, boss.getX(), boss.getY() + 10 * AncientTreeSpirit.MODEL_SCALE, boss.getZ(),
+					15, AncientTreeSpirit.MODEL_SCALE, 2 * AncientTreeSpirit.MODEL_SCALE, AncientTreeSpirit.MODEL_SCALE, 0.1);
 		}
 	}
 

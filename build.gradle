@@ -4,6 +4,12 @@ plugins {
 }
 
 repositories {
+	exclusiveContent {
+		forRepository {
+			maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+		}
+		filter { includeGroupAndSubgroups('com.geckolib') }
+	}
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -42,6 +48,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "com.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}"
 
 	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 }

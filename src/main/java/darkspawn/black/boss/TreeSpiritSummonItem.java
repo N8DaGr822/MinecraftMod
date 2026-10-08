@@ -46,10 +46,12 @@ public final class TreeSpiritSummonItem extends Item {
 		}
 		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
 		boss.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		// Canopy Clearance: Reserve a 21-block square for branches overhanging the 16-block body hitbox.
+		AABB spawnSpace = boss.getBoundingBox().inflate(2.5, 0, 2.5);
 		// Summon Validation: Never carve an arena through builds or consume the item on a failed spawn.
-		if (!level.canSeeSky(pos) || boss.getBoundingBox().maxY > level.getMaxY() + 1
-				|| !level.getWorldBorder().isWithinBounds(boss.getBoundingBox())
-				|| !level.noCollision(boss, boss.getBoundingBox()) || level.containsAnyLiquid(boss.getBoundingBox())) {
+		if (!level.canSeeSky(pos) || spawnSpace.maxY > level.getMaxY() + 1
+				|| !level.getWorldBorder().isWithinBounds(spawnSpace)
+				|| !level.noCollision(boss, spawnSpace) || level.containsAnyLiquid(spawnSpace)) {
 			return fail(player, "boss_needs_space");
 		}
 		boss.prepareEncounter(level);

@@ -1,5 +1,13 @@
 package darkspawn.black.boss;
 
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -27,7 +35,12 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public final class Endborn extends Monster {
+public final class Endborn extends Monster implements GeoEntity {
+	private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.endborn.idle");
+	private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.endborn.walk");
+	private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("animation.endborn.attack");
+	private static final RawAnimation BLINK = RawAnimation.begin().thenPlay("animation.endborn.blink");
+	private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 	private int blinkCooldown;
 	private UUID encounterOwner;
 	private long expiresAt;
@@ -41,6 +54,17 @@ public final class Endborn extends Monster {
 	}
 
 	public Endborn(EntityType<? extends Endborn> type, Level level) { super(type, level); xpReward = 12; }
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+		// Endborn Animation: Movement follows the render snapshot; vanilla swings retain server damage timing.
+		controllers.add(new AnimationController<Endborn>("movement", 4,
+				test -> test.setAndContinue(test.isMoving() ? WALK : IDLE)));
+		controllers.add(DefaultAnimations.<Endborn>genericAttackAnimation(ATTACK).setTransitionTicks(0));
+		controllers.add(new AnimationController<Endborn>("blink", 0, test -> PlayState.STOP)
+				.triggerableAnim("blink", BLINK));
+	}
 	public static AttributeSupplier.Builder attributes() {
 		return createMonsterAttributes().add(Attributes.MAX_HEALTH, 60).add(Attributes.MOVEMENT_SPEED, 0.3)
 				.add(Attributes.ATTACK_DAMAGE, 10).add(Attributes.ARMOR, 6).add(Attributes.FOLLOW_RANGE, 48);
@@ -72,6 +96,7 @@ public final class Endborn extends Monster {
 		blinkCooldown = 100;
 		// Endborn Teleport: Vanilla's placement checks require a solid landing and an unblocked body.
 		if (!randomTeleport(x, y, z, true, state -> false)) { return false; }
+		triggerAnim("blink", "blink");
 		level.sendParticles(ParticleTypes.PORTAL, getX(), getY() + 2, getZ(), 30, 0.5, 2, 0.5, 0.1);
 		return true;
 	}

@@ -9,6 +9,7 @@ import darkspawn.black.boss.BossItems;
 import darkspawn.black.boss.BossEmpowerment;
 import darkspawn.black.health.BossHearts;
 import darkspawn.black.cooking.Cooking;
+import darkspawn.black.ecosystem.ForestEcosystem;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -42,6 +43,10 @@ public class Darkspawn implements ModInitializer {
 		BossEmpowerment.initialize();
 		BossHearts.initialize();
 		Cooking.initialize();
+		ForestEcosystem.initialize();
+		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
+		darkspawn.black.ecosystem.EcosystemEffects.initialize();
+		darkspawn.black.ecosystem.RegionalEcosystems.initialize();
 		PayloadTypeRegistry.serverboundPlay().register(SortInventoryPayload.TYPE, SortInventoryPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(SortInventoryPayload.TYPE,
 				(payload, context) -> InventorySorter.sort(context.player(), payload.stateId()));

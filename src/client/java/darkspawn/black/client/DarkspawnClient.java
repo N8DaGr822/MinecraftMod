@@ -30,7 +30,16 @@ public class DarkspawnClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		darkspawn.black.client.boss.BossClient.initialize();
+		darkspawn.black.ecosystem.ForestEcosystem.MOBS.forEach((kind, type) ->
+				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
+						context -> new darkspawn.black.client.ecosystem.ForestMobRenderer(context, kind)));
+		darkspawn.black.ecosystem.TaigaEcosystem.WOLVES.forEach((kind, type) ->
+				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
+						context -> new darkspawn.black.client.ecosystem.TaigaWolfRenderer(context, kind)));
 		MenuScreens.register(Cooking.MENU, CookingScreen::new);
+		darkspawn.black.ecosystem.RegionalEcosystems.MOBS.forEach((kind, type) ->
+				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
+						context -> new darkspawn.black.client.ecosystem.RegionalMobRenderer(context, kind)));
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
 			if (stack.getItem() instanceof MealItem meal) {
 				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));

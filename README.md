@@ -27,14 +27,15 @@ Right-click the station and combine up to four ingredients **in any order**, one
 | Beef Wellington | Cooked beef + wheat + red or brown mushroom | 10 / 16.0 | +3 attack damage, 2:00 |
 | Fish Chowder | Cooked cod or salmon + milk bucket + potato + bowl | 9 / 12.6 | Water Breathing, 3:00 |
 | Chicken Cordon Bleu | Cooked chicken + wheat + cheese | 9 / 14.4 | Two golden absorption hearts, 2:00 |
+| Woodland Stew | Red or brown mushroom + carrot + Wild Herbs + bowl | 8 / 12.8 | Regeneration I, 0:30 |
 
-Buckets and honey bottles return as empty containers. Eating chowder returns its bowl. Unused inputs return to your inventory when you close the station, walk away, disconnect, or the station is broken; overflow drops normally. Each player's open menu owns its ingredients, so the station does not store items between uses or expose another player's inputs. Extra inventory rows remain accessible through the regular player inventory, matching other container screens.
+Buckets and honey bottles return as empty containers. Eating chowder or Woodland Stew returns its bowl. Unused inputs return to your inventory when you close the station, walk away, disconnect, or the station is broken; overflow drops normally. Each player's open menu owns its ingredients, so the station does not store items between uses or expose another player's inputs. Extra inventory rows remain accessible through the regular player inventory, matching other container screens.
 
 Meals stack to 16 and can be eaten at full hunger to change buffs. **Only one Well Fed meal buff is active at a time**: eating another meal replaces it, including refreshing the same meal. Cheese and vanilla foods do not replace a meal buff. Potions and boss powers retain their own effects and timers. Meal attack damage, regeneration, and absorption can coexist with potion bonuses; vision and breathing use whichever source remains active. Absorption follows Minecraft's shared golden-heart pool and capacity rules.
 
 Meal timers survive saves, reconnects, and dimension changes, pause while offline, and clear on death or when drinking milk. Meal replacement removes only meal-owned effects and attribute modifiers. The five effect variants use vanilla saving and synchronization; vision and breathing checks recognize their dedicated meal effects without overwriting vanilla potion instances. Both client and server must use this updated mod.
 
-Cooking recipes live in `data/darkspawn/recipe` with type `darkspawn:cooking`, support one to four ingredients, and can be overridden by data packs. Meal recipes are station-only; they do not appear in the vanilla crafting-table recipe book. This table is the starter recipe guide. Icons and the station model currently reuse vanilla artwork. Biome dishes, feasts, boss foods, crops, and food-diversity bonuses are future work.
+Cooking recipes live in `data/darkspawn/recipe` with type `darkspawn:cooking`, support one to four ingredients, and can be overridden by data packs. Meal recipes are station-only; they do not appear in the vanilla crafting-table recipe book. This table is the starter recipe guide. Icons and the station model currently reuse vanilla artwork. Further biome dishes, feasts, boss foods, crops, and food-diversity bonuses are planned in the [development roadmap](docs/development-roadmap.md).
 
 Cooking tests cover recipe decoding and ingredient alternatives, network serialization, rejected recipes, shift-click item conservation, full inventories, container returns, menu closure, independent station sessions, meal replacement, potion preservation, milk, save/load, and effect expiration. The screen's appearance at different GUI scales and real two-client interactions still need live playtesting.
 
@@ -80,21 +81,30 @@ The forest encounter is one of 16 implemented boss families. The full roster fol
 
 - The Ender Dragon must have been defeated at least once **in this world**.
 - Craft **Ancient Heartwood** with four logs in the corners, four saplings on the edges, and one dragon's breath in the center.
-- Use it on a moss block in an Overworld forest clearing. The ritual requires open sky, a clear 10-by-10 footprint, and 18 blocks of height. It rejects Peaceful mode and a second Tree Spirit within 128 blocks; failed summons do not consume the item.
-- The Tree Spirit is rooted in place, with an animated 18-block tree silhouette. It has 800 health for one nearby Survival player, plus 400 per additional nearby player, capped at four players when summoned.
-- Root attacks mark the ground for two seconds before erupting. Seed volleys aim at a fixed predicted position and travel as dodgeable projectiles. Ground attacks do not damage players more than six blocks above their impact area.
+- Use it on a moss block in an Overworld forest clearing. The ritual requires open sky, a clear 21-by-21 footprint for the overhanging canopy, and 28 blocks of height. It rejects Peaceful mode and a second Tree Spirit within 128 blocks; failed summons do not consume the item.
+- The Tree Spirit is rooted in place, with an animated 28-block tree silhouette, a roughly 20-block-wide canopy, and roots spanning roughly 17 blocks. Its body hitbox is 16 blocks wide and 28 blocks tall. It has 800 health for one nearby Survival player, plus 400 per additional nearby player, capped at four players when summoned.
+- Summoning plays a three-second awakening: the trunk rises, branches unfold, and the canopy settles. Ordinary damage is blocked during the reveal. It occupies the first three seconds of the existing five-second startup, followed by the full two-second attack warning. Awakening progress survives a reload; older active encounters do not replay it.
+- Root attacks mark the ground for two seconds before erupting: a gold 3.5-block-radius ring for targeted roots and an orange 14-block-radius ring for the sweep. Each boundary matches its damage radius. Green dashed paths and three-axis aiming markers warn of seed volleys at their fixed predicted target; phase three shows both warnings for combined attacks. Critical warnings reach nearby Survival players throughout the 128-block encounter range, including airborne players, and remain visible with reduced particle settings. Moving seeds leave client-local green trails. Ground attacks do not damage players more than six blocks above their impact area.
 
 | Phase | Health threshold | Mechanics |
 | --- | --- | --- |
 | Rooted Guardian | Above 70% | Marked root eruptions, close-range root sweeps, three-seed volleys |
-| Broken Canopy | 70% or lower | Up to four destructible healing saplings, five-seed volleys, exposed heartwood during recovery |
-| Ancient Wrath | 35% or lower | Shorter attack intervals, seven-seed volleys, ground attacks followed by aerial volleys |
+| Broken Canopy | 70% or lower | One outer canopy section sheds, yellow boss bar, up to four destructible healing saplings, five-seed volleys, exposed heartwood during recovery |
+| Ancient Wrath | 35% or lower | Both outer canopy sections shed, red boss bar and warmer bark tint, shorter attack intervals, seven-seed volleys, ground attacks followed by aerial volleys |
 
-After phase two begins, healing cannot reverse a phase. Following attacks, the trunk's heartwood band at 8-14 blocks high glows for two seconds and takes 50% extra damage. Destroy the green saplings to stop their healing. Flower forests and cherry groves strengthen sapling healing; dark forests and pale gardens add two seeds per volley. Sub-biomes share one boss-heart identity.
+After phase two begins, healing cannot reverse a phase. Following attacks, the trunk's heartwood band at approximately 12.4-21.8 blocks high glows for two seconds and takes 50% extra damage. A phase change cancels the previous warning and recovery window, sheds leaf particles, and plays a cracking sound. Canopy damage and boss-bar color follow the saved phase, including after reload. Destroy the green saplings to stop their healing. Flower forests and cherry groves strengthen sapling healing; dark forests and pale gardens add two seeds per volley. Sub-biomes share one boss-heart identity.
 
-Attacks use particles and projectiles without replacing terrain. With no living Survival players within 128 blocks for 60 seconds of server game time, the encounter ends without rewards and removes its healing saplings. If the area unloads, expiration is checked when it next loads. Boss health, phase, variant, and participant IDs persist when saved. The current model, sounds, and icons use vanilla textures/sounds; visual polish and combat balance still need in-game iteration.
+Attacks use particles and projectiles without replacing terrain. With no living Survival players within 128 blocks for 60 seconds of server game time, the encounter ends without rewards and removes its healing saplings. If the area unloads, expiration is checked when it next loads. Boss health, phase, variant, and participant IDs persist when saved. The boss uses a custom Blockbench model and texture with GeckoLib animations; sounds and item icons still use vanilla assets. Visual polish and combat balance still need in-game iteration.
+
+The editable [Tree Spirit project](art/blockbench/ancient_tree_spirit/AncientTreeSpirit.bbmodel) contains 70 cuboids, 20 bones, and twelve clips: idle, wrath idle, three charge poses, three release gestures, phase change, recovery, awakening, and defeat. It retains its 18-block authoring scale; the renderer applies a uniform 28/18 scale to preserve the rig and UV mapping while reaching 28 blocks in game. Combat anchors use the same scale. Synced attack identity selects the charge pose; the server triggers each release when its existing attack executes. The two-second warning and recovery rules remain unchanged. Four full-bright heartwood panels appear only during phase-two/three recovery, marking the raised weak-point band. Healing saplings retain their existing size and renderer.
+
+Keep the `heartwood` bone and `animation.ancient_tree_spirit.*` clip names when editing. Save the `.bbmodel` project, then export geometry to `src/main/resources/assets/darkspawn/geckolib/models/entity/ancient_tree_spirit.geo.json`, animations to `src/main/resources/assets/darkspawn/geckolib/animations/entity/ancient_tree_spirit.animation.json`, and the texture to `src/main/resources/assets/darkspawn/textures/entity/ancient_tree_spirit.png`. The embedded atlas uses a 512-by-512 UV space with shared bark, moss, leaf, and heartwood regions. Its [AI texture prompt](art/blockbench/ancient_tree_spirit/texture-prompt.txt) is saved alongside the model. Blockbench displays the heartwood for editing; the game controls its visibility.
+
+The renderer hides `canopy_left` in phase two and `canopy_right` in phase three. Preserve both bone names when editing the full canopy in Blockbench; the saved encounter phase controls their visibility in game.
 
 The boss drops **Living Heartwood**. Nearby players who attacked it also receive an individually reserved **Ancient Tree Spirit Heart** unless they have already absorbed one. A repeat kill can replace a lost unused heart; it cannot grant a second permanent upgrade from this boss.
+
+Defeat cancels its attack pose, hides the boss bar, removes healing saplings, and plays a three-second collapse with falling leaves and wood-cracking sounds. The body slumps in place without the vanilla sideways death roll. Normal death rewards are awarded once when health reaches zero; the extra corpse time does not delay or duplicate them. The collapse resumes at its saved progress after reload. Both lifecycle clips use synchronized server progress for arriving viewers.
 
 ## Second boss: Giant Mutated Wolf
 
@@ -117,7 +127,7 @@ The boss drops an **Alpha Fang** for smithing and reserves a **Mutant Wolf Heart
 
 ## Remaining biome bosses
 
-All 16 boss families are implemented. The 14 encounters below join the Tree Spirit and Mutated Wolf. Each has a distinct animated model, three phases, a craftable summon, a smithing reward, and its own permanent-heart identity. The Endborn is also implemented; broader ecosystems remain deferred.
+All 16 boss families are implemented. The 14 encounters below join the Tree Spirit and Mutated Wolf. Each has a distinct animated model, three phases, a craftable summon, a smithing reward, and its own permanent-heart identity. All 16 regional ecosystems now have playable creature rosters and discovery rewards; the Endborn also remain available. Client visuals, natural population balance, and multiplayer combat still need playtesting.
 
 Every ritual requires the world's first dragon defeat, the correct dimension/biome, non-Peaceful difficulty, and clear space for the boss. Overworld surface rituals need open sky; the Crawler and Queen require underground space. Another living boss of the same family within 128 blocks blocks the ritual. Failed attempts preserve the summon item.
 
@@ -179,6 +189,10 @@ Encounters end after 60 seconds with no living Survival player within 160 blocks
 
 The Endborn is a tall hostile humanoid with an Enderman-like body and crown. It has 60 HP, teleports toward distant targets, and can dodge a projectile when its five-second blink cooldown is ready. After the world's dragon defeat, it can spawn naturally in End highlands, midlands, and barrens in small groups.
 
+Its renderer uses the editable [Endborn Blockbench project](art/blockbench/endborn/Endborn.bbmodel), with a dark obsidian/violet texture and idle, walk, attack, and blink animations. Movement selects idle/walk, vanilla melee swings play the attack, and successful server teleports trigger the blink. Head tracking remains responsive to the target; the animation changes do not alter attack damage, timing, loot, or health.
+
+To revise this asset, open the project with Blockbench's GeckoLib plugin. Keep the `head` bone and the four `animation.endborn.*` clip names. Save the editable project with **Save Project**, then export geometry to `src/main/resources/assets/darkspawn/geckolib/models/entity/endborn.geo.json`, all animations to `src/main/resources/assets/darkspawn/geckolib/animations/entity/endborn.animation.json`, and the texture to `src/main/resources/assets/darkspawn/textures/entity/endborn.png`. The square texture is embedded in the project and mapped using a 128-by-128 UV space. Shared atlas regions deliberately reuse skin and armor detail; paint changes affect every cube using those regions. The [texture prompt](art/blockbench/endborn/texture-prompt.txt) records the built-in AI image-generation step. Violet markings are part of the texture, without a separate emissive pass.
+
 Natural Endborn killed by a player drop an **Endborn Shard** and an ender pearl. The Void Eye's summoned Endborn expire with the encounter and do not drop these materials. Craft the **Watcher Lens** from four obsidian, one eye of ender, two Endborn Shards, one dragon's breath, and one End crystal:
 
 ```text
@@ -231,13 +245,86 @@ At a smithing table, combine **amethyst shard** (template slot), a **melee weapo
 
 The weapon keeps its item type, enchantments, name, durability damage, and unrelated components. Each item has one boss-power slot: applying a different power replaces the current one, and reapplying the same power is rejected. Only successful direct melee damage triggers these effects. Repeated timed effects refresh their duration without stacking strength. Stormchain and Soul Siphon have explicit cooldowns. Recipe data validates power names and synchronizes them to clients.
 
-## Ecosystems afterward
+## Forest ecosystem
 
-The requested scope of **all 16 bosses plus Endborn** is implemented. Ambient mobs, specialist enemies, heralds, environmental clues, and discovery/ritual structures remain future work. The supplied ecosystem concept notes are preserved in `docs/boss-ecosystem-notes.txt`; summon items remain the agreed way to begin boss fights.
+After the world's first dragon defeat, four creatures can spawn on soil or moss at the surface of supported Overworld forests. They share the Tree Spirit's forest biome tag, including flower, birch, dark, pale, cherry, and dappled forests. Barklings use the creature cap and bright conditions; the other three use the hostile cap, dark conditions, and non-Peaceful difficulty. Existing chunks can spawn them without terrain regeneration.
 
-Models are custom animated cuboid silhouettes using vanilla textures, sounds, and item icons. They still need visual and balance iteration in a live client; headless checks do not establish combat feel or art polish.
+| Creature / entity ID | Behavior and rewards |
+| --- | --- |
+| Barkling / `barkling` | Neutral walking sapling with 16 HP. Freezes near unprovoked players and retaliates with thrown sticks. Use shears to harvest one Wild Herbs; costs one durability and regrows after five minutes of world time. |
+| Hollowed / `hollowed` | Slow armored wooden humanoid with 36 HP. Melee hits apply Slowness III for two seconds. Player kills drop one Wild Herbs. |
+| Rootcrawler / `rootcrawler` | Low tangled roots with 24 HP. Marks a fixed spot for 1.25 seconds, then strikes within 1.5 blocks. Player kills drop one Wild Herbs. |
+| Ancient Ent / `ancient_ent` | Rare 100 HP herald with a wider three-block root strike. Player kills drop Wild Herbs and Ancient Heartwood, providing another route to summon the Tree Spirit. |
+
+These wooden creatures take 50% more incoming damage from axes and fire before normal damage mitigation. Root attacks have a six-block targeting range, affect only nearby ground-level players with line of sight, and briefly slow successful hits. Move outside the marked ring during the warning. Burrowing is a cosmetic crouch; attacks do not replace blocks. The Ent is a herald, so it does not grant boss hearts or smithing materials. Existing summon crafting remains available, and bosses still require player summoning.
+
+Harvesting keeps a Barkling neutral. An angry Barkling refuses harvesting; a regrowing one displays a message. The cooldown belongs to the creature, is shared by players, and survives saves and chunk reloads. A full inventory drops the harvested herb normally. Combine herbs with mushroom, carrot, and bowl at the Cooking Station for Woodland Stew.
+
+For direct testing, use `/summon darkspawn:barkling`, `/summon darkspawn:hollowed`, `/summon darkspawn:rootcrawler`, or `/summon darkspawn:ancient_ent`. Commands bypass the natural-spawn progression gate. Wild Herbs and Woodland Stew are also in Creative's Food & Drinks tab.
+
+The [development roadmap](docs/development-roadmap.md) sequences regional ecosystems, agriculture, meals, boss cuisine, progression rewards, Chef trades, feasts, cookbook discovery, and equipment powers. Later structures, journals, rematches, legendary items, and the Nexus are saved in its [deferred backlog](docs/development-roadmap.md#deferred-expansion-backlog). The original briefs are preserved under `docs/`.
+
+Models are custom animated cuboid silhouettes. The Endborn and Ancient Tree Spirit use custom Blockbench textures and GeckoLib animations; other creatures currently use vanilla textures, sounds, and item icons. They still need visual and balance iteration in a live client; headless checks do not establish combat feel or art polish.
+
+Forest playtest checklist: compare a pre-dragon world with a post-dragon forest by day and night; check all four silhouettes and root warning visibility at normal particle settings; shear a Barkling twice and again after five minutes; repeat with a full inventory and a second player; reload during regrowth; dodge roots and test cover/elevation; obtain the Ent's summon and craft/eat the stew. Natural encounter frequency and two-client feedback remain manual release checks.
+
+## Taiga ecosystem
+
+After the world's first dragon defeat, hostile wolf packs can spawn at the surface of regular, snowy, old-growth pine, and old-growth spruce taigas. They use the native hostile mob cap, dark spawning conditions, suitable soil/snow, and non-Peaceful difficulty. Frostfang has greater spawn weight in snowy taiga. These wolves hunt Survival players, rabbits, and sheep; the boss's temporary Frost Wolves remain separate.
+
+| Creature / entity ID | Behavior and player-kill drops |
+| --- | --- |
+| Dire Wolf / `dire_wolf` | 28 HP pack predator; drops one bone. |
+| Frostfang / `frostfang` | 30 HP; walks on powder snow, successful bites inflict Slowness I for three seconds; drops one bone. |
+| Ravaged Wolf / `ravaged_wolf` | 44 HP with enlarged, uneven forelimbs; at or below 35% health while targeting prey, frenzies for five seconds with +35% movement speed and +2 attack damage. Fifteen-second trigger cooldown; drops one rabbit hide. |
+| Alpha Dire Wolf / `alpha_dire_wolf` | Rare 90 HP herald; howls to boost its pack and marks a landing before a short pounce. Drops one bone and the existing Moonlit Fang boss summon. |
+
+All four gain a single 10% movement-speed bonus near another visible taiga ecosystem wolf within eight blocks. The bonus is rechecked once per second and does not multiply with pack size. Alpha howls give visible ecosystem wolves within twelve blocks Speed I for five seconds, with a ten-second cooldown. The current howl cue reuses a vanilla warning sound.
+
+An Alpha can call at most two temporary Dire Wolves once in its lifetime, subject to a six-wolf local cap and safe placement. Called wolves expire after thirty seconds of world time, disappear when their Alpha dies or remains unloaded, and grant no items or XP. The call limit and helper ownership/expiry survive save/load. Called packs never summon more wolves.
+
+An Alpha's pounce warns for one second at a fixed spot three to eight blocks away. Move outside the 1.75-block landing ring or use solid cover. Normal movement collision stops the leap at walls; it does not teleport or damage terrain. Reloading cancels a pending pounce and requires a fresh warning.
+
+**Alpha Fang remains a boss-only smithing reward.** The herald grants Moonlit Fang instead, preserving existing boss hearts, equipment progression, and summon crafting. Bones and rabbit hides also support the original summon recipe. Taming and the new brief's additional miniboss systems are saved for later.
+
+Test with `/summon darkspawn:dire_wolf`, `/summon darkspawn:frostfang`, `/summon darkspawn:ravaged_wolf`, and `/summon darkspawn:alpha_dire_wolf`. Commands bypass natural spawn requirements. Live playtesting should check night-time pack frequency, snowy pathfinding, prey selection, frenzy visibility, pounce warnings/collision, helper cleanup, and two-player encounters.
+
+## Remaining regional ecosystems
+
+The remaining 14 boss regions add **74 creatures and discoveries**, bringing the forest/taiga/regional roster to 82 entries, separate from bosses and encounter-only minions. They unlock after the world's first dragon defeat and use existing biome tags and native population caps. Command summons bypass this gate. Hostiles do not naturally spawn in Peaceful.
+
+| Region | Creatures and discovery route |
+| --- | --- |
+| Plains / meadows | **Rotted Zombie**, **Brute Zombie**, **Leaping Zombie**, **Mutant Huskling**, **Failed Mutant**. Tougher undead, warned slams/pounces, thrown debris; the Brute opens and closes wooden doors without breaking them. Failed Mutant drops **Mutated Flesh**. |
+| Desert / badlands | **Bone Raptor**, **Fossil Scorpion**, **Bone Vulture**, **Fossilized Husk**, **Tyrant Skull**. Raptor packs pounce; scorpions poison; vultures scavenge loose bones and attack weakened players. Right-click a Tyrant Skull with a pickaxe to excavate one **Ancient Tyrant Fossil**, costing one durability. |
+| Savanna | **Storm Finch**, **Shocktalon**, **Stormstrider**, **Thunder Roc**. Peaceful charged finches, neutral fast striders, warned diving birds, lightning projectiles and wing knockback. Roc drops **Charged Feather**; use it on exposed, unwaxed fresh copper during thunder to obtain **Stormforged Feather**. |
+| Jungle | **Tree Viper**, **Constrictor**, **Jungle Stalker**, **Brood Serpent**. Climbing venomous vipers, fixed warned constriction zones, camouflaged ambush predators. Brood Serpent drops **Titan Scale**. |
+| Swamp | **Bogling**, **Hexed Frog**, **Swamp Wisp**, **Hexbound**, **Baba's Familiar**. Loose-food scavenging, short curses, weak hex projectiles, and guided particle trails. Follow a Familiar to its marked destination for a **Witch Token**; killing it grants no token. Wisps reward followers with glow berries. |
+| Mountains | **Stoneback Goat**, **Crag Crawler**, **Stoneborn**, **Titan Spawn**. Neutral armored charging goats resist projectiles; crawlers ambush; rock creatures throw debris and the Titan Spawn also slams at close range. Titan Spawn drops **Titan Stone**. |
+| Frozen lands | **Frostling**, **Frozen Husk**, **Icefang**, **Young Wyrm**. Ice projectiles, slowing bites, armored husks vulnerable to fire, and a Wyrm that retreats at low health. All four walk on powder snow and resist freezing. Young Wyrm drops **Wyrm Scale**. |
+| Oceans | **Abyssal Fish**, **Giant Crab**, **Siren**, **Leviathan Spawn**. Actual swimming/breathing, seabed crabs with a vulnerable rear, warned Siren pulls, and serpent grabs that also damage nearby boats before retreating deeper. Leviathan Spawn drops **Abyssal Scale** for the existing **Kraken** family. |
+| Caves | **Cave Skitterer**, **Web Spitter**, **Brood Carrier**, **Tunnel Widow**. Wall climbing, temporary web effects, finite hatchlings, and a warned Widow pounce with climbing retreat. Widow drops **Brood Fang**. Also found below Y=48 in covered Overworld terrain outside the Deep Dark. |
+| Deep Dark | **Shadow Drone**, **Shadow Stalker**, **Shadow Spitter**, **Shadow Guardian**, **Shadow Larva**, **Shadow Egg**, **Shadow Praetorian**. Darkness bursts, hunters that freeze under observation, acid/dark patches, nest-area guards, finite egg hatching, natural larva maturation, and directional herald strikes. Praetorian drops **Shadow Membrane**, leaving Royal Shadow Gland boss-exclusive. |
+| Mushroom fields | **Sporeling**, **Mycelium Crawler**, **Infected Mooshroom**, **Sporewalker**, **Mycelial Guardian**. Neutral hive retaliation, fungal ambushes, reactive spores, and a Guardian that heals on mycelium and creates temporary spore patches. Guardian drops **Mycelial Heart Fragment**. |
+| Nether regions | Crimson: **Crimson Ravager**, **Fungal Imp**, **Bloodroot**, **Crimson Spawn**. Warped: **Warped Stalker**, **Warped Wisp**, **Riftling**, **Warped Spawn**. Wastes/deltas: **Ash Ghoul**, **Magma Brute**, **Infernal Hoglin**, **Infernal Spawn**. Charges, allied speed buffs, stationary snares, stare-triggered hostility, safe blinks, and temporary magma effects. The three Spawn heralds drop **Crimson / Warped / Infernal Organ** respectively. |
+| Soul Sand Valley | **Lost Soul**, **Bonewalker**, **Soulflame Skull**, **Tormented**, **Soul Keeper**. Brief ghost movement, one saved reconstruction, soul bolts, stationary snares, and limited helpers. Lost Souls temporarily reduce maximum health by half a heart; Keeper bolts by one heart. Keeper drops **Captured Soul**. |
+| Outer End islands | **Voidling**, **End Grazer**, **Shardling**, **Void Ray**, **Watcher**, **Void Sentinel**. Safe short blinks, passive chorus grazing, arrow dodges, neutral flying rays, retreating observers, and a shielded herald with finite Voidling helpers. Sentinel drops **Watcher Fragment** for the existing Watcher Lens summon. |
+
+Craft each regional discovery material with **one dragon's breath** to obtain that region's existing summon item. Thunder Bird requires the **Stormforged** Feather; Netherborn requires **all three different organs plus dragon's breath**. Collecting a material unlocks its alternative recipe. Existing summon recipes and ritual biome/weather/space requirements remain available. These discoveries never grant permanent hearts or smithing essences.
+
+Special attacks warn at a fixed point for one second, or 1.25 seconds for heralds. Dodge the marked area or use solid cover. Pounces use normal collision. Temporary web, darkness, magma, and spore patches warn again before activating, last five seconds at most, and do not replace terrain. Reload cancels pending attacks and patches.
+
+Each helper-producing creature can create at most two helpers once, with a six-creature local cap. Helpers have no loot or XP, cannot reproduce/mature, and expire after thirty seconds of world time; owner-bound helpers also disappear when their owner dies or remains unloaded. Natural Shadow Larvae can mature into a single Drone after one minute if the adult fits. Bonewalker reconstruction, one-time discovery claims, and helper ownership/expiry survive saves.
+
+Boglings and vultures take at most one loose item, save it, and return it on death; they do not take inventory contents. Familiars reserve their trail reward for the follower, release an abandoned trail after thirty seconds, and depart ten seconds after granting the reward. Soul health loss lasts five seconds, does not stack, leaves at least one usable heart, and preserves permanent boss-heart progress. All teleport destinations require loaded, collision-free space with nearby support.
+
+For testing, use `/summon darkspawn:<creature_name_in_snake_case>`, for example `failed_mutant`, `tyrant_skull`, `babas_familiar`, `shadow_praetorian`, `crimson_spawn`, or `void_sentinel`. Discovery ingredients are also in Creative's Ingredients tab. Every region has animated cuboid models using vanilla textures; bespoke art, sound, and the deferred structure/archaeology systems remain later work. Burrowing, grazing, webs, growth, and rifts use creature poses or particles without editing player terrain; End Grazers are not rideable.
+
+Regional release checks: compare pre/post-dragon saves, inspect every silhouette and warning in its native lighting, observe natural day/night populations, test aerial and underwater movement, follow a Familiar over real terrain, excavate with a full inventory, forge a storm feather, and repeat discoveries/combat on two clients. Check walls, cliffs, doors, boats, unload/reload, peaceful switching, and cleanup around each herald.
 
 ## Setup
+
+Install Darkspawn, Fabric API, and **GeckoLib 5.5.7 for Fabric / Minecraft 26.3** on both the client and server. GeckoLib is a required separate mod, not bundled inside the Darkspawn jar.
 
 Use **JDK 25** and the included Gradle wrapper. From this folder in PowerShell:
 
@@ -270,7 +357,7 @@ The visual layout, upgrade use, death/respawn, and multiplayer behavior still ne
 Use a disposable test world for the first encounter checks:
 
 1. Before defeating the dragon, attempt the moss ritual and confirm it fails without consuming the summon. After defeating the dragon, test valid/invalid biomes, obstructed clearings, Peaceful mode, and duplicate summons.
-2. Fight on foot and with Elytra. Check the two-second telegraphs, projectile collisions, ground-attack height, healing saplings, phase transitions, and glowing recovery windows. Verify attacks do not alter blocks.
+2. Fight on foot and with Elytra. Check the two-second telegraphs, projectile collisions, ground-attack height, healing saplings, phase transitions, and glowing recovery windows. Verify attacks do not alter blocks. For the Tree Spirit model, check the seed casting, one-arm root strike, and two-arm sweep; the four heartwood panels must disappear outside phase-two/three recovery. Inspect the roots against the ground, the canopy against F3+B hitboxes, the orange wrath tint, and animations seen by a second client joining during a warning. Check the three-second awakening and defeat collapse, including a second viewer arriving midway and saving/reloading during each. Confirm the first warning remains two seconds long, the corpse disappears after collapse, and rewards appear only once.
 3. Rejoin/restart mid-fight and verify health/phase persist. Leave the area and return after the abandonment timeout; check that no healing saplings or boss bars remain.
 4. Fight with two players. Both should receive their own usable heart after contributing damage and remaining nearby. Use one heart, repeat the fight, and confirm the same boss cannot increase that player's health twice.
 5. Smith a named, enchanted, damaged weapon. Confirm all original data survives, Rootbound appears in the tooltip and slows melee targets, and a second application is rejected.
@@ -298,6 +385,7 @@ For direct testing, `/summon darkspawn:mutant_wolf` uses solo health and the reg
 4. Watch the Sovereign stand up, destroy healing mushrooms/turrets, and verify temporary mycelium disappears without changing island blocks.
 5. Let the Colossus steal hearts, break cages, wait out the effect, then leave/reload/end the encounter. Permanent health progress should remain.
 6. Check Void Eye shield arcs, End reinforcements, safe platform landing/expiry, and rift warnings. Natural Endborn should drop shards; summoned ones should not.
+   For the new Endborn assets, use `/summon darkspawn:endborn` and check idle/walk transitions, head tracking, melee swings, and successful teleport animations. Check texture orientation and foot placement in daylight and End lighting, then confirm a second client sees the same attack/blink events. Use F3+B to compare the silhouette with the existing hitbox.
 7. Save/reload every phase, abandon encounters, and repeat kills with two players. Check cleanup, one heart per family, no repeated phase waves, and all powers on named/enchanted/damaged weapons.
 
 Both client and server must use the updated jar for the new entities, effects, items, and smithing recipe synchronization.

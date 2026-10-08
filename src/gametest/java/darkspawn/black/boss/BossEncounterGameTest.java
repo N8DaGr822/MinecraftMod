@@ -1,14 +1,19 @@
 package darkspawn.black.boss;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.embedded.EmbeddedChannel;
+import java.util.ArrayList;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
@@ -16,6 +21,7 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
@@ -26,13 +32,15 @@ import net.minecraft.world.phys.Vec3;
 
 public final class BossEncounterGameTest {
 	private static ServerPlayer player(GameTestHelper helper) {
+		return player(helper, new Connection(PacketFlow.SERVERBOUND));
+	}
+	private static ServerPlayer player(GameTestHelper helper, Connection connection) {
 		ServerLevel level = helper.getLevel();
 		var cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "boss-test"), false);
 		ServerPlayer player = new ServerPlayer(level.getServer(), level, cookie.gameProfile(), cookie.clientInformation()) {
 			@Override public GameType gameMode() { return GameType.SURVIVAL; }
 			@Override public boolean isClientAuthoritative() { return false; }
 		};
-		Connection connection = new Connection(PacketFlow.SERVERBOUND);
 		new EmbeddedChannel(connection);
 		level.getServer().getPlayerList().placeNewPlayer(connection, player, cookie);
 		GameType.SURVIVAL.updatePlayerAbilities(player.getAbilities());
@@ -77,6 +85,232 @@ public final class BossEncounterGameTest {
 				} finally { boss.discard(); }
 			}
 		} finally { removePlayer(player); }
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void treeAnimationsPreserveAttackWarningsRecoveryAndReload(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		level.addFreshEntity(boss);
+		try {
+			boolean checkedReload = false;
+			for (int phase = 1; phase <= 3; phase++) {
+				boss.setHealth(boss.getMaxHealth() * (phase == 1 ? 1 : phase == 2 ? 0.6F : 0.3F));
+				boss.customServerAiStep(level);
+				var released = new java.util.HashSet<Integer>();
+				for (int tick = 0; tick < 600; tick++) {
+					int previousWindup = boss.windup();
+					boss.commonTick(); boss.customServerAiStep(level);
+					if (previousWindup == 0 && boss.windup() > 0) {
+						helper.assertTrue(boss.windup() == 40, "Animation integration shortened the attack warning");
+					}
+					if (previousWindup > 0) {
+						helper.assertTrue(boss.windup() == previousWindup - 1, "Warning countdown changed");
+						if (boss.windup() == 0) {
+							released.add(boss.attackKind());
+							helper.assertTrue(boss.recovery() == (phase >= 2 ? 40 : 0), "Weak point no longer matches the recovery window");
+						}
+					}
+					if (!checkedReload && boss.windup() > 0) {
+						var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+						boss.saveWithoutId(output);
+						AncientTreeSpirit restored = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+						restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
+						helper.assertTrue(restored.windup() == 0 && restored.recovery() == 0, "Reload resumed an unfinished attack pose");
+						restored.discard(); checkedReload = true;
+					}
+				}
+				helper.assertTrue(boss.phase() == phase && released.size() == 3, "Tree did not exercise all attack animations in phase " + phase);
+			}
+			// Boss Scale: Seed volleys must originate at the enlarged canopy, not the old 12-block height.
+			var seeds = level.getEntitiesOfClass(SpiritSeed.class, boss.getBoundingBox().inflate(16), seed -> seed.getOwner() == boss);
+			helper.assertTrue(!seeds.isEmpty(), "Tree did not release any seeds");
+			for (SpiritSeed seed : seeds) {
+				helper.assertTrue(Math.abs(seed.getY() - boss.getY() - 18.666667) < 0.001, "Seed did not launch from the enlarged model");
+				seed.discard();
+			}
+			// Client Data: The newly synced attack identity must not keep a charge active after everyone leaves.
+			player.teleportTo(player.getX() + 200, player.getY(), player.getZ());
+			boss.customServerAiStep(level);
+			helper.assertTrue(boss.windup() == 0, "Charge remained active without a nearby player");
+		} finally {
+			boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void treeWarningsMatchTheirDamageAreasAndReachFlyingPlayers(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		var particles = new ArrayList<ClientboundLevelParticlesPacket>();
+		ServerPlayer player = player(helper, new Connection(PacketFlow.SERVERBOUND) {
+			@Override public void send(Packet<?> packet, ChannelFutureListener listener, boolean flush) {
+				if (packet instanceof ClientboundLevelParticlesPacket particle && particle.particle() instanceof DustParticleOptions) {
+					particles.add(particle);
+				}
+				super.send(packet, listener, flush);
+			}
+		});
+		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+		// Target Isolation: Other concurrently scheduled encounters must not supply this test's aim point.
+		boss.setPos(player.position().add(0, 0, 512));
+		level.addFreshEntity(boss);
+		player.teleportTo(boss.getX() + 60, boss.getY() + 40, boss.getZ());
+		try {
+			var warnings = new java.util.HashSet<Integer>();
+			for (int tick = 0; tick < 600 && warnings.size() < 3; tick++) {
+				particles.clear();
+				boss.commonTick(); boss.customServerAiStep(level);
+				if (particles.isEmpty()) { continue; }
+				int attack = boss.attackKind();
+				warnings.add(attack);
+				helper.assertTrue(particles.stream().allMatch(p -> p.overrideLimiter() && p.alwaysShow()), "Flight or particle settings can hide a critical warning");
+				if (attack == 0) {
+					helper.assertTrue(particles.size() == 23, "Flying player did not receive the full seed path and reticle");
+					var target = particles.get(16);
+					helper.assertTrue(new Vec3(target.x(), target.y(), target.z()).distanceTo(player.getEyePosition()) < 0.001,
+							"Seed warning does not end at its fixed aim point");
+				} else {
+					helper.assertTrue(particles.size() == (attack == 2 ? 64 : 32), "Flying player lost part of the ground warning");
+					Vec3 center = attack == 2 ? boss.position() : player.position();
+					for (var particle : particles) {
+						double radius = Math.hypot(particle.x() - center.x, particle.z() - center.z);
+						helper.assertTrue(Math.abs(radius - (attack == 2 ? 14 : 3.5)) < 0.001, "Warning edge differs from the damage radius");
+					}
+				}
+			}
+			helper.assertTrue(warnings.size() == 3, "Not all warning shapes were exercised");
+			boss.setHealth(boss.getMaxHealth() * 0.3F);
+			boolean combinedWarning = false;
+			for (int tick = 0; tick < 220 && !combinedWarning; tick++) {
+				particles.clear();
+				boss.commonTick(); boss.customServerAiStep(level);
+				if (!particles.isEmpty() && boss.attackKind() != 0) {
+					helper.assertTrue(particles.size() == 23 + (boss.attackKind() == 2 ? 64 : 32), "Wrath's extra seed volley has no aerial warning");
+					combinedWarning = true;
+				}
+			}
+			helper.assertTrue(combinedWarning, "No combined phase-three warning was exercised");
+		} finally {
+			level.getEntitiesOfClass(SpiritSeed.class, boss.getBoundingBox().inflate(128), seed -> seed.getOwner() == boss).forEach(SpiritSeed::discard);
+			boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void treeHeartwoodClosesOnPhaseChangeAndRewardsElevatedHits(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		boss.getAttribute(Attributes.ARMOR).setBaseValue(0);
+		boss.setHealth(boss.getMaxHealth() * 0.6F);
+		level.addFreshEntity(boss);
+		SpiritSeed probe = new SpiritSeed(BossEntities.SPIRIT_SEED, level);
+		try {
+			for (int tick = 0; tick < 160 && boss.recovery() == 0; tick++) {
+				boss.commonTick(); boss.customServerAiStep(level);
+			}
+			helper.assertTrue(boss.phase() == 2 && boss.recovery() > 0, "Heartwood never opened");
+			probe.setPos(boss.position().add(0, 8, 0));
+			float health = boss.getHealth();
+			boss.hurtServer(level, level.damageSources().thrown(probe, player), 4);
+			helper.assertTrue(Math.abs(health - boss.getHealth() - 4) < 0.001, "The old low weak point still grants bonus damage");
+			// Damage Probe: Measure separate hits without Minecraft's repeated-hit damage reduction.
+			boss.damageCooldownTime = 0;
+			probe.setPos(boss.position().add(0, 18, 0));
+			health = boss.getHealth();
+			boss.hurtServer(level, level.damageSources().thrown(probe, player), 4);
+			helper.assertTrue(Math.abs(health - boss.getHealth() - 6) < 0.001, "Exposed elevated heartwood did not grant 50% extra damage");
+			boss.setHealth(boss.getMaxHealth() * 0.3F);
+			boss.customServerAiStep(level);
+			helper.assertTrue(boss.phase() == 3 && boss.recovery() == 0 && boss.windup() == 0, "Phase change retained the previous attack's warning or weak point");
+			boss.damageCooldownTime = 0;
+			health = boss.getHealth();
+			boss.hurtServer(level, level.damageSources().thrown(probe, player), 4);
+			helper.assertTrue(Math.abs(health - boss.getHealth() - 4) < 0.001, "Closed heartwood still granted bonus damage during phase change");
+		} finally {
+			probe.discard(); boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player);
+		}
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void treeAwakeningPersistsAndKeepsTheFullOpeningWarning(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		level.addFreshEntity(boss);
+		try {
+			float health = boss.getHealth();
+			helper.assertTrue(boss.awakening() == 60, "New encounter skipped its reveal");
+			helper.assertTrue(!boss.hurtServer(level, level.damageSources().playerAttack(player), 50), "Unfolding boss accepted ordinary damage");
+			for (int tick = 0; tick < 20; tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+			var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+			boss.saveWithoutId(output);
+			var saved = output.buildResult();
+			AncientTreeSpirit restored = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
+			helper.assertTrue(restored.awakening() == 40, "Reload restarted or skipped a partial reveal");
+			for (int tick = 0; tick < 40; tick++) {
+				boss.commonTick(); boss.customServerAiStep(level);
+				helper.assertTrue(boss.windup() == 0 && boss.recovery() == 0, "Boss attacked while awakening");
+			}
+			helper.assertTrue(boss.awakening() == 0 && boss.getHealth() == health, "Reveal failed to finish safely");
+			for (int tick = 0; tick < 39; tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+			helper.assertTrue(boss.windup() == 0, "Opening attack started before the original five-second delay");
+			boss.commonTick(); boss.customServerAiStep(level);
+			helper.assertTrue(boss.windup() == 40, "Awakening shortened the first attack's warning");
+			helper.assertTrue(boss.hurtServer(level, level.damageSources().generic(), 5), "Boss remained protected after awakening");
+			// Save Compatibility: Old active encounters have no awakening field.
+			saved.remove("darkspawn_awakening");
+			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), saved));
+			helper.assertTrue(restored.awakening() == 0, "Old save replayed the reveal");
+			restored.discard();
+			AncientTreeSpirit commanded = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+			helper.assertTrue(commanded.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE), "Awakening blocked administrative removal");
+			commanded.discard();
+		} finally { boss.discard(); removePlayer(player); }
+		helper.succeed();
+	}
+
+	@GameTest(skyAccess = true)
+	public void treeDefeatLastsThreeSecondsWithoutRepeatingRewards(GameTestHelper helper) {
+		ServerLevel level = helper.getLevel();
+		ServerPlayer player = player(helper);
+		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+		boss.setPos(player.position().add(20, 0, 0));
+		level.addFreshEntity(boss);
+		try {
+			for (int tick = 0; tick < 60; tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+			var area = boss.getBoundingBox().inflate(32);
+			var previousItems = level.getEntitiesOfClass(ItemEntity.class, area).stream().map(ItemEntity::getUUID).collect(java.util.stream.Collectors.toSet());
+			boss.hurtServer(level, level.damageSources().playerAttack(player), 10000);
+			helper.assertTrue(boss.isDeadOrDying() && !boss.isRemoved(), "Defeat did not begin with a visible corpse");
+			var drops = level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID()));
+			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.LIVING_HEARTWOOD)).count() == 1, "Death must award one Heartwood drop");
+			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.HEARTS.get(BossKind.ANCIENT_TREE_SPIRIT))).count() == 1, "Death must reserve one boss heart");
+			boss.die(level.damageSources().playerAttack(player));
+			for (int tick = 0; tick < 20; tick++) { boss.tickDeath(); }
+			helper.assertTrue(!boss.isRemoved() && boss.defeatTime() == 20, "Vanilla removal cut the collapse short");
+			var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+			boss.saveWithoutId(output);
+			AncientTreeSpirit restored = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
+			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
+			helper.assertTrue(restored.isDeadOrDying() && restored.defeatTime() == 20, "Reload restarted the collapse");
+			for (int tick = 20; tick < 59; tick++) { boss.tickDeath(); restored.tickDeath(); }
+			helper.assertTrue(!boss.isRemoved() && !restored.isRemoved(), "Collapse ended before its final pose");
+			boss.tickDeath(); restored.tickDeath();
+			helper.assertTrue(boss.isRemoved() && restored.isRemoved(), "Completed collapse left a corpse behind");
+			helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID())).size() == drops.size(),
+					"Repeated death, collapse, or reload duplicated rewards");
+			drops.forEach(ItemEntity::discard);
+		} finally { boss.discard(); removePlayer(player); }
 		helper.succeed();
 	}
 

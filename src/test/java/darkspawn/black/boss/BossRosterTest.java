@@ -2,6 +2,8 @@ package darkspawn.black.boss;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.geckolib.loading.loader.GeckoLibGsonLoader;
+import com.geckolib.loading.math.MathParser;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.Lifecycle;
 import darkspawn.black.Darkspawn;
@@ -184,8 +186,79 @@ class BossRosterTest {
 		for (String name : List.of("BiomeBossRenderer", "BossAccentLayer", "BossHazardRenderer", "VoidPlatformRenderer", "EndbornRenderer")) {
 			Class.forName("darkspawn.black.client.boss." + name, false, getClass().getClassLoader()).getDeclaredMethods();
 		}
-		Object endbornLayer = Class.forName("darkspawn.black.client.boss.EndbornRenderer").getMethod("createBodyLayer").invoke(null);
-		assertNotNull(endbornLayer.getClass().getMethod("bakeRoot").invoke(endbornLayer));
+	}
+
+	@Test
+	void endbornAssetsBakeWithGeckoLibAndAllAnimatedBonesExist() throws Exception {
+		var loader = new GeckoLibGsonLoader();
+		var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/endborn"),
+				resource("/assets/darkspawn/geckolib/models/entity/endborn.geo.json").getAsJsonObject());
+		var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/endborn"),
+				resource("/assets/darkspawn/geckolib/animations/entity/endborn.animation.json").getAsJsonObject(), MathParser.create());
+		assertFalse(model.isMissingno());
+		assertTrue(model.getBone("head").isPresent(), "The renderer requires a head bone for look tracking");
+		for (String name : List.of("idle", "walk", "attack", "blink")) {
+			var animation = animations.getAnimation("animation.endborn." + name);
+			assertNotNull(animation, name);
+			assertTrue(animation.length() > 0, name);
+			for (var bone : animation.boneAnimations()) {
+				assertTrue(model.getBone(bone.boneName()).isPresent(), name + ": " + bone.boneName());
+			}
+		}
+		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/endborn.png")) {
+			assertNotNull(stream);
+			var texture = javax.imageio.ImageIO.read(stream);
+			assertNotNull(texture, "The packaged texture must decode as an image");
+			assertEquals(texture.getWidth(), texture.getHeight(), "The model uses a square UV atlas");
+		}
+	}
+
+	@Test
+	void treeSpiritAssetsPreserveScaleWeakPointAndAnimationBones() throws Exception {
+		var loader = new GeckoLibGsonLoader();
+		var geometry = resource("/assets/darkspawn/geckolib/models/entity/ancient_tree_spirit.geo.json").getAsJsonObject();
+		var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/ancient_tree_spirit"), geometry);
+		var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/ancient_tree_spirit"),
+				resource("/assets/darkspawn/geckolib/animations/entity/ancient_tree_spirit.animation.json").getAsJsonObject(), MathParser.create());
+		assertFalse(model.isMissingno());
+		for (String name : List.of("idle", "wrath_idle", "charge_seed", "charge_root", "charge_sweep",
+				"seed_volley", "root_eruption", "root_sweep", "phase_change", "recovery", "awaken", "defeat")) {
+			var animation = animations.getAnimation("animation.ancient_tree_spirit." + name);
+			assertNotNull(animation, name);
+			for (var bone : animation.boneAnimations()) {
+				assertTrue(model.getBone(bone.boneName()).isPresent(), name + ": " + bone.boneName());
+			}
+		}
+		assertEquals(AncientTreeSpirit.AWAKENING_TICKS / 20.0,
+				animations.getAnimation("animation.ancient_tree_spirit.awaken").length(), 0.001);
+		assertEquals(AncientTreeSpirit.DEFEAT_TICKS / 20.0,
+				animations.getAnimation("animation.ancient_tree_spirit.defeat").length(), 0.001);
+		double height = 0;
+		int heartFaces = 0;
+		for (var value : geometry.getAsJsonArray("minecraft:geometry").get(0).getAsJsonObject().getAsJsonArray("bones")) {
+			var bone = value.getAsJsonObject();
+			if (!bone.has("cubes")) { continue; }
+			for (var cubeValue : bone.getAsJsonArray("cubes")) {
+				var cube = cubeValue.getAsJsonObject();
+				double bottom = cube.getAsJsonArray("origin").get(1).getAsDouble();
+				double top = bottom + cube.getAsJsonArray("size").get(1).getAsDouble();
+				height = Math.max(height, top / 16 * AncientTreeSpirit.MODEL_SCALE);
+				if (bone.get("name").getAsString().equals("heartwood")) {
+					assertTrue(bottom / 16 * AncientTreeSpirit.MODEL_SCALE >= 8 * AncientTreeSpirit.MODEL_SCALE
+							&& top / 16 * AncientTreeSpirit.MODEL_SCALE <= 14 * AncientTreeSpirit.MODEL_SCALE,
+							"Heartwood must mark the raised vulnerable height band");
+					heartFaces++;
+				}
+			}
+		}
+		assertEquals(BossEntities.TREE_SPIRIT.getDimensions().height(), height, 0.001);
+		assertEquals(28, height, 0.001, "The Tree Spirit must render at its intended boss height");
+		assertEquals(4, heartFaces, "Elytra attackers need a visible weak point from all four sides");
+		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/ancient_tree_spirit.png")) {
+			assertNotNull(stream);
+			assertNotNull(javax.imageio.ImageIO.read(stream));
+		}
+		Class.forName("darkspawn.black.client.boss.AncientTreeSpiritRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
 	}
 
 	@Test

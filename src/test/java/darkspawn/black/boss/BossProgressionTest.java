@@ -171,8 +171,8 @@ class BossProgressionTest {
 
 	@Test
 	void registeredBossTypesAndClientModelsLoadWithoutAGameWindow() throws Exception {
-		assertEquals(10, BossEntities.TREE_SPIRIT.getDimensions().width());
-		assertEquals(18, BossEntities.TREE_SPIRIT.getDimensions().height());
+		assertEquals(16, BossEntities.TREE_SPIRIT.getDimensions().width());
+		assertEquals(28, BossEntities.TREE_SPIRIT.getDimensions().height());
 		assertEquals(16, BossItems.HEARTS.size());
 		assertEquals(10, BossEntities.MUTANT_WOLF.getDimensions().width());
 		assertEquals(9, BossEntities.MUTANT_WOLF.getDimensions().height());

@@ -14,7 +14,7 @@ public final class BossClient {
 	}
 
 	public static void initialize() {
-		EntityRenderers.register(BossEntities.TREE_SPIRIT, TreeSpiritRenderer::new);
+		EntityRenderers.register(BossEntities.TREE_SPIRIT, AncientTreeSpiritRenderer::new);
 		EntityRenderers.register(BossEntities.HEARTWOOD_SAPLING, TreeSpiritRenderer::new);
 		EntityRenderers.register(BossEntities.SPIRIT_SEED, context -> new ThrownItemRenderer<>(context, 2, true));
 		EntityRenderers.register(BossEntities.MUTANT_WOLF, MutantWolfRenderer::new);

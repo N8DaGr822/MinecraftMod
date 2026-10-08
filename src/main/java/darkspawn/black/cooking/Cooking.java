@@ -34,6 +34,7 @@ public final class Cooking {
 				@Override public String toString() { return "darkspawn:cooking"; }
 			});
 	public static final Item SALT = register("salt", Item::new);
+	public static final Item WILD_HERBS = register("wild_herbs", Item::new);
 	public static final Item CHEESE = register("cheese", properties -> new Item(properties.food(new FoodProperties.Builder()
 			.nutrition(3).saturationModifier(0.5F).build())));
 	public static final MealItem HERB_STEAK = meal("herb_steak", 8, 0.8F, MealEffects.HERBAL, 180, false);
@@ -41,6 +42,7 @@ public final class Cooking {
 	public static final MealItem BEEF_WELLINGTON = meal("beef_wellington", 10, 0.8F, MealEffects.SAVORY, 120, false);
 	public static final MealItem FISH_CHOWDER = meal("fish_chowder", 9, 0.7F, MealEffects.SEAFOOD, 180, true);
 	public static final MealItem CHICKEN_CORDON_BLEU = meal("chicken_cordon_bleu", 9, 0.8F, MealEffects.HEARTY, 120, false);
+	public static final MealItem WOODLAND_STEW = meal("woodland_stew", 8, 0.8F, MealEffects.SWEET, 30, true);
 
 	private Cooking() {
 	}
@@ -66,12 +68,14 @@ public final class Cooking {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> entries.accept(STATION_ITEM));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
 			entries.accept(SALT);
+			entries.accept(WILD_HERBS);
 			entries.accept(CHEESE);
 			entries.accept(HERB_STEAK);
 			entries.accept(HONEY_PORK);
 			entries.accept(BEEF_WELLINGTON);
 			entries.accept(FISH_CHOWDER);
 			entries.accept(CHICKEN_CORDON_BLEU);
+			entries.accept(WOODLAND_STEW);
 		});
 	}
 }

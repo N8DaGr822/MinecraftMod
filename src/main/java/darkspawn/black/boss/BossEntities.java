@@ -21,7 +21,7 @@ public final class BossEntities {
 			BuiltInRegistries.ATTRIBUTE, Darkspawn.id("boss_max_health"),
 			new RangedAttribute("attribute.darkspawn.boss_max_health", 20, 1, 100000).setSyncable(true));
 	public static final EntityType<AncientTreeSpirit> TREE_SPIRIT = register("ancient_tree_spirit",
-			EntityType.Builder.of(AncientTreeSpirit::new, MobCategory.MONSTER).sized(10, 18).eyeHeight(12)
+			EntityType.Builder.of(AncientTreeSpirit::new, MobCategory.MONSTER).sized(16, 28).eyeHeight(12 * AncientTreeSpirit.MODEL_SCALE)
 					.clientTrackingRange(12).updateInterval(2).notInPeaceful());
 	public static final EntityType<HeartwoodSapling> HEARTWOOD_SAPLING = register("heartwood_sapling",
 			EntityType.Builder.of(HeartwoodSapling::new, MobCategory.MONSTER).sized(1.6F, 2.88F)

@@ -40,6 +40,10 @@ public final class SpiritSeed extends ThrowableItemProjectile {
 	@Override
 	public void tick() {
 		super.tick();
+		// Seed Trail: Client-local particles make moving volleys readable without per-tick network packets.
+		if (level().isClientSide() && !isRemoved() && tickCount % 2 == 0) {
+			level().addParticle(ParticleTypes.COMPOSTER, getX(), getY(), getZ(), 0, 0, 0);
+		}
 		if (tickCount > 160) {
 			discard();
 		}

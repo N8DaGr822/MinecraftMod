@@ -12,6 +12,8 @@ public final class TestBootstrap {
 	}
 
 	public static synchronized void initialize() {
+		// Fabric Tests: ServiceLoader providers must use the same Knot loader as their mod interfaces.
+		Thread.currentThread().setContextClassLoader(TestBootstrap.class.getClassLoader());
 		if (initialized) {
 			return;
 		}

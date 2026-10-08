@@ -65,6 +65,8 @@ class CookingRecipeTest {
 		matches("fish_chowder", Cooking.FISH_CHOWDER, Items.COOKED_COD, Items.POTATO, Items.MILK_BUCKET, Items.BOWL);
 		matches("fish_chowder", Cooking.FISH_CHOWDER, Items.COOKED_SALMON, Items.POTATO, Items.MILK_BUCKET, Items.BOWL);
 		matches("chicken_cordon_bleu", Cooking.CHICKEN_CORDON_BLEU, Items.COOKED_CHICKEN, Items.WHEAT, Cooking.CHEESE);
+		matches("woodland_stew", Cooking.WOODLAND_STEW, Items.RED_MUSHROOM, Items.CARROT, Cooking.WILD_HERBS, Items.BOWL);
+		matches("woodland_stew", Cooking.WOODLAND_STEW, Items.BROWN_MUSHROOM, Items.CARROT, Cooking.WILD_HERBS, Items.BOWL);
 		assertInstanceOf(ShapedRecipe.class, recipe("cooking_station"));
 	}
 
@@ -96,7 +98,7 @@ class CookingRecipeTest {
 
 	@Test
 	void mealsCanReplaceBuffsAtFullHungerAndHavePackagedModels() {
-		for (MealItem item : List.of(Cooking.HERB_STEAK, Cooking.HONEY_PORK, Cooking.BEEF_WELLINGTON, Cooking.FISH_CHOWDER, Cooking.CHICKEN_CORDON_BLEU)) {
+		for (MealItem item : List.of(Cooking.HERB_STEAK, Cooking.HONEY_PORK, Cooking.BEEF_WELLINGTON, Cooking.FISH_CHOWDER, Cooking.CHICKEN_CORDON_BLEU, Cooking.WOODLAND_STEW)) {
 			var stack = new ItemStack(item);
 			assertTrue(stack.get(DataComponents.FOOD).canAlwaysEat());
 			assertEquals(16, stack.getMaxStackSize());
