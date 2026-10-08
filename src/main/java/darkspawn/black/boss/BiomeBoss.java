@@ -118,7 +118,8 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	public AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-		// Zombie Assets: Only the zombie uses this rig; other regional bosses retain their existing renderers.
+		if (CreatureAssets.BOSSES.contains(profile.id())) { BiomeBossAnimations.register(profile, controllers); return; }
+		// Zombie Assets: Preserve its existing controller and clip names when adding regional rigs.
 		if (profile != BossProfile.MUTANT_ZOMBIE) { return; }
 		controllers.add(new AnimationController<BiomeBoss>("movement", 4, test -> {
 			if (test.getDataOrDefault(DataTickets.IS_DEAD_OR_DYING, false)
@@ -229,7 +230,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 			entityData.set(WINDUP, 0);
 			cooldown = 60;
 			level.playSound(null, blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 2, 0.7F);
-			if (profile == BossProfile.MUTANT_ZOMBIE) { triggerAnim("action", "phase_change"); }
+			if (profile == BossProfile.MUTANT_ZOMBIE || CreatureAssets.BOSSES.contains(profile.id())) { triggerAnim("action", "phase_change"); }
 		}
 		if (chargeTicks > 0) { tickCharge(level); return; }
 		if (recovery() > 0) {
@@ -346,6 +347,9 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	}
 
 	private void executeAttack(ServerLevel level) {
+		if (CreatureAssets.BOSSES.contains(profile.id()) && attack != BossAttack.CHARGE && attack != BossAttack.POUNCE) {
+			triggerAnim("action", attack.name().toLowerCase(java.util.Locale.ROOT));
+		}
 		// Attack Release: Animation follows the existing server event without delaying damage or projectiles.
 		if (profile == BossProfile.MUTANT_ZOMBIE) {
 			switch (attack) {
@@ -681,7 +685,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	}
 	@Override
 	public void die(DamageSource source) {
-		if (profile == BossProfile.MUTANT_ZOMBIE) { stopTriggeredAnim("action", null); }
+		if (profile == BossProfile.MUTANT_ZOMBIE || CreatureAssets.BOSSES.contains(profile.id())) { stopTriggeredAnim("action", null); }
 		if (level() instanceof ServerLevel level) { cleanup(level); }
 		super.die(source);
 	}

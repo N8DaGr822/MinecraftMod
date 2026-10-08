@@ -167,6 +167,10 @@ Keep the `head_look` bone and `animation.mutant_zombie.*` names when editing. Ex
 
 ## Remaining biome bosses
 
+The [Fossil Tyrant Blockbench project](art/blockbench/fossil_tyrant/FossilTyrant.bbmodel) includes 101 cuboids, 20 bones, a fossil-bone atlas, and 16 clips covering locomotion, every phase attack, recovery, roar, and a one-second collapse. Its 14-block height, attack timing, collision, and rewards retain their existing values. The jaw, rib cage, and five tail joints make bite and sweep warnings readable. Related minions receive their own assets separately.
+
+The [creature asset tools](tools/assets/README.md) provide a local animated preview, deterministic authoring helpers, export checks, and a catalog of all 115 registered living creatures. The catalog includes unfinished entries; only validated rigs listed in `CreatureAssets` are enabled. Texture prompts are saved beside each source project.
+
 All 16 boss families are implemented. The 14 encounters below join the Tree Spirit and Mutated Wolf. Each has a distinct animated model, three phases, a craftable summon, a smithing reward, and its own permanent-heart identity. All 16 regional ecosystems now have playable creature rosters and discovery rewards; the Endborn also remain available. Client visuals, natural population balance, and multiplayer combat still need playtesting.
 
 Every ritual requires the world's first dragon defeat, the correct dimension/biome, non-Peaceful difficulty, and clear space for the boss. Overworld surface rituals need open sky; the Crawler and Queen require underground space. Another living boss of the same family within 128 blocks blocks the ritual. Failed attempts preserve the summon item.

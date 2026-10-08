@@ -351,6 +351,39 @@ class BossRosterTest {
 	}
 
 	@Test
+	void completedRegionalBossAssetsCoverEveryAttackAndBake() throws Exception {
+		var loader = new GeckoLibGsonLoader();
+		for (var profile : BossProfile.values()) {
+			if (!CreatureAssets.BOSSES.contains(profile.id())) { continue; }
+			String path = "/assets/darkspawn/";
+			var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/" + profile.id()), resource(path + "geckolib/models/entity/" + profile.id() + ".geo.json").getAsJsonObject());
+			var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/" + profile.id()), resource(path + "geckolib/animations/entity/" + profile.id() + ".animation.json").getAsJsonObject(), MathParser.create());
+			assertFalse(model.isMissingno(), profile.id());
+			var names = new java.util.HashSet<>(List.of("idle", "walk", "wrath_idle", "charge", "recovery", "phase_change", "death"));
+			for (int phase = 1; phase <= 3; phase++) {
+				for (int variant = 0; variant <= 2; variant++) {
+					for (var attack : profile.attacks(phase, variant)) {
+						String name = attack.name().toLowerCase(java.util.Locale.ROOT);
+						names.add("windup_" + name);
+						if (attack != BossAttack.CHARGE && attack != BossAttack.POUNCE) { names.add(name); }
+					}
+				}
+			}
+			for (String name : names) {
+				var animation = animations.getAnimation("animation." + profile.id() + "." + name);
+				assertNotNull(animation, profile.id() + ": " + name);
+				assertTrue(animation.length() > 0);
+				if (name.startsWith("windup_")) { assertEquals(2, animation.length(), .001); }
+				for (var bone : animation.boneAnimations()) { assertTrue(model.getBone(bone.boneName()).isPresent(), bone.boneName()); }
+			}
+			try (var stream = getClass().getResourceAsStream(path + "textures/entity/" + profile.id() + ".png")) {
+				assertNotNull(stream); assertNotNull(javax.imageio.ImageIO.read(stream));
+			}
+		}
+		Class.forName("darkspawn.black.client.boss.BiomeBossGeoRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
+	}
+
+	@Test
 	void beamsHaveFiniteEndpointsAndSoulTheftCannotRemoveTheLastHeart() {
 		assertEquals(4, BiomeBoss.distanceToSegmentSquared(new Vec3(5, 2, 0), Vec3.ZERO, new Vec3(10, 0, 0)));
 		assertEquals(25, BiomeBoss.distanceToSegmentSquared(new Vec3(15, 0, 0), Vec3.ZERO, new Vec3(10, 0, 0)));
