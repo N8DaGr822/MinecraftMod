@@ -5,7 +5,7 @@
         "age": "0"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage0"
+        "model": "darkspawn:block/onion_crop_stage0"
       }
     },
     {
@@ -13,7 +13,7 @@
         "age": "1"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage0"
+        "model": "darkspawn:block/onion_crop_stage1"
       }
     },
     {
@@ -21,7 +21,7 @@
         "age": "2"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage1"
+        "model": "darkspawn:block/onion_crop_stage2"
       }
     },
     {
@@ -29,7 +29,7 @@
         "age": "3"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage1"
+        "model": "darkspawn:block/onion_crop_stage3"
       }
     },
     {
@@ -37,7 +37,7 @@
         "age": "4"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage2"
+        "model": "darkspawn:block/onion_crop_stage4"
       }
     },
     {
@@ -45,7 +45,7 @@
         "age": "5"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage2"
+        "model": "darkspawn:block/onion_crop_stage5"
       }
     },
     {
@@ -53,15 +53,7 @@
         "age": "6"
       },
       "apply": {
-        "model": "minecraft:block/carrots_stage2"
-      }
-    },
-    {
-      "when": {
-        "age": "7"
-      },
-      "apply": {
-        "model": "minecraft:block/carrots_stage3"
+        "model": "darkspawn:block/onion_crop_stage6"
       }
     },
     {
