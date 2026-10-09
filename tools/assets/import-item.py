@@ -21,7 +21,7 @@ with Image.open(source) as image:
     alpha = image.convert("RGBA").getchannel("A")
     assert alpha.getextrema()[0] == 0 and alpha.getextrema()[1] == 255, f"Missing transparency: {item_id}"
 destination = ASSETS / f"textures/item/{item_id}.png"
-prepare(source, destination, 32)
+prepare(source, destination, 32, cutout=True)
 model["textures"]["layer0"] = f"darkspawn:item/{item_id}"
 model_path.write_text(json.dumps(model, indent=2) + "\n")
 authoring = ROOT / "art/items"
@@ -30,7 +30,7 @@ authoring.mkdir(parents=True, exist_ok=True)
     "id": item_id, "generator": "built-in image_gen", "date": "2026-10-09",
     "source": source.name, "prompt": base64.b64decode(prompt64).decode(),
     "texture": f"src/main/resources/assets/darkspawn/textures/item/{item_id}.png",
-    "packaging": "32x32 RGBA, Pillow BOX resize, original alpha preserved"
+    "packaging": "32x32 RGBA, Pillow BOX resize, alpha cutout at 128; transparent background retained"
 }, indent=2) + "\n")
 cache = ROOT / "build/art-source"
 cache.mkdir(parents=True, exist_ok=True)
