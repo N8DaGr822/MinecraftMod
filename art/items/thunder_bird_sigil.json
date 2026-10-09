@@ -2,9 +2,8 @@
   "id": "thunder_bird_sigil",
   "generator": "built-in image_gen",
   "date": "2026-10-09",
-  "source": "sources/thunder_bird_sigil.png",
-  "prompt": "Pre-existing workspace reference artwork retained. Its original generation prompt was not available; the source PNG is preserved.",
+  "source": "exec-61fdb973-5f2a-4b63-9092-8deb222ee405.png",
+  "prompt": "Use case: stylized-concept\nAsset type: one Minecraft Java inventory item sprite, designed to remain recognizable at exactly 32x32 pixels.\nSubject: Stormforged Feather, a ritual summoning relic. One broad diagonal navy-blue thunderbird feather with blackened steel vanes, gold lightning-shaped shaft, a small gold ritual binding around the quill base and vivid cyan tip. FEATHER silhouette, not a medallion, crystal, or round token.\nStyle: Darkspawn dark fantasy Minecraft pixel art. Ancient dangerous magic, blackened material edges, saturated luminous inner accents contained inside the item. Biome-specific palette from the subject. Strong iconic shape, visibly precious endgame loot.\nComposition: SINGLE centered isolated icon, three-quarter item view where appropriate, fits inside a square with about 2 pixels transparent margin at 32x32 logical resolution. Occupies 80-88% of canvas. Big legible pixel clusters, strong silhouette, dark 1 pixel outline, three-tone shading, top-left highlight. Draw as a 32x32 pixel sprite enlarged cleanly, limited palette, sharp square pixels. This is game production art.\nBackground: genuine alpha transparency. No floor, backdrop, contact shadow, frame, lettering, numbers, UI, watermark, decorative border or extra unrelated objects. No soft glow outside the silhouette, no photorealism, no smooth painted curves, no gradients.\nPixel discipline: chunky native Minecraft material tones, charcoal outlines with deep violet shadow undertones. Use broad facets and large details; no tiny noise, smooth shading, outside bloom or floating fragments. Keep every tip within a transparent margin.",
   "texture": "src/main/resources/assets/darkspawn/textures/item/thunder_bird_sigil.png",
-  "packaging": "32x32 RGBA, Pillow BOX resize, alpha cutout at 128; transparent background retained",
-  "prompt_status": "unavailable_existing_reference"
+  "packaging": "32x32 RGBA, Pillow BOX resize, alpha cutout at 128; transparent background retained"
 }
