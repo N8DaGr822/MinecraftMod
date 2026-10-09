@@ -1,0 +1,10 @@
+Built-in image_gen; 2026-10-09. 128x128 atlas; four 64x64 material tiles.
+Source: exec-8b725779-9ec8-4567-9f72-7632c75eb384.png
+Use case: stylized-concept
+Asset type: single Minecraft garlic crop MATERIAL TEXTURE ATLAS, NOT an illustration of whole plants.
+A perfectly aligned square atlas divided into 2x2 equal square quadrants, no gaps or borders. Four full-bleed flat material surfaces, each quadrant designed as simple 16x16 logical Minecraft pixels, enlarged with crisp square pixel clusters. These materials will map onto small blocky crop geometry. Exact quadrant order:
+TOP LEFT: cool blue-green garlic leaf surface with narrow pale veins.
+TOP RIGHT: light sage green stalk with fine vertical fibers.
+BOTTOM LEFT: pale mint green immature garlic bulb skin.
+BOTTOM RIGHT: ivory cream garlic skin with pale lavender vertical clove boundaries.
+Opaque surfaces fill every pixel. Native Minecraft crop palette, sparse stylized organic pixel clusters, flat diffuse color; no realistic lighting, no gradients, no grain noise, no perspective, no whole fruit or plant silhouettes, no soil, no words, no labels, no gridlines, no outer frame. Avoid many small details; readable when each quadrant is small.
