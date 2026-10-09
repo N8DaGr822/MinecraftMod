@@ -44,7 +44,7 @@ for(let age=0;age<8;age++){
    }
   }
  }else if(id==='corn'){
-  const h=2+growth*20;
+  const h=2+growth*12;
   box('Corn stalk',[7.55,-1,7.55],[8.45,h,8.45],1);
   for(let n=0;n<2+Math.floor(growth*4);n++)blade('Corn leaf '+n,8,Math.max(0,h*(.17+n*.11)),8,2+growth*4,1+growth,n%2?1:-1,n%3?'z':'x');
   if(age>=5){
