@@ -1,0 +1,9 @@
+{
+  "id": "alpha_fang",
+  "generator": "built-in image_gen",
+  "date": "2026-10-09",
+  "source": "sources/alpha_fang.png",
+  "prompt": "Use case: stylized-concept\nAsset type: one production Minecraft Java inventory item sprite for the Darkspawn mod, designed to read at exactly 32x32 pixels.\nStyle: dark fantasy native Minecraft pixel art. Chunky deliberate square pixel clusters, limited palette, a strong one-logical-pixel charcoal outline with a subtle deep violet undertone in darkest shadows. Simple three-tone material shading with a top-left highlight. Crisp, solid physical object, not painterly concept art.\nComposition: SINGLE centered isolated item on a square canvas. Occupy 80-86% of the square with clear transparent margins. Draw like an actual 32x32 sprite enlarged using nearest-neighbor scaling: large square pixel steps and compact readable detail. Maintain a strong silhouette when shrunk.\nBackground: real alpha transparency. No scene, floor, drop shadow, labels, letters, numbers, inventory box, frame, logo, watermark, extra objects, tiny floating fragments, soft bloom, gradients, smooth curves or photorealism. Any luminous accents must remain inside the object silhouette.\nSubject: Alpha Fang, an earned wolf-boss trophy used for smithing. Two broad serrated silver-white wolf fangs joined at their dark root by a compact ice-blue crystal collar. The larger fang curves down-right; the shorter fang echoes it alongside, both clearly separate at the tips. Compact jagged diagonal trophy silhouette with unmistakably bone teeth rather than sword blades. Ivory-white lit edges, slate-blue shadows, a small icy cyan crystal accent. No leather binding or moon motif; those belong to the separate summoning relic.",
+  "texture": "src/main/resources/assets/darkspawn/textures/item/alpha_fang.png",
+  "packaging": "32x32 RGBA, Pillow BOX resize, alpha cutout at 128; transparent background retained"
+}
