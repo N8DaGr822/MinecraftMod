@@ -1,8 +1,83 @@
 {
-	"parent": "minecraft:block/cube_bottom_top",
-	"textures": {
-		"side": "minecraft:block/smoker_side",
-		"top": "minecraft:block/crafting_table_top",
-		"bottom": "minecraft:block/oak_planks"
-	}
+  "parent": "minecraft:block/block",
+  "textures": {
+    "atlas": "darkspawn:block/cooking_station",
+    "particle": "#atlas"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#atlas",
+          "cullface": "north"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "texture": "#atlas",
+          "cullface": "south"
+        },
+        "east": {
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "texture": "#atlas",
+          "cullface": "east"
+        },
+        "west": {
+          "uv": [
+            0,
+            8,
+            8,
+            16
+          ],
+          "texture": "#atlas",
+          "cullface": "west"
+        },
+        "up": {
+          "uv": [
+            8,
+            0,
+            16,
+            8
+          ],
+          "texture": "#atlas",
+          "cullface": "up"
+        },
+        "down": {
+          "uv": [
+            8,
+            8,
+            16,
+            16
+          ],
+          "texture": "#atlas",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
 }

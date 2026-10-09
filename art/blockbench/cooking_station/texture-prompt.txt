@@ -1,0 +1,10 @@
+Built-in image_gen; 2026-10-09. Runtime atlas: 128x128, four 64x64 faces.
+Source: exec-1a8bf146-3780-4316-b122-5b2d924e2434.png
+Use case: stylized-concept
+Asset type: production texture atlas for a Minecraft Java Cooking Station block. This is TEXTURE ART, NOT a rendered cube.
+Primary request: a square atlas divided into an exact 2 by 2 grid of four square 32x32-style pixel textures. Fill all four quadrants to their edges, no gaps, no labels. Total atlas should look like 64x64 logical pixels, enlarged with crisp nearest-neighbor pixels.
+TOP LEFT quadrant: front-facing rustic oak cooking cabinet, dark iron corner braces, warm end-grain, two cabinet doors with small iron handles, a narrow utensil drawer along upper edge. Perfectly flat orthographic surface.
+TOP RIGHT quadrant: straight top-down worktop, wood butcher-block border, small inset dark iron stove ring on the LEFT and a clean rectangular pale wooden chopping board on the RIGHT with tiny carrot slices and green herbs. Flush surfaces; practical medieval cooking counter.
+BOTTOM LEFT quadrant: side wall of same rustic oak cabinet with iron corner braces, horizontal planks and a small hanging iron ladle and skillet. Flat orthographic.
+BOTTOM RIGHT quadrant: plain underside of same dark oak wood planks with cross-brace, modest grain.
+Style: native Minecraft readable pixel art, sparse handmade pixel clusters, warm honey oak, dark iron, cream cutting board, few saturated ingredient accents. Small palette. No photorealism, no perspective, no glossy highlights, no shadows outside surfaces. Opaque and tile-edge clean. No words, icons, gridlines or watermark. Four full square textures, exact aligned quadrants.
