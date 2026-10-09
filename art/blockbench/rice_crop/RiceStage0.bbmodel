@@ -1,0 +1,1694 @@
+{
+  "meta": {
+    "format_version": "5.0",
+    "model_format": "java_block",
+    "box_uv": false
+  },
+  "name": "RiceStage0",
+  "model_identifier": "rice_crop_stage0",
+  "ambientocclusion": false,
+  "resolution": {
+    "width": 128,
+    "height": 128
+  },
+  "elements": [
+    {
+      "name": "Rice reed 0",
+      "from": [
+        3.75,
+        -1,
+        4.75
+      ],
+      "to": [
+        4.25,
+        3.25,
+        5.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "b91ffeff-105c-434e-a977-6e1d6bdb6890",
+      "box_uv": false,
+      "origin": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rice leaf 00",
+      "from": [
+        3.417,
+        1.463,
+        4.7
+      ],
+      "to": [
+        4,
+        1.763,
+        5.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "d1adff3e-a675-4a77-a41d-77986efe1da7",
+      "box_uv": false,
+      "origin": [
+        4,
+        1.4625000000000001,
+        5
+      ]
+    },
+    {
+      "name": "Rice leaf 01",
+      "from": [
+        2.833,
+        1.463,
+        4.79
+      ],
+      "to": [
+        3.417,
+        1.763,
+        5.21
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "0289779a-1f04-43cb-a6a2-507149cd82b3",
+      "box_uv": false,
+      "origin": [
+        4,
+        1.4625000000000001,
+        5
+      ]
+    },
+    {
+      "name": "Rice leaf 02",
+      "from": [
+        2.25,
+        1.463,
+        4.88
+      ],
+      "to": [
+        2.833,
+        1.763,
+        5.12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "631c6806-d4e1-4fcc-a2a6-0e9e87df4c2b",
+      "box_uv": false,
+      "origin": [
+        4,
+        1.4625000000000001,
+        5
+      ]
+    },
+    {
+      "name": "Rice reed 1",
+      "from": [
+        7.15,
+        -1,
+        4.75
+      ],
+      "to": [
+        7.65,
+        3.5,
+        5.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "aa8e8be1-688c-4acb-a239-ca949db7135c",
+      "box_uv": false,
+      "origin": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rice leaf 10",
+      "from": [
+        7.4,
+        1.575,
+        4.7
+      ],
+      "to": [
+        7.983,
+        1.875,
+        5.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        22.5
+      ],
+      "type": "cube",
+      "uuid": "5b78aa72-fece-4fa5-a7f1-12bb2abe4653",
+      "box_uv": false,
+      "origin": [
+        7.4,
+        1.575,
+        5
+      ]
+    },
+    {
+      "name": "Rice leaf 11",
+      "from": [
+        7.983,
+        1.575,
+        4.79
+      ],
+      "to": [
+        8.567,
+        1.875,
+        5.21
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        22.5
+      ],
+      "type": "cube",
+      "uuid": "4ab9061a-724c-435f-aa64-1583740b3cdd",
+      "box_uv": false,
+      "origin": [
+        7.4,
+        1.575,
+        5
+      ]
+    },
+    {
+      "name": "Rice leaf 12",
+      "from": [
+        8.567,
+        1.575,
+        4.88
+      ],
+      "to": [
+        9.15,
+        1.875,
+        5.12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        22.5
+      ],
+      "type": "cube",
+      "uuid": "bbf89023-1ba3-46a7-a33d-dbdd47bb9383",
+      "box_uv": false,
+      "origin": [
+        7.4,
+        1.575,
+        5
+      ]
+    },
+    {
+      "name": "Rice reed 2",
+      "from": [
+        10.55,
+        -1,
+        4.75
+      ],
+      "to": [
+        11.05,
+        3.25,
+        5.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "8535d3df-0424-4d7f-a7f3-a01dc97cc63a",
+      "box_uv": false,
+      "origin": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rice leaf 20",
+      "from": [
+        10.217,
+        1.463,
+        4.7
+      ],
+      "to": [
+        10.8,
+        1.763,
+        5.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "526a36eb-7cae-40a1-ae92-b37da9d67d0b",
+      "box_uv": false,
+      "origin": [
+        10.8,
+        1.4625000000000001,
+        5
+      ]
+    },
+    {
+      "name": "Rice leaf 21",
+      "from": [
+        9.633,
+        1.463,
+        4.79
+      ],
+      "to": [
+        10.217,
+        1.763,
+        5.21
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "6e255d1c-5bb3-45d6-ab8a-018a0440a51c",
+      "box_uv": false,
+      "origin": [
+        10.8,
+        1.4625000000000001,
+        5
+      ]
+    },
+    {
+      "name": "Rice leaf 22",
+      "from": [
+        9.05,
+        1.463,
+        4.88
+      ],
+      "to": [
+        9.633,
+        1.763,
+        5.12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "8376393d-6e22-405c-a2e9-e4e81687e884",
+      "box_uv": false,
+      "origin": [
+        10.8,
+        1.4625000000000001,
+        5
+      ]
+    },
+    {
+      "name": "Rice reed 3",
+      "from": [
+        3.75,
+        -1,
+        9.75
+      ],
+      "to": [
+        4.25,
+        3.5,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "5ab29809-5602-4383-a948-9d604b6f972a",
+      "box_uv": false,
+      "origin": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rice leaf 30",
+      "from": [
+        4,
+        1.575,
+        9.7
+      ],
+      "to": [
+        4.583,
+        1.875,
+        10.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        22.5
+      ],
+      "type": "cube",
+      "uuid": "37b4411a-27c8-4ff0-a56b-8bcd3e29a9b8",
+      "box_uv": false,
+      "origin": [
+        4,
+        1.575,
+        10
+      ]
+    },
+    {
+      "name": "Rice leaf 31",
+      "from": [
+        4.583,
+        1.575,
+        9.79
+      ],
+      "to": [
+        5.167,
+        1.875,
+        10.21
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        22.5
+      ],
+      "type": "cube",
+      "uuid": "f7c446a5-d7f1-48a7-a6f6-8eb299a9384a",
+      "box_uv": false,
+      "origin": [
+        4,
+        1.575,
+        10
+      ]
+    },
+    {
+      "name": "Rice leaf 32",
+      "from": [
+        5.167,
+        1.575,
+        9.88
+      ],
+      "to": [
+        5.75,
+        1.875,
+        10.12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        22.5
+      ],
+      "type": "cube",
+      "uuid": "7259a06a-375f-406d-a632-beba71ba0efe",
+      "box_uv": false,
+      "origin": [
+        4,
+        1.575,
+        10
+      ]
+    },
+    {
+      "name": "Rice reed 4",
+      "from": [
+        7.15,
+        -1,
+        9.75
+      ],
+      "to": [
+        7.65,
+        3.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            65,
+            1,
+            127,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "type": "cube",
+      "uuid": "40a9fd15-7c7e-4754-af09-b7d61af8e955",
+      "box_uv": false,
+      "origin": [
+        8,
+        0,
+        8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Rice leaf 40",
+      "from": [
+        6.817,
+        1.463,
+        9.7
+      ],
+      "to": [
+        7.4,
+        1.763,
+        10.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "7e409635-b90f-4682-af6d-b72d90e6dc0c",
+      "box_uv": false,
+      "origin": [
+        7.4,
+        1.4625000000000001,
+        10
+      ]
+    },
+    {
+      "name": "Rice leaf 41",
+      "from": [
+        6.233,
+        1.463,
+        9.79
+      ],
+      "to": [
+        6.817,
+        1.763,
+        10.21
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "6514e1b4-cf0b-4fed-ace5-097d33ee7b1e",
+      "box_uv": false,
+      "origin": [
+        7.4,
+        1.4625000000000001,
+        10
+      ]
+    },
+    {
+      "name": "Rice leaf 42",
+      "from": [
+        5.65,
+        1.463,
+        9.88
+      ],
+      "to": [
+        6.233,
+        1.763,
+        10.12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            63,
+            63
+          ],
+          "texture": 0
+        }
+      },
+      "rotation": [
+        0,
+        0,
+        -22.5
+      ],
+      "type": "cube",
+      "uuid": "6cc95788-ab72-48f6-a54c-630ff6e89ce2",
+      "box_uv": false,
+      "origin": [
+        7.4,
+        1.4625000000000001,
+        10
+      ]
+    }
+  ],
+  "outliner": [
+    "b91ffeff-105c-434e-a977-6e1d6bdb6890",
+    "d1adff3e-a675-4a77-a41d-77986efe1da7",
+    "0289779a-1f04-43cb-a6a2-507149cd82b3",
+    "631c6806-d4e1-4fcc-a2a6-0e9e87df4c2b",
+    "aa8e8be1-688c-4acb-a239-ca949db7135c",
+    "5b78aa72-fece-4fa5-a7f1-12bb2abe4653",
+    "4ab9061a-724c-435f-aa64-1583740b3cdd",
+    "bbf89023-1ba3-46a7-a33d-dbdd47bb9383",
+    "8535d3df-0424-4d7f-a7f3-a01dc97cc63a",
+    "526a36eb-7cae-40a1-ae92-b37da9d67d0b",
+    "6e255d1c-5bb3-45d6-ab8a-018a0440a51c",
+    "8376393d-6e22-405c-a2e9-e4e81687e884",
+    "5ab29809-5602-4383-a948-9d604b6f972a",
+    "37b4411a-27c8-4ff0-a56b-8bcd3e29a9b8",
+    "f7c446a5-d7f1-48a7-a6f6-8eb299a9384a",
+    "7259a06a-375f-406d-a632-beba71ba0efe",
+    "40a9fd15-7c7e-4754-af09-b7d61af8e955",
+    "7e409635-b90f-4682-af6d-b72d90e6dc0c",
+    "6514e1b4-cf0b-4fed-ace5-097d33ee7b1e",
+    "6cc95788-ab72-48f6-a54c-630ff6e89ce2"
+  ],
+  "textures": [
+    {
+      "name": "rice_crop.png",
+      "namespace": "darkspawn",
+      "folder": "block",
+      "id": "0",
+      "uuid": "19d4016c-e188-47fa-adcd-940fa2e40913",
+      "width": 128,
+      "height": 128,
+      "uv_width": 128,
+      "uv_height": 128,
+      "mode": "bitmap",
+      "saved": true,
+      "source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAABrZklEQVR42nX9abBm2XWeBz5r73PON9z5ZubNsSprHoFCoYDCVAAxEAQ4yxRlU5YlS2q1FYoOO/pf/+n+3/2juy07LEU4PDQd1GBSJGVIEEHQADGjCkMVaq5CTZlZOd/MO3/jOWfv1T/2PtOX5WQkWcx773fPsPfaa73rfd8lf+e/fVoBbt7MyQtYXhH6fUHEoAo7twsUWF4xLPUt/5ffexrn4X/4+k9BhaJUVOFo7PEerIVzpxIU8KpcveZwJRhguAy9gSG1wn/xGw/iFS7cOOJbv7iOAGUBt3ccIIgAovzm5+7m4w+d4b2rl9k9OOCdqzlvXZqRJELaE1ZXLEYMACjMC8/5Uyv8xqceZHd/nxvbt7m1X/KT1w8pHawsW9JMWF0GI8r/86u/AQrP/fIFMIZXf3kLRNhYzzBG+NyHH2aY9ZnkM7xXLty4we7hmL2jOVli+f1feQZUAOHZX76AICDCZJoDwruXDxCBX//MIxiBvs3YXDmBEYsCL114lVI93332Gkejgl/59BaDLKXfS0hSy5n1UxxfPs7eeJfto22u3zpkOi9478oRqbX8o9/+AiCApXQlb1x5g8m84N3Le4wnjr2Dkk89fi+ff+pRdke7vH/rCtN5wbtX9kDAIApS3YPi1eMVFMWj8b/Be/BaPWeP9x6NP4uAMSAoEBaEavhBkfCvnvDzqgpI/LqChv+O345WbxLBGMEYi4iJX5D4/YQVJdX1aPWbwz8g9f9Un+ar32GgWi9QXV91DT78iurfFQRTf2L1/c2nUl9E9f8p1T2CqkekukjFq4KY+pmg7WuOn6FS/5uqhnuPHyEm/Cwi9UKj+9PhZzV8qX4C9TWEa/I+XA+AIb4UV4ZvKAqYTj3WKGnSeSuIKIgiQGIhkfBBAgx6pvqtYXFo9RrDi3alZzTyLA0My30D6psH1XmcEv+3MhiANeHzxVQPPjyP1WXD5lpYGHHt1g+tLH1zw3FBeg/5zJMaJbUar1taL1Drh1L9sHRerKd6liIS/prwHdXDVm0Wb3UX8X3F61Aym2DFNr8z3pBUzyr+MUZIjOm8REHjjSoiWj9bDW+0/uvVh+diqgXbbI/wzLV+nnXs1LDc42KJv0Cqd6rNYosfYIyh9fxiyA7X136OGr+m2jxKFY07MiyC6hV4be0nAWsFEx82GDDVLjSgEl+6VlsHjSHqzo2hnYddfUMVjYi7XbXaXa3IUt+PtPY74bo6e6+9m7UVYaoo07yg6iVUz0/q72s+v7MWW+9I+IA/0rwXVXBeWw9BW6FS47OU+ncl7VWnCvlcsBZWBmFt3NBw6YmFNJHuC69eWLyRcqrYIewdeVZXDImBwRC8E/b3mrtKjCHLBqBCmnhElHwu7O+7+mpWhoZzWymDXsm8OOTq7oj3tyfc3PeUMe8I8TosziyBWdFaD0i961BFVFEvJPGoKr3WUaNZDD7u1u6DrY+r6iXEzWGkWRSdV69K1ktAlSKvHlJY4MuDjbiAPYLWn2FEwqZq/fGtRVVFlOaZt98c4ej2jtLHTSXtJav1JqgXX1x5iSDhLGdh8YrUO6oOUwbywuG9Z9hLcU6Z5UUMl1LvFlftxuqwjbmCtMKtYBBjsNbWP+vj77NW2NpK+PjDy2yspAhCWYSHOTnysHD+VWuh2WnU11JFtuqvCqgP+Y2xrV0tNGcrirUh8kzLOY4ynJ2qOO9JbMxLFk9f1TtyC9865lohqPNQjTTnu7ZDB9IcNyyEtXiDLr74ST6h9J7UJvQzSK3B2uZgrd57ay2HBaDSfIPQerZVghJfnI1b40+/9xIrg4y/++Wn2D2a8Ud/9YvmhmKuNjqAYQKk8eiQEMq78UtRdXhf1Gepd0rWF05sWU6s9zm1uYk1Kc57CjevEzPvq3Av9blWndimdea29g3WGEwrQZ0VgpTtECmt81hYHfYwxpAaQyqWteVjqPeMJzNERtzcnbYS0yr5C9Et7N7wj4dHLp6LzUqVOtMM19UN7XETiJBaE55bdTSJdBJPgIPxPkmSsr60Hp6LlkxmObf3JpQlMVppvcBVm+MCFRJVOqFEoLMStbVDVGAyV5KkOUfr75XmZYd0X2KGIfXSa2fc1XkFrVBs48tzik3ig3SeOmmtdnG1jDvX2Vra8XPnpef2UcHBuCQm2PG+w8/ls5BlV6GxlcNRlB7vlcl0BoMB0/kcvGeWF+SlC+dsvBdp7frqeYjWQXchV2gSuXZ4rqqUxRyCxcgh0sph4GA8wdqEsgibYmc0Ii88R6Ocee4oC99Ub1U0qjajKsnRqEou4llkw986e3ZaRwS0yXGNCNYYrIn5ssBgSXBluOGDQ48ZwdKqqUurJiQL3rv4b77eyaLC2eMZD9874Phaj8QOePXCDXYPRuxNHLO5UhTdeqGXCkUJewe+zlOMhPsZzUre35mR5xpySCN4FItwdOhxztc3VS2AMkaX7/5oG+9g+7Ex/Z4J9yVw4fIUgKPDkn4vgS9oE66BNLWoKvPcgcBs4sFUZa7WYdjH+25+t9ZlowCJsaQmwcQFKvGYrZ69aogyL71zKSSv8X3d3suZzz23bs/jBoJ83uxybf4j5HaHB005FkobmpAVz0uVOzP7avea6lx10MuESRmy/PEoJFUrG1mdSyhNKPTqmghgwoUCbJ1IuHurz1K/hzEJ2wdTtncnzObg1OBLxRiwSVPiqFfGE8dwaMiyqjyL+Yj3+LgLJd6HmJgrSCt9izu5wiSy1JAMDcvDHgZQExZRmsxBFWuENG0Wd/hg7dbfhDRIF0o+KlzClThXgpEmO1/I/LtFcivhj3+G/QwQsjSlKB2zHNLUM5mWFLniLSS2dXw0Ly8stPoXiHR3uoQ0tAIipBV2RKVVqiii1dpshdHqFPa+qt46QIkxGV4NP37tErduO0RgaVkQLwx7KYNeL6CDc6UooShh56BEjZD1hF4vht94Xb4U1EvnOK/qf+egLJszOE1a3xZfeJpY1DQr/UufPUmSGJ66/0P0k4xpMaUo5tx76iq3Dkfc3p+RWVO/NB8TtyyxgDDPXXVKNS+sBkcMtw63KcqSg9EMY4WycHWOo0CaJAyyHlZMk8t0asUAlD18/jSDrM+ptS32J/sczkYcTWa8c3mbycyxPypYXrGdMhTVepMk1IkeNQAjdWjq5gPt8oR2IBZi2O0eWSISXr6hQb4ijCdmiHhhOiuZTz3Lq4bVZcugl7K6tIJgAaVwMM/BKfhCm8zYtM5/DV9XbXCM6lgpHRS5kM98fXY277k5d6vrMyZk7go4p/HfDOodimJtGhe8Nkd4/bkNYlmFcomgzjwvAWGazzGlYzSdxetWJqMynOG6EGJbOYFWAI9UJWMnHUBjKYlA6WLiaeIz96EMbi8iiYsoadfyuhjna4xYFwJRdSZRr6QKVqoXqbQAgzbip82nVWVVDd0aSLIeRgb1AwglqrQAmQ9KjlpvEImATnMfEm+8ykt7NiyCUrsgSnsbsJDY5WVBXubM8nmD/rVegCAk1sZkNSZ/Qg26/Pz1q4Dyy6UblLlwe3+KTYXr1+cUc6V0incLkHLr5ZTOkRd5g+SJdP/G5TbPc8azaUymfUgES22v0/r7FW0iQPOupMmIO6VndS6EL3gUxWFtU++KgDUxj6g+14T0uz4X26iaNJi7NeHcTdMYViUCM6FjgbgPgvg6MFaTb0sTvUS6p6qJOxITqpUGh4zRL+4i+YB8RySE3S6i2JzfVWImrdCfJILzyiDLMBYSEdK+odcLi8UVniQxoV9RJaXyQRhjrHriu5GY1HbLQmnustVvCPiGaZVRMXFXJUl74UfKoiqrmoRQfbOKnQ8Zvk0knDE33gY1fPGpuzma5Pz41RukFlaWDLOpa+2MbsPDxzo+PDQfX7Ry7+k+n3pindXBEojwg1cusnM4YefAUZexrX5AC8UNL8kvhAdpEk/v432psNy3nFhNuHCtpIF9WgeaNP8mrXcgxiA+5AoVViCLtbk05WTpwpJaXgkJx9/6lc8Ayv5kDwUu3LyOcyWrSylpJrxzYcJ06uLnaedl0TpO8sIxnc0b8KoTrZqIKxoS69nMkxeOwhWUseHjtamkzOmtlNNbaRNy4tesEawVbBp29OjIsbPnwgfE5kOaJtx14jhnNjdCMvVBFay0Gi4K27c9t3d8HeKNCJIINjHhJcYPCA0lHx6qLGAV2sCi1RfMHThTVXEsdPFqrKKdrHQXQJ1Aamdp1KFTROjiWtIgkVUu0opM3vvWpXYRvl7fYEy4XxaCy2J4r77B+04yj0hAVbU+skz93BVw3nEwPWBWTBBjMFZQH5DN5NzxDAWu3Swo4xkkCmfWY0/fCVdvlDX+XuEAgywlMabGsu9IH1qHmWmFYVeGrFxj27PqamVZ+OZ+bxAOmOou2z07pYvVx53vtRUdWl8sHYymAUKWuBak1Q7WCrNrddNc2S1Z2xExZmAL3cDqQoSkat22kufQPxGu7V8D4NTaKQzCR+5ZAxV+OXiX0pe89faYIi86SWX7cKtCuqpixJDPQ8e2ybfCXyPSeUgBM/AMkgzpDyl9iZWcIt8LR5TUZ8udoFPspHcQrXbbsikspA1q3ZFMVs2J0CtuwCCtiB9VyVGHeF+TLERaDIFWC16F0OD5gLAjMSN3pTA5UtSBSYReX0jT2EWMn+F9EaqSOjNuRULpBLAOXiDyATW7tJtR2rTQ6eYVDWIodZtZ22hnu5fR+WLooRBzkRrvqN+C1KCQj02sCjoPlY3B+bDInQ8PIFmALTpPUb1SOI/z2nS5VTtPpf18tLqd+D1CPO/bkHHcHYjgPOSl59yZlC89uQUKo/EuAO9uj9FQXGMNvP9+AVbAC8dOCqlR1EMZuQzONQtx2Eub/CACbusrwmefWkJd6ApKzAOv711HMSz1ByjKZFoGDN2YuJC6jRhpnUPtBTOZT2Je3RBcmhws9ParxWNtQunL+N3Sagm329TayZ2qxzqZl+wfzMPzNfGFN6ukgzt4D/OZ450rt5j7CbO85PK1MfOpMh4XIZrU92Ma8kIXbpJWRKpgXPja927wnRd2Ooljs/xlMT+p04GaOaSE0GsFmwnWJgDsT0sO5mWr4ljYCRWDqYVNq7bbnFUVEHIIqV+WQWMlYWzMhEtFxVK6gqIsKJ3HFe1m02KG3fQy2i9MEC7eugx3MASaZlFT/Ujn3yrksH1P3YVAhyRQYRThKJBuwaAa28ztBREwgCw14MOC7vVDXmeskFS/KE0MRpSybGppAUpnUe/rsN9sfglNhQoAWVyvredmDQyHQumUMm9IH8bA2lBILKh3GGP57ou3cdrq94ssNKUqOpm0O9cNIaTpA2NMk1GVZcOCqYOYEZ7/5SWshbfePcKVysFB3kXuqu+PZVQDm3eP6tKVkfIVqybX3IMu8gUWqg4Tz2z1yumNTZaHWVPLtluNIsxnjtm8hRrWzagunCwISSqsrKY8dv9ZPvvEQ4znIw5mhxyNZvz8jSthEVRdKGklSNImRcV6s13r6iL3rdXyNYaaRccCSUJb55IQCBAiFbRsW+3dDgXijjZ659hvJUBtoIMWOC2tNm/7DBaBXmbBCUkKg4FFXcD466Zm9XmyyPSRDrdQ8V1eXuSpdahh9XPoviizyG1olQLazqlaz76bmkidBRgx8blKK0JUwJSpoe+qI5lUH378WLib7duuQ2rEe05uWSYTz8FBhBjrss6xf/g+oobPPXmK7d0Jb753gFgBt5DBy0JHyQiUYFQwqTDNp3RWl9TJdWzg0IGs8U07td6hYsJijb8uS238b70TWInX8uQD5/Gu5MTxWxhj+bm90Xro0npN7cUVGUHtRV7lSfFXzPOizj86+17CS3IxAeySPSo2tGkhFCGzGhfTePxqh4XVwtjrisBruzoIVUNikrjQtBPdEr0juZEFDt1itisLGb7H2IStjYT5rOz84sWf6MCbMRk8ttYjSc0CoCF12cYCWbRORYxhMlG2t32LUKo1U0crAMVKk7nTAEIh2gnelxhrMdbWTRJ12uortHZQhSJ2AKDmd6Jacw6avEo66ZyodKuEO6o+UxM6wXD7aIebB7dw6lvvTVqVROfT72Ap1dG7/YtaCWxCxM1PrQcwaGd/TlG2antt+tBtgEOB6dzx4zf22VhZ4hOPnGevL2Bvt3ZcC526AyISEit88pFjTRsWyEtqfkI3pN9JvKBiB0mz80Lo9uTFnKKY451y+lTC5npS71RXJWCqrA/XQZX14aimwXn1ZJltoYIN2aRK2vLCo+oCCNN6EdULbpMvK3idegG6+v+f5QWld/WCrX7P+tImw2yAcyXOO/amBxxOjgLULlWjqsXzis83fFa3cRKiYlMttPtMySLJ04ggxtefaVohswlpxBIPdg8KEltiTNxFd7Dkm6y/bo7UVYLpdOT4IMZ9rPe5kyTb6sVH+DuG/4PRlJfevcH7Vyfh59N4Rld1sfrOZTacvi6GsXj2VovPROZSw1heQEjiRqmQRCOL+7JZIPOioCjLOmwbaxCxRPI+xoCKQX2JiJKkJiwoX31wbMtVfYJICq02qzE0rOo77hkSbTFTPDGJ0yZsVffnlQa8gTvq1Jp/rsr6esI8h4P9Mi4aoddXEi8tlmy7Pw47kzx8pgvECqch7+5nglppHXkSWUSmExHSLFQbRpXReM6rBzPef79EFbZWUzaXwjHjRckLZTLxFLknL/JmEbbO1UGMAM0ZHiLDPC8QDKXzJEb/DzjcAeNQ9WGnSrdjaYzF+YDLHxxOyV2BMaFx9M0fvYcRYWMtYThIcE7xHkaTAkS5fmPGdFqyvtkjcVp3ZqvP9q1I1TmqpJtJV1yKxLdr2lhDNlCA1tSwotB2hIqdqIbyXKlqjAk7JE3DlydTT5IKy0sW9crBbhGh1wYhFGv59vN7eOcaNNA3IA4VmGQF8dT97KqqSKxw6oQJTN4Ij5qKSGkgAYY9QayiebwHDyYxdXjvlHemG+naieN4Og/3WkcH39pdLYyi9Xk1TtEmZMYkW+vWbvjSPC/JMoNHmM4deR44fYVX8twzn/mmg+m1Ddd0uu/6QUWntBpLcWEkO4ceMXBuM0W9YT7PI/gbEqhBFsLa8rJhOITd3dDpW18NfMDwOzxlcYjomI2VhKOJMi7CSz48DItjeJdBRUn7ocGE+ggMmYDoOddEHJW64VGVTUkWsnwxoVFVh9YqpIupa28jtB44nFjPOL6WcOX2jO3dkmu3HD6GNe/9Ap27UvlodxHEz9rdn4RuXwml9XVbVT6Iz9nWDcScoy6f46KoSrXh0CICn3ryFMNBxtnNUwyzPtN8SuFy9qdjjsYjXkp2ORwX9e8bpD36aX9BuKI1CloUxOfSLcOryGvmZUi8IODlqoq18PFHTvHxR07VAJCxYNPwYb7qzcfzZTYveX97n37P8JWPn+PeMys1xu19KwlSZW3NsLpiWnWutlCxbr3hfaCK4zUsGu9DVt8hY7SwCNPGKJqXkWWWJLU4pxTeM3O+ztLv6NK1AJVaWlZ13KRiC2nne7qSsfDLja0WaDsTl86RIQ3/HpHQah8MErJU6GcJS4Mhw15GP0tILfT7KWkWuocSu7W1drIG6sxC2G+YE9qK1NUzTA6OXCANnhS89zx4vodIQAbDhRlEmxVV5oEIWpaexBpmJRRHjude3+Hh81t84pEtEpncIZKozlPTKLxCz7qVsaqGLBqB6cwznTp6Pcv5k+v8/d94jHle8F//yU8xFS3KSouO1dQnTiH31MQUdeFos0lInmrEzt9ZPkk76RTpAi6tzuds7lDfZPfnjp+mLAuO5hMUpSgCBa10hGOrtTOdL+84k0NyqeEYTE1dWo7mE45mR0yLOc4FUU4g2SjWWNYGa9hA426nVA2jSrtLvApnVbwwqtp0izRmjVbukCZVNXzQKWirPIpnmbSwu+pBdTgNXbVut+UqLaFo61zzTR5ijQZgRxSx3Wy76qzFbi2uhNHIYyQofFTMnVwFbfBcuSN+S5diJi1tXmsjVx230Dhzda+jJf9Aq+6n+pql1BZ8tVFJtKHYmRZty0cNpaJkmdBP41dUEdOwf2Shh9NB0+hyKKujKClL8KY5G5YywVrDUm8pih8iIhYTp4q3UGEE2snotaaKV3FYF5A4ExPF6veN8jKWaBXI2CQ4FRxeFC7+e9AcyoLytw2Zi4Sew3jieerRJZ54eAUTd8KNnYKjQpmNtQ6L0gH2FwhmVU2PsDM6CIyaiBA5F172T996A++UnYMRTpWjcYErldE4p8iVuXPNy26JcGt5thGMCmUJ87kPEZdA6jDGNrKu+Gd1OSPLDFevTwFPZpMGX6iaVW3V6UJB3sYCRAhVgKk+QNr8N4uIbxCnFlChi58sixXBnWQJbVHPq9Zwc1b7+jxuIc0foLpsfr9Km2AqEQwKiFAlvDFJ/H4Jod/YwCxu74TmLNfY3BIWc+hYBNY9j4qSrapcu7WDemV/XFJ65fAghPeDvVC39/pmEbiv8yFf8Qxbi0+9RzHNS6x8C1rdvTaPsxtJ+YA2srYqHb/QPRCSch7EA9d2HcYIZzcTeqkNrdSKEg1Yq/gyhFetV1A8U30XPMkS0yR3XcJuZ2HmpePHr9yGGKJRmMw8R0cO7xvq8t7RlLzYB5Za0WWhvG4lYgHqlLqUrXCQycx3VDKywJ5pLzoRucN4oQrDIbEUUmt55kOP4VUoveJKx83DPZwr2N45JE0tL76xUyObVUPGiMGpuxP2WryUWnbXJidW+VjTAq+O3TZK0zSApAs1S7fLWkskcgfigmLWWKn76JXwsiaDtBm9C+eqtlZrl6mjnYy3+gCvyq2DMkSL+DK8h7wI35/aEElK7ylcTmIGLIoPpK07a59+RjqteFVP6dtc/vY9RN2i6gfQMFoJVSt0GhNVzOsbILGPIAaTFRRlTpL6zousqdwdmZ9pFQZdepfQ7Nh2vS/t9ncLuaw9GKSLYNYLpt6NDQFFgYRKYBHP83nhG2IhAf6tbjwvqHVpTQ9au6JSbRAovRNNaehUeod9QWthStN4iX/G8wnLvUEIl0Y4GHvmM72jjaoqeCDLDDYmSIcTxzuXD3EKztOhjlckiirB9b6iUFWVhXTCdntBK3B7dBtUObF6qtH9txij2jnXtGYwL7bYigLyuV9s1rXKUOmQThefq/cBOSvLol5M3iuzaUA8m7DZWpSqFZrchD7nfLBYkSZT9L6q5xWxYcG3hR9dkcICbdt0KYa6QMZt8/Clo31fvMECryWffuIkD55dZTRWplNf9+JFG+wAVWxasWHAlY7xtAyMILquHFUHrqn/P4jYIncu4Igy5mVO7ooma9AOU7LVBdeO+0nDWtL6ZTgPizGoHeY7i8YsolRVVPWNLY02C7r2YVLp+CYk7ZgoArcOPf0Mdo52m1C5oCEXI0ynnrIUhksmJGQtwsgws2SpsLVlmeYwOnAsaCObc0u6RkbabZ0HGZYK81LJyjkPn72Lgd3jR/luVABp400TBSqDnuGpR05y5ljGcj+P2sLAYDbSOQWaEFqdwZXsi67RFQsqHJEP6k6182G9Q8/f3snbhzejKqpJQ+SOXCP08o2YWm3U8A9ATcMa8HF152XQO5Sl1puhqmRK59k7PGQyK+tnnTTJWUhS5iWIUQpX1Dz9GmhqefIcHIIYT39YaeICtCoSmhpJFtwnikJr1BDfbJAKcjVtz56OoVUrCpgAUolAai2JTfEtuFe0dfwYYThI+MQjZ0HnTGa72GDGEh++v4PM2rT8pNE36GKfXju8yPb5Jaot4tedDl4i1MdDHfLLol4A7QWii5tNJNT6ztV5WLObq0XvOJodUTgXHVZM596qKsM7R1GWnYWXaIclE7PzQnnhjT3S1PArT95LUZZ864X3GQwEt2YjM6idhCl5Ae/fOsT5C2SJ4dHz64ymjjdGh4Cysx/e/uqS+T9ItD6o7AvnZ1k4fvHLIx4+32dtyaPeddhD2j5zarqZcDRxvHbxkMORizmMZzT2nTdfRNlwZ7e2wPJOidZ6OUXh8Ua7YpMOstdS42vTyWzaxnqHdnJRl6hAZlOGaY+ydLgodNcFkqm1CcdXT+I1eCRMZjnTWUleCCaZLVQZbRg6dE8XSHaBXLk3KjiaOM6fPMb5k1utzLf71qoOk1c4GM1579o+WS/l4w+e4vyJ1SAx9zCbOYqy7emmC8zXIA2vOHJi6GDt07ljOo9U6kjZbmPad/hnCcwK5d2bU27s55QOJtOG9Np+Ee3EtUtCWez0aqtBtRgcTPNiJVDUKjhX7mBHy50mVK2Ko4UTYkwEhKRbJrZ9iQJaWMbXaHHOhaZZ0sr6q2ek0uFVJtW5t7MTdvWxY7YWNFhjkEUpZtUXqC7RSIcDrxHMoOYRKGqastC3zJtqoSPKbK44B4eHvlJ9NK4ZJnQSK9haRRBrkKJSIkitJG6fzxW9W01wOplPXb3H9AN8+hCJJ1XFkjatXnu16aIY1nm0Qupax1XHiUsXjBo7MlbpClpr9LtbtJv4987gqDiv/Ml3vldzJlXh+q1ZYHbtFBRzj7Ewn7s7KPpVYppUzZfSxZfjKxbwgipGGwn4HXx3bUJ6EGIucPm0a29Ra9takXNvL1i2qAZSytKSIU0MEp05vG+dr96TpobeErBLI/2K+m8x0lDECZ5DSkT6aumCthxBta3zxtqGyVvlRrq465HGPgfTyMFbC3uR2y8t6ZB2jhs6hldNKeg7FHRpOaBVLyZJTM0mcg6yniHPPa70pD2505yqvQJCFRDWYVku9MAl9ASaWl9RMezvuU4d2qVQtWVKysZK2tjNLIbOyMoofUiifGS+VETG1bWQtOVF1TeH63sjPuJzjMDy0NDvK7ORkOfK3oHS6wlrK9CLlijBHEIp4oIL+ntt2WDoYi8QIRgtbq2tk9gEI4sGj9GNtPCYnmFe5nWCSquhJQtHRtt9dGEbdisO7kQDQyQyXcV1BJ4+/vg9GDGc2zwbSKTjW4zGYy7evMFkVnLp2pS1taTew3lRBl1BvJpk0SSpkSBBYrtqGzwkaUQOZ7qA12tXJKaKlXaZRUdV236Yld9AnWGbBtzY2wsK4cEwYZ6XeC0Db646Vky1gJU0CeVxmobV7gJuHTGMLoBS1+ht06QaQjbh5ZvAz6uYOwEZ9fV57LziIgmzY8BQ4/ZmEUzuHKW6eJa3uQULCY22ECKt2L5VRy9JMCbBe493JdYarA0RwXvfscPtMrM1agOlS4MWCULCcqFVK6Kc2kpwJVy9UiK2i8vX1ZFv9aCNQWoHTuHaVcfaSkVicN2ct10CRmTH+wA+FXOFoUGxeD8nS+i81dJ5xCb8Z1/+KCBs71/hYDKjWKB3s2j63OKeS6S6Zdby/vZNjDW40rM+XGWYDihtSS/JSDLhhp9RzpTpPO/s8opjmec+lpzStaLRO10+9Y78v4uFhFyse+1tm752ZJnMp0zmOeNJyWxW1KV5NwI3TZnkTjy2othqJwGqWCsd0qAI+/sem0jN8hFpr2htgWORcu0VV/iuydQHGCBWC8sseulG/FwWe17a9MfL0vHKu7uMph7kA0rNBYi6eqAaHcsq69UiLyM9LtbSqiSZaTwAou1MW5zZuIM2njxV+S+6IDKtAl78WzWyuobVUm+kNnzZrjy10w1r7YtWIlc/H+lKgZPFCN5eh3npmh9cWKVV+3Y8UrKesLZKN1dtEUo7zn6V8rslhJS6ZUyrYRH6Bd5LbVZdwbXGtOTWcVFWIbHK3Lf3i5Bf1F046SQ/lT48+Po057v3ge3z4xduhR7Ew5Z+b4f3Lu3hvOfm9pSyUFbWwtwB73x9BGirWXYwmtL215sV81YjztRnai+xoaqpF4LtCGussSRRONsknXSf3YKvU90UQpjPHQdHI/ZHuzifszzsYY1FmESTKGlDs3qnaUYlCJEWVt5ygHBakQ6bHr1EnLuuDrQL7IveWRPLAhdAoqNlJArXv9/EpGixWdCOEIindIEaJi1dQr3OPaR9IUlaD7C+8EDOmE4dYoR5WeDxHI5mSGI4PCgQA8uraTes1yYVWkOxbZ+sYIsT9P1tU8gkSfHekSQGY/UDG2cVcXZRLFzV43JHPGwWhPOBIFNEGpoxIbkXMfhgEtXaSQslgnPKzYMrOOf43IfOoEb40avXFrmN3fgqMJ3lqDqsVbKEeuCDimAzg6TNB5gWdWzRoKx9bknFJFqAi6uczCaCsQb1BWWZM4/uoMqdFGkV2DwmWIQsycI/zo4QUaazwPr5yq/cjbWWB0/fR2IMj529CSK8fu4KGOXilVGrSrpTNtcMxgg1+g9fukxZOO69awLAxfd3yHrClSsT8rlSOBcbNx7UtpLpkPiWztUJJx1MpmtsUbrgGC6E1vp8rlzfPeTFd95nMnVcuTGiLDx7+0UoI1dWBe+F0cg1uHGrdZe7nMRYHjl/ille8sNXrtV5kyx4WVYXdzB2TRQxErNo06xoqcK1bREvpXbT6ErLpCalhvPZL9j6hGMlsYJJKiglJA+eUFoe7Cvzuda9ghCG21p8iS3hxi530AuhuJcYMpuxPOzhXEkvC5CoTQJe0T5/tV0Ex5wptjIYz0L5mvsCV4amTamwd5DXyKfqor8OjPMZB9NDclc0xBvpehOKaZI6Mc2MhUrOVzpPiWMyK5hOA6BcFOF9J4NBsDHb3/MfyCM7lvURa0KJEcsh1S6XpbF/VeYFzCPcmia28RCKV760CsN+0zo5GrvIvdM7odJq+IFTnFOc8zif1+EzcBUEjOdvffEhhoOEg8lOUO9oA+Z4FxQ6CiwvGZaXojhUWJgY0tTueVG2qI7K4XRCXuSMZ3PAkOcuDrSoyMVdAlm1+1dWEqwVvvr0IxhjOba8hhjL/MES70u+N3wVkyrvX5swm/lGfBoXVeEc85Y/YBXym3fV4haodjgMNhGWlix3ndzk6Qfv4Wg85vLWTZx63nxvL+QAtRDCd20nNfrpJ4lttSkjO8W3LdpZsEnrMKjrzF998OqxfWrGkdcA/ZoWC6aTiEo0fTDC7T1HzxQ4XwRFrzEdBc7map9BZjma7FINzJAW/7K6Lmsh67UROR/nEDVOX/hgYGladDHnHV6oJV/ea4OYtl6AtlzAvA8sXlXYXF0G9awOloM0rO9Qr2xu9nC+xErg+S+A1I3XD11lbp0TSLcv07iwUFPhsyRhuddHcKzPe+SFC57KIRo3pYMAk4lnHH3+RIRb4zG3xqMuXUoWtr50LeYWxR01MUFbIlExNW26xio68uVWgmcCF3F/UvCtn73P9v6Iz3/kbj56/6laspYmKYlNmeYl41kefm+llevmVk39r5DalNSmXYGJaGzCmPonrJjgAlZ3AzW4kAsdI6vUWhJj6xdmrQSNRf1wTIdObmK/JE2FNG3T5xcGUETRR2VfVwWd0nmcd/Wp7byvj4rqmEuMpZf2SExaR71+ZuhlpnL0b7Rp+weOw1FZe8sU3lHG0O+rPrLpMs9l0QtApMV6idHCtzHupmamhQ7KQvLXdpc0MSk9GOdYazl3fJOtjXU8vtbSh+zbURTlgoECXW+eFlW9ah139fotyzlpOAntKSG+Y+AubaJPBNYaRpC0aPDhGO3+CXpKqTN+abm21QOjahl6a2xPx1GlMsVs3lND9dOoIJIOIVZqIKjFVAm70TDLQ69YvUeNQSiwxnF8JXTA7DnDaOzZ33PkuXL1ckmawqnTtmMW1WHdRp2fxBpcdGEU0x1oorSs14RG+BckUVYshmAyFexfDQfjktHEBQ+ANv8P7TpO0ObtKZlNoWVZoy3q9B3+NLGBVCmMuoaRC9NHRBYGw3XFqNaaYNkWsRUfP7coc/Iy5DtWTO1DbKIzmDpwoix6+lZJdrvvb9qMHmnBIEEe3rBiq2Sy7ZARZtmYusFjY2tVTGM5XiWAztNR+Egl4Zau4USH8Fi3l6XGAip3kJo8WdGgKyGmMfEbtZ5vIOpRb3jtwrTrm1CdydoiV3boWdUuDG6bde7RWi8duGWBJ/BBLaUmGVt0MIfFWWNtPqW1AVhyVnDqmBcTFB+OIoXEmrpH4n24Xz7An7XRZGjt/rZgPVRfeQJh+MHJ0xb1sL3tGnKOKK9eHJMgnN043sKQtcUVrPldHXGkoPhoanAnYUZbo1NaMiyBE1u20xXThVrXGCiKKaolRqLmz0qUZGn0NAwf4B3kueLLxmB5YWZCPFcXyCkLpWhVHvsPMHOqiSPtqVzS4kp4bTPpugJY1drEwYhQ5sre4ZwsNVjdZWk4YP/wiKPJhHkZ/Bp3dueMJ2XIP9BOgO1C5uG4cHWXtXWNbZeWKhykaQj/voxnanxYR6MyiEdNgki5AEG2XDBbTNR21t2ucWUh19MFaQQEdG6REdx2AysL4Wg0Y56PcOowqUTFrHR7AhHWPdjXOskMcnaPqmlQtNriThdJia3dox1jaGkZUVWtmHkxCwqrBZOrstQWueVOBXmQhgUHT6/KlZtHGAOjeU6WpuzujRlPCsYzR5F79vc83mlE9JqSUdszA1oj0spCI88iOrxoy1hbtYKCtXGTMHGMXPyeg5EnywRr+ojkrXCmNe27NpbSxmmjbY8i0swd6NibxgmXyAeYUemdRonOew6ncH2/JC9mlC40ooaZxRobZgC1rqGWmMellmVRZt5du43+rmIUEdhQxrQk4nUppjWZ1Ugz0fNgvNcSv3Zl4w35XnFatqaGScwBGorbyePLJBZOrK+xNBiw2htTasH+0ZSj0QyjM8TC0ZGLaKDvcDAglJ/O+YgqtgQh3Fm9JW1fPW1tUV8GoYixUs8SbgAaaWBI0/ybNHLd2hq+frEVnavFaJV26txi1Kq0eHpGOqNdaqfP0CkikcBRUPWUZdmEdl100YSN9TS0sKPUvXbvaLGCq9tJk4TE2kYdVRsrhBeZJEKSmhaj6IMm/DRW9k5dcOj2ZURAq4iX1HMbjYWzWyv0Usvdx8+xlA2YHp8yLybc2L/NeN6j1zPMS8d0NsNK4wcg7a5oHIxZm2O2XMIWj9ZEWOguxe8Yj8EkMFzWOI/HY6wJ5IpYpxsbkrDQAtdoyRaSyKphmxcah1IHa9b2tJHK8aOm9puu7Wz7etomUNU120RYXxOW+8J4tsd0WpL7Dzg+NOx8k1bgUjUYkwX3TyFLDaVX+r0sdhYlCjZb2nprGA4TrDGx5jattnIzotVYwyS2pPcnh2ERLh3rOJH3swzjYhXTwtjDrAZTcxBVg8dwmlmmuUe9YjJTb5sOoQfCpBDvOqeptNrD0vgqNC1WYwMp0ko4u0oXXmb1stS7egfWdWs0c04Sg02C+KKamefKaPoUkSmTmFAX1Epfj8bzzCSmdhk1Uo2lq3HWYGuaVH0BwYqNhYCSpmH6qNiGhSs2LkSvce6BwaZA2aBl9ci6aBNjTCCC9jLbylWlBq2I/gmmNeq1Em6YaDkj8XpTa7C1gsi0Rs/61vi3aoRs5QwSwCejLR2mD4luLxvW8LdE3mRipaY71ZqBamJJhW94bajt6jEYrLHhCAPkn379c9pPU77w4IOIGI4v349IwoWdF3Eu598+98ugQIkv5eHzq/QSy09f3uVwlPOPfuthsrTPQ1tfxPs8WJxh+dc/+yNUlFde28d7OHNXHxHh3LEBiOGlN3ewYnjq8U1A+eS5R0lsj2OrTwBwdedHIMK//N4LmBRsGh7y3/jooyQ2Za2/haKM5zuUzvP/+dPnSHuGr3xqCxHDS5duh0FMcQrno/dsgHqePPMIIoafXHidUh2fe3+vmTbqPXf96v8dSZbAlwG1O3wdcLz1rX+BIqxuDBAjnP7k30dsD3rnQCwHb/4h6uaY8gAxhuHxe/HlnOTkb4JJufXSv2C+e5EzH/1yoHnbQXgpvS1Q5fC97+Gne/TSecAzbh3hPRx76HP0j98Lpgc+x8/C7KEbL/413jV+g8aGaHHigQ+FBbhxHi0Ldt5+Lghsx4eITTjxyOeRZIntV/4iVFKVgtRrGJxgTBLZO2XUAhrERvtRA8aEVTadFQRWtEG1QLVEJA2CYySCNKajD6+wgzqhMlqTGyuFLdHlOzSWCnb2c27dDs0Qm1bAoIvInwnzB9EgcZFAIfc+RJ7onBLJJUKWDGodnrXS0t3F3W1TxKSI+ng9vj5/jDTjc/EgphJJxiliYhAfHLkpg1DTmKzBUaqJUMFgKeYqJrxYO2Tv2nW2L14Oj8CFnxfvkWQA0g/voyKSaDNQw1iLtQlie5ikV01FCr/Hu9qdPVTrFumvI9kyxgYeYVJlBdNyQjNR3rGcLcU+u6FwDpd7tFROrSyDWNTfrLtyiGWS3wSvDPt3gTq+8NBjqMLrb/yYUZ6zvpK2Zt2b1uzk4I51e3oDK8LK8C5Qy/Zsh3nhmIxKMLC+skRiTCSa2Pq8O8xHlKULxg/SYpbUYU/YGGzw64/9JxgDN/d+EcammDCiRkyYQXDi4Y+T9DcCTxaLP3wtLITK9cRU57QPUS7dqhetIixt3oNBObj4I8RYzPID4cWbFBSGq2u48U123vk5w43jDM88WQHRnaRstD+uR+tZK2QnP4OkKzB9B3VHEbcQjvYnGBHOPfE0/Y3z2K0vAUp+6Y9RLSkOb1BMR+SHByCG/soySW8VkQSxA4499CXy/YshCWwTGtQXkXVqm8kUroF0qx5+xb+7fPuIBMuZ5TycbKqoJBhJUDxF7uKyEtQEi3nvG3jXR4cQryVGeohYPNHrX5raNiB1EnYe4OPAhcP5jHnp665fMEySxpNXQ7IoJgnWri3SnLRImtnq2Y6bpmhrmqibg/iOG1e7uYNYRFLUzUJyZk1L52+ikCUlGy5RTMfMD3ZYOu0RkzRmiFIhkSHx3Xz4c6RLx5Ck18Im8qZ0jvsoGa5HCVAzjVxIKCZ7lPNpnSQmvQHpYBh7AwmIIVs/T2LiNIth0kcQbh29iZGUM5ufQQSOrb7KvHRsb08akqMQjgZVvv/SVfDw6JmTWNuLEaBgpX8Kr56NtVVuHx5wenM59NXH83BRVnCl59nnb5KksPmZPlYKbh2+Vh9HSiB5+FJ5YGuNLOlz9/HP4LXkzRt/jfOeK3v75KV2GlTWhLnBwyzjN558jGG2hOBALDM3wfkCV3HNvCJJit34CE0fOd4jwuWf/Bla5mxsraJemU9Dp7HG+cWEubl2CZIh+9sHJP0lVh8IdHZsH9yMpXv/I4b3eK798L9hvrPLZmxn++l1RCwry5bSZBTzIm6OBExWR2WdXkH9tMYVghDEY7KVkLOYDHyJHYYIfPPNn9dzHsRaVh7+O9HmbQewSO9kVAZJZVbY9ZerIugXH3oAxPJH289jTJh0WXkKh/GygrWhREFLvM6Ddbv6SHCMngLV0OQIVNRsHFXKIvTbxRq8FjXXQL1DPGR96GcDEpMCNtCkYsHotQXB1urZUDJmieXcxjES0wPvUTylL2qwxpW+5dhpa8aRljM67UwgGayF3GJyu0XOaNmZ2iyij0KZFzHbt6BxZq3JEF82JpSuCDvXeZQC9XljrKEtDTg+foYL9yAxJzF05g5U2kQkCU4lNsX5edTfaFRHm/qIJ7adk8rpupkm2e6jChtLJ8NEEUkoteT2aNzg2AZW1yw2aSje2wcvYiRhY/mB+CJCUjZMgxv5waSIx3QcRmEDVPzWtX0SMZx/9DiI8B++f4VSHY88vkKZex458WQ4frSoiRJibDjDy2ao46QocXE0yvrqGhtL9wWo1h3ifcH10W3EJLx9/YCDg5xf7VMjapgUt/8aRBdwqj6BSVj78N9HxDD5wT9H52PczquI6WGOfSo8/v6pcJR5hxaNws9P3guft/FZkITJ1DA7nOPKOdYYbr78DdTlLK8vQ2/IaDdwL3wxRsth2PluGnIPazm6/AaTw13WtlZDA01z1E0RDaNpzfL94XuTPn4+Y3QwwSY9TLYRytByB4ojRAaADfLwdkewkmxVK7ia4WvToPX36rEm4f/xn/4jEMv/7zv/imk5Z16UiHhSW6lptGO+UJWRd22ex6ty6coIjHBUzGt2i0mE0gc1zzQvAwOnUPrDNFbONoRDXwQnDMLQZY09hJD1h8iRZbY1GTRYu3uNfkQEipix0pqG5sFN67XvvUP9DK8+2rXFmj1OVVE3R9VhNBwtFVhh0wR1ZRC0RkPo8ENJHW1EPPtv/5TBxlZYHMYESxpjMWkfJLxMX0wxbgImiTOPCorZlNHuHqsbSzGf8agru3mJWIxN4ixBoTEE901UiflCMpo5DiYT/pfv/4J+L+EPPvE4Hkte7iMk9NONoHQpHbNZyeE0J0tgub8CeAaDHtODgv/+L37CYJDwj7/6NKqe2fwWYgz5PA+O2QiZ7fHRc8+gWvLoiRM47/ivv/YdxGhEGZU3t6+hKszyEoPw+D3HSEzK8uB8cN/2c5w6DudTnPO88e4BokJig3fx3niKFcs/eOYZUpNFrZ/jje1nWe+tsdlfbSaem8aMSUdvxwolJJrvfOePKIuCzeNDbNarE77VE1uU0yOu/uIbYBLOf/WLLdCm4O4nP4t6x+5b3yHpLbN8/rP4+QF2szlSvML0cJd8slcbPfY37iFb2WJt+SwiwtVn/zXelZz95N8Gk3B4/U3yw1vsXLmJJJbByiqIcP3lb2N765zZ+lKHj3DikS+gvuTo2/+qccdGUXUBr8hWIhQc5/yUzjObljV06L1rbGjEBlykQrXq/kHC5x65i9wV/OkPXg8OnlX2bKSu0bVFYQplVFKzkEyEACqXD2MMzoWdL1ZIYvautRlwidc8NmYMhweO4VLKlz5xCkW5PQnj2G09i6DAx2MjMQkz11ISV0mtetTldcmGlrgy1Os27ZEOVuoKqb+6BatbHG7fis8gGg+pi3Z3oeKYHe0zNOHIqnmDGnT73kdU01YG2Am9zfvCWR93q6no6hIimpvPyMdHJL0sLNwkibOG25u/bHKCeC/qPd7cOayqguqT1Ejom089mlR2aY6dw9cBOLH2oSAiKEOruCdCIk078ezqPYCwNrzE4XTC//76m1ibsHfb4QvP7cNJ7Nsoc83DA1NI7BKpSdhY7zOazGpu/1qvh2qAlW1ieHzr4XiUeMByY/8XlN5B7KAlWUhCh1kQR7rC07Mpy/2zeHVsH7yC857SebYn+4ymk8C2FcUmJqrglNnOm6T9VY5uvIvLpwgemxiOPfaVTnPBrj2MoMznz1LmY/zOc6GJtHI/iJAsnQUtmR5McLll5a7DcGwdvRkmo2lOkhgGS0NMkrD24K8H8GnlcdRkFFe/Dm5CPp2gruDG838enNDzKd6VnHvsCTAJvWP3A8po9xtoOcHd/hGiHtn4KOpy7PpHUF/gfJwLVL2y+SR2u8IzTUILuJkZ4CLClBjTmKnWEzaqiZUVN87VMqfqjB/Nc5CCd66Majs4Y004S+Nuo8pksQyyjCIvwQe9vRGDb03eCDYtthZJVLDdNA9+Ajipw7mJZ3FZUGe72uLzOV/y7ZevBdi0xTMQEY5uXqA3XKHMx6BlJIRWBJi0M89HaQZgq8sRSeLCltgzaTmkV+idm8U8wJGkthHdSoZiQ3QIoyaqpm4wm57FqSfG1K34tm1NwEcsuBlqMsSkUE7iue+jDELDu+qYVPtKHRz+YT73FKXyL3/0Esu9lN9/+kMghsnsOsYkSKJYL2wu9VHv2Ru9gRHDyuAewJCkKUyFYd9SFsrycsjQ5zMlzULN63zJ7aPXQYWt9Y+CWP7uZ7+IAP/sm98gL3IeP3M8gDgVoSSWN3lxiGpRl2U/fOF67Ag2PDlQLm+P6SdlYPC0RtkWLli5ipGm6aawsrEJ6pns7ePygt4wRSRhaaVPurKFDM9GtM4ggzMw365Zu16V7Ve+gffK6Y/9TcT2QctgoT+dUxZNa9JPLoBYUpOTDlPSwRJJ2kdWHolgUgCFJF3FJDnD1SXU5QyO34dJMvbefzMgvPMRmmbEQ5TjD3wYXMn2m9/C2JQTH96I1v/31MZYqoruvxLh4LD45zefRb1rqYNbPDmtpoFJ6BxVjD0jJk6qlgZ1ig329WGKtf3g6NFpaTbt4FBy+gavVhcz6yy2nGVxsnMzCVt8Sylr6xsTU3UfA7+/zEETEyHTevRFUAlpR7eBogw2z6DOM5/6iODNFiRvUbyJDQtBXUDSkFofIbWBRNHqNQT1UCjfEnxZUkzCQC31nt7aGdLBRnyOthmRomWkkYX/6W+cQkyGzS7i8gmuyEls2hps3YqoxjaRSAPuEfCamD8Z6QzDjECQxJemNV1oWpb88U9eQxTGh+Hh3nW2HwSMJrSF3937JVYsT517CEX5G099DAT+txe/H0azRGHJ2a1+La123nPpIESUrfUSwbAyvDcUeNbgatMF37JNDYvx+u7PQSxXRrconUZX7UB5xsbgqZ69nZz5RLl19Creu3oRff+Va0FpbBqGsIiQrj0MYjh59++ACDsv/o/42UFTOkkSFnmyTCUnakilSn8YkrUbL34NVVjePIaqsn4iCEGKo6sgwuUXf453juNn1xGx9O79OwE+9nnIsQ5eRn2OSVYaGrjNsCv3AcrxBz+Fm+8x3b2ETkf0dY6qCYO6rKWYjChR3NEFxKZxKnrOYJhgbYqfXUMRbP9U0DWMbqHqQi+gn2Z87vEnESPsTK6gBm4eHOJK5XAaOIGP331X0FCWeXTzkNqDN7QjQ/grHZQxj2i8g4P8TGoJsKNwR4gkJGYplJu9DD8vefa1G/iqTvUVShcrEXUUzoWB0xsrZL2UlWyVrJegTOvA4bXx4siLktLltS9QZdyklXuJTQK+0GJX1lSqursUz1+fd1Q4gRdRZfIea1JcOWuZbMB09yYYoSyKcH4nNiwoNc0IudosWxvuQW0ekNTATmJOkPR3cfNDfD5BjG26qRVd3RfxXkrwQeFsEkMxPcCmg0iFCs00dZ4kS4WNpVV+/bHPBg7g9CJlmfM/f+/7JCkd3p93nqt7YxB48NQgWrHdBAz9dAMRw6XLOdNZHmzSq5k4Vrhwex88fOSeLQB2j94kMT1OrD0NKH/v85+kLHP+v3/+HbBEwiOMi/3Q90YwJuGtK0eYRPi9T38UxLCxdB+o8tylb9XHk/NKUTr2xjP+1fdexhewcTwhTS13r6+BES7c3AmRZuURjFi0mIAY8mmOmxWR+WEah4/Jhbq7qMD6xhLqLNlggKqycv+vhZR5cBp/8Cbbb3wv+BTfuBzznzjdbLCGSQeNEqncjy+r6BhV1UdDeiwk2L17A32AjMnVH3Hzle+hXjn52NP1lAoR2H7zhxibcPzBz+DKGVk/AxH2LryCzXps3huOxsn+AcV0ErSBvuo/i4372pAkoVY1pmXsZIR59BGu6FmB45bWq7ftCaSRlWIQnIv6d201UmrnTBOHMFpMKpSFxzuPtYZbeyOG/aTW2FUNucCVb3ZzJYnSOGfo4vY+h+MZ6kKp6L3STzJ+76NfAFX+8Af/O/vlOHbklMrvRloU92puQjWsouGWN0eT18q3UENvP1nCbD4JfK9j9GCkGsSVBSJJPdvetw0RmO9foyzmuDIPC6Xia8aErpJJV/Ivl88QW3aOTEQoRtdx6kn6/dCDKeaoc0z2tkEMxXSKL0uSo2mJYcz2wUuIGM4c+zQo/JMvbaA+5//1b/5d7V4nCu9dOgIPD5/aoN/L2JtcRBC21p4MStxoBjmbKyYRfv9jnyG1GV9/7SdM85z3dw9JxHJu+QQqnpv7zyFiWR3cjfdKkYdz+2999X6c9/zhX72EWGF1LcHlyn/1218gsYbjqx9Csfzy+l+iCFf2w3X97ufPoRi+9qO3UK+kmbA6GPCPv/T5UK5FksfJzT7ZtKoqDEgP8Kxs3YvLT3DrvdegVw8ewo9vh2fbW40M5Vi6esWmGfbMb4OkgUdgDMlgnXJ2yOapNVBh8u5t1HsGD/xDxMbp4Mag46sNsGbg/V98F3UFG1tL4ejRRhoWsC9LtrKF2Z+Qj4+4+tLPcU7Jy8DNOPfQ3Qw2z2KGx0AMyyfvA+D6839F6RzX33ylLkE1+jO0hnGUkdCYhi6eCP00IcmkMxVbEcYzxzwvoq2ij2idb6zjRFju9VjqrdJL+mwuLbO5vFz771Rc/DAPx8VztBm7LlEZ7OLf0nkGywmpFRLbA9LaPAGpBk6CScK56MsqShmMNaRpnzQJP6NRUeSdNlUHDjEp/eP3s3TyoZjlx9CsRTNvV12gi/lQYST9VbKlYzVWIHWkkI5vj1SjdCr2U4j/NM19DZzLaj6Ai3mUmBZtPVRcyWCV0098pRbWGmtq4Wh/8wy2P2yRPBYGXC+o1xKJzYKj+QgRuLb7Y6ztcXLt46g6/s6XP8KsPOJwOgkhTASTwV89dwVrhP/yd48jCKPp5UgiaQYk2ngkiEn4nY/8AQK8eOmb3Bjv8ZPLF+iZhCfPnq8tUyo7c++1IfVEH5oTmz0G/YyN5cdALF7neO9iQtVIzAaJpayNpITlZcsT99zLyuAeRBLeuv6NSAwpGfQS3O7zCClm7cOgDjs8E3ARZzm6epFTO8+HsJ0soaq8/6M/Qp0n61nEWAZnnqnLt7AIBPyc9bMPBYbObkAAfYvoKSh+9DZajmqCy2zn1VDje4eIUOQOb8oFzwSP6Z+EdLmeXLaykpL2etzz2KdDeXzsV0IJuP8TBMj3LgXAJ03QVFhuq5t8RALbqtewgyPnzmSYmGn+8PVrlGWYKRjGpYHYkNH7yKiV2L0zhpYPTjMgQtVx18Zpzqxv8b23X8BRRn2ftCZ7t0eeRrTMRA6+CmKyEKnqebm+sX+No9S8C9M2ra0IIjbyFX3cybGmr03EQg6k9e4MSVsSuXbUdU/FUm7Yt8Rnpe3pobEf0BhhdWbRxM0/armHC34+Zbq/HRHA9tDuNn5vav5kPWgrKlTE2lAxSNKwl/w8DqkP2INJU4499InQrHrn5y1hSFTs2DrUVDdTcHLlLnTlLnb3fomi3HV2gKowmTmcg3/x7dfo9QypuQTAyqbFO8vRUYniOJi8jzGW5d5dIIbN1cdR9Rzuv8rubJdzJ25jjHDOaU0UqWp0qSeHRODYNuHw4s4Pgpx9Pqn9ddPYhq7MqIdJj3/y618hsz2EskWKCJ/Znh6CuE64NGJxqlz4yTc5ed89DE8/UQ9nFlHGh/OW25c2/zuSPe3y3WED7L2FllOWlsMRofsv4k0SiaeG4uBt1M05vHEJX8w5fmo5TBUf5/h8jNt/M5TZp387sIuK6+DG0SY+wOGJxhuqFpiCn++i3nP7vTcREVY217BLJxjc9Qyiyv6ll9EiJ1FV8tIxns/oJRmDdEFXHfHvalqoOkh6UrtnjPKCcaFMxhOsEX738/cyzz3f+NGlANFKvcSQ2NUTIOtZUm/Iy8B28cOSaiy378iqwmV88r67WR0MI3qoeJ83nnwCl69POLbWQ080Ak2bGEzEFEIC6BoQqJ5gGckgLkesqfEDRPAIRZEz3t9jcHyCLyfxvKXpqbdcP4OdbptPaBGbgDORTlA9W19TrorJLq6Y4OPUkarPUg+7qq6vjk5dM1mbZgzW1psHVY2z8a7mI4ixqJHYiwg0NmMM3gjJ3jiPbdmbLGc9Pn1v4O5N5lcAGPZOhl/sDYUreebRc9gk5SsPn0bE8qc//y5FoUzGHmMgtYKm4UGmialD+8HkTYpywtb6x1AMX/7ww5Ruzh9+61mMEV5bGbf0eV2jRCPCY2eeQhDm5T6qjp7t1aYVXoXDUcmk8Hz0/qZsTZM+q8N7QR3bBz/Dq6uh0encsTvKcbOb4WixSyGEZquR1h5A67L07FzfRvPvgrGc+8TvAXDh2f8tTPmk7UAitSRdVh4BsSTFmHLnefqDSfAUjEdCcfAe6kpcPsLYjBOPfiEosq48W1cq3hXk+29jxJOd9VE2V9G6Asy7ft8TDNY2mye29yzqSyY3LkR9ZjhKl+76XDzOpEY0ESGpOyNKp/4NPH8Tz8uk1vNZazHqObV5IoRlEUoNXadmEWp00ZLa0GhejijdvBkIhSMxsSeewHs39lAXHbgNdRVScfpN7G/XRsnxgV+4NqaIGrh6B4mrNXFG0rDntOiglz5i5VJN/65UOqrVqdlxPq18iUy21PgexOw9JHK+YR1X/fjI6wt6iyj9Uod6Qzm5TTE9RPCYbIl06WS4V2tr4m+bZ0Ds6FGPiDOkvV6AfW3W+gEfHdKqCS6BbSy2H4ij8X2snrobl0+CV7B65catGWeOxzYlnoPJ+8GkOZ7dxlSj28MLWO7fBSL83Wc+hyr80699qzWtw3BsM2NlmNSJkXPz9sBMttY+iqrywNkbXLh1EVcGweVHntzAl77hytOFb3cOXw8vLi6M1945oPCe4TCEzsPZNAy9iiKTZk5HKJN2pyMAtvcnzGeOG2/+jKw35MSH7wMM5eE7qHekiZJgOXZmLTinOKW3cgLJjoEknH7oYYrpPuNrzyNiWFp5LCZg0a4mJqiuyCnnE472pwFwe/3bJFmffLwDeJY3N5BsEznxBfAl60+cBgzFi3/CfO8SRzffR0TZPPMmJlvHT3dgfhuzfJr1c/fXPkYS27vF6AbqlMnuPiqGMx/7G6FFvPl58AV68BOkf4L+5rnYDIoPdu8gZzb1fPGx9oOzLdZL9MXzruNWlSa9eohEe1KWEbqYtlQeINXMnrR2xaiUxYoyyCwktp7DowpqaA168B3XrFppbFtt4UrPYBprUm3PpIkXGEwZcnxRxnM5snhjNAgNrcAWXjn9ACq9OlE0aUpm19i/coneoMeSFmCjMqdt3ybS4UeW033KGS1ldWtnm174q57hxgnKyXa447Jsef77mgFdlYa1CY0RivERvnTMJjMk6VOZPYhYtGVeXVnxBuOrKNueFSXffv1N1oY9nj5/dxgONX4bVc9HHllnUszq7Hwyv4GRhLXhfSH0qYmkTMU7z9GoZDyZ8J23LpAZy688dD8g3Nz/CcZknFh9qmpH0rMpXucYVRJj6lFzwRAiwMJ743eikNLi1PH9t95jnjvyIoTXJOZIuStxFe2Lkv3R2yieyfwIldBP0DgXUAxQhsRs942vky2t01s7iUhCv2eDkYRJkCTFrH0oHEOmhwzPk208BL5k/8VXMAJr978WWMLDszFvC8ynYjpjfDCqbehOPPYZTNoPY3lNwq03niOVGcPqfI8NqOXzv8rS3V/i1st/xmTvHZheheJWEJ8k/TiwomTnreexNmXzgQ8jwOVX3wjNN+dJ+74zeKKuUud7aBnG9SaNYjjIpgtf4itAQ8C5OYiwttqjV7Rr07KZfo0lzSyYyqAggjqibB+O6CVJXSgF0UcRa3nDpx48z0fuOc4/+9qPogeUdP13qTwKylCCGQE1vHFpr3Esazlk1tHGVgTMvGVp4NkfzQJRtHDRmzeAVfnkiHx8RJkHgWtYhC2fH5NVKWkkMQYun4tyeVQRLULH0PYbfEBdLRX33pH0lyPLt7JzVXzpYtePRiNZmUaLjVYz82AhK43ruMSI7FUpjm4zO9xv+Sxwh1sJnQnjIXlNji2nOKfs3w5kylv7M1wpyD2h/JuXBw3RsOW39+7OC1iT8vjp3wKU//K3vwzAmzdfpSBYngSfAEtelFw5uoFgObd6MpxVboKIYX1wlvWBsr70EkfTcSSgeEp1lKoMh+Gmx/MjBOGX27vc2htjE0Wd1GBIcO0UBtbiKm9i9ZQuBzEczKcUTvnuq9dBYXnZgBeOn38AI4bDG++BwK2LFxGBpdVekJplw4AERpNn+ic75lDVMXXjlf+A2ISTH/4tRDIkW40hf498WrB26iRLx88g/S3EDij3XkWLKaPb+wz8agCSWo2fwFxWsuVNZjswvvYsvZVjpKuPoOrJb/0CynFNjDm8fglF2Tq3jircvLwXkvlIUa8ydD/dxww2I01eSQRDP7N89aOfQozw0tXXcM5TlCXGBOxdfTAqdqoNP69DI0pJbYZqEehj6ltmh+G+Xr+yjzHCXStb9bAIIoLYzMeTeuDixe1DyiLoEXyuYWKYKK9euIUjHDlZZjhz7iTGCnvFrXD2x/q9ElsaI3ifVx0LvCPYxPhwhb31E4hXVpIlitEeo/13IxKq2MSSLZ3A2DQknhiQrFYMi7rGv19LKCvblrJOyiCYaqzf/1TgDphehP/LAD3byBb2RUQiY5SJgyCNzZpZRG7edF19QTkb1f4D6epJxFis38OVeW3nK9L2JFiY2AYk1grrS8t89rEnEBKuHF7myq1t/vl/+Dm9nsEXJmToQ09iDR8+dxr1no3+Gtb0KHxQCq0O74oDmt/hYHxAXnjIFVkHj+et9w4QI3zlkUAX3zl8FTEJm8uPNmwkDexeVeW7r+5hjPCbz5whTTP+p794LViubqWIF/72Mx/C2pTTa/ehAl9/6TtMykmkrYWHv3M04b/7d89S5p50zaFOAk2Lll5Dgqxr6fF/BMD+rf8bxdFNbJpgswHZ5iPUahBJ6ZQyxpAkYarIYCkFMRxd/DbZygnStccREeaH27jSYTc/Ho6E+W3wOdPbV+qEeLZ/leLK1zFJH7vx0bAA3Tg01E6cZXn1S1z4+Q8oJu/w0Jc/Ar7k8i9+jLGGY6dXsL1Vlh/5fQQYX/pL9OAyq2sZNrOUo0tgMsz47ZhH2ihVDxT0RFvDDVWUB07czfGlTZ5963W0hMks8NofuXujpnY1h6/GlVrh1BneudoeraJfqQ9oulFwrgi7XtpsX1rOmlLPuzVGsElS9wgkTh/t9Sxrw9UQbSpLNqHlWBaRPq/sH82wCdjCkGaWjdXlwBu005pXX+UxQVEjmNQGqlXLDbRBRbvWuF41iHMjd9IVc2YHN0mX78cpTPauYdM0tJvVhahBywxRTOzClk1PpuXHH9TSFiNhpsDs9mt1WY5q8AVIh7VFm2pkFdcOZz4ggupimWo6s52SzBqsOEazKxiBTz34DCIJr155j3xeMB45rIVHT2+iqlw+2MUYy9pgHcVx++hlQNha/ViUazt2jqbNLL92K9Iqf/i958kyw9/77Cfw6jicXKynOLRtB4s8tESHWRrJooFj+OBdaywPh5xY+wiqOYfjd1DCXMH2LOKK3GoSSFPD/+lXPwFiObX2MIjl3/zs69we7WGyEwEgMSmo4+zjT4J6dt59LphlVC++hmFjbjG+jgBra31QT5oFM4jR/hFozu7b30ZFOHbmRMj6Y7PIz66h5TRwAcoiTBwzltGNl0j7Q5bXHw/AW7WY157ArsHWh4dce/5PyY+uBkhZQpd19UP/58YZG0+SDvDZMiIT1JVMbl/BZMtkZ7JgN2MHQQM5G4GWQR1ca+ei6wYoD2ydQ9Xw3MGbcWyboVTPD164hTHwyJfPgTXRgq3SpStl6ZnNXO0EYiX6/4gLvP8kJE9H0zGD3gArrqmd4+71nVH3AbOvIslnH3okVgouGi/7hsDZGTod854SrBiW+qu1Ps77wGOQKE2q7FzFJCGDL2eo86j1zczfyk0ch2KY7N4GN6sNJdPNR8LvPXg+ntEBG1m5O5aPvgCT4PMJWo6jp1FaI5aTvVuk/T7L6uJubdrqxOvyzuHLoG+0iY2RNI3lwCywgLMhvZUTHN28GY6X0QHZkoncA1/PWwq+RSY0g7yW7E8DW3dzNRBDfvfjvx6y/avX2d7br8epeedxZRgVk4jB+zzSyQICdu3mhFuH07CjPfzeUx+il/YpXIBFv/7KS3iv/C9//RKDnuVvPvMIinA4mgalTu2Vv0CPE1gdDNhaeQhTMXsUxvlegD3V07avRCCxlofPH+PY+jpbKx9CjeHt63+Fx5OXs+gH0BrspmB6G5AUlE7weYlOdwMgtLwWG6T7iFhuvxdUxGvHhpgkpX/uV8EXrM52KMY7TA+PSLJBtG1R/PhtwDC68Q5uPmL1rkdJ+mv0Ns4x27/BzXffRQ7HHN9/NWym4V2IzULbVwQ1A1ShmM8x1nDi/DmwA2TlwXCMHr4MWmKXzqODkoP9n2OtsLTSw5f7zC5/E5tkSO9E6wQXEt9yyQgPIeoD41lhMREf7/rYh/Eltp7t0yh3NNDCYwOrwvB7SYKYHomxzEsXRsGp56X3b8YNFngEmRhy0VaLtRmhkvYshqTlOeubrLmVnFXLYNBL+I+eeSqGVK1VSaJd3l+VgdYomwnM3WBS4boNlDYXXxWTRGcP9eGMtb2andNMJK3ypXAWG2ORdCl4EtiUwbFz2MuXcXneUmGVqEZoOW4wW9nwBRpQTQat9IxBe2gjOytikXF4wPj2RZaOnSVJN+torRrNokMbPpAart7+AdaknNz4BAhsrC8z1aOgu3Oe8Siobv7F918kSwz/+Rc+gqjhcHwRBTY3BDUZ48Np9M4PMOSp9acB+M8+tYnH8P/+9/8ap8prF24DhrvPDclSixXoVcITI+RleHDLyynLyz2ydANVh/Pj1vRyePfiEbO85P4Ta/Xi21he49jKYxGQKeuHKxKOBTEto93pNZq5NMrR3ohiPuXYfQdh58TGjN9/LU7sBkkS0qVVjA3yLhFDtno32fIZti99g7QnbFZ+xLHBNDvaxxdzVsWi3mGPfwIxGetnLuHGO1z+2Z9jsz4nP/RlbDJEhqfB9IOm31jG+1M8yvHHPgbSi2ZRJZTTUCbSDN8wJuHEh76CzQZcf/7fUs5yjj9yHhSuvfEK3nsS56Fwvg6jFWe8SuL6Wcpw0Kvduht8u3HBbEachSw5S0P0SKy0PHZDCp/YAYqln1iKnEDTsNDLLDYaJjXMJOGnb94EhM999Az9tBczaFtPzK6o4EXpW/bvnn6a0k/TOlI4n3ddiWsL28r+1dO2EVVtz/b1dd3oy1mwYkmCv1Zv9SwmGTYVUSwZy9KR9LRWKOHyuuJo5i4EGxgkCW41xuDLHF8W4F1YtG6OmF5k+8QWbtpH7DAGozzyCYuuT6kINs1Ilo6BemzaC6NqDq6FzmAEmpIbe1OsFUQuklrL03ff13K0Vv7gM7+NV8f33vq3gUEjjTCidJ4//vErGBHG49cQhF//9BnmhfLuhbfj9YajYXv/WRQ4ufEZwPFf/OrnQQ3//V9/n9I5EgkzhqibSQHE2TkM0O2jJz/KIC4AVc/NgxdrR05UOToqwAaA2iQp/9ff/TUS26/JFVf3nm2Nc10coerwhy8jyUpNvqgpaT4PyWZ+CKpc/umfY4xlsDIgW7uH/oP/JCyMw1cgWUbSVfAlZeEp87KGXfP9dyimh1ir2OUhkm1E66xQPqb9AVZnjMwo6C9+8Q0whrMf/Q0kGaCzUHUMV3v0jz+C2fwE+BLN98KGLOcNkceVdOaJirD1xJfxRc57P/j3Db1co3K4Ov+da3fwtDX32TArHS4Oe2h3/mauxIjh1t48SsdS0Hkz/YKo0YuqHGrVahpQrmp4RFwsppodIA2eLTa6jouNx3D0zKnmGFQWbqZivbbt5ROcm8SqwXaGRWilAKq4hX7ehOtqjoG2J4Dmd9iya+0OUjVVgj7P1KyhQOV2swnz/R2ypfXgAhJbuCKgJq3P9CpL9+U8KoIjfczlgeGUmFb3MEV8ES1too5RXaeiqnKkiu9Yua1VXJGkIliEvKLZIaPJu0El2z+PAIezPEzhaE3CMIlwfDPDl8royJH1hLyY4/D0BzZoAfevkSYJZ5a3WiHKcmz1yYhVf5d5MeZwVpBYf8f00oCMW44t3wsYxvPrcVZAglfHqzeuMi+C+NMAeVGANawvPYTzBXtHr9SCVG1NPC/K8NCK/XcRMaSbHw6Q9/hiNHWIJhfFCKdzRje/xfxop3ExF5AkiyVsPObUBdsYY1nZGCAChxd+juK5+nZw+Hz0K78aQn9vE9TgZ9vRtaNAxXLX5/4BgnLlp39GOT1k/51v1hT1pZWsOmyDVhEJyGKVgKrDja+iOJZX+9h+FhPGDHv8y1g/48yj7zIf73K0fSskgRJVvK+9fcT6SsIz9wVNnlePoeqTm46Hvirct7XBcNjDWHClZ7t/ExS+9fPLDIYJqREkFQ6njkQcp4Zl9A5y9XwfgKyXMHXCaFxiTZguqO3ButIgYoEL6OqM3ojlhbf2mIyLOHGL2mQxuJC4rk9/bHmjSp670Da2Nu6cSqxToWYhb5nu72GThHJ2iBjFpkkztNM33xdKmaI13Tt8abyzXQ+l0NYUE5EsPA9GiJ831UH0EuqvHWceo1FVnWicByQmrZ1MJSKxGmu7yd5tynJercs4sEMhuq9ly8dJhsc4unW7QQK9KnlesrvvqUb17E2vo+pYHjwQHbNrZAac8plH7qGfpmwuh7r8yu3/ldwV7O8XTOeO3/7MXYDhaz+8wFI/4eEvn0FVubn/PEu9LZaH9wDwD7/4GQ4nI/7pv/lrsp6tmUBpKrXVa1WWei05nF5qDK1EmI6CWLTCCmalQ0MmEBdBFdLDUfbvXngnGEwZgrsoEh98hfeH+xz0DC6xHG5vB0BnY4hYy5knPomI4cqLz9EzOWuRcKEeNN+NgyxLhpsbCLB/YzeU1rUpQSXx6oXyOd8JItb5FC0KllceA4Tjj/ZCCzgmi5d/+IcU+ZzprGTJHrEeE1Y/udSZa3TtzVcQI5w6v4HNBmi+FyqU8VvBFu7UrwUY/q0X8OUsRAATcXZV4TCf0EvS2m+vwpYL51EfcEKTSdzDUg87vu/MJpNZzu2dG2HYgjW1kFJbM2y8dzg/r30BDIa1wYDE2E6GbuJQxpD0hzNajI3qX1+7gSmNJZtps3xppoD7WBd7ykDMjONkmi5bUdfbGhOoanQc7cniVE6lhnoWg0ZGT8VX0EZt1B1BY+I9SN3UCK6qUs83UAQ1SfgMYyP+oY3fcTQHD0WENp4CUWbWmUUUn0VgYpe14zumO7MoOXdsiaL03Lg+Q1LPn/34DRKB3/z4eTCWV699E4/y3rUjLIbf/cLd9QBGRcmSDcDza4//KiKG51/9H5FegI4VKEsYj8s2G4FpscdalDKvDk7HoyCj9Hkc0BAUPeojWKfK/vi9kO3nhzhVvvPqBZwHV/sVd9VQebFH6XIOJtdREfbyo3rAdXW6WCtce/UXWGM4++QaiGXnvdfx5Zy0lyDWcvLDv4KIML7+DsZm2MExACajGaY/hsnVsHAm15FsvRnBrO3JZNKZhicAk0soQnl4hXJ2xPRgD0l6kexhoH8+xK7pJSgnnP7w58iPbnL0ws9IJA8MIVcEcyvvcLNbuGLKcKlXTzrxxZyjKy9j0iHLKw+0zCdN3eBKAmKW8Q9/7XcwBr72s2+jlPVkLjUaeuctTVkzAzDwA2qnGYW0F6aNVDV05QS2PT0kEWGzv1aNJqu7VyJpzWvTmH+srqWoKgf7ZV2VaD26NpJCRdEykmnqEezNHEClRAnHmveO0i+Mion+RarC0fW36a0cC0mcDYzb3spaa9ZecDuvBgY3Axp8iAA2C9m7mwWpeXz/m+cfDWfzK79oWL4+zOsSPOV8zGy0izoXYYgK6ZyHSkR9dCSBpLeENQEOpsr2Iyv58Nq7zCcH0ZGFehK6dOYntriEsVuYCLDcG/LAqbsQlP/0mY9TuJKv/exl1CuzeQyntiqFKnOiIK86nLyLIqwMg83ZH3zhMZz3XN0/wHmPjXTtP/3eL0mN4R9/9ZOIwM39n2PEsr7yMB80JWpztR+y6P0jxAqvXXuPJE35xevbKDCTAnGG3//s0xhj+IsXXmRehmkQ3juOpu/j1DN3nkLhWy9fCWHfhjN+pW9IEIyGNvVo5wZHt6+zdnwdm/ZYeuTvhSbZ6NWADN66jlhL78SD0W1cmB9cwR++GsqwNDCArv3iL0Adq5vLmGyF5ft/J3D8rl+hGO9R7L0bzKnX7wUxXHzpFUSD8FXyQ8rr3wTbw64+DskQBuG9WF9i+zlp8n10dpPi5ncCUTddw3vH7SvvY6xh4/gQTMLSuc/gXcHoys8Q5/DTG6GMTjbBDFg5dhx1UxJjovdPBEl6WYYpLTujGb6A8STswM0TWWviprQMZX09aAmTkaVBavDGpdvMS1d7LHhVvNBq1fpaSlXRvNudPGmFTiMwcQX4gms7gSixtpayutzj4dOnEGP5K14h1zLmJJHV6yP3INrHgiCRp2ANQZfQitQiBpMEbV3o7yctvD1S3IJFWCSWRHwfW3sJqAulYDpYxfRW445WhuvrTDWPUdGALymmB62xehUNrEINg2ahGZhp6kQymJ2WoaLK1kJOUnEbolbQDrcwPsrftamqdH4L+qdIez3UR1Ko8zP2x79EJGFr7WOoFvwnnz7A2JQ//dHPKUvFmDBfsAqJlYnReHYjaM+WHgJVTi6fjQqZN6ObdrxBVVxR8j986zkya/nPv/AxVEv2xu8gEi1iaaaL2UgMKZxSOM9SltYl1iBJ+Y8/9TGMCEuDcwH2TCzilCx6GP3L7z5PXpRM3DQYRw+Fj5w/y9N3PQ5i+Os3f8LhdFRLuZZX+4gxLD/421GBE4iffroXIsruGGsN++/8BPUFS8ux6VPsox5stoyqI58X2P46S4//V7GncwQK6+eeZP1swcXn/gJ1Jesn3wyayeWgcBqsDIPW8dKPMUnKaraG2AFm9WEgQWOyfe/HnkHVc/mF74DAmUefYnpwm6yfYo2w8eH/OJSJJngbjXYPMWbMYO2XmHSJdHMVptdIltYCNE9zXESOeagrT2+coEXjj8OSWNCca1fBEhB6DGlEAX1rIFT4PU61Ltsq61KRJEzjkK4/YDVEuprwVf131rccW14NO7ZSyhrBR32BB96/tY8xymBgyRLhdz/6UOhGxkHRibXhHKxnDJmmejC96H7WdCV9NK7KJ4f11PAGadWwo2cjvCtJTcsDoAZQbM2RaI/FEyuI96zf+0kkWeLmK39J2h/GCOioJMx1NLAJGkfKGuDg6hsUeRGuyZroPpI0nsERXdy/coG1U3eTSkt4WQNB6pnMDqIUPHz92EpQ8Z4/+Sbv3bzMXSeXQrMnhvBrR7ew1nJq+RiCMJ1fBrGs9u9DUf7mJ77KH//kP4TdaYR/8MVPYW3K13/xAruHI/7XH7wIwNrSIIQw68liuacSdIW+wvoN7I2miLEsr1iWllI2Vx4DlN3Dl0Esgx6UvurwBWQzyQznzgw4vXaah07+GiLClZ0fxEZSgSg4Fwge/bVT4WUP7w8TQya/RPDBWiVy/FWhv3GKwcYpDi+9GGlnJYjlxgt/SplHg6h02LB74zwBu/ogimKTDFdM6zJt4+QJ0uUTJKe/HNzEx3+J27vN+v0jkv4KWhxAdgyyTZhdI9l8Mm6Q5xAxlHmOzZa45+nfi3ByP7Cb/BTU0FsOTaP9mwdMj97i/PEHYn/LNcqg2v+lhZpFh5/oPUds68b63xh+8u4N+knCbz1xrIkFvgx4Noo1Cd5VqJjh2MoaiOGzj97D7uSIv37+YnAlG89QD48+sIw1sVNWZfK+saV/6Z09xMCTD2/RS3oYCUxdX6FceIxV9kZ59Pn1QYlsYKk3aNG7fMuSReqyTWwaQ0ES5x5p5CL42vtYjGHl9MNhimoSqOIHl18DY/Euj1WR6Yydrn15pfIRkhZHwJMsH8cON+rsX6ztdiB9QZW9BkAsadhM9VQSiV5GpgOga7TlbSa+K+X0CFt1VVGSwilJ6Woa95Wd72NMwumNTzYkiwgKmdocSpnMSlzq66GOh5MriBg2lzdiUqLkM22ZJAQa15PnvwwIP37lnzMr5nH6SMy5BF67fID3nifuPY5zymuyH4AbVXom5Tc/9FtISyJ9/fB9jLVkWTBAeOG1nSCKjPMIEwzDXtrqAvqaIy8exkfBeDG7/x/WuL6qUu68Uh9r1YMVm2GOfQIxKcd6p1Gfc/W5P2qpgpvp3fUhaZbC8RJnKp167DP4fMTk9huIJGQnnmigZEnpDVISMq4+/+9BLHc9/TcQcxHpnUBMVpNgxuMCMYbNfoIkfWT18QBGza+F/zu+jLqS+WSGNYZjp5bxHi7+9NuIGM5/7KngtTwvlMxq7VMn4mtef5Wl13ajEZSpGKhVX7vR3jWuIJVfUP0gJPLqsQieT374bqb5nJ+/fhk1GvvkytsXQtL0kftO1J8dEDii86apPQO10vHFDmWtwYuYwObyKr/54U+RJct4P601hSIaXUTinOTWdJBw/dqaGEZLrx+7fXGQpNgeNs0CyliWjTq3jdJFB/HKYSxbWkN7PQ6vBq8h9a61cQ3rp87g5hNuv3+ZspjFPr/H4KL2sHJwoZ7qFrAMaj5nXVZHzCJ4MiURYU3Csy4LxFiSS7em9FJha2UPawynVzZrUoPEbV9ZuITo3ECOpSqzIhg0Jjapx87EKSXM51oPmBzPdxCEtaUwnuXLj/wOqp4b23/M1f3rNWI2m5RhNGyLj2EMWGvppylZsorzOdf2fhRHvUb7Wmvi0MYqQRMeuetBTm48iXNzru3+AFXD/jwMgdgdz5kVrUZKNdjx8KVoBxvUx76Y48qSXs9iEoFoTMHgXpCEk0/97eCt9LM/wZc5q8eWMP0SP3o3LJjh/eHZaVgcduVeQDnc+yZuPmVrfoRJB7HZ5Vg69wyoY//2v8cfbXPp2T8n6/c5/dRvBX6h2DBCLm6l4498FdtbrReen91Gy2ns3yj5LHAI0+NrmLTPfY99FTGGC9/9s6ALACUvlefevsFyL+PsE8caZwqBZx47y8N3Wb75/LskxvLgyc16jJoIXNjbBeDB41sNDbwet9YQElQjY0ZbVYM2U0hrQ8ZqRm816SKA+DxwdoWVQa/Lz2+dsabmEFQePUrLpi9UCyK8cPFaEJWWvpaPSQdGDzx6ifj9jbfeDlqHTkbfWM00A9dsjdkHD0NXM4waX9VK+xc6kRrP/FCAlYGRXI/FTephFvlsEp+Xo20eYIwErMGkUc1ckUGankh1H5VOoJ5mFnOspJI95KUnt81okfE0nOmnVk5zfPkUf3r0Fkmiodumyt2nVvHO840fXkYsPPQ7pxAx3D58LSKEhzXo0zwkw/W9ZzFi2Vr7eBSH0JyZ2oaYGmKqqvLp++4jSwYtciYVZRSD0EttIxQFvvjkg9x/8njLyiWYOhgNXcVREWjqg2FGYhL89CKCwR1dCMieDcKSfFbiXMnasSHYBL/7QmAonPh8uN7+FuA4cc/DuHLO+NZF3OyQcu8VRCzJ8MEWx60xhtR4hPrpTbApkrweDJ+Xw5Cu049uM98/wc23X0N9yeWf/lv6KyucePBpFGE46CEmwSzfUye3gomjagzl6DLOOea5R0oY3vNrsQwNM5v6gxTvTBwcKc2oqKodWunjxCRYD84FhzAfQ6WNK6n0QU2gamI4jj2Cqrun4czVFqbesGwMgzRjmPU6FJCGqxsjggSvYBNVNF4bZfJzb1/FqydLTb3gEmP4+H330LPLQVWsRVTyxPFyRnBxQwWGjCJ+Wo8ukShxr6qbKgcyNYPatKS3cSJnNiRNAwnElQXl9ACbLSN+hkraRLOInNYu3upjt87XXMdQLVh6a1uY5C1cHpL0+XjM/PAWph5h0ziqh65tGUfealQ6z6IHQxxVKwplHmTySag2kir6tn35FOVodgURYW14X91t814Z5aHcObk8CN53BGbJP/v6T+lnln/yG58CEZwPo9z7vRB+ro93MWI4t3S81Rtz/PbHPg4of/Kzv2Ka562krFFPGZTV3jFELNv7P8NFT34BLl0aowIP3LcEAr2esNTrsTq4G+fmbO//DK/KuBzHEjOQIYnCjSQJC7fce7ku91Dl+svP44FeL4T7tD8IOzUCNH78JiYZIsOHQ8heug/REtUXEYXLL79I2h9yfuXeUFAPTrdIpkqWGdQY3GwfMGTZbngxg3tQLKZ/Avwq/dVjzPaucupDH8OmPa69/FNc6cJYnOjBhM/xR78MEXG+i3cll15+hSS1nHnoHpKlE5jlh4ES3X8eVFg7dQ40cDGDjNkruXOMy3mYZm3Teq5Mh6nbYp4aabqETjW6fIav74zGtNUE33/1Cqk1/MHTJzpjXasPnuWO2dzVu9RInMYj7bHn4LSMSqCokoWGbdO5uqoe9nUkqsbFNo4mzT1Vg+uDWQa1g4ZN0xrxbH5Gw/QNN49fM9FLMNy/r6zqpBo1W5V5LR1CbU0eu4z1PATfnOc0yqWKiW1Mghdfq6ipnkcdxZtcCjEMTzwAST9Gm0ZPUZlGJJWGbpw7xvOcf/X9V1juZfztz3w4tGPHlyg9+OjgeftwihFha3kpyEZqK1TIS8c//doPo7xLOy3x8cxhxNX98HkZ+HWpGSAIt2/Pmc7zWg2ltCxnqEocqZ4Zf/3mm9GuNo6Ia410VbRl/CQ477i0u0MhcHFnEquH0AUMQcHj5pOY9L0ZBSHhs05/5HMgsH/xJVDhxqvfxSQJW4//Wpi+NbuGmh6kfUQ9k8NZHOMmlPMxu2//JdnSGstnPx3y9v561P2FI2D3/XcRI5xYP48xKd4VAWiqzbaDoDMZbCJpxpmnv4yfT7j+0vdBPO7gl/HoCp+3f+0V8tFRhLfTkCOIrY/V8uj9mFxGQkiH5lo/fKkbM9qo/1q7isbZMyKG7YkjPlq+aqvVptXEjvqzK6aMrYGZem9okzcHpoy2fkv4M8k923uzun+gtPF57dCkFPBiOJzkwfallZd7VSzC0a3rMffRlrdhxTMwJNmAsshRr5SFi+xh0GIEvV6DwlXe//G6iumYMi9YPiOR0xCEsG36U93xE6A8gtYZX1G7NaqpVQRJ+yGSmZZ+Lr6/YjLF5fNas1g7qtZkkNY7AP7/en2wNTub++QAAAAASUVORK5CYII="
+    }
+  ]
+}
