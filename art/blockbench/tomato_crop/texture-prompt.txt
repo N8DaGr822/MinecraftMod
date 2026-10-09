@@ -1,0 +1,10 @@
+Built-in image_gen; 2026-10-09. 128x128 atlas; four 64x64 material tiles.
+Source: exec-f22a8d77-caf8-4b76-bb81-0ed2c65ae768.png
+Use case: stylized-concept
+Asset type: single Minecraft tomato crop MATERIAL TEXTURE ATLAS, NOT an illustration of whole plants.
+A perfectly aligned square atlas divided into 2x2 equal square quadrants, no gaps or borders. Four full-bleed flat material surfaces, each quadrant designed as simple 16x16 logical Minecraft pixels, enlarged with crisp square pixel clusters. These materials will map onto small blocky crop geometry. Exact quadrant order:
+TOP LEFT: rich dark green tomato leaf surface with sparse lighter branching veins.
+TOP RIGHT: olive green tomato stalk with sparse pale hair flecks.
+BOTTOM LEFT: fresh light green unripe tomato skin with a modest highlight.
+BOTTOM RIGHT: ripe scarlet red tomato skin with deep red edge shading and a sparse orange highlight.
+Opaque surfaces fill every pixel. Native Minecraft crop palette, sparse stylized organic pixel clusters, flat diffuse color; no realistic lighting, no gradients, no grain noise, no perspective, no whole fruit or plant silhouettes, no soil, no words, no labels, no gridlines, no outer frame. Avoid many small details; readable when each quadrant is small.
