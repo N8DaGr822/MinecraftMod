@@ -59,6 +59,7 @@ public final class TreeSpiritSummonItem extends Item {
 			return InteractionResult.FAIL;
 		}
 		context.getItemInHand().consume(1, player);
+		darkspawn.black.cooking.Culinary.award(player, "first_summon", "earned");
 		player.sendOverlayMessage(Component.translatable("message.darkspawn.tree_awakened"));
 		return InteractionResult.SUCCESS;
 	}

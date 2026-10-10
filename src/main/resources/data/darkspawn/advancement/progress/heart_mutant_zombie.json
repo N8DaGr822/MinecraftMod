@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Heart: Mutant Zombie"
+    },
+    "description": {
+      "text": "Absorb this unique boss heart."
+    },
+    "icon": {
+      "id": "darkspawn:mutant_zombie_heart"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/defeat_mutant_zombie"
+}

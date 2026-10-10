@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Heart: Mutant Wolf"
+    },
+    "description": {
+      "text": "Absorb this unique boss heart."
+    },
+    "icon": {
+      "id": "darkspawn:mutant_wolf_heart"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/defeat_mutant_wolf"
+}

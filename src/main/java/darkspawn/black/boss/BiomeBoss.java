@@ -55,6 +55,22 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public final class BiomeBoss extends Monster implements GeoEntity {
+	private int audioPreviousWarning;
+	@Override public void baseTick() {
+		super.baseTick();
+		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
+			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
+			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
+			audioPreviousWarning = warning;
+		}
+	}
+	@Override protected net.minecraft.sounds.SoundEvent getAmbientSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "idle"); }
+	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
+	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
+	@Override public int getAmbientSoundInterval() { return 220; }
+	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+
 	public static final DataTicket<Integer> ANIMATION_PHASE = DataTickets.create("darkspawn_biome_phase", Integer.class);
 	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTickets.create("darkspawn_biome_windup", Integer.class);
 	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTickets.create("darkspawn_biome_recovery", Integer.class);
@@ -229,7 +245,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 			bossBar.setName(phaseName());
 			entityData.set(WINDUP, 0);
 			cooldown = 60;
-			level.playSound(null, blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 2, 0.7F);
+			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
 			if (profile == BossProfile.MUTANT_ZOMBIE || CreatureAssets.BOSSES.contains(profile.id())) { triggerAnim("action", "phase_change"); }
 		}
 		if (chargeTicks > 0) { tickCharge(level); return; }
@@ -262,7 +278,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 			marked = floor(level, target.getX(), target.getZ(), target.getY());
 			if (profile == BossProfile.KRAKEN) { marked = target.position(); }
 			entityData.set(WINDUP, profile == BossProfile.SHADOW_CREEPER_QUEEN && phase() == 3 ? 35 : 40);
-			level.playSound(null, blockPosition(), SoundEvents.IRON_GOLEM_ATTACK, SoundSource.HOSTILE, 3, 0.5F);
+			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), SoundSource.HOSTILE, 1.8F, 1F);
 		}
 	}
 
@@ -665,6 +681,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	@Override
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
+		darkspawn.black.cooking.BossCuisineRewards.grant(this, level, participants, profile.kind(), 192);
 		if (!participants.isEmpty()) { spawnAtLocation(level, new ItemStack(BossItems.ESSENCES.get(profile))); }
 		for (UUID id : participants) {
 			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);

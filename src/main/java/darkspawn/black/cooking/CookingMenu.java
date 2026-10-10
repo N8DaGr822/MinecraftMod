@@ -25,6 +25,8 @@ public final class CookingMenu extends AbstractContainerMenu {
 	private static final int INVENTORY_END = 41;
 	private final ContainerLevelAccess access;
 	private final Level level;
+	private final Player owner;
+	private final net.minecraft.world.inventory.ContainerData discoveryState = new net.minecraft.world.inventory.SimpleContainerData(1);
 	private final ResultContainer result = new ResultContainer();
 	private RecipeHolder<CookingRecipe> recipe;
 	private boolean takingResult;
@@ -43,6 +45,8 @@ public final class CookingMenu extends AbstractContainerMenu {
 		super(Cooking.MENU, id);
 		this.access = access;
 		this.level = inventory.player.level();
+		this.owner = inventory.player;
+		addDataSlots(discoveryState);
 		for (int i = 0; i < INPUT_COUNT; i++) {
 			addSlot(new Slot(ingredients, i, 20 + i * 26, 36));
 		}
@@ -50,7 +54,7 @@ public final class CookingMenu extends AbstractContainerMenu {
 			@Override public boolean mayPlace(ItemStack stack) { return false; }
 			@Override public boolean isFake() { return true; }
 			@Override public boolean mayPickup(Player player) {
-				return hasItem() && (level.isClientSide() || recipe != null && recipe.value().matches(input(), level));
+				return hasItem() && (level.isClientSide() || recipe != null && canCook() && recipe.value().matches(input(), level));
 			}
 			@Override public void onTake(Player player, ItemStack stack) { takeResult(player, stack); }
 		});
@@ -74,13 +78,14 @@ public final class CookingMenu extends AbstractContainerMenu {
 		if (!takingResult && level instanceof ServerLevel serverLevel) {
 			CraftingInput input = input();
 			recipe = serverLevel.recipeAccess().getRecipeFor(Cooking.RECIPE_TYPE, input, serverLevel).orElse(null);
-			result.setItem(0, recipe == null ? ItemStack.EMPTY : recipe.value().assemble(input));
+			discoveryState.set(0, recipe != null && !canCook() ? 1 : 0);
+			result.setItem(0, recipe == null || !canCook() ? ItemStack.EMPTY : recipe.value().assemble(input));
 			broadcastChanges();
 		}
 	}
 
 	private void takeResult(Player player, ItemStack stack) {
-		if (!(level instanceof ServerLevel) || recipe == null || !recipe.value().matches(input(), level)) {
+		if (!(level instanceof ServerLevel) || recipe == null || !canCook() || !recipe.value().matches(input(), level)) {
 			return;
 		}
 		// Crafting Transaction: Consume once after the output is taken; defer previews until all remainders are returned.
@@ -107,6 +112,8 @@ public final class CookingMenu extends AbstractContainerMenu {
 		}
 		slotsChanged(ingredients);
 	}
+	private boolean canCook() { return recipe != null && Cuisine.canCook(owner, recipe.id().identifier().getPath()); }
+	public boolean isRecipeLocked() { return discoveryState.get(0) != 0; }
 
 	@Override
 	public boolean stillValid(Player player) {

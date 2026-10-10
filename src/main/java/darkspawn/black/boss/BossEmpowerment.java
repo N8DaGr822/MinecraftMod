@@ -58,6 +58,7 @@ public final class BossEmpowerment {
 	}
 
 	public static boolean isKnownPower(String power) {
+		if (EquipmentPowers.POWERS.contains(power)) return true;
 		if (ROOTBOUND.equals(power) || PREDATORS_RUSH.equals(power)) { return true; }
 		for (BossProfile profile : BossProfile.values()) { if (profile.power.equals(power)) { return true; } }
 		return false;

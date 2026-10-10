@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Beyond Mortal"
+    },
+    "description": {
+      "text": "Reach all 15 heart upgrades."
+    },
+    "icon": {
+      "id": "minecraft:enchanted_golden_apple"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/heart_collector"
+}

@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Something Stirs"
+    },
+    "description": {
+      "text": "Complete a biome boss ritual."
+    },
+    "icon": {
+      "id": "darkspawn:ancient_heartwood"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/root"
+}

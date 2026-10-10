@@ -1,18 +1,19 @@
 {
-	"required": true,
-	"package": "darkspawn.black.client.mixin",
-	"compatibilityLevel": "JAVA_25",
-	"client": [
-		"ExampleClientMixin",
-		"ContainerScreenExpansionMixin",
-		"InventoryScreenExpansionMixin",
-		"CreativeInventoryExpansionMixin",
-		"SlotPositionAccessor"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
-	}
+  "required": true,
+  "package": "darkspawn.black.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "ExampleClientMixin",
+    "ContainerScreenExpansionMixin",
+    "InventoryScreenExpansionMixin",
+    "CreativeInventoryExpansionMixin",
+    "SlotPositionAccessor",
+    "EncounterMusicMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
 }

@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Heart: Titan Boa"
+    },
+    "description": {
+      "text": "Absorb this unique boss heart."
+    },
+    "icon": {
+      "id": "darkspawn:titan_boa_heart"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/defeat_titan_boa"
+}

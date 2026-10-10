@@ -26,7 +26,11 @@ public final class Agriculture {
 	public static final Crop RICE = crop("rice", 0);
 	public static final Crop CORN = crop("corn", 3);
 	public static final Crop PEPPER = crop("pepper", 2);
-	public static final List<Crop> CROPS = List.of(ONION, GARLIC, TOMATO, RICE, CORN, PEPPER);
+	public static final Crop FROST_GARLIC = crop("frost_garlic", 1);
+	public static final Crop JUNGLE_PEPPER = crop("jungle_pepper", 2);
+	public static final Crop MARSH_RICE = crop("marsh_rice", 0);
+	public static final List<Crop> STANDARD_CROPS = List.of(ONION, GARLIC, TOMATO, RICE, CORN, PEPPER);
+	public static final List<Crop> CROPS = List.of(ONION, GARLIC, TOMATO, RICE, CORN, PEPPER, FROST_GARLIC, JUNGLE_PEPPER, MARSH_RICE);
 
 	private Agriculture() {
 	}
@@ -64,5 +68,22 @@ public final class Agriculture {
 
 		// Crop Identity: Pick-block returns this crop's registered seeds instead of wheat seeds.
 		@Override protected ItemLike getBaseSeedId() { return asItem(); }
+
+		@Override protected void randomTick(net.minecraft.world.level.block.state.BlockState state,
+				net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos, net.minecraft.util.RandomSource random) {
+			super.randomTick(state, level, pos, random);
+			// Only newly ripened crops mutate. Mature vanilla crops do not receive random ticks.
+			if (!isMaxAge(state) && isMaxAge(level.getBlockState(pos))) {
+				Crop variant = regionalVariant(this, level.getBiome(pos));
+				if (variant != null && random.nextInt(4) == 0) level.setBlock(pos, variant.block().getStateForAge(7), 2);
+			}
+		}
+	}
+
+	public static Crop regionalVariant(CropBlock crop, net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome) {
+		if (crop == GARLIC.block() && biome.is(darkspawn.black.boss.BossProfile.ICE_WYRM.biomes())) return FROST_GARLIC;
+		if (crop == PEPPER.block() && biome.is(darkspawn.black.boss.BossProfile.TITAN_BOA.biomes())) return JUNGLE_PEPPER;
+		if (crop == RICE.block() && biome.is(darkspawn.black.boss.BossProfile.BABA_YAGA.biomes())) return MARSH_RICE;
+		return null;
 	}
 }

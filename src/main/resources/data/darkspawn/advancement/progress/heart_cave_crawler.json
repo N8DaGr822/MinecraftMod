@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Heart: Cave Crawler"
+    },
+    "description": {
+      "text": "Absorb this unique boss heart."
+    },
+    "icon": {
+      "id": "darkspawn:cave_crawler_heart"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/defeat_cave_crawler"
+}

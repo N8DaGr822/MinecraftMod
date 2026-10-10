@@ -132,7 +132,8 @@ public final class BossEncounterGameTest {
 			helper.assertTrue(boss.charging(), "No charge to cancel when players leave");
 			player.teleportTo(player.getX() + 200, player.getY(), player.getZ());
 			boss.customServerAiStep(level);
-			helper.assertTrue(!boss.charging() && boss.windup() == 0, "Zombie attack pose remained active without players");
+			helper.assertTrue(!boss.charging() && boss.windup() == 0, "Zombie attack pose remained active without players; remaining Survival players: "
+					+ level.players().stream().filter(BiomeBoss::eligible).map(p -> p.getScoreboardName() + " at " + p.position()).toList());
 		} finally {
 			level.getEntitiesOfClass(BossBolt.class, boss.getBoundingBox().inflate(64), bolt -> bolt.getOwner() == boss).forEach(BossBolt::discard);
 			boss.discard(); removePlayer(player);
@@ -499,7 +500,10 @@ public final class BossEncounterGameTest {
 			boss.hurtServer(level, level.damageSources().playerAttack(player), 10000);
 			helper.assertTrue(boss.isDeadOrDying() && !boss.isRemoved(), "Defeat did not begin with a visible corpse");
 			var drops = level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID()));
-			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.LIVING_HEARTWOOD)).count() == 1, "Death must award one Heartwood drop");
+			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.LIVING_HEARTWOOD)).count() == 1,
+					"Death must award one Heartwood drop; new drops: " + drops.stream().map(item -> item.getItem().toString()).toList()
+					+ "; mob drops: " + level.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.MOB_DROPS)
+					+ "; player alive: " + player.isAlive() + "; player mode: " + player.gameMode());
 			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.HEARTS.get(BossKind.ANCIENT_TREE_SPIRIT))).count() == 1, "Death must reserve one boss heart");
 			boss.die(level.damageSources().playerAttack(player));
 			for (int tick = 0; tick < 20; tick++) { boss.tickDeath(); }

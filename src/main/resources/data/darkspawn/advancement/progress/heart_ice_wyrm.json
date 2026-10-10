@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Heart: Ice Wyrm"
+    },
+    "description": {
+      "text": "Absorb this unique boss heart."
+    },
+    "icon": {
+      "id": "darkspawn:ice_wyrm_heart"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/defeat_ice_wyrm"
+}

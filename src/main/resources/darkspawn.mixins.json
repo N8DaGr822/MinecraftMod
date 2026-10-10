@@ -9,7 +9,12 @@
 		"PlayerInventoryDataMixin",
 		"BossHeartPlayerMixin",
 		"BossHealthMixin",
-		"MealUtilityEffectMixin"
+		"MealUtilityEffectMixin",
+		"CulinaryPlayerMixin",
+		"DietMixin",
+		"MealExhaustionMixin",
+		"MealPhysiologyMixin",
+		"EquipmentDefenseMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

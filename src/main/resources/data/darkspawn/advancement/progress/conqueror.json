@@ -1,0 +1,114 @@
+{
+  "display": {
+    "title": {
+      "text": "Conqueror"
+    },
+    "description": {
+      "text": "Defeat all 16 boss families."
+    },
+    "icon": {
+      "id": "minecraft:nether_star"
+    }
+  },
+  "criteria": {
+    "ancient_tree_spirit": {
+      "trigger": "minecraft:impossible"
+    },
+    "mutant_wolf": {
+      "trigger": "minecraft:impossible"
+    },
+    "mutant_zombie": {
+      "trigger": "minecraft:impossible"
+    },
+    "fossil_tyrant": {
+      "trigger": "minecraft:impossible"
+    },
+    "thunder_bird": {
+      "trigger": "minecraft:impossible"
+    },
+    "titan_boa": {
+      "trigger": "minecraft:impossible"
+    },
+    "baba_yaga": {
+      "trigger": "minecraft:impossible"
+    },
+    "mountain_titan": {
+      "trigger": "minecraft:impossible"
+    },
+    "ice_wyrm": {
+      "trigger": "minecraft:impossible"
+    },
+    "kraken": {
+      "trigger": "minecraft:impossible"
+    },
+    "cave_crawler": {
+      "trigger": "minecraft:impossible"
+    },
+    "shadow_creeper_queen": {
+      "trigger": "minecraft:impossible"
+    },
+    "mycelial_sovereign": {
+      "trigger": "minecraft:impossible"
+    },
+    "netherborn": {
+      "trigger": "minecraft:impossible"
+    },
+    "soulbound_colossus": {
+      "trigger": "minecraft:impossible"
+    },
+    "void_eye": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "ancient_tree_spirit"
+    ],
+    [
+      "mutant_wolf"
+    ],
+    [
+      "mutant_zombie"
+    ],
+    [
+      "fossil_tyrant"
+    ],
+    [
+      "thunder_bird"
+    ],
+    [
+      "titan_boa"
+    ],
+    [
+      "baba_yaga"
+    ],
+    [
+      "mountain_titan"
+    ],
+    [
+      "ice_wyrm"
+    ],
+    [
+      "kraken"
+    ],
+    [
+      "cave_crawler"
+    ],
+    [
+      "shadow_creeper_queen"
+    ],
+    [
+      "mycelial_sovereign"
+    ],
+    [
+      "netherborn"
+    ],
+    [
+      "soulbound_colossus"
+    ],
+    [
+      "void_eye"
+    ]
+  ],
+  "parent": "darkspawn:progress/first_summon"
+}

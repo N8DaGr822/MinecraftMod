@@ -51,6 +51,22 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class MutantWolf extends Monster implements GeoEntity {
+	private int audioPreviousWarning;
+	@Override public void baseTick() {
+		super.baseTick();
+		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
+			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
+			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
+			audioPreviousWarning = warning;
+		}
+	}
+	@Override protected net.minecraft.sounds.SoundEvent getAmbientSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "idle"); }
+	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
+	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
+	@Override public int getAmbientSoundInterval() { return 220; }
+	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+
 	public static final int AWAKENING_TICKS = 60;
 	public static final int DEFEAT_TICKS = 60;
 	public static final DataTicket<Integer> ANIMATION_PHASE = DataTickets.create("darkspawn_wolf_phase", Integer.class);
@@ -202,7 +218,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 			setSpeed(0);
 			setDeltaMovement(0, Math.min(0, getDeltaMovement().y), 0);
 			if (awakening() == AWAKENING_TICKS - 20) {
-				level.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_WARNING, SoundSource.HOSTILE, 4, 0.5F);
+				level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
 			}
 			if (awakening() % 10 == 0) {
 				level.sendParticles(ParticleTypes.SNOWFLAKE, getX(), getY() + 2, getZ(), 24, 3, 1, 3, 0.05);
@@ -222,7 +238,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 			entityData.set(WINDUP, 0);
 			cooldown = 60;
 			triggerAnim("action", "phase_change");
-			level.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_WARNING, SoundSource.HOSTILE, 4, 0.6F);
+			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
 		}
 		List<ServerPlayer> nearby = level.players().stream()
 				.filter(player -> eligible(player) && distanceToSqr(player) <= 128 * 128).toList();
@@ -282,7 +298,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 			}
 			entityData.set(WINDUP, 40);
 			entityData.set(ATTACK_KIND, attack);
-			level.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_WARNING, SoundSource.HOSTILE, 4, 0.8F);
+			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), SoundSource.HOSTILE, 1.8F, 1F);
 		}
 	}
 
@@ -403,6 +419,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 	@Override
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
+		darkspawn.black.cooking.BossCuisineRewards.grant(this, level, participants, BossKind.MUTANT_WOLF, 160);
 		if (!participants.isEmpty()) { spawnAtLocation(level, new ItemStack(BossItems.ALPHA_FANG)); }
 		for (UUID id : participants) {
 			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);
@@ -430,7 +447,6 @@ public final class MutantWolf extends Monster implements GeoEntity {
 			setDeltaMovement(0, Math.min(0, getDeltaMovement().y), 0);
 			bossBar.setVisible(false);
 			removePack(server);
-			server.playSound(null, blockPosition(), SoundEvents.POLAR_BEAR_DEATH, SoundSource.HOSTILE, 4, 0.5F);
 		}
 		super.die(source);
 	}

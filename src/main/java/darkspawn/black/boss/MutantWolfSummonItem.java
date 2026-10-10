@@ -58,6 +58,7 @@ public final class MutantWolfSummonItem extends Item {
 		boss.prepareEncounter(level);
 		if (!level.addFreshEntity(boss)) { return InteractionResult.FAIL; }
 		context.getItemInHand().consume(1, player);
+		darkspawn.black.cooking.Culinary.award(player, "first_summon", "earned");
 		player.sendOverlayMessage(Component.translatable("message.darkspawn.wolf_awakened"));
 		return InteractionResult.SUCCESS;
 	}

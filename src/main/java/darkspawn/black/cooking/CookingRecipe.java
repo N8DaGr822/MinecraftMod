@@ -42,6 +42,8 @@ public final class CookingRecipe implements Recipe<CraftingInput> {
 	}
 
 	@Override public boolean matches(CraftingInput input, Level level) { return matchingRecipe.matches(input, level); }
+	public List<Ingredient> ingredients() { return ingredients; }
+	public ItemStack resultStack() { return result.create(); }
 	@Override public ItemStack assemble(CraftingInput input) { return result.create(); }
 	@Override public boolean isSpecial() { return true; }
 	@Override public boolean showNotification() { return false; }

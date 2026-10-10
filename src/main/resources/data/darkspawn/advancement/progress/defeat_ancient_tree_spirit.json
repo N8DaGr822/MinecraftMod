@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Ancient Tree Spirit"
+    },
+    "description": {
+      "text": "Contribute to defeating this boss and remain nearby."
+    },
+    "icon": {
+      "id": "darkspawn:ancient_tree_spirit_trophy"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/first_summon"
+}

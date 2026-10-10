@@ -4,6 +4,6 @@
 	"version": "1.0.0",
 	"name": "Darkspawn Server Tests",
 	"environment": "server",
-	"entrypoints": {"fabric-gametest": ["darkspawn.black.boss.BossEncounterGameTest", "darkspawn.black.cooking.CookingGameTest", "darkspawn.black.cooking.AgricultureGameTest", "darkspawn.black.ecosystem.ForestGameTest", "darkspawn.black.ecosystem.TaigaGameTest", "darkspawn.black.ecosystem.RegionalGameTest"]},
+	"entrypoints": {"fabric-gametest": ["darkspawn.black.boss.BossEncounterGameTest", "darkspawn.black.cooking.CookingGameTest", "darkspawn.black.cooking.AgricultureGameTest", "darkspawn.black.cooking.CuisineGameTest", "darkspawn.black.ecosystem.ForestGameTest", "darkspawn.black.ecosystem.TaigaGameTest", "darkspawn.black.ecosystem.RegionalGameTest", "darkspawn.black.worldgen.BossStructureGameTest"]},
 	"depends": {"darkspawn": "*", "fabric-gametest-api-v1": "*"}
 }

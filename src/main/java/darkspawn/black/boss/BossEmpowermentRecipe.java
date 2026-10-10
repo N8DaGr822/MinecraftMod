@@ -90,7 +90,8 @@ public final class BossEmpowermentRecipe extends SimpleSmithingRecipe {
 	@Override
 	public List<RecipeDisplay> display() {
 		return List.of(new SmithingRecipeDisplay(template.display(), base.display(), addition.display(),
-				new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(BossEmpowerment.apply(new ItemStack(Items.NETHERITE_SWORD), power))),
+				new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(BossEmpowerment.apply(
+					new ItemStack(base.items().findFirst().orElseThrow()), power))),
 				new SlotDisplay.ItemSlotDisplay(Items.SMITHING_TABLE)));
 	}
 }

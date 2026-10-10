@@ -2,6 +2,8 @@
 
 Fabric mod for Minecraft **26.3**, with inventory upgrades, 16 post-dragon biome bosses, the Endborn, equipment empowerment, and permanent boss-heart progression.
 
+**Current release candidate: 1.0.0-alpha.3.** Adds the first [boss discovery structures](#boss-discovery-structures) alongside the [cuisine and progression expansion](#expanded-cuisine-and-progression). Intended for playtesting. The earlier live session reported working inventory, cooking/food, and Tree Spirit weapon empowerment. Tree Spirit combat pressure, animation polish, and live heart-persistence verification remain open. Preparing this candidate does not mean it has been published on Modrinth; the [alpha.1 publishing notes](docs/modrinth-release.md) are retained as history.
+
 ## Cooking Station and meals
 
 Craft a **Cooking Station** using four iron ingots, one campfire, and three planks:
@@ -34,9 +36,9 @@ Buckets and honey bottles return as empty containers. Eating chowder or Woodland
 
 Meals stack to 16 and can be eaten at full hunger to change buffs. **Only one Well Fed meal buff is active at a time**: eating another meal replaces it, including refreshing the same meal. Cheese and vanilla foods do not replace a meal buff. Potions and boss powers retain their own effects and timers. Meal attack damage, regeneration, and absorption can coexist with potion bonuses; vision and breathing use whichever source remains active. Absorption follows Minecraft's shared golden-heart pool and capacity rules.
 
-Meal timers survive saves, reconnects, and dimension changes, pause while offline, and clear on death or when drinking milk. Meal replacement removes only meal-owned effects and attribute modifiers. The five effect variants use vanilla saving and synchronization; vision and breathing checks recognize their dedicated meal effects without overwriting vanilla potion instances. Both client and server must use this updated mod.
+Meal timers survive saves, reconnects, and dimension changes, pause while offline, and clear on death or when drinking milk. Meal replacement removes only meal-owned effects and attribute modifiers. Effects use vanilla saving and synchronization; utility checks recognize dedicated meal effects without overwriting vanilla potion instances. Both client and server must use this updated mod.
 
-Cooking recipes live in `data/darkspawn/recipe` with type `darkspawn:cooking`, support one to four ingredients, and can be overridden by data packs. Meal recipes are station-only; they do not appear in the vanilla crafting-table recipe book. This table is the starter recipe guide. Icons and the station model currently reuse vanilla artwork. Further biome dishes, feasts, boss foods, biome crop variants, and food-diversity bonuses are planned in the [development roadmap](docs/development-roadmap.md).
+Cooking recipes live in `data/darkspawn/recipe` with type `darkspawn:cooking`, support one to four ingredients, and can be overridden by data packs. Meal recipes are station-only; they do not appear in the vanilla crafting-table recipe book. This table is the starter recipe guide; the Cookbook covers the additional [regional dishes, boss cuisine, and feasts](#expanded-cuisine-and-progression). Three biome crop variants are available; see [regional discoveries](#regional-discoveries-and-the-next-expansion).
 
 Cooking tests cover recipe decoding and ingredient alternatives, network serialization, rejected recipes, shift-click item conservation, full inventories, container returns, menu closure, independent station sessions, meal replacement, potion preservation, milk, save/load, and effect expiration. The screen's appearance at different GUI scales and real two-client interactions still need live playtesting.
 
@@ -46,21 +48,21 @@ Cooking tests cover recipe decoding and ingredient alternatives, network seriali
 
 Plant seeds on farmland with adequate light. Crops use eight growth ages, normal farmland hydration and planting-density growth rules, and bone meal; rice also uses ordinary farmland in this release. Breaking an immature crop returns one seed. A mature crop gives **one or two produce and two to five seeds** before Fortune; Fortune increases the extra-seed roll. Replant manually or let a farmer collect the seeds and use normal harvesting behavior. Breaking the supporting farmland drops the crop normally. Seeds feed chickens, and both seeds and produce can be composted.
 
-| Ingredient | Raw hunger / saturation | Acquisition | Planned dish uses (next cuisine milestone) |
+| Ingredient | Raw hunger / saturation | Acquisition | Example dish uses |
 | --- | --- | --- | --- |
-| Onion | 2 / 1.2 | Onion crop | Hunter's Stew, Bog Gumbo, advanced Woodland Stew |
-| Garlic | 1 / 0.6 | Garlic crop | Garlic bread, roast chicken, savory mushroom dishes |
-| Tomato | 3 / 1.8 | Tomato crop | Vegetable stew, pasta, pizza |
-| Rice | Ingredient only | Rice crop | Seafood bowl, curry, mushroom risotto |
-| Corn | 3 / 1.8 | Corn crop | Cornbread, roasted corn, hearty stew |
+| Onion | 2 / 1.2 | Onion crop | Hunter's Stew, Bog Gumbo, Vegetable Pizza |
+| Garlic | 1 / 0.6 | Garlic crop | Garlic Bread, Winter Hotpot, Mushroom Risotto |
+| Tomato | 3 / 1.8 | Tomato crop | Nether Chili, Vegetable Pizza, Builder's Lunch |
+| Rice | Ingredient only | Rice crop | Seafood Rice, boss dishes, Mushroom Risotto |
+| Corn | 3 / 1.8 | Corn crop | Cornbread, Farmer's Lunch, Nether Chili |
 | Pepper | 2 / 1.2 | Pepper crop | Spiced Steak, Tropical Skewer, chili |
 | Butter | Ingredient only | Milk bucket → two butter at the Cooking Station; returns the bucket | Garlic bread, baked potatoes, pastries |
 
-Raw vegetables restore normal food values and do not replace the active meal buff. The original meals keep their existing recipes. The dish examples above are planned uses, not newly craftable meals. Salt, cheese, and Wild Herbs retain their current renewable sources: water, milk plus salt, and Barkling shearing respectively.
+Raw vegetables restore normal food values and do not replace the active meal buff. The original meals keep their existing recipes. The dishes above are available through the Cooking Station; consult the Cookbook for ingredients and discovery requirements. Salt, cheese, and Wild Herbs retain their current renewable sources: water, milk plus salt, and Barkling shearing respectively.
 
 Seeds appear under Creative's **Natural Blocks**; produce and butter appear under **Food & Drinks**. For testing, use `/give @s darkspawn:onion_seeds` (or `garlic_seeds`, `tomato_seeds`, `rice_seeds`, `corn_seeds`, `pepper_seeds`), `/give @s darkspawn:butter`, or `/setblock ~ ~ ~ darkspawn:onion_crop[age=7]` above farmland. Each ripe crop has a distinguishing produce model. The growth foliage and inventory icons currently reuse vanilla artwork; custom textures and live-client visual review remain a polish task.
 
-Agriculture tests cover all six planting/growth/harvest/replant loops, bone meal consumption, premature harvesting, light and soil rejection, saved growth age, seed tags and composting, native farmer behavior, additive trades, payment, stock persistence and restocking, and butter batch/container conservation. Biome mutations and regional meals follow in later increments.
+Agriculture tests cover all six planting/growth/harvest/replant loops, bone meal consumption, premature harvesting, light and soil rejection, saved growth age, seed tags and composting, native farmer behavior, additive trades, payment, stock persistence and restocking, and butter batch/container conservation. Regional mutation checks cover the three biome variants described below.
 
 ## Inventory sorting
 
@@ -366,6 +368,83 @@ For testing, use `/summon darkspawn:<creature_name_in_snake_case>`, for example 
 
 Regional release checks: compare pre/post-dragon saves, inspect every silhouette and warning in its native lighting, observe natural day/night populations, test aerial and underwater movement, follow a Familiar over real terrain, excavate with a full inventory, forge a storm feather, and repeat discoveries/combat on two clients. Check walls, cliffs, doors, boats, unload/reload, peaceful switching, and cleanup around each herald.
 
+## Expanded cuisine and progression
+
+The expansion adds **44 meals, six shareable feasts, 16 boss cooking ingredients, 16 decorative trophies, a Chef profession, recipe discoveries, dietary variety, and ten shield/bow/armor powers**. Meals have dedicated textured models; trophies depict each boss family, and feast boards visibly lose portions as they are shared. The new bundled project icon is a tree-spirit emblem. Live multiplayer balance and in-game visual review remain open.
+
+Craft a **Cookbook** with a book and Wild Herbs. Right-click it for categorized Cooking Station recipes, ingredients, effects, your meal collection, and hints for locked recipes. Every station ingredient listed costs one item. Existing meals stay available without discoveries.
+
+- Regional dishes include Hunter's Stew, Farmhouse Roast, Spiced Steak, Tropical Skewer, Bog Gumbo, Miner's Meal, Winter Hotpot, Seafood Rice, Mushroom Risotto, Nether Chili, and Ender Salad. Existing Woodland Stew and Fish Chowder remain available.
+- Everyday dishes include Garlic Bread, Cheesy Potato, Vegetable Pizza, and Cornbread. Utility lunches support farming/exploration, building, mining, fishing, and night travel. Desserts include Berry Pie, Chocolate Cake, Honey Tart, and Chorus Pie; Chorus Pie grants slow falling without teleporting the diner.
+- Each boss family now gives a separate cooking ingredient and a decorative trophy to each living nearby contributor. These remain available on repeat kills, including after absorbing that boss's heart. Helpers and abandoned encounters grant neither. Cook each boss ingredient with rice, butter, and Wild Herbs for its premium dish.
+- Place a Cooking Station near an unemployed adult villager to offer the **Chef** profession. Its five trade levels buy carrots and sell butter, cheese, food, and scrolls. The villager uses ordinary stock and restocking; it cannot access ingredients in a player's open station menu.
+- Find **Shadow Stew** scrolls in Ancient City chests, **Infernal Roast** scrolls in bastion treasure chests, and **Captain's Chowder** scrolls in shipwreck supply chests (50% chance per newly generated chest loot). Chefs sell Bog Gumbo, Captain's Chowder, and Hero Feast scrolls at higher levels. Right-click a scroll to learn it permanently; duplicate scrolls are not consumed. Existing generated chest contents are not rewritten.
+- The **Hunter's, Woodland, Ocean, Nether, and Hero Feasts**, plus **Ender Banquet**, each have six servings. Right-click with an empty hand while hungry. Each serving restores eight hunger points and applies one five-minute meal effect. Hunter's/Hero Feast combine +3 attack damage with +20% movement speed in the same meal slot. Breaking an untouched feast returns it; breaking a partially eaten feast loses the leftovers.
+
+### Regional discoveries and the next expansion
+
+- **Frost Garlic**, **Jungle Pepper**, and **Marsh Rice** can emerge when ordinary garlic, pepper, and rice naturally reach maturity in Ice Wyrm, Titan Boa, and Baba Yaga biomes respectively (25% chance at the final natural growth step). Bone meal grows crops normally but does not trigger mutation. Harvest regional seeds to replant anywhere on suitable farmland. Farmers can harvest/replant them; chickens accept the seeds. Regional produce can be crafted back into its ordinary ingredient, one for one.
+- Discover **Frost Garlic Soup** in igloo chests, **Jungle Pepper Skewer** in jungle temple chests, and **Marsh Rice Bowl** in dungeon chests. These three new station recipes require their scroll. Mineshaft chests provide an alternate Shadow Stew source; fishing treasure can include Captain's Chowder. Each source adds a 50% scroll roll when that loot table is rolled, without rewriting existing inventories.
+- **Frostguard** shields weaken a successfully blocked attacker for three seconds; **Venomshot** bows apply Poison I for three seconds; **Highland** armor reduces the fall-damage multiplier by 0.25, once regardless of equipped piece count. Smith with an amethyst shard and Ice Wyrm, Titan Boa, or Mountain Titan essence respectively. Powers replace the existing item empowerment and preserve other item data.
+- After the world's first dragon victory, suitable regional habitats occasionally show small particle wisps and quiet ambient sounds. These identify habitat, not an active boss or generated structure. Particle bursts are limited to seven per player every ten seconds; sound cues occur at most once per minute and respect the ambient volume category.
+- **Boss discovery structures:** the Overgrown Druid Shrine and Abandoned Hunter Camp now generate in new terrain. Landmarks for the other 14 families remain in the [expansion plan](docs/boss-structures-plan.md).
+
+Artwork sources, generation prompts, and reproduction commands are recorded in [art provenance](art/cuisine-art-provenance.md). Run `node tools/assets/preview-cuisine.cjs` to create an offline textured model gallery at `build/art-review/cuisine.html`.
+
+### Boss discovery structures
+
+Explore forest biomes for the **Overgrown Druid Shrine**, a ruined stone circle with roots, a broken arch, and an offering shelter. Search taigas for the **Abandoned Hunter Camp**, with a spruce shelter, supply cache, unlit hearth, and marked posts. Each has three variants and four possible rotations.
+
+- Shrines occupy a 31×31 footprint; camps occupy 25×25. The central moss or bone block marks a prepared ritual clearing. Explicit air in the templates clears natural vegetation during generation; there is no recurring clearing or block-changing effect after generation.
+- Each chest guarantees a readable three-page ritual guide and several modest food, seed, or crafting-material rolls. It never gives a boss heart, trophy, premium culinary ingredient, or complete summon. Chests use ordinary shared inventory and generate their loot once.
+- Both sites can be explored before the dragon fight. Bosses still require the existing crafted summon, world dragon victory, valid biome, space, and other ritual conditions. The wolf additionally requires night. Finding a landmark is optional; portable rituals keep working.
+- Natural placement uses independent structure sets with 40-chunk spacing and 16-chunk separation. Those are candidate-grid settings, not a guaranteed distance between landmarks. Unsuitable biome, water, steep terrain, or insufficient world height rejects a site.
+- Existing worlds gain sites only in **newly generated terrain**. Nothing retroactively places a site into an explored chunk or modifies an opened chest. Blocks placed later by players remain untouched.
+
+With cheats or operator permission, locate the nearest eligible site:
+
+```mcfunction
+/locate structure darkspawn:druid_shrine
+/locate structure darkspawn:hunter_camp
+```
+
+For a disposable test world, `/place structure darkspawn:druid_shrine` or `/place structure darkspawn:hunter_camp` uses the normal terrain suitability checks. To inspect a specific design at an explicit position, use `/place template darkspawn:landmarks/druid_shrine_0 ~ ~ ~` (or `hunter_camp_0`, variants 0–2). Template placement deliberately writes the entire clearing, including air; reserve empty test space. The center is at local `(15,3,15)` for shrines and `(12,3,12)` for camps.
+
+Editable generation source: `tools/assets/boss-structures.py`. Voxel blueprints: `art/structures/`. Native templates: `data/darkspawn/structure/landmarks/` inside the JAR. Run `node tools/assets/preview-structures.cjs` for an offline layout gallery. Live travel-distance tuning, terrain seams at old/new chunk borders, and two-client exploration remain playtest checks.
+
+All meal effects replace the previous meal while preserving independently applied potions:
+
+| Meal identity | Benefit |
+| --- | --- |
+| Hearty Sustenance | 20% less food exhaustion |
+| Hunter's Instinct | +10% movement speed; hostile attackers glow for three seconds after hurting you |
+| Surefooted | +30% knockback resistance and 35% less fall damage |
+| Iron Stomach | Halves the duration of newly applied, finite poison effects |
+| Deep Breath | Air drains half as often underwater |
+| Energized | +10% movement speed; 20% less exhaustion while sprinting |
+| Miner's Focus | +20% block-breaking speed |
+| Fisher's Luck | +1 Luck, affecting luck-sensitive fishing loot |
+| Warming | Prevents freezing damage and clears frozen ticks |
+| Spiced Protection / Lightfoot | Fire resistance / slow falling, owned by the meal |
+
+**Dietary variety** counts distinct foods in the last eight eating events, including vanilla foods. Three distinct foods give +5% bonus saturation and five give +10%; eight also heal half a heart every five seconds while at full hunger. No food loses its normal hunger or saturation. Repetition naturally displaces variety. Discoveries and lifetime meal collection survive death; the recent-food window resets on death. Eating 20 different Darkspawn meals unlocks Hero Feast. Placed feast servings do not count as distinct inventory meals.
+
+The **Darkspawn advancement page** tracks boss summons, each family's defeat and absorbed heart, eight-heart and fifteen-upgrade milestones, all 16 boss defeats, dietary variety, cooking discoveries, and feasts. Defeat credit belongs to nearby contributors, including multiplayer participants. Existing absorbed hearts are recognized on login; old kills without a saved defeat record require a new victory.
+
+At a smithing table, use **an amethyst shard + equipment + boss material**:
+
+| Equipment | Material | Power |
+| --- | --- | --- |
+| Shield | Living Heartwood | Successful blocks slow the attacker for two seconds |
+| Shield | Mountain Titan Essence | +50% knockback resistance while raised |
+| Bow | Thunder Bird Essence | Successful arrows slow the target and arc three magic damage to one nearby hostile mob; no terrain ignition |
+| Bow | Void Eye Essence | Successful arrows reveal targets for five seconds and slow them for three |
+| Armor | Ice Wyrm Essence | Freeze protection while worn |
+| Armor | Kraken Essence | +35% water movement efficiency while worn |
+| Armor | Shadow Creeper Queen Essence | Clears Darkness while worn |
+
+Each item holds one power. Replacing it preserves names, enchantments, durability, and unrelated components; reapplying the same power is rejected. Matching armor pieces do not stack their power, but different powers can coexist across pieces. Removing equipment removes its benefit. Arrows retain the power of the bow that fired them, even after switching held items. Existing melee empowerments keep their recipes and behavior.
+
 ## Setup
 
 Install Darkspawn, Fabric API, and **GeckoLib 5.5.7 for Fabric / Minecraft 26.3** on both the client and server. GeckoLib is a required separate mod, not bundled inside the Darkspawn jar.
@@ -377,7 +456,7 @@ Use **JDK 25** and the included Gradle wrapper. From this folder in PowerShell:
 .\gradlew.bat runClient
 ```
 
-`build` compiles common/client code, runs unit tests, and starts a headless Minecraft server for encounter GameTests. It does not open a game window. The distributable mod is `build/libs/darkspawn-1.0.0.jar`; the `-sources.jar` file is for development.
+`build` compiles common/client code, runs unit tests, and starts a headless Minecraft server for encounter GameTests. It does not open a game window. The distributable mod is `build/libs/darkspawn-1.0.0-alpha.3.jar`; the `-sources.jar` file is for development. Replace the earlier Darkspawn JAR rather than installing both versions.
 
 The tests cover stack limits, item counts and component data, protected slots, empty/full inventories, repeat sorting, and 200 reproducible randomized inventories. They also check upgrade capacity, locked menu slots, extra-slot pickups, inventory copying, save/load, crafting recipes, and client mixin injection targets without opening a game window. Boss tests cover unique-heart limits, refill timing, saved progression, phase thresholds, smithing preservation and power replacement, recipe network round-trips, ritual night boundaries, recipe decoding, and model loading. Roster tests also decode every new summon/empowerment recipe and advancement, resolve biome IDs, bake/animate models, and verify ocean-heart migration. Run unit tests with `.\gradlew.bat test`. Run server checks with `.\gradlew.bat runGameTest`; these exercise phases, save/load, projectiles, minion cleanup, soul cages, and melee events. AI smoke tests call server callbacks directly and do not replace movement or multiplayer playtesting.
 

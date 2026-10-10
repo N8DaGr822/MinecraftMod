@@ -1,0 +1,753 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "atlas": "darkspawn:block/cuisine_atlas",
+    "particle": "#atlas"
+  },
+  "elements": [
+    {
+      "name": "Bulb 0 middle",
+      "from": [
+        2.613,
+        -1,
+        2.613
+      ],
+      "to": [
+        6.387,
+        1.699,
+        6.387
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        }
+      }
+    },
+    {
+      "name": "Bulb 0 neck",
+      "from": [
+        3.462,
+        1.699,
+        3.462
+      ],
+      "to": [
+        5.538,
+        3.02,
+        5.538
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        }
+      }
+    },
+    {
+      "name": "Upright leaf 0 0",
+      "from": [
+        3.5,
+        -1,
+        4.15
+      ],
+      "to": [
+        4.2,
+        6.6,
+        4.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        }
+      },
+      "rotation": {
+        "origin": [
+          4.5,
+          -1,
+          4.5
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "name": "Upright leaf 0 1",
+      "from": [
+        4.15,
+        -1,
+        4.15
+      ],
+      "to": [
+        4.85,
+        8,
+        4.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        }
+      },
+      "rotation": {
+        "origin": [
+          4.5,
+          -1,
+          4.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "name": "Upright leaf 0 2",
+      "from": [
+        4.8,
+        -1,
+        4.15
+      ],
+      "to": [
+        5.5,
+        6.6,
+        4.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        }
+      },
+      "rotation": {
+        "origin": [
+          4.5,
+          -1,
+          4.5
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "name": "Bulb 1 middle",
+      "from": [
+        9.613,
+        -1,
+        8.613
+      ],
+      "to": [
+        13.387,
+        1.699,
+        12.387
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        }
+      }
+    },
+    {
+      "name": "Bulb 1 neck",
+      "from": [
+        10.462,
+        1.699,
+        9.462
+      ],
+      "to": [
+        12.538,
+        3.02,
+        11.538
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            4.1,
+            12.1,
+            7.9,
+            15.9
+          ],
+          "texture": "#atlas"
+        }
+      }
+    },
+    {
+      "name": "Upright leaf 1 0",
+      "from": [
+        10.5,
+        -1,
+        10.15
+      ],
+      "to": [
+        11.2,
+        6.6,
+        10.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        }
+      },
+      "rotation": {
+        "origin": [
+          11.5,
+          -1,
+          10.5
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "name": "Upright leaf 1 1",
+      "from": [
+        11.15,
+        -1,
+        10.15
+      ],
+      "to": [
+        11.85,
+        8,
+        10.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        }
+      },
+      "rotation": {
+        "origin": [
+          11.5,
+          -1,
+          10.5
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "name": "Upright leaf 1 2",
+      "from": [
+        11.8,
+        -1,
+        10.15
+      ],
+      "to": [
+        12.5,
+        6.6,
+        10.85
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "east": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "south": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "west": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "up": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        },
+        "down": {
+          "uv": [
+            8.1,
+            4.1,
+            11.9,
+            7.9
+          ],
+          "texture": "#atlas"
+        }
+      },
+      "rotation": {
+        "origin": [
+          11.5,
+          -1,
+          10.5
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    }
+  ]
+}

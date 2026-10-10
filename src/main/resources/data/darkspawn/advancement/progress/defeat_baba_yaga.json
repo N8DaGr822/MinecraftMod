@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Baba Yaga"
+    },
+    "description": {
+      "text": "Contribute to defeating this boss and remain nearby."
+    },
+    "icon": {
+      "id": "darkspawn:baba_yaga_trophy"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/first_summon"
+}

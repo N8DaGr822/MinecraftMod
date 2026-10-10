@@ -34,6 +34,7 @@ public class Darkspawn implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		darkspawn.black.audio.DarkspawnSounds.initialize();
 		InventoryUpgradeItem.register();
 		InventoryExpansion.initialize();
 		darkspawn.black.boss.BossEffects.initialize();
@@ -44,10 +45,16 @@ public class Darkspawn implements ModInitializer {
 		BossHearts.initialize();
 		Cooking.initialize();
 		darkspawn.black.cooking.Agriculture.initialize();
+		darkspawn.black.cooking.Cuisine.initialize();
+		darkspawn.black.cooking.Culinary.initialize();
+		darkspawn.black.cooking.VillageKitchen.initialize();
+		darkspawn.black.boss.EquipmentPowers.initialize();
 		ForestEcosystem.initialize();
 		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
 		darkspawn.black.ecosystem.EcosystemEffects.initialize();
 		darkspawn.black.ecosystem.RegionalEcosystems.initialize();
+		darkspawn.black.ecosystem.RegionalAtmosphere.initialize();
+		darkspawn.black.worldgen.BossLandmarkStructure.initialize();
 		PayloadTypeRegistry.serverboundPlay().register(SortInventoryPayload.TYPE, SortInventoryPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(SortInventoryPayload.TYPE,
 				(payload, context) -> InventorySorter.sort(context.player(), payload.stateId()));

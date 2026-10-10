@@ -81,6 +81,7 @@ public final class BiomeBossSummonItem extends Item {
 		boss.prepareEncounter(level);
 		if (!level.addFreshEntity(boss)) { return InteractionResult.FAIL; }
 		stack.consume(1, player);
+		darkspawn.black.cooking.Culinary.award(player, "first_summon", "earned");
 		player.sendOverlayMessage(Component.translatable("message.darkspawn.boss_awakened", boss.getName()));
 		return InteractionResult.SUCCESS;
 	}

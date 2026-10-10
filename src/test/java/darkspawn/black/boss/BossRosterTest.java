@@ -362,6 +362,12 @@ class BossRosterTest {
 			var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/" + profile.id()), resource(path + "geckolib/models/entity/" + profile.id() + ".geo.json").getAsJsonObject());
 			var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/" + profile.id()), resource(path + "geckolib/animations/entity/" + profile.id() + ".animation.json").getAsJsonObject(), MathParser.create());
 			assertFalse(model.isMissingno(), profile.id());
+			if (profile == BossProfile.SHADOW_CREEPER_QUEEN) {
+				for (String bone : List.of("leg_0", "leg_1", "foot_0", "foot_1", "left_small_arm", "right_small_arm", "inner_jaw", "tail_7")) {
+					assertTrue(model.getBone(bone).isPresent(), "The queen's royal predator rig needs " + bone);
+				}
+				assertTrue(model.getBone("leg_2").isEmpty(), "The queen must retain two hind legs, not the former spider rig");
+			}
 			var names = new java.util.HashSet<>(List.of("idle", "walk", "wrath_idle", "charge", "recovery", "phase_change", "death"));
 			if (profile == BossProfile.MYCELIAL_SOVEREIGN) { names.add("awaken"); }
 			for (int phase = 1; phase <= 3; phase++) {

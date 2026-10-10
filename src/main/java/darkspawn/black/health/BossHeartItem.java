@@ -28,6 +28,7 @@ public final class BossHeartItem extends Item {
 				return InteractionResult.FAIL;
 			}
 			BossHearts.apply(player);
+			darkspawn.black.cooking.Culinary.hearts(serverPlayer);
 			player.getItemInHand(hand).consume(1, player);
 			player.heal(2);
 			serverPlayer.sendOverlayMessage(Component.translatable("message.darkspawn.heart_used",

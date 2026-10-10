@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Varied Diet"
+    },
+    "description": {
+      "text": "Eat three different foods in your last eight eating events."
+    },
+    "icon": {
+      "id": "darkspawn:berry_pie"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/root"
+}

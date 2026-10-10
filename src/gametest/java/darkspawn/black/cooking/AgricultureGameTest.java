@@ -182,7 +182,8 @@ public final class AgricultureGameTest {
 		helper.assertTrue(level.registryAccess().getOrThrow(TradeSets.FARMER_LEVEL_1).value().calculateNumberOfTrades(context) == 2
 				&& farmer.getOffers().size() == 2, "Native novice offer selection must remain two trades");
 		farmer.getOffers().clear();
-		for (var crop : Agriculture.CROPS) {
+		// Regional seeds originate in biome mutations, not novice trades.
+		for (var crop : Agriculture.STANDARD_CROPS) {
 			String name = BuiltInRegistries.ITEM.getKey(crop.seeds()).getPath();
 			var trade = registry.getOrThrow(ResourceKey.create(Registries.VILLAGER_TRADE, Darkspawn.id("farmer/1/emerald_" + name)));
 			helper.assertTrue(pool.contains(trade), "Every seed must be obtainable from the novice trade pool");

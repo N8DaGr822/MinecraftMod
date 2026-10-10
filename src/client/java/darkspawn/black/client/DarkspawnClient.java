@@ -32,6 +32,7 @@ public class DarkspawnClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		darkspawn.black.client.boss.BossClient.initialize();
+		darkspawn.black.client.audio.EncounterMusic.initialize();
 		darkspawn.black.ecosystem.ForestEcosystem.MOBS.forEach((kind, type) ->
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
 						context -> CreatureAssets.MOBS.contains(kind.id) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, "forest_creatures") : new darkspawn.black.client.ecosystem.ForestMobRenderer(context, kind)));
@@ -46,6 +47,7 @@ public class DarkspawnClient implements ClientModInitializer {
 			if (stack.getItem() instanceof MealItem meal) {
 				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));
 				lines.add(meal.effectDescription().copy().withStyle(ChatFormatting.GREEN));
+				lines.add(meal.effectDetail().copy().withStyle(ChatFormatting.GRAY));
 				lines.add(Component.translatable("tooltip.darkspawn.meal_replaces").withStyle(ChatFormatting.GRAY));
 			}
 		});

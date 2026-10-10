@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Heart Collector"
+    },
+    "description": {
+      "text": "Absorb eight unique boss hearts."
+    },
+    "icon": {
+      "id": "minecraft:golden_apple"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/root"
+}

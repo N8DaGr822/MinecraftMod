@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "Ice Wyrm"
+    },
+    "description": {
+      "text": "Contribute to defeating this boss and remain nearby."
+    },
+    "icon": {
+      "id": "darkspawn:ice_wyrm_trophy"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/first_summon"
+}

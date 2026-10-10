@@ -5,7 +5,7 @@ const {clips}=require('./combat-clips.cjs');
 const {details}=require('./species.cjs');
 const catalog=require('./catalog.cjs');
 for(const id of process.argv.slice(2)){
- const e=catalog.find(e=>e.id===id);if(!e)throw Error('Unknown entity '+id);if(e.preserve||id==='fossil_tyrant')throw Error('Preserve existing authored rig '+id);
+ const e=catalog.find(e=>e.id===id);if(!e)throw Error('Unknown entity '+id);if(e.preserve||e.region==='shadow_creeper_queen'||id==='fossil_tyrant')throw Error('Preserve existing authored rig '+id);
  const r=new Rig(e);const shape=buildShape(r,e);details(r,e,shape);r.fitHeight();if(e.category!=='boss')materialUVs(r);clips(r,e);
  const family=`art/blockbench/${e.region}/${e.texture==='netherborn_warped'?'warped-atlas':'atlas'}.png`,atlas=fs.existsSync(family)?family:`src/main/resources/assets/darkspawn/textures/entity/${e.region}.png`;
  console.log(JSON.stringify(r.save(atlas)));

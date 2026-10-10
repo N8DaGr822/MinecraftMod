@@ -37,7 +37,8 @@ public final class CookingScreen extends AbstractContainerScreen<CookingMenu> {
 		graphics.text(font, "->", 146, 40, 0xFF40372D, false);
 		ItemStack output = menu.getSlot(CookingMenu.RESULT_SLOT).getItem();
 		if (output.isEmpty()) {
-			graphics.text(font, Component.translatable("container.darkspawn.cooking_hint"), 8, 68, 0xFF40372D, false);
+			graphics.text(font, Component.translatable(menu.isRecipeLocked()
+				? "container.darkspawn.recipe_locked" : "container.darkspawn.cooking_hint"), 8, 68, 0xFF40372D, false);
 		} else {
 			graphics.text(font, output.getHoverName(), 8, 62, 0xFF40372D, false);
 			graphics.text(font, MealItem.nutritionDescription(output), 8, 76, 0xFF40372D, false);

@@ -34,7 +34,28 @@ public final class MealEffects {
 			entity.setAbsorptionAmount(entity.getAbsorptionAmount() + 4);
 		}
 	}.addAttributeModifier(Attributes.MAX_ABSORPTION, Darkspawn.id("meal_absorption"), 4, AttributeModifier.Operation.ADD_VALUE));
-	public static final List<Holder<MobEffect>> ALL = List.of(HERBAL, SWEET, SAVORY, SEAFOOD, HEARTY);
+	public static final Holder<MobEffect> SUSTAINED = register("sustained_meal", new MealEffect(0xC99645));
+	public static final Holder<MobEffect> HUNTER = register("hunter_meal", new MealEffect(0xAE7547)
+		.addAttributeModifier(Attributes.MOVEMENT_SPEED, Darkspawn.id("meal_hunter"), 0.10, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+	public static final Holder<MobEffect> SUREFOOTED = register("surefooted_meal", new MealEffect(0xA6A69C)
+		.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, Darkspawn.id("meal_footing"), 0.3, AttributeModifier.Operation.ADD_VALUE)
+		.addAttributeModifier(Attributes.FALL_DAMAGE_MULTIPLIER, Darkspawn.id("meal_fall"), -0.35, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+	public static final Holder<MobEffect> IRON_STOMACH = register("iron_stomach_meal", new MealEffect(0x97AD56));
+	public static final Holder<MobEffect> DEEP_BREATH = register("deep_breath_meal", new MealEffect(0x4DA8B7));
+	public static final Holder<MobEffect> ENERGIZED = register("energized_meal", new MealEffect(0xEED65F)
+		.addAttributeModifier(Attributes.MOVEMENT_SPEED, Darkspawn.id("meal_energy"), 0.10, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+	public static final Holder<MobEffect> MINER = register("miner_meal", new MealEffect(0xD9BD71)
+		.addAttributeModifier(Attributes.BLOCK_BREAK_SPEED, Darkspawn.id("meal_mining"), 0.20, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+	public static final Holder<MobEffect> FISHER = register("fisher_meal", new MealEffect(0x62C6AF)
+		.addAttributeModifier(Attributes.LUCK, Darkspawn.id("meal_luck"), 1, AttributeModifier.Operation.ADD_VALUE));
+	public static final Holder<MobEffect> WARMING = register("warming_meal", new MealEffect(0xEA9162));
+	public static final Holder<MobEffect> FIREPROOF = register("fireproof_meal", new MealEffect(0xDB653D));
+	public static final Holder<MobEffect> FLOATING = register("floating_meal", new MealEffect(0xB699DE));
+	public static final Holder<MobEffect> FEAST = register("feast_meal", new MealEffect(0xDCA963)
+		.addAttributeModifier(Attributes.ATTACK_DAMAGE, Darkspawn.id("feast_strength"), 3, AttributeModifier.Operation.ADD_VALUE)
+		.addAttributeModifier(Attributes.MOVEMENT_SPEED, Darkspawn.id("feast_speed"), 0.20, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+	public static final List<Holder<MobEffect>> ALL = List.of(HERBAL, SWEET, SAVORY, SEAFOOD, HEARTY,
+		SUSTAINED, HUNTER, SUREFOOTED, IRON_STOMACH, DEEP_BREATH, ENERGIZED, MINER, FISHER, WARMING, FIREPROOF, FLOATING, FEAST);
 
 	private MealEffects() {
 	}
@@ -58,7 +79,9 @@ public final class MealEffects {
 
 	public static MobEffectInstance utilityEffect(LivingEntity entity, Holder<MobEffect> requested, MobEffectInstance potion) {
 		Holder<MobEffect> meal = requested.equals(MobEffects.NIGHT_VISION) ? HERBAL
-				: requested.equals(MobEffects.WATER_BREATHING) ? SEAFOOD : null;
+				: requested.equals(MobEffects.WATER_BREATHING) ? SEAFOOD
+				: requested.equals(MobEffects.FIRE_RESISTANCE) ? FIREPROOF
+				: requested.equals(MobEffects.SLOW_FALLING) ? FLOATING : null;
 		if (meal == null) {
 			return potion;
 		}

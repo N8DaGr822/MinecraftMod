@@ -1,0 +1,24 @@
+{
+  "display": {
+    "title": {
+      "text": "A Shared Table"
+    },
+    "description": {
+      "text": "Eat a serving from a feast."
+    },
+    "icon": {
+      "id": "darkspawn:hunters_feast"
+    }
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:progress/recipe_discovery"
+}

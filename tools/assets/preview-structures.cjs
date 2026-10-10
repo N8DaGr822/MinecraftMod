@@ -1,0 +1,19 @@
+// Render the authored voxel blueprints for layout review (not an in-game screenshot).
+const fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'../..');
+const builds=['druid_shrine','hunter_camp'].flatMap(site=>[0,1,2].map(n=>({name:site+'_'+n,...JSON.parse(fs.readFileSync(path.join(root,`art/structures/${site}_${n}.json`),'utf8'))})));
+const html=`<!doctype html><meta charset="utf-8"><title>Darkspawn landmarks</title><style>body{margin:24px;background:#142126;color:#edf1dc;font:16px system-ui}h1{margin:8px 0}p{color:#bdcab7}main{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}figure{margin:0;background:#20342d;padding:12px;border:1px solid #586a56}canvas{width:100%;image-rendering:pixelated}figcaption{text-align:center;font-size:18px}</style><h1>Darkspawn · boss discovery structures</h1><p>Six authored templates · voxel layout preview · central ritual clearings, perimeter ruins and supply chests</p><main></main><script>
+const builds=${JSON.stringify(builds)};
+function color(name){let c=name.includes('moss')?[88,113,65]:name.includes('stone')||name.includes('andesite')||name.includes('gravel')?[116,122,111]:name.includes('grass')?[92,127,63]:name.includes('dirt')?[112,86,54]:name.includes('spruce')?[89,64,39]:name.includes('oak')?[105,77,44]:name.includes('bone')?[214,207,168]:name.includes('chest')?[181,117,45]:name.includes('hay')?[174,150,54]:name.includes('wool')?[107,97,81]:[120,83,44];if(name.includes('cracked'))c=c.map(v=>v*.8);return c;}
+for(const build of builds){const fig=document.createElement('figure'),canvas=document.createElement('canvas');canvas.width=640;canvas.height=430;fig.append(canvas);const label=document.createElement('figcaption');label.textContent=build.name.replaceAll('_',' ');fig.append(label);document.querySelector('main').append(fig);const ctx=canvas.getContext('2d'),pixels=ctx.createImageData(640,430),depth=new Float32Array(640*430).fill(-Infinity),r=build.anchor[0],scale=8.8;
+const project=([x,y,z])=>[320+(x+z-2*r-1)*scale,230+(x-z)*scale*.5-(y-3)*scale,x-z+y];
+function triangle(p,color){const [a,b,c]=p,den=(b[1]-c[1])*(a[0]-c[0])+(c[0]-b[0])*(a[1]-c[1]);if(Math.abs(den)<.01)return;
+for(let y=Math.max(0,Math.floor(Math.min(...p.map(v=>v[1]))));y<=Math.min(429,Math.ceil(Math.max(...p.map(v=>v[1]))));y++)for(let x=Math.max(0,Math.floor(Math.min(...p.map(v=>v[0]))));x<=Math.min(639,Math.ceil(Math.max(...p.map(v=>v[0]))));x++){
+const w=((b[1]-c[1])*(x+.5-c[0])+(c[0]-b[0])*(y+.5-c[1]))/den,v=((c[1]-a[1])*(x+.5-c[0])+(a[0]-c[0])*(y+.5-c[1]))/den,t=1-w-v;if(w<0||v<0||t<0)continue;const d=w*a[2]+v*b[2]+t*c[2],i=y*640+x;if(d<depth[i])continue;depth[i]=d;for(let k=0;k<3;k++)pixels.data[i*4+k]=color[k];pixels.data[i*4+3]=255;}}
+for(const b of build.blocks){const state=build.palette[b.state],name=state.Name,[x,y,z]=b.pos;if(name.endsWith(':air'))continue;let height=name.includes('slab')?.5:name.includes('campfire')?.45:name.includes('trapdoor')?.18:1;const col=color(name),noise=.92+((x*3+y*7+z*11)%7)/60;
+for(const [points,shade]of [[[[x,y+height,z],[x+1,y+height,z],[x+1,y+height,z+1],[x,y+height,z+1]],1],[[[x+1,y+height,z],[x,y+height,z],[x,y,z],[x+1,y,z]],.8],[[[x+1,y+height,z+1],[x+1,y+height,z],[x+1,y,z],[x+1,y,z+1]],.63]]){const p=points.map(project),c=col.map(v=>v*shade*noise);for(const indices of [[0,1,2],[0,2,3]])triangle(indices.map(i=>p[i]),c);}}
+ctx.putImageData(pixels,0,0);ctx.fillStyle='#efdfab';ctx.font='14px system-ui';ctx.fillText(build.size[0]+' × '+build.size[2]+' block footprint · one clue chest',16,410);}
+document.title='READY · Darkspawn landmarks';</script>`;
+fs.mkdirSync(path.join(root,'build/structures-review'),{recursive:true});
+fs.writeFileSync(path.join(root,'build/structures-review/index.html'),html);
+console.log('build/structures-review/index.html');

@@ -55,6 +55,22 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class AncientTreeSpirit extends Monster implements GeoEntity {
+	private int audioPreviousWarning;
+	@Override public void baseTick() {
+		super.baseTick();
+		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
+			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
+			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
+			audioPreviousWarning = warning;
+		}
+	}
+	@Override protected net.minecraft.sounds.SoundEvent getAmbientSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "idle"); }
+	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
+	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
+	@Override public int getAmbientSoundInterval() { return 220; }
+	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+
 	// Boss Scale: Keep the authored rig and UVs intact while scaling visuals and combat anchors together.
 	public static final float MODEL_SCALE = 28.0F / 18.0F;
 	public static final int AWAKENING_TICKS = 60;
@@ -211,7 +227,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 		bossBar.setProgress(getHealth() / getMaxHealth());
 		if (awakening() > 0) {
 			if (awakening() == AWAKENING_TICKS) {
-				level.playSound(null, blockPosition(), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.HOSTILE, 4, 0.5F);
+				level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
 			}
 			if (awakening() % 10 == 0) {
 				level.sendParticles(ParticleTypes.COMPOSTER, getX(), getY() + 1, getZ(), 32, 7, 0.5, 7, 0.1);
@@ -235,7 +251,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 			triggerAnim("action", "phase_change");
 			level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_LEAVES.defaultBlockState()), true, false,
 					getX(), getY() + 25, getZ(), 96, 7, 2, 4, 0.15);
-			level.playSound(null, blockPosition(), SoundEvents.WOOD_BREAK, SoundSource.HOSTILE, 4, 0.5F);
+			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
 		}
 		if (recovery() > 0) {
 			entityData.set(RECOVERY, recovery() - 1);
@@ -271,7 +287,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 			markedTarget = attack == 0 ? target.getEyePosition().add(target.getDeltaMovement().scale(12))
 					: groundPosition(level, target.getX(), target.getZ());
 			entityData.set(WINDUP, 40);
-			level.playSound(null, blockPosition(), SoundEvents.IRON_GOLEM_ATTACK, SoundSource.HOSTILE, 4, 0.5F);
+			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), SoundSource.HOSTILE, 1.8F, 1F);
 		}
 	}
 
@@ -413,6 +429,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 	@Override
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
+		darkspawn.black.cooking.BossCuisineRewards.grant(this, level, participants, BossKind.ANCIENT_TREE_SPIRIT, 160);
 		if (!participants.isEmpty()) {
 			spawnAtLocation(level, new ItemStack(BossItems.LIVING_HEARTWOOD));
 		}
@@ -437,7 +454,6 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 			stopTriggeredAnim("action", null);
 			bossBar.setVisible(false);
 			removeHealers(server);
-			server.playSound(null, blockPosition(), SoundEvents.IRON_GOLEM_DEATH, SoundSource.HOSTILE, 4, 0.5F);
 		}
 		super.die(source);
 	}

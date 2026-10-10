@@ -8,6 +8,17 @@ The first approved milestone is **the forest ecosystem, a new ingredient, and a 
 
 The follow-up ideas received on 2026-10-08 are saved in [future-expansion-notes.txt](future-expansion-notes.txt) and indexed under **Deferred expansion backlog** below. They are reserved for later and do not replace the active ecosystem/cooking/boss-reward/progression sequence. After forest and taiga, the user approved completing all remaining boss ecosystems. That roster is implemented below; live-client checks remain on the release checklist.
 
+## First live playtest and alpha handoff (2026-10-08)
+
+The user built and launched the mod in Modrinth and tested through the Ancient Tree Spirit. They reported that cooking/food and inventory worked, and successfully applied the Tree Spirit weapon empowerment. This is a user-reported smoke test, not completion of every client or multiplayer release check.
+
+- **Tree Spirit balance:** the player could stand close and repeatedly chop with little incoming damage. Investigate close-range attack coverage, successful damage, armor/effects, and Survival targeting before tuning health/damage. The test included Creative/Survival switching; equipment, active effects, and exact combat conditions were not recorded. A buff is requested; it is not included in the alpha packaging change.
+- **Animation polish:** the user captured phase screenshots and plans further animation work. Screenshots have not yet been reviewed here.
+- **Hearts:** reward receipt/absorption was inconclusive while switching game modes. Creative hides the health HUD; absorbed permanent progress is not intended to reset on mode changes. Reproduce reward eligibility, absorption, mode switching, reconnect, and death in Survival before calling this a confirmed reset bug.
+- **Family test release:** prepare `1.0.0-alpha.1` with clear known issues and required dependencies. Modrinth account/project selection and submission remain separate from creating the local artifact. See [release preparation](modrinth-release.md).
+- **Next testing priorities:** two-player rewards and scaling, heart persistence, Tree Spirit damage without command effects, remaining bosses/regions, and animation synchronization. The remaining milestone release checks still apply.
+- **Alpha verification:** final build passed with 58 unit tests and 69 server GameTests. The initial run failed zombie no-player attack-pose and Tree Spirit death-drop assertions; a diagnostic rerun passed without gameplay changes. Investigate intermittent test isolation/entity loading. The local alpha JAR is prepared under author `nathen.lentz`; the user selected unlisted distribution, but Modrinth submission is still pending.
+
 ## Rules that apply to every milestone
 
 - Bosses remain player-summoned. The world's first Ender Dragon defeat unlocks ecosystem spawning; a player's personal dragon achievement is not the gate.
@@ -165,7 +176,48 @@ Status: **implemented; full regression build passed; live-client review pending*
 - Server checks cover all six complete planting/bone-meal/harvest/replant loops, age-dependent loot, native random growth, saved age, seed identity, light/soil rejection without seed loss, chicken/farmer/compost integration, native farmer harvesting/replanting, trade-pool preservation, payment, depleted-stock save/load, and restocking.
 - Two new cooking server tests exercise butter batches, both mouse buttons, repeat-click rejection, full inventories, partial-stack overflow, bucket return, and preserved cheese matching. The recipe decoding suite includes butter; an asset test resolves all growth stages, ripe models, textures, icons, and translations.
 
-## Decisions to settle at their milestone
+## Cuisine, rewards, and equipment expansion (2026-10-09)
+
+The user authorized the next eight feature groups together: regional/everyday cuisine, boss cuisine, advancements/variety, trophies, Chef trades, feasts, cookbook/discoveries, and shield/bow/armor empowerment. Their first implementation is now in the workspace as **1.0.0-alpha.2**. These features extend the existing saves and do not activate the separate deferred expansion backlog.
+
+- **Cuisine:** 25 regional, everyday, utility, and dessert dishes plus 16 boss dishes. All use the existing four-input station. Six distinct proposed meal identities are implemented, along with mining, fishing, warming, fire-resistance, slow-falling, and combined feast effects. Existing food and potion behavior stays compatible.
+- **Boss cuisine and trophies:** all 16 families have independent renewable culinary ingredients and decorative pedestal trophies. Existing participant sets and death-loot paths own the rewards; living nearby contributors get reserved pickups regardless of their heart collection. Helpers and abandonment do not call this path.
+- **Progression:** a dedicated advancement page tracks rituals, participant victories, hearts, collection thresholds, discoveries, and feasts. Variety uses the last eight eating events (not the last eight unique foods), gives positive saturation bonuses, and grants slow full-hunger healing at eight. Twenty lifetime distinct meals unlock Hero Feast. Saved discoveries and lifetime collection survive death; recent variety resets on death.
+- **Chef:** Cooking Station POI, five native trade levels, normal price/stock/restock behavior. New profession presentation reuses the vanilla butcher apron. Player station ingredients remain menu-local and private.
+- **Feasts:** six variants with six portions each, server-authoritative use and native saved block states. Empty-hand use requires hunger. Only untouched feasts drop when broken, preventing portion resets. Hunter's/Hero Feast combine strength and speed inside one meal effect.
+- **Cookbook:** native book pages built from server recipes, categories, personal collection, locked previews, and discovery hints. Scrolls gate only five new recipes; three chest sources and Chef trades supply them. No retroactive modification of generated chests. Duplicate scroll use consumes nothing.
+- **Equipment:** two shield, two bow, and three armor powers. One component per item preserves existing smithing data. Arrows use their captured weapon; armor duplicates do not stack, and transient attributes are removed when equipment is taken off. Voidmark uses reveal/slow instead of the brief's unresolved projectile-teleport proposal.
+
+The initial placeholder presentation has now been replaced by bespoke textured models for 44 new meals, six portion-aware feast families, and 16 sculpted trophies. The bundled icon has new generated tree-spirit artwork. Three biome-mutated crops and their discovered dishes, three additional equipment powers, five additional loot sources, and bounded regional particles/ambient sounds are implemented. Effect icons still reuse vanilla art. Client readability, two-client use, village claiming in real terrain, economy, and combat balance still need live review. Original custom sounds and the remaining 14 structure families remain future work.
+
+### Current priority: boss discovery structures
+
+The user selected boss structures on October 9, 2026. **Alpha.3 implements the first two:** Druid Shrine and Hunter Camp, three native templates each with four rotations, biome-specific structure sets, guaranteed ritual books, and modest lazy chest loot. A bounded 49-point survey rejects water and steep terrain; gentle slopes meet a midpoint floor with at most three blocks of sampled cut/fill. Placement runs during new-terrain generation after vegetation and never on chunk load. Bosses remain player-summoned under existing progression rules. The [boss structures plan](boss-structures-plan.md) tracks the next 14 landmarks and live acceptance checks.
+
+### Alpha.3 structure verification
+
+- Common/client compilation, resource loading, packaging, and **61 unit tests** pass. The new unit test validates all six native NBT palettes, block properties, coordinate bounds/uniqueness, empty entity lists, and chest loot references. Minecraft 26.3 requires lowercase `id`/`properties` palette fields; the exporter was corrected after the initial integration test caught the old format.
+- All **four new server tests** pass: all 24 template rotations retain loot and actual boss clearance; 60 loot rolls guarantee a readable three-page clue without victory rewards; both native pieces place usable lazy chests that cannot refill on a second opening; and 20 successful real-terrain starts across seeds `1`, `42`, `7319`, `-49017`, and `20261009` repeat and survive native save/load. Candidate sampling includes positive and negative coordinates. This exercises structure generation directly, not a live `/locate` travel session.
+- The full suite passed all **85 server tests** in `build/structures-alpha3.log`. After the final palette test and lower-world-boundary adjustment, the latest full run, `build/structures-regression.log`, passed **84/85**: the existing zombie animation/no-player fixture still sees another test's Survival player inside its saved arena. Therefore the latest `build` task is **not fully green**, despite successful packaging and all structure checks. An attempted isolation change for existing encounter fixtures was reverted; no combat changes were made. Other intermediate runs also reproduced the previously recorded wolf-pack/Tree Spirit loot fixture failures.
+- Offline voxel layouts were rendered and inspected at `build/structures-review/landmarks.png`. They are layout previews, not Minecraft screenshots. In-game materials, travel-distance balance, snowy ritual clearing, old/new chunk-border seams, and real two-client exploration remain manual checks.
+- Packaged artifact: `build/libs/darkspawn-1.0.0-alpha.3.jar` (26,292,452 bytes), SHA-256 `3d2e890100c2eff0dffe0ea2147d55f49d85fbc09b1eab2ad5dbd5b96d447aad`. Verified embedded version, six NBT templates, both structure sets, and both loot tables. No publication was performed.
+
+The reproducible cuisine definitions and resource generator are `tools/assets/cuisine.py` and `tools/assets/cuisine.java.template`. The player-facing recipes and behavior are documented in the README's **Expanded cuisine and progression** section.
+
+### Expansion verification
+
+**Art and regional expansion follow-up (October 9, 2026):** `build/art-expansion-final.log` records a successful full build with **60 unit tests and 81 server GameTests**, including regional biome/harvest checks and the three new equipment powers. The original farming regressions now exercise all nine crops for planting, growth, drops, replanting, villager behavior, and persistence; novice trades deliberately remain the six ordinary crops. The first run caught missing farming tags on the new variants; those resources were corrected before the passing run. `python tools/assets/verify-cuisine-art.py` passed all **126** model, UV, atlas-size, crop-stage, item-reference, and feast-portion checks. The offline textured gallery was rendered and visually inspected. Live in-game lighting, UI scale, ambient audio, and two-client checks remain open.
+
+Historical art-expansion artifact: `build/libs/darkspawn-1.0.0-alpha.2.jar`; SHA-256 `846f77b138bdc51138ac4d40aa66786bc8fdce25bd151b9837284f659e0e3c79`. The following bullets preserve the earlier cuisine verification record.
+
+- Common and client compilation passed. The full regression run passed **60 unit tests and 79 server GameTests**, including ten new server checks for locked cooking, scroll duplication, cookbook contents, two-diner serving counts, dietary tracking/save-load, Chef stock/restocking, equipment removal, actual arrow-damage events, smithing component preservation, participant-owned repeat rewards, and poison/potion ownership. Two new unit checks cover bounded dietary history and every new meal/feast recipe's decoding and distinct ingredients.
+- All 63 new dish/feast/trophy item model references resolve, including their vanilla texture references. All generated recipes, trade sets, loot tables, and advancements loaded in the server run.
+- The first server boot found an outdated dragon advancement predicate; the resource generator now uses the Minecraft 26.3 schema. A later run failed the existing wolf-defeat test's pack-spawn setup; the subsequent full run passed without a wolf gameplay or fixture change. This remains an intermittent test-fixture limitation, not evidence of a combat fix.
+- Full regression log: `build/expansion-final.log`; alpha.2 packaging/final tooltip verification: `build/alpha2-package.log`. Live-client cookbook layout, Chef claiming, visual presentation, existing-world upgrades, and real two-client encounters remain manual release checks.
+
+## Original design questions and later refinements
+
+The implemented choices above supersede the original candidate values below. Three crop variants, regional influence cues, and ten shield/bow/armor powers now exist. Projectile teleporting remains deferred.
 
 - **Custom meal identities:** prototype Hearty (20% slower hunger drain), Hunter's Instinct, Surefooted, Iron Stomach, Deep Breath, and Energized. Define each precisely and test interactions before promising exact percentages.
 - **Variety:** use a bounded window of recent eating events and count distinct foods within it. Merely remembering the last eight distinct foods would become a permanent bonus after eight discoveries. Candidate tiers are 3/5/8, with +5%/+10% bonus saturation and modest full-hunger regeneration; never subtract normal food value. Track lifetime distinct meals separately for the 20-meal advancement.
@@ -182,11 +234,11 @@ For each milestone: inspect the closest existing implementation, agree material 
 
 ## Deferred expansion backlog
 
-Status: **saved for later, not scheduled for implementation**. Finish the active ecosystems, cooking, boss rewards, and progression work first, then prioritize cohesion and polish before starting more major systems. The source brief is preserved verbatim in [future-expansion-notes.txt](future-expansion-notes.txt); examples and numerical targets below are proposals, not current functionality.
+Status: **first two boss structures implemented; remaining 14 landmarks next, other ideas saved for later**. Follow the [ordered expansion plan](boss-structures-plan.md). The source brief is preserved verbatim in [future-expansion-notes.txt](future-expansion-notes.txt); examples and numerical targets below are proposals, not current functionality.
 
 | Later idea | Preserved direction and dependency |
 | --- | --- |
-| Boss discovery structures | Druid shrines, hunter camps, excavation sites, storm altars, witch-hut variants, frozen nests, wrecks, Deep Dark hives, Nether shrines, fossil altars, End observatories; clues, lore, ingredients, summon components. Design world generation and rarity after the regional loops work. |
+| Boss discovery structures | Druid shrines and hunter camps implemented in alpha.3. Next: excavation sites, storm altars, witch-hut variants, frozen nests, wrecks, Deep Dark hives, Nether shrines, fossil altars, End observatories. Reuse the native generation/loot pipeline and add placement rules appropriate to each terrain type. |
 | Additional rare minibosses | Alpha Dire Wolf, Fossil Raptor Matriarch, Storm Roc, Jungle Broodmother, Cave Widow, Shadow Praetorian, Netherborn Spawn, Void Sentinel; ingredients, summon components, cosmetics, or enchantment materials, **no permanent hearts**. Already-planned regional heralds such as the taiga Alpha remain in the active ecosystem scope; this proposal does not add a second Alpha encounter. |
 | Small thematic enchantment set | Hunter, Butcher, Forager, Soulward, Venom Guard, Shadow Sight, Deep Diver. Optional advantages; never mandatory keys to a boss. Define compatibility and stacking with meal/equipment powers first. |
 | Utility equipment | Hunter's Compass for boss structures, Ingredient Pouch, Quiver, Explorer's Pack. Reuse inventory upgrades and preserve item ownership/save rules instead of creating overlapping storage systems. |

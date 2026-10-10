@@ -32,6 +32,10 @@ public final class MealItem extends Item {
 		return Component.translatable("tooltip.darkspawn.meal_effect", effect.value().getDisplayName(),
 				String.format(java.util.Locale.ROOT, "%d:%02d", duration / 1200, duration / 20 % 60));
 	}
+	public Component effectDetail() {
+		return Component.translatable("tooltip.darkspawn."
+			+ net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(effect.value()).getPath() + "_detail");
+	}
 
 	public static Component nutritionDescription(ItemStack stack) {
 		var food = stack.get(DataComponents.FOOD);
