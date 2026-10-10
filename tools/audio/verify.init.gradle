@@ -1,0 +1,4 @@
+// Isolate this verification from other Gradle runs sharing the working directory.
+gradle.beforeProject { project ->
+    project.layout.buildDirectory.set(project.layout.projectDirectory.dir('build/audio-verification'))
+}

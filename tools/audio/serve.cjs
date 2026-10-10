@@ -7,5 +7,17 @@ http.createServer((req,res)=>{
  else if(url==='/roster.json')file=path.join(__dirname,'roster.json');
  else if(url==='/sounds.json'||/^\/sounds\/[a-z0-9_/]+\.ogg$/.test(url))file=path.resolve(assets,'.'+url);
  else{res.writeHead(404).end();return;}
- fs.readFile(file,(error,data)=>{if(error){res.writeHead(404).end();return;}res.setHeader('Content-Type',file.endsWith('.ogg')?'audio/ogg':file.endsWith('.json')?'application/json':'text/html');res.setHeader('Cache-Control','no-store');res.end(data);});
-}).listen(8767,'127.0.0.1',()=>console.log('Darkspawn audio workshop: http://127.0.0.1:8767/'));
+ fs.readFile(file,(error,data)=>{
+  if(error){res.writeHead(404).end();return;}
+  res.setHeader('Content-Type',file.endsWith('.ogg')?'audio/ogg':file.endsWith('.json')?'application/json':'text/html');
+  res.setHeader('Cache-Control','no-store');res.setHeader('Accept-Ranges','bytes');
+  if(req.headers.range){
+   const match=/^bytes=(\d+)-(\d*)$/.exec(req.headers.range);
+   if(!match){res.writeHead(416).end();return;}
+   const start=Number(match[1]),end=match[2]?Math.min(Number(match[2]),data.length-1):data.length-1;
+   if(start>end||start>=data.length){res.writeHead(416,{'Content-Range':`bytes */${data.length}`}).end();return;}
+   res.statusCode=206;res.setHeader('Content-Range',`bytes ${start}-${end}/${data.length}`);data=data.subarray(start,end+1);
+  }
+  res.setHeader('Content-Length',data.length);res.end(req.method==='HEAD'?undefined:data);
+ });
+}).listen(Number(process.env.DARKSPAWN_AUDIO_PORT||8767),'127.0.0.1',()=>console.log('Darkspawn audio workshop: http://127.0.0.1:'+(process.env.DARKSPAWN_AUDIO_PORT||8767)+'/'));

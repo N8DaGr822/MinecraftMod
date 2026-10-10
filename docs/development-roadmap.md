@@ -1,5 +1,7 @@
 # Darkspawn development roadmap
 
+**V2 release preparation (2026-10-09):** `2.0.0-alpha.1` is packaged for upload. Full build passed with 63 unit tests and all 85 server GameTests; no publication performed. Current instructions: [Modrinth release](modrinth-release.md). Earlier alpha records below remain historical.
+
 ## Direction and current baseline
 
 The design goal is a post-dragon world whose ecosystems connect exploration, farming, cooking, equipment, and boss progression. Preserve the existing 16 boss families, heart progression, inventory upgrades, smithing powers, and Cooking Station. The original expansion brief is in [progression-expansion-notes.txt](progression-expansion-notes.txt); creature concepts are in [boss-ecosystem-notes.txt](boss-ecosystem-notes.txt).
