@@ -92,6 +92,8 @@ public final class BossEncounterGameTest {
 	public void zombieAnimationsPreservePhaseAttacksChargeAndReload(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = player(helper);
+		// Target Isolation: Keep the no-player assertion outside other encounters' target range.
+		player.teleportTo(player.getX(), player.getY(), player.getZ() - 512);
 		BiomeBoss boss = new BiomeBoss(BossEntities.BIOME_BOSSES.get(BossProfile.MUTANT_ZOMBIE), level, BossProfile.MUTANT_ZOMBIE);
 		boss.setPos(player.position().add(20, 0, 0));
 		level.addFreshEntity(boss);
@@ -300,53 +302,60 @@ public final class BossEncounterGameTest {
 	@GameTest(skyAccess = true)
 	public void wolfDefeatCancelsPouncesAndResumesWithoutDuplicateRewards(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
-		ServerPlayer player = player(helper);
 		MutantWolf boss = new MutantWolf(BossEntities.MUTANT_WOLF, level);
-		boss.setPos(player.position().add(20, 0, 0));
-		boss.setOnGround(true);
-		level.addFreshEntity(boss);
-		try {
-			boss.setHealth(boss.getMaxHealth() * 0.6F);
-			for (int tick = 0; tick < 240 && !boss.leaping(); tick++) { boss.commonTick(); boss.customServerAiStep(level); }
-			helper.assertTrue(boss.phase() == 2 && boss.leaping(), "Defeat test did not reach a phase-two pounce");
-			boss.commonTick(); boss.customServerAiStep(level);
-			helper.assertTrue(boss.getDeltaMovement().y > 0, "Pounce had no upward momentum to cancel");
-			var packSave = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
-			boss.saveWithoutId(packSave);
-			var packIds = TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), packSave.buildResult())
-					.read("darkspawn_pack", com.mojang.serialization.Codec.STRING.listOf()).orElseThrow();
-			var pack = packIds.stream().map(id -> level.getEntity(UUID.fromString(id))).toList();
-			helper.assertTrue(!pack.isEmpty() && pack.stream().allMatch(entity -> entity instanceof FrostWolf), "Defeat test has no living pack to clean up");
-			var area = boss.getBoundingBox().inflate(32);
-			var previousItems = level.getEntitiesOfClass(ItemEntity.class, area).stream().map(ItemEntity::getUUID).collect(java.util.stream.Collectors.toSet());
-			boss.setOnGround(false);
-			boss.hurtServer(level, level.damageSources().playerAttack(player), 10000);
-			helper.assertTrue(boss.isDeadOrDying() && !boss.isRemoved() && !boss.leaping()
-					&& boss.windup() == 0 && boss.recovery() == 0, "Lethal hit did not replace the pounce with a collapse");
-			helper.assertTrue(boss.getDeltaMovement().equals(Vec3.ZERO), "Defeated wolf retained upward or horizontal pounce momentum");
-			helper.assertTrue(pack.stream().allMatch(net.minecraft.world.entity.Entity::isRemoved), "Pack survived the start of the collapse");
-			var drops = level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID()));
-			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.ALPHA_FANG)).count() == 1, "Defeat must award one Alpha Fang");
-			helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.HEARTS.get(BossKind.MUTANT_WOLF))).count() == 1, "Defeat must reserve one wolf heart");
-			boss.die(level.damageSources().playerAttack(player));
-			for (int tick = 0; tick < 20; tick++) { boss.tickDeath(); }
-			helper.assertTrue(!boss.isRemoved() && boss.defeatTime() == 20, "Vanilla death removal cut the collapse short");
-			var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
-			boss.saveWithoutId(output);
-			MutantWolf restored = new MutantWolf(BossEntities.MUTANT_WOLF, level);
-			restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
-			helper.assertTrue(restored.isDeadOrDying() && restored.defeatTime() == 20 && restored.awakening() == 0, "Reload restarted the defeated wolf's animation");
-			for (int tick = 20; tick < 59; tick++) {
-				boss.tickDeath(); restored.tickDeath(); restored.customServerAiStep(level);
-			}
-			helper.assertTrue(!boss.isRemoved() && !restored.isRemoved(), "Wolf disappeared before its three-second collapse completed");
-			boss.tickDeath(); restored.tickDeath();
-			helper.assertTrue(boss.isRemoved() && restored.isRemoved(), "Completed collapse left a corpse behind");
-			helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID())).size() == drops.size(),
-					"Collapse, repeated death, or reload duplicated the wolf's rewards");
-			drops.forEach(ItemEntity::discard);
-		} finally { boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player); }
-		helper.succeed();
+		boss.setPos(Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(30, 3, 10))));
+		for (int x = -2; x <= 2; x++) {
+			for (int z = -2; z <= 2; z++) { level.getChunk((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z); }
+		}
+		// Entity Sections: Load the pack spawn chunks before resolving wolves by UUID for cleanup assertions.
+		helper.runAfterDelay(3, () -> {
+			ServerPlayer player = player(helper);
+			level.addFreshEntity(boss);
+			boss.setOnGround(true);
+			try {
+				boss.setHealth(boss.getMaxHealth() * 0.6F);
+				for (int tick = 0; tick < 240 && !boss.leaping(); tick++) { boss.commonTick(); boss.customServerAiStep(level); }
+				helper.assertTrue(boss.phase() == 2 && boss.leaping(), "Defeat test did not reach a phase-two pounce");
+				boss.commonTick(); boss.customServerAiStep(level);
+				helper.assertTrue(boss.getDeltaMovement().y > 0, "Pounce had no upward momentum to cancel");
+				var packSave = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+				boss.saveWithoutId(packSave);
+				var packIds = TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), packSave.buildResult())
+						.read("darkspawn_pack", com.mojang.serialization.Codec.STRING.listOf()).orElseThrow();
+				var pack = packIds.stream().map(id -> level.getEntity(UUID.fromString(id))).toList();
+				helper.assertTrue(!pack.isEmpty() && pack.stream().allMatch(entity -> entity instanceof FrostWolf),
+						"Defeat test has no living pack to clean up: saved=" + packIds.size() + ", loaded=" + pack.stream().filter(entity -> entity instanceof FrostWolf).count());
+				var area = boss.getBoundingBox().inflate(32);
+				var previousItems = level.getEntitiesOfClass(ItemEntity.class, area).stream().map(ItemEntity::getUUID).collect(java.util.stream.Collectors.toSet());
+				boss.setOnGround(false);
+				boss.hurtServer(level, level.damageSources().playerAttack(player), 10000);
+				helper.assertTrue(boss.isDeadOrDying() && !boss.isRemoved() && !boss.leaping()
+						&& boss.windup() == 0 && boss.recovery() == 0, "Lethal hit did not replace the pounce with a collapse");
+				helper.assertTrue(boss.getDeltaMovement().equals(Vec3.ZERO), "Defeated wolf retained upward or horizontal pounce momentum");
+				helper.assertTrue(pack.stream().allMatch(net.minecraft.world.entity.Entity::isRemoved), "Pack survived the start of the collapse");
+				var drops = level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID()));
+				helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.ALPHA_FANG)).count() == 1, "Defeat must award one Alpha Fang");
+				helper.assertTrue(drops.stream().filter(item -> item.getItem().is(BossItems.HEARTS.get(BossKind.MUTANT_WOLF))).count() == 1, "Defeat must reserve one wolf heart");
+				boss.die(level.damageSources().playerAttack(player));
+				for (int tick = 0; tick < 20; tick++) { boss.tickDeath(); }
+				helper.assertTrue(!boss.isRemoved() && boss.defeatTime() == 20, "Vanilla death removal cut the collapse short");
+				var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+				boss.saveWithoutId(output);
+				MutantWolf restored = new MutantWolf(BossEntities.MUTANT_WOLF, level);
+				restored.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), output.buildResult()));
+				helper.assertTrue(restored.isDeadOrDying() && restored.defeatTime() == 20 && restored.awakening() == 0, "Reload restarted the defeated wolf's animation");
+				for (int tick = 20; tick < 59; tick++) {
+					boss.tickDeath(); restored.tickDeath(); restored.customServerAiStep(level);
+				}
+				helper.assertTrue(!boss.isRemoved() && !restored.isRemoved(), "Wolf disappeared before its three-second collapse completed");
+				boss.tickDeath(); restored.tickDeath();
+				helper.assertTrue(boss.isRemoved() && restored.isRemoved(), "Completed collapse left a corpse behind");
+				helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID())).size() == drops.size(),
+						"Collapse, repeated death, or reload duplicated the wolf's rewards");
+				drops.forEach(ItemEntity::discard);
+			} finally { boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player); }
+			helper.succeed();
+		});
 	}
 
 	@GameTest(skyAccess = true)
