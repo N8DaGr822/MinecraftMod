@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "redstone",
+	"pattern": [
+		"IDI",
+		"ECE",
+		"IOI"
+	],
+	"key": {
+		"I": "minecraft:iron_ingot",
+		"D": "minecraft:diamond",
+		"E": "minecraft:ender_pearl",
+		"C": "minecraft:chest",
+		"O": "minecraft:obsidian"
+	},
+	"result": {
+		"id": "darkspawn:bank_chest",
+		"count": 1
+	}
+}

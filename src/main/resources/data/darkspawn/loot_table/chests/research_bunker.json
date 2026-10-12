@@ -1,0 +1,111 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:written_book_content": {
+                "title": "Quarantine Protocol",
+                "author": "Forsaken Research Division",
+                "resolved": true,
+                "pages": [
+                  {
+                    "text": "The Forsaken\n\nThe city is quarantined. Read the copper-screen archive to recover the gate schematic. Each researcher may learn it independently."
+                  },
+                  {
+                    "text": "Gate Repair\n\nRestore a 5x5 obsidian border around the controller at bottom center. Keep the 3x3 opening clear. The damaged bunker gate is missing one upper corner."
+                  },
+                  {
+                    "text": "Fabrication\n\nUse the archive to craft a reusable Containment Key. Hover over its button for materials. Activation requires this world to have defeated the Ender Dragon."
+                  },
+                  {
+                    "text": "Extraction\n\nUse the key on the controller, then use it with an empty hand to travel. Everyone may use an open gate. The glowing extraction terminal returns each traveler to their own entrance."
+                  },
+                  {
+                    "text": "Personal Gates\n\nCraft a controller at an archive and build the same frame in the Overworld. Sneak-use a controller to fabricate more parts. Keep supplies and an escape route ready."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_ingot",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bread",
+          "weight": 4,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:obsidian",
+          "weight": 1,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

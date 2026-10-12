@@ -1,0 +1,314 @@
+The Forsaken
+
+Minecraft Dimension Design and Codex Handoff
+
+Version 1   |   12 October 2026   |   Working name
+
+Build a quarantined ruined-city dimension that combines tense survival horror with escalating parasite combat. Players enter to scavenge, recover research and biological materials, craft specialized tools, and return better prepared for deeper expeditions.
+
+1 Design direction
+
+The atmosphere draws from the ruined urban exploration of The Lost Cities and the biological horror of Scape and Run: Parasites. These are creative references; direct integration with either mod is an open implementation decision.
+
+Portal access combines A and B: discover a damaged research-bunker gate, recover its technology, and eventually build a personal Quarantine Gate.
+
+The horror blend combines A and B: scarce supplies, stealth and uneasy exploration coexist with aggressive infected encounters and overwhelming combat in dangerous areas.
+
+Quiet abandoned districts establish tension. Infested districts and pressure spikes escalate the action. Players can read danger, choose routes, and retreat.
+
+The city is a civilization consumed by infection. Expeditions, environmental storytelling and meaningful exclusive rewards drive repeat visits.
+
+2 Core expedition loop
+
+Discover the bunker → recover the schematic → prepare supplies → activate a gate → explore and scavenge → manage threats and pressure → extract → craft upgrades → attempt a deeper expedition.
+
+Success is returning with valuable resources after making meaningful risk decisions. Specialized equipment should improve access and survival without making the city harmless.
+
+3 First playable release
+
+Deliver one dimension, one bunker unlock route, functional travel in both directions, a small ruined-city layout, four infected enemies, destructible nests, local pressure and a useful reward loop. The full vision remains the target; the first release proves one complete expedition.
+
+Implementation details introduced below are proposed defaults unless described as part of the design direction. Names, recipes, rates, damage values and progression thresholds remain adjustable.
+
+Access and city exploration
+
+4 Portal access
+
+Players discover an abandoned Overworld research bunker. A damaged gate, warning signs and research records reveal the quarantined city. They recover a Quarantine Gate Schematic and the knowledge needed to make a Containment Key.
+
+The progression should let players restore the bunker gate for their first trip and construct their own gate for later expeditions. The schematic unlock avoids repeatedly hunting for another bunker.
+
+Frame: a recognizable, buildable structure using rare Overworld and Nether materials. Final ingredients, dimensions and progression tier are open.
+
+Activation: a Containment Key opens a valid frame. Reject incomplete frames cleanly. Key consumption, gate duration and fuel costs are tuning decisions.
+
+Arrival: place players at a cleared quarantine landing area with a visible return route. Arrival and extraction must not require materials found only inside the dimension.
+
+Linking: preserve a reliable return destination for each entrance. Validate safe positions and support concurrent travelers and multiple gates.
+
+Progression: keep schematic access recoverable. Proposed multiplayer default is per-player unlocks with shared physical gates; confirm against the project.
+
+5 Environment and routes
+
+Area
+
+Exploration role
+
+Abandoned districts
+
+Apartments, shops, offices, hospitals and police stations. Eerie scavenging with sparse threats and readable escape routes.
+
+Infested districts
+
+Living growth, nests and damaged military or research facilities. Higher threat and more valuable specialized loot.
+
+Rooftop routes
+
+Alternative paths above infected streets. Fewer encounters, precarious gaps and occasional rare caches.
+
+Underground networks
+
+Subways, maintenance tunnels and secret labs. Expand later; one short tunnel can support the first release.
+
+
+Use broken lighting, distant movement, empty rooms, damaged barricades and biological growth to tell the story. Fog and ambience reinforce danger while preserving navigability and player accessibility settings.
+
+6 Infestation intensity
+
+District intensity controls the baseline environment: growth coverage, enemy density, visibility and loot quality. Moving into more infested areas increases risk. For the first release, use fixed district tiers with recognizable boundaries; a radial difficulty gradient is optional, not required.
+
+Start with a small reusable building set and two district tiers. Elaborate city generation and deep underground networks can follow after the expedition loop is fun.
+
+Enemies and infestation pressure
+
+7 Small enemy roster
+
+Enemy
+
+Behavior
+
+Combat role
+
+Infected Wanderer
+
+Moves slowly until detection, then charges.
+
+Baseline threat; punishes careless exposure.
+
+Crawler
+
+Fast, low-profile creature encountered in small groups.
+
+Flanks players and contests movement.
+
+Spore Spitter
+
+Fires infection projectiles and prefers distance.
+
+Forces movement and use of cover.
+
+Assimilated Brute
+
+Slow, armored attacker with strong knockback.
+
+Elite obstacle in streets and high-value locations.
+
+
+Give each enemy a readable silhouette, detection cue and attack telegraph. A Brute blocking an alley, Crawlers closing in and a Spitter in a window should create a distinct encounter without requiring a large roster. Tune group sizes before inflating health.
+
+8 Nests
+
+A nest is a stationary biological structure that periodically produces infected creatures. Destroying it yields a Parasitic Core and temporarily reduces local threats. Proposed first-release behavior: the destroyed nest remains gone, while unrelated district spawns continue at a reduced rate for a configurable period. Nest regrowth is deferred.
+
+Cap active nest creatures and spawn attempts. Nests in unloaded areas must not accumulate a backlog or trigger an unlimited burst when chunks load.
+
+9 Local infestation pressure
+
+Pressure is temporary attention attracted by player activity. It is separate from a district’s baseline infestation intensity. Combat, explosions and disruptive actions raise pressure; avoiding detection or leaving the area lets it fall.
+
+Band
+
+Proposed response
+
+0 to 24
+
+Baseline encounters and restrained ambience.
+
+25 to 49
+
+Stronger warning cues and more nearby patrol activity.
+
+50 to 74
+
+Bounded reinforcement groups and greater nest activity.
+
+75 to 100
+
+A short, capped surge with clear escape opportunities.
+
+
+These bands are starting values, not approved balance numbers. Use one server-owned value per bounded local area, shared by nearby players. Aggregate activity without multiplying spawn budgets blindly by player count.
+
+Pressure must have a ceiling, spawn cooldowns and recovery rules. A surge needs a duration or cooldown so the highest band cannot repeatedly fire. Expose state through sound and visual cues; a permanent numeric HUD is optional.
+
+Rewards and contamination
+
+10 Exclusive resources
+
+Reward
+
+Source
+
+Purpose
+
+Contaminated Alloy
+
+Military facilities
+
+Specialized equipment crafting.
+
+Biofiber
+
+Infected creatures
+
+Resistance and utility equipment.
+
+Parasitic Core
+
+Destroyed nests
+
+Specialized weapon upgrades.
+
+Research Data
+
+Laboratories
+
+Unlock new crafting recipes.
+
+Quarantine Module
+
+Rare facility loot
+
+Portable contamination protection.
+
+
+Ordinary salvage can support expeditions, but exclusive materials should justify the risk. Place better rewards behind recognizable danger rather than making every container equally valuable. Keep loot and recipe values configurable.
+
+11 Equipment progression
+
+Quarantine Armor: reduces infection and environmental hazards. Its value comes from protection in this dimension; higher raw defense than Netherite is not required.
+
+Pulse Blade: deals bonus damage to infected enemies and has a charged clearing attack. Define charge time, range, cooldown and multiplayer hit rules before implementing the area attack.
+
+Bio-Scanner: detects nearby nests, biological resources and high-infestation areas. Use a limited range and scan interval; avoid scanning the entire world.
+
+Containment Beacon: temporarily suppresses parasite spawning within a small radius. Cap its effect and define how overlapping beacons interact.
+
+First-release priority: one usable Quarantine Armor set or protective piece, plus a basic Bio-Scanner that detects nests. Introduce all five resource types with at least one useful crafting or unlock purpose. Complete Pulse Blade upgrades, beacon behavior and broader scanner functions in the next increment.
+
+First trips should feel dangerous. Returning players should gain better information and protection, allowing longer expeditions while preserving high-threat encounters.
+
+12 Contamination and infection
+
+The protection rewards need an actual hazard to counter. Proposed first-release model: one temporary contamination effect applied by spore attacks and marked infested hazards. Use a bounded duration or bounded stacking, readable feedback and a clear recovery path.
+
+Ordinary preparation must allow the first expedition before specialized armor exists. Define recovery and death behavior explicitly; avoid permanent character loss or an escalating penalty with no practical cure.
+
+Contamination does not imply a spreading ecosystem. Dynamic world infection, mutations and infection leaking into the Overworld remain outside the first release.
+
+Milestones and completion checks
+
+13 Implementation milestones
+
+Milestone
+
+Reviewable result
+
+1 Project fit
+
+Identify Minecraft edition, version, loader, repository conventions and existing systems. Propose the smallest implementation plan.
+
+2 Travel foundation
+
+Register the dimension, implement bunker discovery and gate unlocks, and verify safe travel in both directions.
+
+3 City slice
+
+Create a small ruined-city layout with abandoned and infested areas, rooftop access and facility loot.
+
+4 Threat loop
+
+Add four enemy roles, a destructible nest, contamination and bounded local pressure.
+
+5 Reward loop
+
+Add exclusive resources, useful recipes or unlocks, protective equipment and the basic scanner.
+
+6 Expedition review
+
+Play through discovery, preparation, exploration, extraction and crafting; tune pacing and verify multiplayer behavior.
+
+
+14 First release acceptance checks
+
+A survival player can find the bunker, recover the unlock, open a gate and return without creative commands or dimension-exclusive prerequisites.
+
+Arrival positions are safe and return links work with multiple entrances, concurrent travelers, reconnects and server restarts.
+
+Abandoned and infested areas communicate different baseline risk. At least one rooftop route offers a useful alternative.
+
+Each of the four enemies demonstrates its intended behavior and a usable counterplay opportunity.
+
+Destroying a nest grants its reward once and visibly reduces nearby threat under the chosen suppression rule.
+
+Pressure rises from defined actions, decays under the chosen recovery rule and cannot exceed caps or flood an area with reinforcements.
+
+Contamination can be recognized and recovered from; protective gear measurably reduces its impact.
+
+One complete expedition yields an exclusive crafting or unlock outcome that helps a subsequent trip.
+
+Save and load preserve unlocks, return links and nest state. Unloading and reloading areas respects spawn budgets.
+
+Shared areas behave consistently for two players. Test representative city exploration against an agreed performance budget.
+
+15 Deferred expansion
+
+Defer spreading infestation, adaptive enemies, mutation trees, bosses, elaborate underground networks, large procedural city systems and permanent Overworld outbreaks. Expand after the first expedition delivers tension, useful loot and reliable extraction.
+
+Codex implementation handoff
+
+16 Engineering boundaries
+
+Inspect the existing project and its instructions before choosing APIs, dependencies or file locations. Preserve established structure and naming; make surgical changes.
+
+Use APIs supported by the target Minecraft platform and loader. Reuse the project’s dependency conventions.
+
+Keep authoritative gameplay on the server: pressure, spawns, loot, unlocks, hazards and gate links. Synchronize only the client data needed for rendering and feedback.
+
+Use versioned, persistent state for unlocks, portal links and nest destruction. Define pressure decay across unloads and restarts; use stable area identities.
+
+Put district tiers, pressure rules, spawn caps, loot, recipes, equipment effects and contamination values in configuration or data assets where practical.
+
+Bound AI, pathfinding, pressure updates and scanner queries to loaded areas. Avoid whole-world scans and per-player duplicate simulations.
+
+Validate gate arrival positions, handle missing destinations and make simultaneous activation or nest destruction safe against duplicate rewards.
+
+Run the repository’s relevant checks. Add focused verification for persistent travel, shared pressure, spawn caps and reward duplication, plus manual gameplay checks.
+
+17 Decisions before implementation
+
+Codex should resolve what the repository already answers and ask only about remaining decisions that materially block implementation.
+
+Minecraft Java or Bedrock, target version, mod loader or platform, repository and existing modpack dependencies.
+
+Original standalone content versus direct Lost Cities or Parasites integration. Inspiration alone does not require either dependency.
+
+Target progression tier, portal recipe and shape, activation costs, schematic sharing and unlock recovery.
+
+City generation approach, expected player count, server performance budget, and asset sources.
+
+Contamination recovery, death rules, pressure area size and decay, nest suppression duration, and initial balance values.
+
+18 Starter instruction for Codex
+
+Use this brief as the gameplay direction for The Forsaken. First inspect the repository and identify the Minecraft platform, version, loader, existing dimension and entity systems, project instructions and checks. Separate confirmed design choices from proposed defaults and unresolved technical decisions. Present the smallest first-release plan and ask only for information the repository cannot resolve. Once blocking decisions are resolved, implement the milestones incrementally, preserving the existing architecture. Keep deferred systems outside this release. For each increment, explain the changes, why they were needed, the behavior they enable, verification performed, and material tradeoffs or risks.

@@ -2,6 +2,151 @@
 
 **V2 release preparation (2026-10-09):** `2.0.0-alpha.1` is packaged for upload. Full build passed with 63 unit tests and all 85 server GameTests; no publication performed. Current instructions: [Modrinth release](modrinth-release.md). Earlier alpha records below remain historical.
 
+## Current increment: The Forsaken city slice (2026-10-12)
+
+The first authored city adds two visually distinct districts, four reusable building designs, ten finite scavenging caches, upper floors, a rooftop circuit with a broken span, and a short maintenance tunnel. Dedicated native structures generate only in new Forsaken terrain, using a 64×80-block slice on a 512-block grid. Saved starts preserve looted containers and player edits; existing chunks are not retrofitted. Ordinary salvage tables are separate for housing/shops, medical rooms, research rooms and the roof cache. Exclusive resources and actual infestation mechanics remain for subsequent increments.
+
+[Implementation and upgrade notes](forsaken-implementation.md#increment-2-ruined-city-slice) and [layout preview](../art/structures/forsaken-city-preview.html). Automated voxel traversal confirms all ten caches are reachable and the central retreat route remains open. Full build passed with 76 unit tests and all 143 server GameTests, including three city tests covering template contents, native structure starts/serialization, and placement/loot preservation. The production JAR contains the city template, biome, structure registration and loot tables and excludes the GameTest world preset. GameTestServer disables automatic structure generation, so live new-world generation, movement/collision, two-client exploration and restart checks remain acceptance work. The user requested committing and pushing after completion.
+
+## Previous increment: The Forsaken travel foundation (2026-10-12)
+
+The user supplied [The Forsaken design brief](forsaken-design-v1.txt) and approved standalone Darkspawn content, global post-dragon gate activation, and builder research with shared travel access. [The implementation record](forsaken-implementation.md) separates these confirmed decisions from initial tuning defaults and the later city/threat/reward milestones.
+
+This first increment adds new-chunk research bunkers, recoverable permanent schematic knowledge, server-validated fabrication, repairable/buildable Quarantine Gates, reusable keys, and a shared landing with per-player return links. Normal expedition inventory and death rules apply. OneBlock remains isolated and proficiency remains deferred. The destination is currently a travel foundation, not a finished city expedition. Full build passed with **76 unit tests and all 140 server GameTests**, including eight Forsaken tests covering research/fabrication, dragon/frame validation, independent return links, persistence/death copying, blocked arrivals, landing preservation, missing-destination fallback and native rotated-bunker repair/loot. The packaged mod includes the dimension, client screen and all three bunker templates; the test-only world preset is excluded. Live client, two-player and server-restart acceptance remains pending. Next increment: the two-tier ruined-city slice.
+
+## Previous increment: shared OneBlock dimension (2026-10-12)
+
+The user deferred proficiency and selected OneBlock. Confirmed scope: one shared 3×3 starting footing, six resource phases, block-count unlocks with manual advancement, occasional supply chests/vanilla creatures, and free inventory-menu entry/return. Possessions are isolated—including Ender Chests and inactive armor—while character upgrades remain shared. Death stays on the island and follows server keepInventory rules; void losses are not recovered.
+
+Implementation uses a void dimension, persistent shared progress, a regenerating resource with vanilla harvest rules, and synchronous saved item-profile switching. Alternate portal/entity routes cannot bypass the boundary. No pirate-portal implementation was found in this checkout; this destination is independent. No new bosses or distant islands are added. [Player guide](../README.md#shared-oneblock-dimension) records the exact rules and initial pools. Full build passed with 76 unit tests and all 132 server GameTests, including eight OneBlock integration tests covering item profiles, travel restrictions, persistence, death/respawn, progression, supply milestones, and native harvesting. Live multiplayer, GUI scales, server restarts, and a full progression run remain acceptance work. Proficiency remains deferred at the user's request.
+
+## Previous increment: unified expedition temperature (2026-10-12)
+
+Heat and cold now ship together with gradual exposure, clear HUD status/trend/wetness, biome/altitude/night/weather/cover checks, and bounded local campfire/lava heat. Worn expedition pieces provide distinct climate protection. Warmth and Cooling I–II supplement equipment through native enchanting, loot, and trades; existing Warming meals and Fire Resistance help too. Standard and legendary armor retain their combat roles. No thirst or skill gates are added.
+
+Exposure persists across saves, reconnects, loadouts, and living transfers; death resets it. Server-owned penalties use separate movement/mining modifiers and dedicated climate damage types. Initial tuning, equipment values, counterplay, and limitations are in [the temperature guide](../README.md#temperature-and-expedition-preparation).
+
+Verification: full build passed with **75 unit tests and all 124 server GameTests** (`build/temperature-build.log`). New tests cover progressive heat/cold, recovery, cave shelter, wetness, campfires, bounded enchantment protection, inactive loadouts, damage/penalty ownership, save/load, living transfers, and death. The prior forest spawning failure was resolved by establishing daylight and waiting for skylight in its test fixture; ecosystem behavior was unchanged. In-game HUD readability, real two-client play, and long-expedition balance remain acceptance work. Next planned discussion areas remain activity-based proficiency, shared OneBlock, and dangerous portal expeditions.
+
+## Previous increment: five boss-forged legendary sets (2026-10-12)
+
+The user selected legendary armor next and requested difficult boss-ingredient acquisition. Dragonlord, Phoenix, Voidwalker, Titan, and Soul Reaper are separate netherite-based item families, each with four pieces, custom wearable and inventory models, native trim support, and a matching-set ability. Standard styles remain at fifteen.
+
+Each core consumes two distinct boss essences plus one netherite ingot; each armor piece consumes a core and netherite upgrade template when converting its corresponding netherite piece. A full set requires eight essences and four extra netherite ingots/templates. Existing shared boss essence drops are reused; permanent-health hearts and boss loot tables are unchanged. Exact pairings and abilities are in [the player guide](../README.md#legendary-armor).
+
+Phoenix and Soul Reaper cooldowns persist through player saves and respawns; loadout changes never reset them. Titan and Voidwalker use feature-owned modifiers; Dragonlord applies only to direct player melee/projectiles against qualifying mobs. Twenty new armor items and five cores have generated assets and recipes. Verification: Java/client compilation, packaging, and all 72 unit tests passed. The last full server run passed 119 of 120 tests, including all legendary recipes, preservation, full-set bonuses, Phoenix save/respawn cooldown, and Soul Reaper eligibility checks. The existing forest natural-spawn fixture failed its unlocked Barkling surface assertion; forest code was not changed. Earlier runs also encountered the known agriculture lighting fixture. The full build remains red on that unrelated server test. In-game appearance and balance remain acceptance work.
+
+## Previous increment: final 15-style standard roster (2026-10-12)
+
+The user approved condensing the 40-style proposal into 15 standard styles plus five future legendary sets. All standard styles are now implemented: Classic, Knight, War Chief, Berserker, Samurai, Spartan, Viking, Ranger, Reaver, Pirate, Pathfinder, Conquistador, Juggernaut, Paladin, and Shadowblade. The [README](../README.md#full-set-style-bonuses) is authoritative for current recipes and reduced bonuses.
+
+Ranger merges bow/crossbow damage. Saved Arbalist / Royal Guard / Brawler identities decode to Ranger / Paladin / Berserker without changing other item data; retired recipes are removed and artwork retained. Paladin adds 10% healing; Shadowblade grants two seconds of invisibility after damage with a server-session 15-second cooldown. At the user's request, Shadowblade armor, trims, and glint also hide whenever the wearer is invisible. Held items remain visible. New geometry preview: art/armor-styles/final-roster-preview.png. Verification: build passed with 71 unit tests and all 116 server game tests. Coverage includes retired-item migration, reduced bonuses, Paladin healing, and Shadowblade activation/cooldown. An unrelated agriculture lighting-fixture failure passed on retry without farming-code changes. Live client visibility and balance remain playtest tasks.
+
+Earlier batch records below are historical, including their former roster sizes and values. Do not continue implementing the superseded 40-style list. Legendary designs and biome temperature remain separate future work.
+
+## Previous increment: Ranger, Arbalist, and Brawler (2026-10-12)
+
+Ranger and Arbalist start at +10% ranged damage, and Brawler at +1 unarmed attack damage. Bow/crossbow arrows use the weapon stored on the projectile; crossbow rockets use the native angled-launch marker. All ranged bonuses require the matching worn set at impact. Brawler uses a feature-owned native attribute, removed when the main hand contains any item, and preserves normal attack recharge. Three distinct iron/diamond designs add hood/quiver, asymmetric aiming armor/bolt pouches, and padded/studded gauntlet armor with corresponding shoulder and boot variants. Recipes use paper plus leather / tripwire hook / brick. Verification: full build passed with 70 unit tests and all 115 server game tests. A final hood-only geometry correction passed a subsequent package build and unit/asset checks; unchanged gameplay tests were not repeated. Live wearer fit and balance remain playtest tasks. Preview: art/armor-styles/ranged-brawler-preview.png.
+
+Sixteen of forty standard styles are implemented. Continue through defensive, healing/status, conditional combat, mobility, companion, and legendary sections with conservative playtest values. Regional temperature remains a separate pass.
+
+## Previous increment: three specialist armor styles (2026-10-12)
+
+Reaver, Pirate, and Conquistador add three complete iron/diamond styles with distinct edge-spiked shoulders and boots. Each starts at a conservative 10% bonus: mace damage including smash attacks, melee/thrown trident damage, and pickaxe mining speed respectively. Pirate checks the worn set at impact and the actual thrown projectile; changing the held item does not change its identity. Conquistador applies after native mining modifiers on client and server without altering harvest requirements. Paper plus flint / nautilus shell / copper ingot selects the corresponding style. Verification: full build passed with 70 unit tests and 114 server game tests, including native mace-smash damage. Offline preview: art/armor-styles/specialists-preview.png; live wearer fit remains a playtest task.
+
+Thirteen of forty standard variants are implemented. Remaining specialist weapons, defensive sets, status effects, conditional combat, companions, and legendary sets follow in manageable sections. Temperature remains a separate pass.
+
+## Previous increment: three utility armor styles (2026-10-12)
+
+Implementation proceeds in manageable sections. Royal Guard (+2 maximum health), Juggernaut (+15 percentage points knockback resistance), and Pathfinder (+5% movement speed) add three complete iron/diamond styles, smithing recipes, models, inventory previews, and matching-set bonuses. Juggernaut and Pathfinder start below their proposed values. Royal Guard does not heal on equip and clamps excess health on removal. The same worn-only rules and owned transient modifiers apply. Verification: full build passed with 70 unit tests and all 113 server game tests; asset checks include trim bounds and inventory models. Live wearer fit and balance still need playtesting. Offline preview: art/armor-styles/utility-preview.png.
+
+Ten of forty standard variants are implemented. Remaining sections: weapon specialists; damage defenses; healing/status effects; conditional combat and companion effects; legendary sets. Balance each section before adding the next. Legendary acquisition still needs a design decision, and regional temperature work remains separate.
+
+## Previous increment: full-set armor style bonuses (2026-10-12)
+
+The user requested implementation of the variant buffs and subsequently revised Samurai to +15% sword damage. All seven styles now have a full-set bonus: Classic armor-wear reduction, Viking axe damage, Spartan spear damage, War Chief attack damage, Knight toughness, Berserker attack speed, and Samurai sword damage. See the [current values and activation rules](../README.md#full-set-style-bonuses).
+
+Four worn matching-style iron/diamond pieces are required; materials may mix. Only feature-owned transient modifiers are managed. Weapon damage is restricted to direct native player/spear melee sources and the eligible weapon tag. Classic only reduces native wear calls on actual worn armor. No temperature mechanics are added. Verification: full build passed with 70 unit tests and 112 server game tests. Visual fit and balance still need in-game playtesting.
+
+The user's expanded roster of 40 standard variants and five legendary sets is preserved in [the design notes](expedition-equipment-proficiency-notes.txt). The first seven were implemented in that increment; later progress is recorded above.
+
+## Previous increment: additional cosmetic armor styles (2026-10-12)
+
+The user selected War Chief's commander appearance, then asked to document potential full-variant combat bonuses while continuing visual styling. The [design notes](expedition-equipment-proficiency-notes.txt) distinguish user examples (Spartan spear damage, Knight defense, War Chief strength, Berserker attack recovery, Samurai counters) from proposed activation/stacking rules and assistant suggestions. None of these buffs is active or scheduled; all temperature systems remain a separate future pass.
+
+The current visual batch adds War Chief, Knight, Berserker, and Samurai to iron and diamond using the existing cosmetic item component, native trim overlay, inventory model selectors, Blockbench review sources, and smithing recipe system. All armor stats and unrelated components remain unchanged. Paper plus gold ingot / iron ingot / rabbit hide / bamboo selects the four styles respectively. The offline preview is `art/armor-styles/commanders-preview.png`; live visual testing remains necessary.
+
+Verification: full build passes with **70 unit tests and all 109 server GameTests** (`build/armor-style-expansion-build.log`). Existing preservation, serialization, recipe, selector and trim-coordinate checks cover the new variants. The first run hit the previously observed Kraken tentacle-count and agriculture lighting failures; both passed in the final build after the final leg-plate asset adjustment. No boss or agriculture code changed. Combat bonuses remain documentation only.
+
+## Previous increment: iron and diamond cosmetic armor rework (2026-10-12)
+
+The user selected automatic upgraded default models for vanilla iron and diamond armor, plus cosmetic Viking and Spartan variants applied by smithing. Original items, stats, enchantments, trims, and boss powers are preserved. Styles are independent per piece, reversible to Classic, and saved in a dedicated synchronized item component. Existing armor defaults to Classic without migration. Native netherite upgrades and expedition conversions retain their own equipment assets; unsupported items ignore the cosmetic component.
+
+The existing armor mesh pipeline now includes six metal/style families, inventory selectors, Blockbench review files, and trim-bearing plates. Worn trims use native pattern/material rendering; item previews show material-colored borders. Paper plus bone selects Viking, paper plus feather selects Spartan, and paper plus iron nugget restores Classic. See the [player guide](../README.md#iron-and-diamond-armor-styles) and `art/armor-styles/preview.png`. All temperature work remains deferred to one dedicated pass.
+
+Verification: full build passes with **70 unit tests and all 109 server GameTests** (`build/armor-styles-build.log`). Tests cover all eight vanilla armor items, style reset, saved-component round trips, preservation of stats/names/enchantments/damage/trims/boss powers, repeat-style rejection, loadout swaps, netherite and expedition conversions, and model/trim-coordinate resources. The asset test caught and corrected an oversized Viking shoulder UV region. All 80 packaged style resources match source. Offline visual review is complete; in-game movement, glint, trim placement, and wearer fit remain acceptance checks.
+
+## Previous increment: three additional expedition armor sets (2026-10-12)
+
+The user selected an armor-first pass for Diver, Desert Wanderer, and Ashwalker. All temperature systems will be addressed together in a later pass; no heat, thirst, or new cold mechanics are activated here. Marsh Warden and Blightguard remain future ideas.
+
+The three four-piece sets add distinct wearable models, textured 3D inventory items, editable Blockbench review sources, and native smithing conversions from iron armor with leather plus prismarine shards, rabbit hide, or magma cream respectively. Existing item components survive conversion. All sets work with the existing three loadout slots, armor enchantments, repairs, and boss empowerments.
+
+Diver's helmet uses native oxygen bonus and submerged mining attributes, plus equipment-owned underwater night vision. Air remains finite; tank refill and boot anchoring are not implemented. Desert Wanderer is wearable/craftable now, with climate benefits deferred. Ashwalker reduces incoming fire-tagged damage by 10% per worn piece, capped by four slots at 40%; lava remains damaging. Initial values and recipes require playtesting.
+
+Verification: full build passes with **67 unit tests and all 107 server GameTests** (`build/expedition-expansion-build.log`). Existing armor resource/recipe checks now cover all 20 pieces. New server tests cover Diver's dry/submerged vision, potion preservation and attribute removal on loadout swap, plus full/partial/removed Ashwalker fire protection, ordinary damage, and lava damage. The fire fixture initially reset the wrong invulnerability field; resetting native damage cooldown corrected the test without changing gameplay. All 57 new packaged armor resources match source. Offline model review passed; live movement, fit, glint, and gameplay balance still require playtesting.
+
+## Previous increment: biome expedition armor (2026-10-12)
+
+The user selected biome armor next. The first armor-only increment adds four-piece Mountaineering and Spelunking sets, original raised armor geometry and textured item models, plus native smithing conversions that preserve existing item data. Mountaineering supplies full-set powder-snow freeze immunity and snow-walking boots. Spelunking supplies personal headlamp vision and padded boots with multiplicative fall protection. Both integrate with loadouts, armor enchantments, and existing boss empowerments. See the [player guide](../README.md#biome-expedition-armor).
+
+Implementation is in the workspace. Common/client compilation, **67 unit tests**, and all **four new armor server tests** pass. An initial full run passed all 105 server tests; after correcting the client equipment definition's required nonempty fallback layers, the latest full run passed **104/105**, with the existing agriculture soil-lighting fixture failing (`build/expedition-armor-build.log`). The prior rerun failed an existing Kraken tentacle-count fixture instead; that fixture passed on the latest run. No agriculture or boss code was changed. The latest full build is therefore not completely green, despite successful packaging and all new armor checks passing.
+
+Armor verification covers all eight native smithing conversions, saved item components, enchantment tags, boss smithing compatibility, full/partial snow suits, inactive loadouts, potion/meal preservation, fall-modifier stacking and removal, and geometry/texture/item references. All 38 packaged armor assets were checked against source. Initial defense, durability, recipes, and benefits are playtest choices; wider biome temperature remains separate future work. Offline geometry review is available in `art/expedition-armor/preview.png`. Custom armor-trim mapping and live checks for movement, slim/baby wearers, glint, and GUI scales are not complete.
+
+## Current increment: craftable armor loadouts (2026-10-12)
+
+The user selected armor loadouts as the first implementation from the new expedition ideas. One set is available initially; iron and diamond upgrades unlock sets two and three in order. Each recipe uses an armor stand, two leather, and two of its named material. Upgrades are shareable and permanent, without proficiency gates. The [armor loadout guide](../README.md#armor-loadouts) describes the controls and initial balance choices.
+
+Inactive sets store actual armor separately from ordinary inventory, while the active set uses vanilla equipment slots. Server-validated requests use menu and loadout revisions, a two-second switch, damage interruption, grounded checks, and native Curse of Binding restrictions. Saves retain stored item components; normal death drops inactive armor with vanishing handling, while keepInventory retains it. Weapons and offhand remain independent.
+
+Verification: the full build passed with **64 unit tests and all 101 server GameTests**, including six new loadout tests (`build/loadout-build.log`). Checks cover ordered upgrade consumption, full-inventory item/component conservation, inactive powers, independent players, replay/unsafe/Binding rejection, damage interruption, player save/load, respawn copying, normal death drops, vanishing, and keepInventory. The first run exposed a mock-client loading acknowledgement issue in the damage test; the fixture was corrected before the passing run. Live GUI-scale presentation and real two-client testing remain acceptance checks. Recipes and timings are initial playtest choices. This increment does not activate temperature, new armor families, proficiency, or dimension work.
+
+## Future expedition design discussion (2026-10-12)
+
+The [expedition, equipment, and proficiency notes](expedition-equipment-proficiency-notes.txt) preserve the agreed direction for temperature-based exploration, specialized armor with improved visuals, three armor loadouts unlocked through craftable upgrades, activity-based proficiency bonuses without usage gates, and a Lost Cities / Parasites-inspired portal destination. They also record the user's in-progress pirate portal, multiplayer catch-up goals, lower priority for broad weapon expansion, and unresolved proposals. **Saved for future planning only; no implementation milestone or release date is assigned.**
+
+## Future shared OneBlock dimension (2026-10-12)
+
+The [OneBlock dimension notes](oneblock-dimension-notes.txt) preserve the user's selected direction: a classic OneBlock experience on one shared family island within the existing server, with outside equipment prevented from bypassing the challenge. Separate inventory profiles and persistent shared progression are the working concept; phase activation, transfer details, and death rules remain undecided. Special events and distant islands are future possibilities only. **Saved for future planning; no implementation milestone or release date is assigned.**
+
+## Pending home-checkout work and testing priorities (2026-10-12)
+
+Status: **documented; implementation deferred until the home changes are available**. The user reports an existing **Griffon** mount and believes newer mount, barracks bonfire, and starting-chest work may be on the home machine. This checkout (`main` at `7944bcd`) and the accessible Minecraft chats do not contain those implementations. That does not establish that the work is missing from the home checkout. The user plans to commit and push the home changes on the evening of October 12; reconcile that code before extending or recreating these systems.
+
+| Priority | Requested direction | Next step after the home changes arrive |
+| --- | --- | --- |
+| More flying mounts | Expand beyond the existing Griffon for Survival playtesting; originally requested for tonight's testing. | Inspect the Griffon's riding, flight controls, ownership, persistence, and assets; use its established implementation as the reference. Additional species are not selected yet. |
+| Leveled barracks bonfire | Begin with a small **12×12 area**, called **Bonfire**. Spend items to upgrade it for a larger area and improved buffs, including movement, building, mining, and health regeneration. | Inspect the existing bonfire first, then define levels, upgrade items/costs, area dimensions and height, buff strengths, building behavior, multiplayer eligibility, and overlap rules. Only the initial 12×12 area and item-funded progression are established; later sizes and balance values remain undecided. |
+| Testing starting chest | Supply gear and new feature items so Survival testing can start without several minutes of Creative inventory setup. | Check the existing chest's contents and acquisition/refill behavior, then add a practical equipment set and supplies for testing mounts, bonfire upgrades, and other new features. Exact contents and delivery behavior remain undecided. |
+
+These requests are saved for follow-up while other work proceeds. The earlier suggested mount species, four-level bonfire table, increased building reach, and chest loadout were proposals, not approved implementation requirements. After pulling the home changes, reassess what is already complete, update this status, and make only the remaining necessary changes.
+
+## Current increment: storage sorting network (2026-10-12)
+
+The user selected this independent feature while the home-checkout work above waits for synchronization. First implementation: **Dump Chest, directional Sorting Tube, three-filter Sorting Chest, and searchable Bank Chest**. The [player guide](../README.md#sorting-tubes-dump-chests-sorting-chests-and-banks) records recipes, controls, routing, storage limits, and recovery behavior.
+
+- Physical output direction determines chest priority. Bounded routing checks loaded chunks only; rejected remainders stay at their source. Matching chests merge compatible partial stacks before allocating empty slots.
+- Three ghost filters designate exact item types without consuming examples. Sorting chests accept manual deposits regardless of filters. Their Sort button reuses the existing inventory sorter; player-inventory slot selection remains unchanged.
+- Bulk Deposit preserves hotbar, equipment, and offhand while including unlocked extra rows. Bank withdrawal supports one item, one stack, or available normal inventory space.
+- Bank storage aggregates component-identical items, supports search/paging/name-or-count ordering, and can re-sort old stock after new chests are added. Initial playtest capacity is 256 variants, upgraded to 512/1,024/2,048 with 1/2/4 diamond blocks; each variant holds at most one million items. Normal stock and Trash share capacity.
+- Overflow trash filters feed a recoverable compartment. Deletion requires a second confirmation click, invalidated by storage changes. No automatic voiding. Breaking a Bank carries stock, Trash, filters, and upgrades in its dropped block item.
+- New server tests cover route priority, partial acceptance, cycles, broken connections, live ticking, extra-row deposits, protected equipment, ghost-slot conservation, component preservation, capacity, save/load, packed item/network round trips, concurrent menu withdrawals, search/paging, confirmation, upgrade payment, re-sorting, and unloaded-route rejection.
+
+Verification: the full build passed with **64 unit tests and all 95 server GameTests**, including ten new storage GameTests and one storage resource/recipe test (`build/storage-final.log`). The first combined run after storage fixes passed all storage checks but failed an existing agriculture lighting-fixture assertion; the final full run passed without farming changes. Earlier storage failures exposed a menu refresh issue (fixed) and timed tests exceeding the default timeout (corrected).
+
+Remaining acceptance work: live client presentation at different GUI scales, output-direction usability, real two-client interaction, and throughput/capacity/cost balance. Branch-priority controls, category filters, automatic voiding, vanilla-chest sorting buttons, and direct Bank hopper integration remain later work. This increment does not implement the pending Griffon, bonfire, or starter-chest changes.
+
 ## Direction and current baseline
 
 The design goal is a post-dragon world whose ecosystems connect exploration, farming, cooking, equipment, and boss progression. Preserve the existing 16 boss families, heart progression, inventory upgrades, smithing powers, and Cooking Station. The original expansion brief is in [progression-expansion-notes.txt](progression-expansion-notes.txt); creature concepts are in [boss-ecosystem-notes.txt](boss-ecosystem-notes.txt).

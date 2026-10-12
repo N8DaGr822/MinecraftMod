@@ -1,0 +1,2346 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "darkspawn:armor_style",
+    "cases": [
+      {
+        "when": "viking",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_viking_helmet"
+          }
+        }
+      },
+      {
+        "when": "spartan",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_spartan_helmet"
+          }
+        }
+      },
+      {
+        "when": "war_chief",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_war_chief_helmet"
+          }
+        }
+      },
+      {
+        "when": "knight",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_knight_helmet"
+          }
+        }
+      },
+      {
+        "when": "berserker",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_berserker_helmet"
+          }
+        }
+      },
+      {
+        "when": "samurai",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_samurai_helmet"
+          }
+        }
+      },
+      {
+        "when": "juggernaut",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_juggernaut_helmet"
+          }
+        }
+      },
+      {
+        "when": "pathfinder",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_pathfinder_helmet"
+          }
+        }
+      },
+      {
+        "when": "reaver",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_reaver_helmet"
+          }
+        }
+      },
+      {
+        "when": "pirate",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_pirate_helmet"
+          }
+        }
+      },
+      {
+        "when": "conquistador",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_conquistador_helmet"
+          }
+        }
+      },
+      {
+        "when": "ranger",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_ranger_helmet"
+          }
+        }
+      },
+      {
+        "when": "paladin",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_paladin_helmet"
+          }
+        }
+      },
+      {
+        "when": "shadowblade",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_helmet_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_shadowblade_helmet"
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:trim_material",
+      "cases": [
+        {
+          "when": "minecraft:quartz",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 15196885
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:iron",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 7568000
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:netherite",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 5327189
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:redstone",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 12134177
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:copper",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 12152138
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:gold",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 15385673
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:emerald",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 3001466
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:diamond",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 4837326
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:lapis",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 3431362
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:amethyst",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 10187468
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:resin",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_helmet_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 15368753
+              }
+            ]
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "darkspawn:item/iron_classic_helmet"
+      }
+    }
+  }
+}

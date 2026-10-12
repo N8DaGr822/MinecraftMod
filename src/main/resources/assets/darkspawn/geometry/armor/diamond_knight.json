@@ -1,0 +1,1076 @@
+{
+  "texture_width": 256,
+  "texture_height": 128,
+  "parts": [
+    {
+      "name": "head",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "crown",
+          "slot": "helmet",
+          "from": [
+            -4.5,
+            -8.6,
+            -4.4
+          ],
+          "size": [
+            9,
+            2.1,
+            8.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "back_guard",
+          "slot": "helmet",
+          "from": [
+            -4.5,
+            -6.5,
+            3.45
+          ],
+          "size": [
+            9,
+            5.8,
+            1
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            2
+          ]
+        },
+        {
+          "name": "temple_-4.5",
+          "slot": "helmet",
+          "from": [
+            -4.5,
+            -6.5,
+            -4.4
+          ],
+          "size": [
+            1.05,
+            4.9,
+            7.85
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            2
+          ]
+        },
+        {
+          "name": "temple_3.45",
+          "slot": "helmet",
+          "from": [
+            3.45,
+            -6.5,
+            -4.4
+          ],
+          "size": [
+            1.05,
+            4.9,
+            7.85
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            2
+          ]
+        },
+        {
+          "name": "brow",
+          "slot": "helmet",
+          "from": [
+            -4.65,
+            -6.7,
+            -4.7
+          ],
+          "size": [
+            9.3,
+            0.8,
+            0.7
+          ],
+          "material": 2
+        },
+        {
+          "name": "visor_upper",
+          "slot": "helmet",
+          "from": [
+            -4.5,
+            -6.3,
+            -4.85
+          ],
+          "size": [
+            9,
+            1.25,
+            0.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            2
+          ]
+        },
+        {
+          "name": "visor_lower",
+          "slot": "helmet",
+          "from": [
+            -4.5,
+            -4.25,
+            -4.85
+          ],
+          "size": [
+            9,
+            3.95,
+            0.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            3
+          ]
+        },
+        {
+          "name": "visor_slit",
+          "slot": "helmet",
+          "from": [
+            -4.1,
+            -5.1,
+            -4.65
+          ],
+          "size": [
+            8.2,
+            0.85,
+            0.3
+          ],
+          "material": 6
+        },
+        {
+          "name": "breathing_slot_-2.8",
+          "slot": "helmet",
+          "from": [
+            -2.8,
+            -2.8,
+            -5.3
+          ],
+          "size": [
+            0.4,
+            1.5,
+            0.1
+          ],
+          "material": 6
+        },
+        {
+          "name": "breathing_slot_-1.4",
+          "slot": "helmet",
+          "from": [
+            -1.4,
+            -2.8,
+            -5.3
+          ],
+          "size": [
+            0.4,
+            1.5,
+            0.1
+          ],
+          "material": 6
+        },
+        {
+          "name": "breathing_slot_1",
+          "slot": "helmet",
+          "from": [
+            1,
+            -2.8,
+            -5.3
+          ],
+          "size": [
+            0.4,
+            1.5,
+            0.1
+          ],
+          "material": 6
+        },
+        {
+          "name": "breathing_slot_2.4",
+          "slot": "helmet",
+          "from": [
+            2.4,
+            -2.8,
+            -5.3
+          ],
+          "size": [
+            0.4,
+            1.5,
+            0.1
+          ],
+          "material": 6
+        },
+        {
+          "name": "visor_ridge",
+          "slot": "helmet",
+          "from": [
+            -0.5,
+            -6.4,
+            -5.3
+          ],
+          "size": [
+            1,
+            6.2,
+            0.45
+          ],
+          "material": 2
+        },
+        {
+          "name": "crown_ridge",
+          "slot": "helmet",
+          "from": [
+            -0.65,
+            -9,
+            -4
+          ],
+          "size": [
+            1.3,
+            0.5,
+            8
+          ],
+          "material": 2
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "gambeson",
+          "slot": "chestplate",
+          "from": [
+            -4.4,
+            0.2,
+            -2.45
+          ],
+          "size": [
+            8.8,
+            9.3,
+            4.9
+          ],
+          "material": 0
+        },
+        {
+          "name": "breastplate",
+          "slot": "chestplate",
+          "from": [
+            -4.2,
+            1.1,
+            -3.15
+          ],
+          "size": [
+            8.4,
+            5.7,
+            1.05
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            16
+          ]
+        },
+        {
+          "name": "back_plate",
+          "slot": "chestplate",
+          "from": [
+            -4.2,
+            1.1,
+            2.35
+          ],
+          "size": [
+            8.4,
+            7.9,
+            0.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            16
+          ]
+        },
+        {
+          "name": "abdominal_7",
+          "slot": "chestplate",
+          "from": [
+            -3.95,
+            7,
+            -3.05
+          ],
+          "size": [
+            7.9,
+            1.25,
+            0.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            20
+          ]
+        },
+        {
+          "name": "abdominal_8.5",
+          "slot": "chestplate",
+          "from": [
+            -3.95,
+            8.5,
+            -3.05
+          ],
+          "size": [
+            7.9,
+            1.25,
+            0.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            20
+          ]
+        },
+        {
+          "name": "collar",
+          "slot": "chestplate",
+          "from": [
+            -4.6,
+            -0.35,
+            -2.8
+          ],
+          "size": [
+            9.2,
+            1.2,
+            5.6
+          ],
+          "material": 2
+        },
+        {
+          "name": "clasp",
+          "slot": "chestplate",
+          "from": [
+            -0.8,
+            1,
+            -3.45
+          ],
+          "size": [
+            1.6,
+            1.3,
+            0.4
+          ],
+          "material": 4
+        },
+        {
+          "name": "neck_guard_-4.7",
+          "slot": "chestplate",
+          "from": [
+            -4.7,
+            -1.3,
+            -2.8
+          ],
+          "size": [
+            1.05,
+            2,
+            5.6
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            16
+          ]
+        },
+        {
+          "name": "neck_guard_3.65",
+          "slot": "chestplate",
+          "from": [
+            3.65,
+            -1.3,
+            -2.8
+          ],
+          "size": [
+            1.05,
+            2,
+            5.6
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            16
+          ]
+        },
+        {
+          "name": "sternum_ridge",
+          "slot": "chestplate",
+          "from": [
+            -0.55,
+            2.5,
+            -3.45
+          ],
+          "size": [
+            1.1,
+            4,
+            0.45
+          ],
+          "material": 2,
+          "trim_uv": [
+            16,
+            16
+          ]
+        },
+        {
+          "name": "belt",
+          "slot": "leggings",
+          "from": [
+            -4.5,
+            9.6,
+            -2.5
+          ],
+          "size": [
+            9,
+            2.6,
+            5
+          ],
+          "material": 3
+        },
+        {
+          "name": "belt_clasp",
+          "slot": "leggings",
+          "from": [
+            -0.8,
+            10,
+            -2.9
+          ],
+          "size": [
+            1.6,
+            1.5,
+            0.5
+          ],
+          "material": 4
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "origin": [
+        -5,
+        2,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "sleeve",
+          "slot": "chestplate",
+          "from": [
+            -3.3,
+            -1.8,
+            -2.3
+          ],
+          "size": [
+            4.6,
+            10.1,
+            4.6
+          ],
+          "material": 0
+        },
+        {
+          "name": "pauldron",
+          "slot": "chestplate",
+          "from": [
+            -3.85,
+            -2.8,
+            -2.85
+          ],
+          "size": [
+            5.7,
+            2.7,
+            5.7
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame",
+          "slot": "chestplate",
+          "from": [
+            -3.65,
+            0,
+            -2.65
+          ],
+          "size": [
+            5.3,
+            1.5,
+            5.3
+          ],
+          "material": 2,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame_0",
+          "slot": "chestplate",
+          "from": [
+            -3.9,
+            1,
+            -2.9
+          ],
+          "size": [
+            5.8,
+            0.7,
+            5.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame_1",
+          "slot": "chestplate",
+          "from": [
+            -3.7,
+            1.9,
+            -2.7
+          ],
+          "size": [
+            5.4,
+            0.7,
+            5.4
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame_2",
+          "slot": "chestplate",
+          "from": [
+            -3.5,
+            2.8,
+            -2.5
+          ],
+          "size": [
+            5,
+            0.7,
+            5
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "vambrace",
+          "slot": "chestplate",
+          "from": [
+            -3.55,
+            5.5,
+            -2.55
+          ],
+          "size": [
+            5.1,
+            3.2,
+            5.1
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            20
+          ]
+        },
+        {
+          "name": "wrist_rim",
+          "slot": "chestplate",
+          "from": [
+            -3.6,
+            8.4,
+            -2.6
+          ],
+          "size": [
+            5.2,
+            0.65,
+            5.2
+          ],
+          "material": 4
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "origin": [
+        5,
+        2,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "sleeve",
+          "slot": "chestplate",
+          "from": [
+            -1.3,
+            -1.8,
+            -2.3
+          ],
+          "size": [
+            4.6,
+            10.1,
+            4.6
+          ],
+          "material": 0
+        },
+        {
+          "name": "pauldron",
+          "slot": "chestplate",
+          "from": [
+            -1.85,
+            -2.8,
+            -2.85
+          ],
+          "size": [
+            5.7,
+            2.7,
+            5.7
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame",
+          "slot": "chestplate",
+          "from": [
+            -1.65,
+            0,
+            -2.65
+          ],
+          "size": [
+            5.3,
+            1.5,
+            5.3
+          ],
+          "material": 2,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame_0",
+          "slot": "chestplate",
+          "from": [
+            -1.9,
+            1,
+            -2.9
+          ],
+          "size": [
+            5.8,
+            0.7,
+            5.8
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame_1",
+          "slot": "chestplate",
+          "from": [
+            -1.7000000000000002,
+            1.9,
+            -2.7
+          ],
+          "size": [
+            5.4,
+            0.7,
+            5.4
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "shoulder_lame_2",
+          "slot": "chestplate",
+          "from": [
+            -1.5,
+            2.8,
+            -2.5
+          ],
+          "size": [
+            5,
+            0.7,
+            5
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            16
+          ]
+        },
+        {
+          "name": "vambrace",
+          "slot": "chestplate",
+          "from": [
+            -1.55,
+            5.5,
+            -2.55
+          ],
+          "size": [
+            5.1,
+            3.2,
+            5.1
+          ],
+          "material": 1,
+          "trim_uv": [
+            40,
+            20
+          ]
+        },
+        {
+          "name": "wrist_rim",
+          "slot": "chestplate",
+          "from": [
+            -1.6,
+            8.4,
+            -2.6
+          ],
+          "size": [
+            5.2,
+            0.65,
+            5.2
+          ],
+          "material": 4
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "origin": [
+        -1.9,
+        12,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "lining",
+          "slot": "leggings",
+          "from": [
+            -2.2,
+            0,
+            -2.2
+          ],
+          "size": [
+            4.4,
+            8.1,
+            4.4
+          ],
+          "material": 0
+        },
+        {
+          "name": "thigh_plate",
+          "slot": "leggings",
+          "from": [
+            -2,
+            0.3,
+            -2.7
+          ],
+          "size": [
+            4,
+            4.8,
+            0.7
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            16
+          ]
+        },
+        {
+          "name": "knee_guard",
+          "slot": "leggings",
+          "from": [
+            -2.1,
+            5.5,
+            -2.85
+          ],
+          "size": [
+            4.2,
+            2.3,
+            0.85
+          ],
+          "material": 2,
+          "trim_uv": [
+            0,
+            21
+          ]
+        },
+        {
+          "name": "hip_guard",
+          "slot": "leggings",
+          "from": [
+            -1.85,
+            0.1,
+            -2.95
+          ],
+          "size": [
+            3.7,
+            2.5,
+            0.45
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            16
+          ]
+        },
+        {
+          "name": "boot",
+          "slot": "boots",
+          "from": [
+            -2.35,
+            8.2,
+            -2.4
+          ],
+          "size": [
+            4.7,
+            3.8,
+            4.8
+          ],
+          "material": 3
+        },
+        {
+          "name": "sabatons",
+          "slot": "boots",
+          "from": [
+            -2.5,
+            9.5,
+            -3.1
+          ],
+          "size": [
+            5,
+            2.4,
+            5.65
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            20
+          ]
+        },
+        {
+          "name": "sole",
+          "slot": "boots",
+          "from": [
+            -2.5,
+            11.7,
+            -3.1
+          ],
+          "size": [
+            5,
+            0.65,
+            5.7
+          ],
+          "material": 6
+        },
+        {
+          "name": "ankle_rim",
+          "slot": "boots",
+          "from": [
+            -2.5,
+            8.15,
+            -2.55
+          ],
+          "size": [
+            5,
+            1.1,
+            5.1
+          ],
+          "material": 2,
+          "trim_uv": [
+            0,
+            21
+          ]
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "origin": [
+        1.9,
+        12,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "lining",
+          "slot": "leggings",
+          "from": [
+            -2.2,
+            0,
+            -2.2
+          ],
+          "size": [
+            4.4,
+            8.1,
+            4.4
+          ],
+          "material": 0
+        },
+        {
+          "name": "thigh_plate",
+          "slot": "leggings",
+          "from": [
+            -2,
+            0.3,
+            -2.7
+          ],
+          "size": [
+            4,
+            4.8,
+            0.7
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            16
+          ]
+        },
+        {
+          "name": "knee_guard",
+          "slot": "leggings",
+          "from": [
+            -2.1,
+            5.5,
+            -2.85
+          ],
+          "size": [
+            4.2,
+            2.3,
+            0.85
+          ],
+          "material": 2,
+          "trim_uv": [
+            0,
+            21
+          ]
+        },
+        {
+          "name": "hip_guard",
+          "slot": "leggings",
+          "from": [
+            -1.85,
+            0.1,
+            -2.95
+          ],
+          "size": [
+            3.7,
+            2.5,
+            0.45
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            16
+          ]
+        },
+        {
+          "name": "boot",
+          "slot": "boots",
+          "from": [
+            -2.35,
+            8.2,
+            -2.4
+          ],
+          "size": [
+            4.7,
+            3.8,
+            4.8
+          ],
+          "material": 3
+        },
+        {
+          "name": "sabatons",
+          "slot": "boots",
+          "from": [
+            -2.5,
+            9.5,
+            -3.1
+          ],
+          "size": [
+            5,
+            2.4,
+            5.65
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            20
+          ]
+        },
+        {
+          "name": "sole",
+          "slot": "boots",
+          "from": [
+            -2.5,
+            11.7,
+            -3.1
+          ],
+          "size": [
+            5,
+            0.65,
+            5.7
+          ],
+          "material": 6
+        },
+        {
+          "name": "ankle_rim",
+          "slot": "boots",
+          "from": [
+            -2.5,
+            8.15,
+            -2.55
+          ],
+          "size": [
+            5,
+            1.1,
+            5.1
+          ],
+          "material": 2,
+          "trim_uv": [
+            0,
+            21
+          ]
+        }
+      ]
+    }
+  ]
+}

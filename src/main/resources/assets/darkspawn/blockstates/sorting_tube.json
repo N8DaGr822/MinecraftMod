@@ -1,0 +1,27 @@
+{
+	"variants": {
+		"facing=north": {
+			"model": "darkspawn:block/sorting_tube"
+		},
+		"facing=east": {
+			"model": "darkspawn:block/sorting_tube",
+			"y": 90
+		},
+		"facing=south": {
+			"model": "darkspawn:block/sorting_tube",
+			"y": 180
+		},
+		"facing=west": {
+			"model": "darkspawn:block/sorting_tube",
+			"y": 270
+		},
+		"facing=up": {
+			"model": "darkspawn:block/sorting_tube",
+			"x": 90
+		},
+		"facing=down": {
+			"model": "darkspawn:block/sorting_tube",
+			"x": 270
+		}
+	}
+}

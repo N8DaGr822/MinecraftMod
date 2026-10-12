@@ -1,0 +1,2346 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "darkspawn:armor_style",
+    "cases": [
+      {
+        "when": "viking",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_viking_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_viking_boots"
+          }
+        }
+      },
+      {
+        "when": "spartan",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_spartan_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_spartan_boots"
+          }
+        }
+      },
+      {
+        "when": "war_chief",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_war_chief_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_war_chief_boots"
+          }
+        }
+      },
+      {
+        "when": "knight",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_knight_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_knight_boots"
+          }
+        }
+      },
+      {
+        "when": "berserker",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_berserker_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_berserker_boots"
+          }
+        }
+      },
+      {
+        "when": "samurai",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_samurai_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_samurai_boots"
+          }
+        }
+      },
+      {
+        "when": "juggernaut",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_juggernaut_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_juggernaut_boots"
+          }
+        }
+      },
+      {
+        "when": "pathfinder",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pathfinder_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_pathfinder_boots"
+          }
+        }
+      },
+      {
+        "when": "reaver",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_reaver_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_reaver_boots"
+          }
+        }
+      },
+      {
+        "when": "pirate",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_pirate_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_pirate_boots"
+          }
+        }
+      },
+      {
+        "when": "conquistador",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_conquistador_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_conquistador_boots"
+          }
+        }
+      },
+      {
+        "when": "ranger",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_ranger_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_ranger_boots"
+          }
+        }
+      },
+      {
+        "when": "paladin",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_paladin_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_paladin_boots"
+          }
+        }
+      },
+      {
+        "when": "shadowblade",
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:trim_material",
+          "cases": [
+            {
+              "when": "minecraft:quartz",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15196885
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:iron",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 7568000
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:netherite",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 5327189
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:redstone",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12134177
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:copper",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 12152138
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:gold",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15385673
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:emerald",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3001466
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:diamond",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 4837326
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:lapis",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 3431362
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:amethyst",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 10187468
+                  }
+                ]
+              }
+            },
+            {
+              "when": "minecraft:resin",
+              "model": {
+                "type": "minecraft:model",
+                "model": "darkspawn:item/iron_shadowblade_boots_trim",
+                "tints": [
+                  {
+                    "type": "minecraft:constant",
+                    "value": 15368753
+                  }
+                ]
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_shadowblade_boots"
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:trim_material",
+      "cases": [
+        {
+          "when": "minecraft:quartz",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 15196885
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:iron",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 7568000
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:netherite",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 5327189
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:redstone",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 12134177
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:copper",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 12152138
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:gold",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 15385673
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:emerald",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 3001466
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:diamond",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 4837326
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:lapis",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 3431362
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:amethyst",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 10187468
+              }
+            ]
+          }
+        },
+        {
+          "when": "minecraft:resin",
+          "model": {
+            "type": "minecraft:model",
+            "model": "darkspawn:item/iron_classic_boots_trim",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 15368753
+              }
+            ]
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "darkspawn:item/iron_classic_boots"
+      }
+    }
+  }
+}

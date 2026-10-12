@@ -254,9 +254,13 @@ public final class ForestGameTest {
 		var originalDifficulty = level.getDifficulty();
 		BlockPos pos = helper.absolutePos(new BlockPos(1, 2, 1));
 		var originalBiome = level.getBiome(pos).unwrapKey().orElseThrow();
+		long originalTime = level.getOverworldClockTime();
+		// Spawn Fixture: Establish daylight and let skylight settle before testing daytime spawn rules.
+		helper.setTime(6000);
+		helper.setBiome(Biomes.FOREST);
+		level.setBlockAndUpdate(pos.below(), Blocks.MOSS_BLOCK.defaultBlockState());
+		helper.runAfterDelay(5, () -> {
 		try {
-			helper.setBiome(Biomes.FOREST);
-			level.setBlockAndUpdate(pos.below(), Blocks.MOSS_BLOCK.defaultBlockState());
 			end.setDragonFight(EnderDragonFight.createDefault());
 			for (var entry : ForestEcosystem.MOBS.entrySet()) {
 				helper.assertTrue(!ForestEcosystem.canSpawn(entry.getKey(), entry.getValue(), level, EntitySpawnReason.TRIAL_SPAWNER, pos, RandomSource.create(1)), "Pre-dragon world must reject " + entry.getKey());
@@ -282,7 +286,8 @@ public final class ForestGameTest {
 			level.setBlockAndUpdate(pos.below(), Blocks.MOSS_BLOCK.defaultBlockState());
 			level.setBlockAndUpdate(pos.above(4), Blocks.STONE.defaultBlockState());
 			helper.assertTrue(!ForestEcosystem.canSpawn(ForestMob.Kind.HOLLOWED, type, level, EntitySpawnReason.TRIAL_SPAWNER, pos, RandomSource.create(1)), "Underground floor must reject spawns");
-		} finally { end.setDragonFight(originalFight); level.getServer().setDifficulty(originalDifficulty, true); helper.setBiome(originalBiome); }
+		} finally { end.setDragonFight(originalFight); level.getServer().setDifficulty(originalDifficulty, true); helper.setBiome(originalBiome); helper.setTime(originalTime); }
 		helper.succeed();
+		});
 	}
 }

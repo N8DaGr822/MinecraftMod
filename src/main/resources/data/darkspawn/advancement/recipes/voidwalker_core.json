@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_essence": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "darkspawn:void_eye_essence"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_essence"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkspawn:voidwalker_core"
+    ]
+  }
+}

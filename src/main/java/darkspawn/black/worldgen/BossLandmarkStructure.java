@@ -27,7 +27,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 /** Native saved structure starts; nothing runs on chunk load or changes old terrain. */
 public final class BossLandmarkStructure extends Structure {
 	private static final Codec<String> SITE_CODEC = Codec.STRING.validate(s ->
-		(s.equals("druid_shrine") || s.equals("hunter_camp")) ? DataResult.success(s) : DataResult.error(() -> "Unknown landmark: " + s));
+		(s.equals("druid_shrine") || s.equals("hunter_camp") || s.equals("research_bunker")) ? DataResult.success(s) : DataResult.error(() -> "Unknown landmark: " + s));
 	public static final MapCodec<BossLandmarkStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
 		settingsCodec(i), SITE_CODEC.fieldOf("site").forGetter(s -> s.site)
 	).apply(i, BossLandmarkStructure::new));

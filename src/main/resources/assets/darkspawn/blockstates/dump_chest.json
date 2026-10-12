@@ -1,0 +1,27 @@
+{
+	"variants": {
+		"facing=north": {
+			"model": "darkspawn:block/dump_chest"
+		},
+		"facing=east": {
+			"model": "darkspawn:block/dump_chest",
+			"y": 90
+		},
+		"facing=south": {
+			"model": "darkspawn:block/dump_chest",
+			"y": 180
+		},
+		"facing=west": {
+			"model": "darkspawn:block/dump_chest",
+			"y": 270
+		},
+		"facing=up": {
+			"model": "darkspawn:block/dump_chest",
+			"x": 90
+		},
+		"facing=down": {
+			"model": "darkspawn:block/dump_chest",
+			"x": 270
+		}
+	}
+}

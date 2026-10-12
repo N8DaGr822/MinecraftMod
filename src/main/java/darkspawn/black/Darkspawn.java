@@ -37,6 +37,12 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.audio.DarkspawnSounds.initialize();
 		InventoryUpgradeItem.register();
 		InventoryExpansion.initialize();
+		darkspawn.black.equipment.ExpeditionArmor.initialize();
+		darkspawn.black.equipment.LegendaryArmor.initialize();
+		darkspawn.black.equipment.ArmorStyles.initialize();
+		darkspawn.black.equipment.Temperature.initialize();
+		darkspawn.black.inventory.ArmorLoadouts.initialize();
+		darkspawn.black.storage.Storage.initialize();
 		darkspawn.black.boss.BossEffects.initialize();
 		BossItems.register();
 		BossEntities.register();
@@ -50,6 +56,8 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.cooking.VillageKitchen.initialize();
 		darkspawn.black.boss.EquipmentPowers.initialize();
 		ForestEcosystem.initialize();
+		darkspawn.black.oneblock.OneBlock.initialize();
+		darkspawn.black.forsaken.Forsaken.initialize();
 		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
 		darkspawn.black.ecosystem.EcosystemEffects.initialize();
 		darkspawn.black.ecosystem.RegionalEcosystems.initialize();

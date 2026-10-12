@@ -42,7 +42,14 @@ public final class InventorySorter {
 			throw new IllegalArgumentException("Sorting requires a full player inventory.");
 		}
 
-		int[] slots = InventoryExpansion.sortableSlots(inventory);
+		return sortSlots(inventory, InventoryExpansion.sortableSlots(inventory));
+	}
+
+	public static boolean sortContainer(Container inventory) {
+		return sortSlots(inventory, java.util.stream.IntStream.range(0, inventory.getContainerSize()).toArray());
+	}
+
+	private static boolean sortSlots(Container inventory, int[] slots) {
 		List<ItemStack> sorted = new ArrayList<>(slots.length);
 		// Stack Safety: Work on copies and compare every component before combining stacks.
 		for (int slot : slots) {
@@ -89,7 +96,7 @@ public final class InventorySorter {
 			return false;
 		}
 
-		// Protected Slots: Include unlocked storage while skipping hotbar, equipment, and locked rows.
+		// Protected Slots: Only write the slots selected by the player-inventory or container caller.
 		for (int index = 0; index < slots.length; index++) {
 			inventory.setItem(slots[index], index < sorted.size() ? sorted.get(index) : ItemStack.EMPTY);
 		}

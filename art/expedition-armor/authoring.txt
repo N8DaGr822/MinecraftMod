@@ -1,0 +1,38 @@
+Expedition armor assets — 2026-10-12
+
+The project-native generator tools/assets/expedition-armor.cjs owns the geometry,
+pixel-textured material atlases, 3D item models, recipe resources, and the offline
+preview. It follows the existing scripted item/model asset workflow. No image
+generation service or new package dependency is required for these model assets.
+
+Runtime wearable geometry:
+  src/main/resources/assets/darkspawn/geometry/armor/mountaineering.json
+  src/main/resources/assets/darkspawn/geometry/armor/spelunking.json
+Runtime atlases:
+  src/main/resources/assets/darkspawn/textures/equipment/mountaineering.png
+  src/main/resources/assets/darkspawn/textures/equipment/spelunking.png
+Editable Blockbench review sources:
+  art/blockbench/mountaineering_armor/mountaineering.bbmodel
+  art/blockbench/spelunking_armor/spelunking.bbmodel
+
+Additional families: diver, desert_wanderer, ashwalker. Each uses the same paths
+above with its family id, including art/blockbench/<family>_armor/<family>.bbmodel.
+All five families are authored by the same generator. Diver's tank and heavy
+boot soles, Desert Wanderer's canteen, and Ashwalker's orange inlays are cosmetic;
+the inlays are not emissive and the tank is not a refillable inventory object.
+
+Run `node tools/assets/expedition-armor.cjs` from the repository root to regenerate.
+Do not regenerate over hand-edited assets without transferring those edits into
+the generator first. The Blockbench files are editable review copies, not an
+automatic runtime export path; update generator geometry to retain edits.
+
+Wearable geometry uses vanilla humanoid part origins and Y-down local coordinates.
+Each cube identifies the equipment slot that owns it. The client bakes four models
+per family, each containing only that slot's cubes, and copies native armor poses
+at render submission. The 256x128 atlas has eight 64x64 material tiles.
+
+Inventory models and the preview use those same cuboids. Preview orientation:
+mountaineering/spelunking on row one, diver/desert_wanderer on row two, and
+ashwalker on row three. Each family has a front/back pair. This is an
+offline geometry/material inspection, not validation of Minecraft animation,
+lighting, slim/baby anatomy, armor trims, or resource-pack interactions.

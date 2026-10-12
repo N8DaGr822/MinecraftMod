@@ -73,7 +73,243 @@ Agriculture tests cover all six planting/growth/harvest/replant loops, bone meal
 - Leaves the hotbar, armor, offhand, and crafting slots untouched. Put down any item on the cursor before sorting.
 - Sorting runs on the server. Requests made while another container is open, while dead or spectating, or against an outdated inventory revision are rejected.
 
-Install Darkspawn and Fabric API on **both the client and the Fabric server**. The sorting controls are unavailable on servers that do not support the feature. Chest sorting, quick dump, and custom slot locks are not implemented yet.
+Install Darkspawn and Fabric API on **both the client and the Fabric server**. The sorting controls are unavailable on servers that do not support the feature. The new Dump and Sorting chests support chest sorting and bulk deposits as described below; equivalent buttons on vanilla chests and custom slot locks remain unimplemented.
+
+## Sorting Tubes, Dump Chests, Sorting Chests, and Banks
+
+Build a directed route: **Dump Chest → Sorting Tube → Sorting Chest → Sorting Tube → Bank Chest**. Add more Sorting chests along the route as needed. Gold arrows mark each block's output direction. Placement points along your look direction; empty-hand use rotates a tube, and **sneak + empty-hand use** rotates a chest. Chest use without sneaking opens its menu. Tubes support horizontal and vertical turns by pointing each tube toward the next block. Use one Dump and one terminal Bank per route for predictable re-sorting.
+
+| Block | Purpose | Crafting ingredients |
+| --- | --- | --- |
+| Dump Chest | 27-slot network input; **Deposit** moves main inventory and unlocked extra rows, preserving hotbar, armor, and offhand | Iron ingot above chest above hopper |
+| Sorting Chest | 27 storage slots plus three ghost item filters; accepts matching routed items, merging compatible stacks before using empty slots | Iron ingots above/below chest; redstone on either side |
+| Bank Chest | Searchable overflow storage with separate recoverable Trash, quantity display, paging, and capacity upgrades | Iron ingots in corners; diamond top; ender pearls left/right; chest center; obsidian bottom |
+| Sorting Tube ×8 | Sends items toward the next block along its gold arrow | Iron nuggets across top/bottom; glass, redstone, glass across middle |
+
+Recipes unlock from a chest, or iron nuggets for tubes. All four blocks are in Creative's Functional Blocks tab. For quick testing:
+
+```mcfunction
+/give @s darkspawn:dump_chest
+/give @s darkspawn:sorting_chest 3
+/give @s darkspawn:sorting_tube 32
+/give @s darkspawn:bank_chest
+```
+
+**Filters:** pick up an example item and left-click one of the three teal slots. It records the item type without consuming your item. Right-click clears the filter. Empty filters accept nothing automatically. Filters match item type, while actual stacking preserves every component, including names, enchantments, and damage. Changing filters does not remove existing contents. Manual deposits into Sorting chests are unrestricted by filters. **Sort chest** consolidates compatible stacks and orders the chest by item ID, using the existing inventory-sort algorithm.
+
+**Transfers:** every five ticks, a Dump attempts up to 64 items from one occupied slot, rotating through slots so a blocked item cannot permanently starve later items. The first matching chest receives what fits; the remainder continues to later chests and finally the Bank. Routing examines at most 128 loaded blocks, never loads chunks, stops at broken connections, and detects cycles. Items that cannot be accepted stay at their source. No loose item entities travel through tubes. Vanilla hoppers can access Dump/Sorting inventories; hopper insertion into Sorting chests obeys filters. Banks use their menus and Sorting Tubes, not direct hopper access.
+
+**Bank:** starts at 256 distinct item variants, with up to **1,000,000 items per variant**. Stored and Trash entries share the variant capacity. Named, enchanted, or differently damaged items have separate entries. Three upgrades increase capacity to 512, 1,024, and 2,048 variants, costing **1, 2, and 4 diamond blocks**, respectively. These are initial playtest values. Banks and shulker boxes cannot be nested inside a Bank; Bank items cannot enter bundles or shulker boxes. Rejected items stay at their source.
+
+Search by item name or registry ID and click **Find / Refresh** (or press Enter). **Name / Count** switches alphabetical versus highest-quantity ordering. Hover for the exact count; left-click takes a stack, right-click takes one, and shift-click fills available normal inventory space. The Bank's Deposit button also includes unlocked extra inventory rows. Visible item identities remain fixed until you refresh, change page, change view, or use another Bank action, preventing incoming items from shifting a different item under your cursor. Newly arriving types appear on refresh. **Re-sort** sends stored items back to eligible Sorting chests on the connected Dump route in bounded batches; unmatched items and Trash remain in the Bank. A re-sort pass stops on reload and can be started again.
+
+**Trash:** the Bank's three ghost filters designate incoming routed overflow for its separate Trash view. Sorting chests always get first chance. Manual Bank deposits remain normal stored items, and changing a trash filter never retroactively destroys or moves existing stock. Withdraw from Trash to recover items normally. **Empty trash** requires a second click within five seconds; intervening storage changes invalidate that confirmation. Only confirmed trash emptying destroys stored items.
+
+**Persistence:** contents, filters, and Bank upgrades save with the world. Breaking a Bank preserves its contents, Trash, filters, and upgrades in a single Bank item, including when broken in Creative; placing it restores that data. Dump and Sorting chests drop their ordinary stored items when broken; ghost filters never drop items. Dropped Banks follow ordinary dropped-item survival rules, so pick them up as you would a filled shulker box. Install the updated mod on both clients and server. In-game UI, tube-arrow readability, and real two-client playtesting remain acceptance checks.
+
+## Armor loadouts
+
+Start with one armor set and permanently unlock two more with craftable upgrades. Upgrades can be given to other players; no skill or boss requirement applies. Apply the iron upgrade first, then the diamond upgrade, by holding it and right-clicking.
+
+| Upgrade | Crafting ingredients | Result |
+| --- | --- | --- |
+| Iron Armor Loadout Upgrade | 1 armor stand, 2 leather, 2 iron ingots | Unlock armor set 2 |
+| Diamond Armor Loadout Upgrade | 1 armor stand, 2 leather, 2 diamonds | Unlock armor set 3 |
+
+Both recipes use the same pattern: material at top-center and bottom-center, leather at middle-left and middle-right, armor stand in the center. Collect an armor stand to discover the recipes. Duplicate or out-of-order use preserves the upgrade. They are also in Creative's Tools & Utilities tab.
+
+Open the Survival inventory and use **Set 1 / Set 2 / Set 3** beside Sort inventory. **ON** marks the equipped set, **X** a locked set, and **...** a change in progress. Creative players can use the existing **Extra inventory** screen. Switch to an empty set and equip its four armor slots normally; switch back to retrieve a previous set. Inactive armor takes no main-inventory space and grants no armor or boss-power benefits. Weapons, hotbar, offhand, and inventory-expansion rows are unchanged.
+
+Changing sets takes **two seconds**. Remain grounded, keep the player inventory menu active, and leave inventory items untouched. Taking damage, becoming airborne, using an item, changing inventory revision, changing dimensions, or disconnecting cancels the change. You cannot start while riding, gliding, carrying a cursor stack, or for three seconds after damage. Curse of Binding prevents removing bound armor through a loadout switch, following vanilla Creative exceptions.
+
+Unlocked sets survive death. Worn and stored armor preserve durability, names, enchantments, and equipment powers across saves and reconnects. With normal death rules, inactive armor drops alongside the active equipment and vanishing-cursed items disappear; `keepInventory` retains all sets. Only the active set occupies vanilla armor slots. Client and server both need this version.
+
+Initial recipes and timings are playtest values. Custom transparent equipment-case icons distinguish silver iron fittings from cyan diamond fittings; both have an armor-shaped clasp. Live GUI-scale checks and real two-client playtesting remain follow-up work.
+
+## Iron and diamond armor styles
+
+Existing iron and diamond armor automatically use new Classic models: raised breastplates, layered shoulders, articulated leg plates, detailed boots, and shaped helmets. Their vanilla item identities, defense, durability, crafting recipes, repair ingredients, and enchantment rules remain unchanged. Viking adds a brow/nasal-guard helmet and broader layered shoulders; Spartan adds a crested helmet, cheek guards, and leather skirt details. Every piece can be styled independently, so helmets and shoulders can be mixed.
+
+Use a **smithing table** with **paper** in the template slot, any **iron or diamond armor piece** in the base slot, and one of these additions:
+
+| Appearance | Addition |
+| --- | --- |
+| Viking | Bone |
+| Spartan | Feather |
+| War Chief | Gold ingot |
+| Knight | Iron ingot |
+| Berserker | Rabbit hide |
+| Samurai | Bamboo |
+| Paladin | Amethyst shard |
+| Juggernaut | Obsidian |
+| Pathfinder | String |
+| Reaver | Flint |
+| Pirate | Nautilus shell |
+| Conquistador | Copper ingot |
+| Ranger | Leather |
+| Shadowblade | Ink sac |
+| Restore Classic | Iron nugget |
+
+War Chief uses a commander silhouette: a crowned armored helmet, reinforced brow, broad shoulders, and a rank sash. Knight has a closed visor and overlapping shoulder plates. Berserker has a fur mantle and an oversized left shoulder guard. Samurai has a crescent crest, neck lames, and layered shoulder/skirt guards. All four are available in iron and diamond.
+
+Each conversion consumes one paper and one addition. Applying the current style produces no result, avoiding wasted ingredients. Styling preserves the original item, damage, names, enchantments, boss powers, and native armor trims. Styles survive saving and armor-loadout swaps. Existing armor needs no migration; an absent style component means Classic. Matching full sets now supply the bonuses below; individual or mixed-style pieces retain only their ordinary armor properties.
+
+### Full-set style bonuses
+
+Wear four iron/diamond pieces with the **same style**. Iron and diamond can mix, but missing pieces, unsupported armor, and mixed styles disable the bonus. Inactive loadouts grant nothing. These are initial playtest values:
+
+| Style | Full-set bonus |
+| --- | --- |
+| Classic | 20% less worn armor durability loss, before Unbreaking; randomized fractional rounding. |
+| Knight | +2 armor toughness. |
+| War Chief | +1 native melee attack damage. |
+| Berserker | +10% native attack speed. |
+| Samurai | +10% sword damage. |
+| Spartan | +10% spear damage. |
+| Viking | +10% axe damage. |
+| Ranger | +10% bow and crossbow damage, including crossbow rockets; matching set required at impact. |
+| Reaver | +10% mace damage, including smash attacks. |
+| Pirate | +10% melee and thrown trident damage; matching set required at impact. |
+| Pathfinder | +5% movement speed. |
+| Conquistador | +10% pickaxe mining speed after native modifiers; no harvest-tier upgrade. |
+| Juggernaut | +15 percentage points knockback resistance, subject to the native cap. |
+| Paladin | +10% healing received through normal healing; maximum health stays unchanged. |
+| Shadowblade | 2 seconds of invisibility after taking damage; 15-second cooldown. Shadowblade armor, trims, and glint also disappear while invisible. |
+
+These are the **15 active standard styles**. Five separate legendary sets are available through boss-core forging; see below. The former 40-style proposal is superseded, and biome protection stays with expedition armor.
+
+Saved Arbalist armor loads as Ranger, Royal Guard as Paladin, and Brawler as Berserker, preserving item identity, durability, names, enchantments, and trims. Retired recipes are removed; their artwork remains archived for possible future cosmetic options. Client and server must both update.
+
+Shadowblade triggers on unblocked, nonfatal damage while the full set is worn. Its cooldown survives gear changes, loadout swaps, reconnects, and respawns during the same server session; restarting the server clears it. Normal effect merging preserves longer invisibility potions. Shadowblade armor hides during any invisibility effect; held items and non-Shadowblade equipment retain normal visibility. Removing the armor does not cancel an already granted two-second effect. It grants no invulnerability or guaranteed escape from enemies.
+
+Paladin uses the crowned/tabard design with gilded boot cuffs. Shadowblade has a dark hood, wrapped mask, purple accents, shoulder edge spikes, and heel blades. Ranger retains its hood, quiver, shoulder studs, and wrapped boots. Reaver, Pirate, and Conquistador retain their distinct spiked shoulders and boots. Spike details are cosmetic and deal no contact damage.
+
+Arrows retain their launch weapon, so switching the held item does not change a projectile's identity. Hand-launched and elytra fireworks do not receive Ranger's crossbow bonus.
+
+Samurai, Spartan, and Viking increase eligible direct melee damage before the target's normal damage mitigation. Other weapon types and indirect damage receive no weapon-style bonus.
+
+Bonuses are server-owned. Native attribute modifiers refresh each server tick, immediately after a loadout switch, and before melee/defense calculations. They do not replace potion, meal, or boss-power effects. War Chief adds to native attack damage alongside other additive sources; Berserker multiplies attack speed; weapon-specific damage applies before target mitigation. These buffs add no proficiency gates or temperature effects.
+
+Native trim patterns render on the new raised plates, with the original material palettes and darker same-metal variants. Inventory previews show trim-material-colored borders; they do not depict the individual trim pattern, matching the native inventory distinction between material and worn pattern. Custom resource-pack trim materials without an inventory color case fall back to the untrimmed icon, while worn trims still use the native renderer. New geometry, pattern placement, movement, glint, and wearer fit still need in-game visual testing.
+
+Netherite and expedition armor retain their own models. Upgrading styled diamond armor to netherite, or converting styled iron armor to expedition gear, keeps normal item behavior; the stored cosmetic component is ignored on unsupported items. Styles add no equipment slots or temperature mechanics.
+
+The [offline style preview](art/armor-styles/preview.png) shows iron front/back on the left and diamond front/back on the right. Rows are Classic, Viking, and Spartan. This is a geometry/material preview, not a Minecraft screenshot.
+
+The [additional styles preview](art/armor-styles/commanders-preview.png) uses the same layout, with rows for War Chief, Knight, Berserker, and Samurai.
+
+## Legendary armor
+
+Five separate four-piece sets upgrade **netherite armor**, retaining netherite's base defense, toughness, durability, fire resistance, and repair material. They do not add standard-style bonuses. All four matching legendary pieces must be worn; inactive loadouts and mixed sets grant no legendary ability.
+
+First craft a core from **one of each listed boss essence plus one netherite ingot**. Then use a smithing table with **a netherite upgrade template + the matching netherite armor piece + its legendary core**. Each piece consumes its own core and template. A full set costs **eight boss essences, four extra netherite ingots, four upgrade templates, and a full netherite suit**. Existing boss encounters award one shared essence drop per qualifying kill; normally this means four victories against each of the two required bosses. Ingredients and finished armor can be shared with family members. Permanent-health boss hearts are not consumed.
+
+| Set | Essences needed for each core | Full-set ability |
+| --- | --- | --- |
+| Dragonlord | Ice Wyrm + Netherborn | +25% direct melee/projectile damage against bosses or mobs with at least 40 maximum health. Does not boost PvP or indirect retaliation. |
+| Phoenix | Thunder Bird + Netherborn | Survive a fatal hit at 1 heart with Regeneration II for 5 seconds; 10-minute cooldown. Bypass-invulnerability damage such as the void remains fatal. |
+| Voidwalker | Void Eye + Shadow Creeper Queen | No ender pearl teleportation damage; 40% less remaining fall damage. |
+| Titan | Mountain Titan + Fossil Tyrant | +2 hearts maximum health and +40 percentage points knockback resistance, on top of netherite. Equipping does not heal; removing clamps excess health. |
+| Soul Reaper | Soulbound Colossus + Baba Yaga | Restore 1 heart on a player-credited hostile enemy kill; 5-second cooldown. Passive animals and players do not qualify. |
+
+Phoenix and Soul Reaper cooldowns are saved on the player using overworld game time. They survive equipment changes, reconnects, server restarts, and respawns; they progress with world ticks rather than offline wall-clock time. Phoenix grants no fire immunity or extended invulnerability, so lingering hazards can still kill a rescued player. Normal healing limits and other effects still apply.
+
+Native smithing preserves names, damage, enchantments, trims, and boss-power components. Legendary armor cannot be converted using paper-style recipes or re-forged into another legendary set. Enchanting, netherite repair, native trim rendering, and loadout storage remain supported.
+
+The [legendary preview](art/armor-styles/legendary-preview.png) shows front/back pairs: Dragonlord and Phoenix on the first row, Voidwalker and Titan on the second, Soul Reaper on the third. Designs use larger plated shoulders, edge spikes, high greaves, horn/flame silhouettes or masked hoods, and distinct palettes. Client wearer fit, animations, and combat balance still need live playtesting.
+
+## Biome expedition armor
+
+Five four-piece armor families now work with the armor loadouts. All have original wearable geometry, textured 3D inventory items, and native equip/enchantment behavior. Mountaineering has blue fabric, steel plates, fur-colored trim, gauntlets, and crampons. Spelunking has charcoal fabric, bronze details, a lamp helmet, knee pads, and a rear supply pouch. Diver has a brass porthole helmet, teal suit, rear air tank, and heavy boots. Desert Wanderer has a wrapped hood, pale cloth, segmented plates, and a canteen. Ashwalker uses dark ceramic plates, a sealed mask, and orange inlays. Pouches, tanks, canteens, and boot ballast are visual details, not separate storage, refill, or anchoring mechanics.
+
+| Set | Defense: helmet / chest / legs / boots | Current benefits |
+| --- | --- | --- |
+| Mountaineering | 2 / 6 / 5 / 2 | Full four-piece set prevents vanilla powder-snow freezing. Boots let you walk on powder snow, with native crouch-to-descend behavior. |
+| Spelunking | 2 / 5 / 4 / 1 | Helmet grants personal night vision while equipped. Boots reduce remaining fall damage by 25%, multiplying with existing meal and boss modifiers. |
+| Diver | 2 / 6 / 5 / 2 | Helmet grants +2 native oxygen bonus (roughly triples average air duration before other modifiers), 2.5x submerged mining speed, and night vision while underwater. Air is finite; normal swimming controls remain unchanged. |
+| Desert Wanderer | 2 / 5 / 4 / 1 | Each worn piece provides 20 heat protection (80 for the full suit). |
+| Ashwalker | 2 / 6 / 5 / 2 | Each worn piece reduces incoming fire-tagged damage by 10%, up to 40%, before native armor/enchantment mitigation. Lava still damages you; no fire-resistance effect is granted. |
+
+Convert iron armor at a **smithing table**. Put **one leather** in the template slot, the corresponding **iron armor piece** in the base slot, and the addition below in the final slot. Native smithing preserves the original name, enchantments, damage, and boss power; each operation consumes one leather, one base piece, and one addition.
+
+| Output | Addition |
+| --- | --- |
+| Any Mountaineering piece | Any wool block |
+| Spelunking Helmet | Glowstone dust |
+| Spelunking Chestplate or Leggings | Copper ingot |
+| Spelunking Boots | Slime ball |
+| Any Diver piece | Prismarine shard |
+| Any Desert Wanderer piece | Rabbit hide |
+| Any Ashwalker piece | Magma cream |
+
+All families repair with iron ingots, support applicable armor enchantments, and accept existing boss armor empowerments. They are also in Creative's Combat tab. Durability multipliers are 18 for Mountaineering and Diver, 15 for Spelunking and Desert Wanderer (matching iron), and 20 for Ashwalker. None has armor toughness. There are no skill requirements. You still have three loadout slots; additional armor families do not add slots.
+
+Only worn armor grants benefits; inactive loadouts do not. The headlamp does not create world light or prevent mob spawning, and it does not overwrite potion or meal timers. Removing the helmet immediately removes its vision contribution. Mixing pieces is allowed, but mountaineering freezing immunity requires its full set. Existing leather, warming-food, and winter-power behavior is preserved.
+
+Heat, cold, equipment protection, and climate enchantments are now active together; see the temperature guide below. Thirst is not included. The custom renderer does not map cosmetic armor trims in this pass; existing trim data survives conversion. Live checks for movement, slim/baby models, enchanted appearance, and GUI scales remain necessary. The [offline model preview](art/expedition-armor/preview.png) shows front/back pairs: Mountaineering and Spelunking on row one, Diver and Desert Wanderer on row two, and Ashwalker on row three. It is not a Minecraft screenshot.
+
+## Temperature and expedition preparation
+
+Heat and cold affect Survival and Adventure players. The top-left meter shows current exposure, warming/cooling direction, and wetness. This is a gameplay exposure scale, not degrees Celsius. Mild regions remain comfortable; snowy regions, high exposed mountains, hot deserts, and the Nether reward specialized preparation.
+
+Exposure changes once per second: one point toward more severe conditions, or two points toward recovery. At 35 points in either direction the HUD warns you; at 60, movement slows by 10% and mining by 15%; at 85, you take one health point of climate damage every five seconds through the normal damage system. From comfortable, continuously severe conditions give a warning at 35 seconds and the first hit at about 89 seconds. Shelter and changing armor start gradual recovery. Existing potion, food, and armor modifiers remain separate.
+
+Biome establishes the climate. Exposed terrain above Y=128 grows colder, up to a maximum altitude penalty at Y=208. Night cools exposed areas, especially deserts; rain and wetness cool them further. Shallow roofs reduce severity; cover at least 12 blocks above your position moderates biome climate to 20%, making deeper caves useful for switching to Spelunking gear. Nether heat remains under cover; the End is mildly cold. Wetness lasts 30 seconds after leaving water/rain. Lit campfires within three blocks horizontally and two vertically add warmth; nearby lava/magma adds heat. Copies of the same heat source do not stack. These are bounded proximity and column-cover checks, not a simulated indoor heating system.
+
+| Worn equipment or preparation | Climate protection |
+| --- | --- |
+| Mountaineering | 20 cold per piece, 80 full suit; each piece adds 5 heat in hot conditions |
+| Desert Wanderer | 20 heat per piece, 80 full suit |
+| Ashwalker | 25 heat per piece in the Nether, 15 elsewhere; existing fire-damage reduction is separate |
+| Diver | 10 cold per piece while wet, 40 full suit; icy water can still need Warmth |
+| Spelunking / standard / legendary armor | No inherent climate protection; retain their existing abilities |
+| Warmth I–II | 3 cold protection per level on each worn armor piece; maximum 24 total |
+| Cooling I–II | 3 heat protection per level on each worn armor piece; maximum 24 total |
+| Existing Warming meal | 15 cold protection, plus original powder-snow protection |
+| Fire Resistance potion or meal | 20 heat protection, plus original fire resistance; does not erase heatstroke |
+
+Warmth and Cooling use native enchanting tables, enchanted-book loot, trades, and anvils. They are mutually exclusive **on the same piece**; mixing different pieces is allowed. Only worn armor protects you, and protection cannot push temperature past comfortable into the opposite extreme. Ordinary armor with Warmth II still cannot sustain the harshest cold. In extreme cold, Mountaineering plus Warmth II avoids climate damage but can still suffer strain; a Warming meal helps further. Equipment can be crafted and shared without skill gates.
+
+Exposure and wetness persist through saves, reconnects, loadout changes, and living dimension transfers; offline exposure pauses. Death starts a fresh comfortable state. Creative and Spectator are exempt and reset exposure. Powder-snow immunity, leather armor, winter powers, and fire immunity retain their native behavior; they do not grant blanket climate immunity. No thirst meter is added.
+
+These are initial playtest values. Check mountain-to-cave transitions, exposed deserts, wet freezing terrain, and Nether lava edges with each suit, including real two-client synchronization and HUD readability at different GUI scales. Both client and server need the updated mod.
+
+## The Forsaken: ruined-city expedition prototype
+
+The Forsaken now has access, extraction and a first ruined-city slice; infected enemies and the exclusive reward loop are still upcoming. Find a **research bunker in new Overworld chunks**, read its Quarantine Protocol book, and use the research archive to permanently unlock gate/key fabrication. Every visitor can learn from the same archive.
+
+Repair the bunker's **5×5 obsidian frame**, keeping the 3×3 opening clear and the controller at bottom center. Craft a reusable **Containment Key** at the archive (hover over the fabrication buttons for costs), then use it on the controller after the server's first Ender Dragon victory. Empty-hand use of an active controller enters Forsaken. Everyone can travel through an opened gate, including players without the schematic. Researched players can build personal gates and sneak-use a controller for fabrication.
+
+The lit quarantine landing has an **Extraction Terminal** that returns each traveler near their own entrance. Bring normal supplies: inventories, equipment and salvage travel with you. Normal server death and keepInventory rules apply. Install on clients and server, then restart to load the dimension.
+
+In fresh Forsaken terrain, the first city lies south of the landing: apartments and shops lead across a marked quarantine boundary to an infested hospital and research annex. Ten finite scavenging caches reward ground, upper-floor, rooftop and tunnel exploration. A rooftop crossing provides an alternative route; the central street remains clear for retreat. Infestation is visual until the next threat-system increment.
+
+Cities repeat every 512 blocks along both axes. Existing explored chunks are preserved; older saves need a fresh site to see the city. See [access rules, city layout, recipes and remaining milestones](docs/forsaken-implementation.md) and the [layout preview](art/structures/forsaken-city-preview.html).
+
+## Shared OneBlock dimension
+
+Open the normal inventory and click **OneBlock** to enter the shared island for free. Inside, the same button reads **Return**. Both directions take three seconds standing still on solid ground; damage cancels travel and adds a five-second combat delay. Close other containers, empty the cursor and 2×2 crafting grid, finish using items, dismount, and detach leashed/shoulder pets first. The buttons also appear in the existing expanded storage inventory. Install this version on both clients and server, then restart the server so `darkspawn:oneblock` loads.
+
+Everyone joins **one persistent island**, starting with a 3×3 dirt footing and a central regenerating resource at **0, 79, 0**. The bedrock underneath anchors the source; the surrounding island belongs to the players. The central resource uses the represented vanilla block's mining speed, harvest tier, drops, Fortune/Silk Touch behavior, and ore experience. Pistons cannot move it. Environmental recovery restores the source without awarding resources or progress. Creative breaking grants no phase progress.
+
+| Shared phase | Breaks to unlock the next phase | Main additions |
+| --- | --- | --- |
+| Grassland | 100 | Dirt, grass, oak wood; basic supplies and farm animals |
+| Stone | 200 | Stone, coal, iron, copper, gravel; lava for a cobblestone generator |
+| Farmland | 250 | Sand, clay, moss; crop and sugar-cane supplies |
+| Deep Caves | 350 | Redstone, lapis, gold, diamonds; zombie encounters |
+| Nether | 450 | Netherrack, quartz, soul sand, glowstone; brewing supplies and zombified piglins |
+| End | Endless | End stone and mixed advanced resources; pearls, obsidian, and Endermen |
+
+Counts apply **within each phase**. Reaching the threshold unlocks **Next phase** in the inventory; anyone on the island can activate it when the group is ready. Hover over that button to see the current phase and count. Gathering continues in the current phase until activation. Returning players join the group's current phase immediately. Later pools retain earlier resources, with guaranteed dirt/wood turns every ten breaks.
+
+A supply chest is attempted every 25 successful resource breaks, and a vanilla creature every 50. They require free supported space near the source and do not overwrite builds or spawn into players; expand the footing and leave room nearby. If there is no suitable space, that attempt is skipped and the next milestone tries again. Creature attempts stop while eight mobs are within 32 blocks. These are classic resource/creature milestones, with no Darkspawn boss events or distant islands. Nether and End are resource phases in this same dimension, not travel to the server's existing Nether or End.
+
+**Only possessions are separate.** Main inventory, hotbar, all equipment, extra storage rows, inactive armor sets, and Ender Chest contents switch to the player's saved OneBlock items on arrival and back on return. Bundles, shulker boxes, and bank contents remain inside their respective item profiles. First entry starts empty. Character upgrades—including boss hearts, inventory capacity, and unlocked loadouts—remain shared, as do XP, health, hunger, effects, and other character progress. No normal item imports or exports are available. Native portals, entity transfers, and cross-boundary teleport commands cannot bypass the menu/profile switch.
+
+Death respawns you at the shared island and follows the server's **keepInventory** rule. With normal item loss, carried OneBlock equipment and stored armor drop normally; void losses stay lost. Outside possessions remain saved and cannot drop on the island. Ender Chests retain their normal death behavior. Island beds do not replace your outside bed. Return normally uses your saved departure point, with the world's normal spawn as a fallback if that point is obstructed. Keep the two blocks above the central source clear: emergency arrivals/respawns may clear obstructions there, dropping them normally.
+
+The inactive item profile and its dimension marker persist in player data; travel saves the completed switch immediately. Shared phase progress is saved with the dimension. Reconnects cancel unfinished travel and retain the correct profile. The island is not reset when everyone leaves. Real two-client play, GUI-scale readability, repeated server restarts, and the first full progression run remain live acceptance checks.
 
 ## Inventory upgrades
 

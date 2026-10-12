@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_essence": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "darkspawn:ice_wyrm_essence"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_essence"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkspawn:dragonlord_core"
+    ]
+  }
+}

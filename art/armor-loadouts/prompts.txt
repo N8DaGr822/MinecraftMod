@@ -1,0 +1,14 @@
+Armor loadout upgrade artwork — 2026-10-12
+
+Generated using the built-in image_gen tool. Original transparent PNGs are preserved as iron-source.png and diamond-source.png beside this file. Runtime textures are 64x64 PNG exports using nearest-neighbor resampling with alpha preserved. No recoloring or background removal was performed locally.
+
+Iron final texture: src/main/resources/assets/darkspawn/textures/item/iron_armor_loadout_upgrade.png
+Diamond final texture: src/main/resources/assets/darkspawn/textures/item/diamond_armor_loadout_upgrade.png
+
+Iron generation prompt:
+Use case: stylized-concept. Asset type: Minecraft inventory item sprite, square transparent PNG. Create ONE original iron-tier armor loadout upgrade icon: a compact dark brown leather armor equipment case with a chunky silver iron frame, a short carrying handle, two bright iron corner braces and a prominent small breastplate-shaped silver clasp on the front. Three-quarter front view, centered, entire object visible with 10 percent transparent margin. Crisp low-resolution pixel-art aesthetic, large blocky pixels, dark silhouette outlines, limited brown/charcoal/silver palette, light from upper left, readable at tiny inventory-slot size. Shape must read as an equipment case, not wearable chest armor, not a treasure chest. No text, letters, numbers, scenery, floor, cast shadow, glow, blur, checkerboard, or additional objects. Genuinely transparent background. Deliver a square power-of-two image if possible.
+
+Diamond edit prompt (iron generated image supplied as the single reference/edit target):
+Use case: precise-object-edit. Asset type: matching Minecraft inventory item sprite. Use the preceding iron armor equipment case image as the edit target. Create the DIAMOND tier variant. Keep exactly the same case silhouette, three-quarter view, handle, brown leather, breastplate-shaped front clasp, framing, pixel-art block size and transparent background. Change all silver iron reinforcement pieces, corner braces, handle brackets and the breastplate clasp to bright turquoise/cyan diamond with pale aqua highlights and dark teal shadows. Preserve strong contrast against brown leather. No added objects, particles, text, numerals, floor, shadow, glow, or background. Output one standalone square icon with true transparency.
+
+Visual review: matching leather cases with armor-shaped clasps, silver versus cyan fittings, consistent silhouette, no lettering or scenery. Source PNG alpha and dimensions verified. In-game GUI-scale appearance still needs a live playtest.

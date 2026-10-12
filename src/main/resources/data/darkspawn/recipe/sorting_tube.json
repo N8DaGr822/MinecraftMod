@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"category": "redstone",
+	"pattern": [
+		"III",
+		"GRG",
+		"III"
+	],
+	"key": {
+		"I": "minecraft:iron_nugget",
+		"G": "minecraft:glass",
+		"R": "minecraft:redstone"
+	},
+	"result": {
+		"id": "darkspawn:sorting_tube",
+		"count": 8
+	}
+}

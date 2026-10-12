@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#darkspawn:styleable_armor"
+          }
+        ]
+      }
+    },
+    "has_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "darkspawn:armor_style_viking"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_armor",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkspawn:armor_style_viking"
+    ]
+  }
+}

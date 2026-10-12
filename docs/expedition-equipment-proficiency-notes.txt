@@ -1,0 +1,355 @@
+Darkspawn future design discussion: expeditions, equipment, and proficiency
+Recorded: 2026-10-12
+
+UNIFIED TEMPERATURE IMPLEMENTATION FOLLOW-UP
+The user selected the complete heat/cold pass after legendary armor. Both are now
+implemented together with gradual exposure, warnings, worn-piece protection,
+Warmth/Cooling I-II, existing warming meals and fire resistance, wetness, shelter,
+and bounded nearby heat sources. Saves and living transfers preserve exposure;
+death clears it. No thirst or proficiency gates were added. Initial balance and
+playtest rules are documented in README; earlier future-tense notes below are
+historical.
+
+LEGENDARY ARMOR IMPLEMENTATION FOLLOW-UP
+The user selected all five legendary sets and requested difficult boss-material
+acquisition. Each piece now requires a netherite armor base, netherite upgrade
+template, and a core forged from two boss essences plus a netherite ingot.
+Full sets cost eight essences, four additional ingots, and four templates.
+Dragonlord: Ice Wyrm + Netherborn; Phoenix: Thunder Bird + Netherborn;
+Voidwalker: Void Eye + Shadow Creeper Queen; Titan: Mountain Titan + Fossil
+Tyrant; Soul Reaper: Soulbound Colossus + Baba Yaga. Existing boss essence drops
+are reused; health hearts remain progression rewards. All five use the user's
+specified abilities and matching worn-set rules. Persistent cooldowns prevent
+swapping/reconnecting to reset Phoenix or Soul Reaper. README is authoritative.
+
+CURRENT DECISION: FIFTEEN STANDARD ARMOR STYLES
+The user approved replacing the overlapping 40-style proposal with these fifteen:
+Classic (20% less wear), Knight (+2 toughness), War Chief (+1 melee damage),
+Berserker (+10% attack speed), Samurai (+10% sword damage), Spartan (+10% spear
+damage), Viking (+10% axe damage), Ranger (+10% bow/crossbow damage), Reaver
+(+10% mace damage), Pirate (+10% trident damage), Pathfinder (+5% movement),
+Conquistador (+10% pickaxe mining), Juggernaut (+15 percentage points knockback
+resistance), Paladin (+10% healing), and Shadowblade (2 seconds invisibility
+after damage, 15-second cooldown). All require the full matching worn set.
+Shadowblade armor, trims, and glint also disappear while invisible, as requested;
+held items remain visible. Five legendary sets remain future designs.
+Existing Arbalist maps to Ranger, Royal Guard to Paladin, Brawler to Berserker.
+The old 40-item list and batch notes below are preserved as history, not an
+implementation backlog. README contains the current behavior and caveats.
+
+STATUS AND SCOPE
+Follow-up: the user selected craftable armor loadouts for implementation on
+2026-10-12. The development roadmap and README track the current implementation
+and initial playtest rules. The user subsequently selected biome armor: the first
+Mountaineering and Spelunking sets are implemented as an armor-only increment,
+with powder-snow protection, personal headlamp vision, and padded boots. Regional
+temperature remains future work. See the roadmap for verification limitations.
+The remainder of this discussion stays future work;
+the original decisions and proposals below are preserved as discussion history.
+
+Saved for future planning at the user's request. This document does not schedule
+implementation, activate a milestone, or claim any feature below is implemented.
+Agreed direction is separated from proposals and unresolved design choices.
+Reconcile current code and home-checkout changes before planning implementation.
+
+ARMOR STYLE BONUSES - FOLLOW-UP IMPLEMENTATION
+The user requested the buffs and then revised Samurai from shield retaliation
+to +15% sword damage. The README records the implemented first-pass values:
+Classic 25% less worn armor wear; Viking +15% axe damage; Spartan +15% spear
+damage; War Chief +2 native attack damage; Knight +4 armor toughness;
+Berserker +15% attack speed; Samurai +15% sword damage.
+Four worn matching styles are required; iron and diamond can mix.
+Material stats and other effects remain separate. These values need playtesting.
+Temperature work remains separate. The proposal history below is preserved;
+its earlier 'not active' statements describe the discussion before this request.
+
+RANGED AND BRAWLER BATCH - IMPLEMENTATION FOLLOW-UP
+Ranger and Arbalist use +10% rather than +15% ranged damage. Brawler uses +1
+rather than +2 unarmed damage, with an empty main hand and native attack recharge.
+Arrows retain bow/crossbow launch identity; Arbalist also includes crossbow
+rockets, excluding hand-launched and elytra fireworks. Full matching armor must
+be worn at impact. Hood/quiver, aiming armor/bolt pouches, and studded brawling
+armor have distinct shoulder and boot designs. Recipes use leather, tripwire
+hook, and brick respectively, in the existing paper-template smithing system.
+
+SPECIALIST ARMOR BATCH - IMPLEMENTATION FOLLOW-UP
+Reaver, Pirate, and Conquistador now use 10% bonuses rather than the original
+15% proposals below. Reaver includes mace smashes; Pirate includes thrown and
+melee tridents, with matching armor required at impact. Conquistador improves
+native pickaxe mining speed, not harvest tier. New shoulders and boots have
+varying edge spikes, cuffs, toes, buckles, and spurs; spikes add no contact damage.
+
+UTILITY ARMOR BATCH - IMPLEMENTATION FOLLOW-UP
+The user authorized manageable implementation sections with conservative balance.
+Royal Guard, Juggernaut, and Pathfinder now have iron/diamond styles and recipes.
+Royal Guard retains +2 maximum health; equipping does not heal, and removing
+it clamps health to the new maximum. Juggernaut starts at +15 percentage points
+knockback resistance instead of 20; Pathfinder starts at +5% speed instead of 10.
+These values supersede the original proposals below for the implemented batch.
+The first seven buffs remain unchanged for comparative playtesting. Only the
+worn matching set activates; no progression gate or temperature system is added.
+
+EXPANDED ARMOR ROSTER - USER REVISION
+Recorded: 2026-10-12. This list supersedes earlier proposed bonus values,
+including Samurai retaliation. Bonuses require the complete equipped variant.
+The first seven already have models and smithing styles. The expanded roster is being implemented in manageable sections; legendary
+acquisition remains under discussion; entries below
+do not imply that all variants or legendary sets are available in game.
+
+1. Classic: 25% less armor durability loss.
+2. Knight: +4 armor toughness.
+3. Warchief: +2 melee attack damage (existing internal style: war_chief).
+4. Berserker: +15% attack speed.
+5. Samurai: +15% sword damage.
+6. Spartan: +15% spear damage.
+7. Viking: +15% axe damage.
+8. Paladin: +15% healing received.
+9. Centurion: 20% less shield durability loss.
+10. Gladiator: +15% critical hit damage.
+11. Templar: +15% damage against undead.
+12. Shinobi: +20% sneaking speed.
+13. Ranger: +15% bow damage.
+14. Arbalist: +15% crossbow damage.
+15. Dragoon: +15% melee damage while mounted.
+16. Sentinel: 10% less projectile damage received.
+17. Juggernaut: +20% knockback resistance.
+18. Reaver: +15% mace damage.
+19. Assassin: +20% damage against full-health enemies.
+20. Duelist: +10% melee damage while the offhand is empty.
+21. Frostguard: 50% less freezing damage.
+22. Ashguard: 15% less fire damage.
+23. Tidecaller: +15% swimming speed.
+24. Pathfinder: +10% movement speed.
+25. Nomad: 15% less hunger consumed while sprinting.
+26. Netherguard: +15% damage against Nether mobs.
+27. Ender Knight: +15% damage against End mobs.
+28. Alchemist: +15% potion effect duration.
+29. Stoneguard: 15% less explosion damage.
+30. Blood Knight: restores 1 health point per enemy kill.
+31. Death Knight: +15% melee damage while below 50% health.
+32. Explorer: 20% less fall damage.
+33. Brawler: +2 unarmed attack damage.
+34. Inquisitor: 20% shorter negative status effect duration.
+35. Royal Guard: +2 maximum health.
+36. Conquistador: +15% pickaxe mining speed.
+37. Pirate: +15% trident damage.
+38. Beastmaster: +15% damage dealt by tamed wolves.
+39. Shadowblade: 2 seconds of invisibility after being hit.
+40. Vanguard: 15% less damage received while holding a shield.
+
+LEGENDARY ARMOR - USER DESIGNS
+Design intent: visibly more powerful than standard styles, with distinctive
+abilities. Preserve the supplied values; Dragonlord and Titan currently use
+stat bonuses, so any additional active ability needs a separate design decision.
+
+Dragonlord: +25% damage against bosses and mobs with at least 40 maximum
+health. Black, crimson, and gold dragon-scale patterns.
+Phoenix: survive a fatal hit with 1 heart and gain Regeneration II for 5 seconds;
+10-minute cooldown. Gold, orange, and red flame-shaped trims.
+Voidwalker: ender pearls deal no teleportation damage; 40% less fall damage.
+Obsidian-black armor with glowing purple trim patterns.
+Titan: +4 maximum health (2 hearts) and +40% knockback resistance.
+Massive-looking plated armor with bronze and gold accents.
+Soul Reaper: restore 1 heart per enemy kill, with a 5-second cooldown.
+Dark netherite with soul-blue and ghostly gray trims.
+
+Future implementation must define Nether/End mob membership, eligible enemy
+kills, potion duration handling, shield hand eligibility, and cooldown
+persistence. No extra cooldown for Shadowblade was specified. Regional
+temperature work remains a separate unified pass.
+
+ORIGINAL ARMOR STYLE BONUS DISCUSSION
+Follow-up discussion: 2026-10-12. The user chose a commander appearance for
+War Chief and asked to document possible full-variant bonuses while continuing
+visual styling only. Cosmetic styles currently change no combat attributes.
+
+User examples for a future matching full-set system:
+- Spartan: increased spear damage.
+- Knight: increased defense.
+- War Chief: strength / increased melee damage.
+- Berserker: quicker attack recovery.
+- Samurai: counters.
+
+Further assistant suggestions, not settled requirements:
+- Knight could use armor toughness to resist heavy hits.
+- War Chief could use a modest equipment damage bonus with explicit rules for
+  stacking alongside Strength potions, meals, boss powers, and proficiency.
+- Berserker could improve native attack recharge rather than bypass it.
+- Samurai could earn a brief counterattack opportunity from a timed block,
+  with an expiry and cooldown rather than automatic retaliation on every hit.
+- Viking could specialize in axe damage; Classic could reduce armor wear.
+
+Suggested activation rules still need design approval and balancing:
+- All four worn pieces share the style; inactive loadout armor grants nothing.
+- Iron and diamond pieces may mix if they share the same style.
+- Material retains base stats; do not multiply the style bonus by material tier.
+- Changing loadouts cannot reset cooldowns or carry a counter window forward.
+- Define supported spears/axes, what counts as a timed block, stacking limits,
+  multiplayer authority, HUD feedback, and removal behavior before implementation.
+- Consider separating visual appearance from combat specialization later, so
+  players are not forced into a particular appearance to get their preferred buff.
+
+No numeric bonuses, cooldowns, combat hooks, skill requirements, or implementation
+milestone are approved here. This remains separate from the planned unified
+temperature pass. Current visual additions: War Chief (commander), Knight,
+Berserker, and Samurai for iron and diamond, using cosmetic smithing variants.
+
+DESIGN GOAL
+Make exploration harder through destination-specific preparation, equipment, and
+environmental hazards. Support family multiplayer with different play schedules:
+regular players earn useful proficiency advantages, while returning players can
+be equipped by the group and join adventures without grinding usage requirements.
+Taking a few days away should not prevent someone from exploring with the group.
+
+AGREED DIRECTION
+
+1. Portal destinations and late-game threats
+- The user is already adding dimensions and working on a pirate-themed portal.
+  Treat that as existing work to inspect, not a request to recreate it here.
+- New mobs and encounters can belong to other destinations reached through
+  portals that players must open.
+- A Lost Cities / Parasites-inspired destination is a strong fit: dangerous
+  ruined environments and creatures can form a distinct expedition experience.
+- Exact portal requirements, dimension layout, rewards, and progression placement
+  remain undecided. Do not assume the pirate destination contains the parasites.
+
+2. Temperature and expedition preparation
+- Temperature is a desired feature, making different areas harder to explore.
+- Extreme areas should require specialized preparation. Vanilla equipment alone
+  should not provide a satisfying sustainable answer to the hardest climates.
+- Add environmental equipment and enchantments such as warmth and cooling.
+- Enchantments should make exposure more manageable, but must not solve every
+  temperature challenge or eliminate the role of specialized armor.
+- Design toward ordinary gear for mild conditions, enchanted ordinary gear for
+  limited harsh exposure, specialized gear for sustained regional exploration,
+  and specialized gear plus provisions/enchantments for extreme expeditions.
+  Exact boundaries, protection values, and exposure times require balancing.
+
+3. Better armor appearance and meaningful armor families
+- Improve the basic armor visuals toward recognizable, substantial armor.
+- Environmental specialization is a reason to add armor sets with different
+  purposes, rather than simply increasing defense on a linear equipment ladder.
+- The user's example: wear cold-protective equipment in the mountains, then
+  switch inside a suitable cave to spelunking equipment emphasizing light and
+  fall protection, where less cold protection is needed.
+- Weapons are a lower priority. Keep the existing legendary-item direction;
+  do not turn this discussion into approval for a large new weapon catalog.
+
+4. Three equipment loadouts with craftable upgrades
+- Provide three selectable armor loadouts in the inventory/menu so spare gear
+  sets do not consume ordinary inventory space.
+- Begin with one loadout. Craftable upgrades unlock the second and third.
+- The user explicitly selected craftable upgrades so frequent players can help
+  brothers or other returning players catch up and participate.
+- Follow the existing inventory-expansion approach where applicable; inspect its
+  implementation before designing storage, unlocks, or menu behavior.
+- Recipes, costs, acquisition timing, switching rules, and exact slot coverage
+  remain to be specified. Accessories are not automatically approved by this.
+
+5. Activity-based proficiency, with no usage gates
+- Improve proficiency slowly by performing the relevant activity.
+- Improvements provide bonuses, never requirements for using equipment/tools
+  or participating in exploration.
+- User examples: combat increases damage; mining improves gathering.
+- Regular players retain a rewarding advantage without making less-frequent
+  players unable to contribute when supplied with appropriate equipment.
+- Skill categories, gain rates, caps, bonus amounts, and persistence details
+  remain design work. Eight skills and two separate leveling systems are not
+  requirements; the original mod references were inspiration.
+
+PROPOSALS DISCUSSED, NOT FINAL REQUIREMENTS
+
+Temperature model
+- Biome/dimension establish climate; altitude, time, exposure, and wetness modify
+  it. Shelter, clothing, meals, drinks, and the proposed bonfire provide options.
+- Exposure accumulates with clear warnings before serious penalties.
+- Armor changes alter warming/cooling rates rather than instantly resetting
+  body temperature. Cave temperature depends on actual conditions: a shallow
+  ice cave can remain cold even when deeper sheltered passages are milder.
+- Start with temperature without a constant thirst meter.
+- Keep food choices meaningful: a warming meal should have alternatives rather
+  than becoming the only usable meal in an entire region.
+
+Armor and enchantment concepts
+- Mountaineering: fur-lined layers, reinforced boots, insulation, wind protection,
+  and possibly traction.
+- Spelunking: compact reinforced armor, helmet light, impact/fall protection,
+  and possible climbing utility.
+- Desert: wrapped cloth, hood/face covering, lighter segmented plates, cooling.
+- Maritime/wet weather: treated leather, overlapping scales, resistance to
+  soaking and its cold effects; possible connection to pirate content.
+- Containment: enclosed helmet and sealed-looking joints, with protection against
+  particular parasite hazards if those hazards are selected.
+- Model direction: breastplates, shaped shoulders, gauntlets, knee guards, and
+  substantial boots within Minecraft proportions. Prototype helmet/chest visuals.
+- Candidate enchantments: Insulation (less heat loss), Cooling (shed heat), and
+  Weatherproofing (less soaking or shorter wetness). Names and mechanics are open.
+- Avoid one universal set; insulation may be a disadvantage in hot conditions.
+
+Loadout behavior
+- Store actual items with durability/enchantments; only the active set grants
+  effects. Keep weapons/hotbar independent initially.
+- Permanent unlocks survive death; all stored equipment follows normal death and
+  keepInventory rules. These were recommended defaults, not finalized rules.
+- Consider a short switch duration, interruption on damage, and preventing
+  mid-fall switching to stop last-moment defensive swaps.
+- Define item conservation, full-inventory handling, death drops, multiplayer
+  synchronization, save compatibility, and duplicate attribute/effect prevention.
+
+Proficiency behavior
+- Possible tracks: combat, mining, farming, cooking, exploration, animal handling.
+- Possible benefits: modest damage/handling, gathering yield/efficiency, crop
+  yield, meal duration, endurance/recovery, and mount endurance/recovery.
+- Reward productive actions; prevent placed-block loops and harmless-target
+  farming from becoming optimal progression. Specify legitimate repeat activities.
+- Keep bonuses bounded, with slower high-level gains and clear progress feedback.
+- Define mining interactions with Fortune, Silk Touch, and placed resources.
+- Recommended defaults: proficiency survives death and does not decay offline.
+- Environmental proficiency should improve efficiency/recovery, not become a
+  hidden prerequisite for surviving a destination with appropriate equipment.
+- Consider destination/player-action difficulty rather than escalation merely
+  because the multiplayer server has been running while someone was absent.
+
+Ruined-city expedition concepts
+- Portal-opening objective, dependable return route, and an arrival foothold.
+- Explore districts, recover resources, and encounter increasingly dangerous nests.
+- Opening sealed areas or disturbing hives can escalate local threats.
+- Rewards support armor, enchantments, and a few legendary items.
+- Initially contain infestation within its destination. Overworld spread would
+  require a separate explicit gameplay decision.
+
+OTHER INITIAL IDEAS AND THEIR DISPOSITION
+- First Aid: independent lethal head/torso pools were raised initially, but not
+  selected. They conflict with existing health/heart assumptions and need separate
+  design. Nonlethal injuries, bandages, splints, and camp recovery were alternatives.
+- Simple Difficulty: temperature selected; thirst/dehydration not selected.
+- Reskillable / Level Up! Reloaded: adapt toward one activity-based improvement
+  system. Hard equipment gates are explicitly rejected.
+- Lycanites Mobs / Ice and Fire: creature roles, taming, mounts, dragons, and lairs
+  remain inspiration. No wholesale roster or new dragon system was approved.
+  Inspect the home Griffon and existing bosses, including Ice Wyrm, before overlap.
+- Spartan Weaponry: broad weapon expansion is lower priority per the user.
+- Baubles / Quality Tools: accessory slots, utility relics, and material-funded
+  refinement were discussed, but are not selected requirements. Chosen refinements
+  rather than random penalty rerolls were a suggestion only.
+- Lost Cities / Parasites: desired inspiration for a dangerous portal destination.
+- Treat named mods as design references for this document. Actual dependency
+  integration versus original mechanics remains unconfirmed; no compatibility,
+  installation, licensing, or porting decision is implied.
+
+NEXT DESIGN DECISIONS WHEN THIS WORK IS SELECTED
+- Follow-up decision: implement Diver, Desert Wanderer, and Ashwalker armor first.
+  Address all temperature mechanics together in one later pass: cold, heat,
+  protection values, and enchantment interactions. Do not add climate penalties
+  piecemeal while building armor. Marsh Warden and Blightguard remain future ideas.
+- Inspect in-progress dimensions, pirate portal, mounts, bonfire, player inventory,
+  armor/equipment powers, cooking, and persistence before extending them.
+- Choose the first playable climate and armor pair; define readable temperature
+  thresholds, recovery, environmental transitions, and multiplayer behavior.
+- Specify loadout upgrade recipes and storage/switch/death rules.
+- Prototype armor silhouettes and menu usability before producing many sets.
+- Select a small proficiency scope and measurable, bounded bonuses.
+- Define ruined-dimension access and threats without displacing existing boss
+  hearts, summon progression, or legendary rewards.
+- Discuss remaining material choices with the user before implementation. No
+  implementation order, release date, recipe, or numerical balance is committed.

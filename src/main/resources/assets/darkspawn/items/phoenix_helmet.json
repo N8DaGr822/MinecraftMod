@@ -1,0 +1,155 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:trim_material",
+    "cases": [
+      {
+        "when": "minecraft:quartz",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 15196885
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:iron",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 12041664
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:netherite",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 3683131
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:redstone",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 12134177
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:copper",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 12152138
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:gold",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 15385673
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:emerald",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 3001466
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:diamond",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 4837326
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:lapis",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 3431362
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:amethyst",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 10187468
+            }
+          ]
+        }
+      },
+      {
+        "when": "minecraft:resin",
+        "model": {
+          "type": "minecraft:model",
+          "model": "darkspawn:item/phoenix_helmet_trim",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": 15368753
+            }
+          ]
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "darkspawn:item/phoenix_helmet"
+    }
+  }
+}

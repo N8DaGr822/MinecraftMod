@@ -1,0 +1,101 @@
+Shared OneBlock dimension: future design notes
+Recorded: 2026-10-12
+
+STATUS
+The user selected OneBlock implementation on 2026-10-12 and deferred proficiency.
+Current decisions and behavior are described in README. The discussion history
+below preserves the earlier open proposals; it is not the current contract.
+
+IMPLEMENTATION DECISIONS - USER CONFIRMED
+- Free inventory-menu entry and return; no craftable anchor requirement.
+- One shared island with a 3x3 dirt footing and a protected regenerating source.
+- Separate items only; keep character upgrades. Inventory, worn/stored armor,
+  extra storage rows, and Ender Chest contents have independent profiles.
+- Death respawns on the island and follows the server's keepInventory rule,
+  including ordinary void item loss. No graves or automatic item recovery.
+- Six phases: Grassland (100), Stone (200), Farmland (250), Deep Caves (350),
+  Nether (450), and endless mixed End. Counts are per phase.
+- Thresholds unlock manual advancement when the family is ready. Earlier
+  essentials remain available. Include occasional supply chests and vanilla mobs.
+- Keep this first implementation classic OneBlock: no custom bosses, extra
+  islands, special events, or rewards exported to the outside world.
+
+USER-SELECTED DIRECTION
+- Play OneBlock within the existing server, without creating another server.
+- Use one shared island. The user wants a cohesive family adventure rather than
+  personal islands that make the experience feel competitive.
+- Keep the initial experience classic OneBlock. Do not add Darkspawn bosses or
+  custom event systems to the initial scope.
+- Prevent players from arriving with a full outside inventory and bypassing the
+  challenge. Existing-world gear must not trivialize OneBlock progression.
+- Special events and distant islands are possible later additions only. No event,
+  additional island, or related implementation is selected yet.
+
+WORKING CONCEPT FROM THE DISCUSSION
+These are the proposed mechanics supporting the selected direction, rather than
+finalized inventory, progression, or death contracts.
+- A dedicated dimension with one shared starting island and regenerating block.
+- Breaking the central block draws from phase-specific resource selections,
+  including appropriate blocks, supply chests, and creature encounters.
+- Resource phases and island unlocks belong to the group. Returning players join
+  the island's current progress without personal phase-unlock requirements.
+- Individual OneBlock inventories persist between visits; shared chests allow
+  players to equip and support one another.
+- Entering stores the player's outside inventory/equipment and restores their
+  OneBlock profile. Leaving stores OneBlock possessions and restores the outside
+  profile. Extra inventory rows and planned armor loadouts must be accounted for.
+- The island and its progress persist when everyone leaves.
+- Provide a dependable return route that does not rely on retaining a single item.
+
+PROPOSALS STILL OPEN
+
+Phase progression
+- Automatic advancement versus manual activation is UNDECIDED. The assistant
+  recommended unlocking the next phase after sufficient block breaks, then letting
+  someone activate it when the family is ready; the user has not chosen this rule.
+- Under that proposal, gathering continues in the current phase while waiting.
+- Illustrative phases discussed: basic dirt/wood/food; stone/coal/metals; farming
+  and animals; dangerous depths; Nether and beyond. No exact roster, order, block
+  count, objective, or final encounter is approved.
+- Milestone objectives alongside block counts were suggested, but must not expand
+  the selected classic OneBlock scope without a further decision.
+- Keep essential early resources obtainable after advancing; decide how.
+
+Inventory and progression isolation
+- No ordinary item transfers in either direction was recommended, but exact import
+  and export rules remain undecided. Outside gear bypass is explicitly unwanted.
+- A separate OneBlock progression profile was recommended so outside boss hearts,
+  proficiency bonuses, and equipment unlocks do not grant a large head start.
+- Decide which health, XP, hunger, skill, inventory-capacity, and unlock states are
+  separate. Isolation beyond inventory has not been explicitly approved.
+- Decide how potion/meal effects, mounts, accessories, stored armor sets, carried
+  containers, and other transfer paths are handled.
+- Cosmetic completion rewards usable outside were suggested, not selected.
+
+Travel and death
+- Portal/entrance acquisition, placement, and access requirements are undecided.
+- A menu return action with a short delay and combat restrictions was suggested;
+  the actual travel interface and restrictions remain undecided.
+- Death, void falls, respawn location, keepInventory behavior, and recovery rules
+  are undecided. A recoverable grave near the central anchor was suggested, not
+  approved. Do not silently implement custom graves or item-loss protection.
+- Disconnect/reconnect should preserve the correct location and inventory profile.
+- Entering, leaving, death, and restart recovery must never duplicate items or
+  drop/restore the wrong profile.
+
+IMPLEMENTATION CONSIDERATIONS FOR FUTURE PLANNING
+- Inspect current dimension/portal work, including the user's pirate destination,
+  and existing inventory/persistence patterns before choosing an implementation.
+- Persist shared island state independently of individual player profiles.
+- Make profile switching robust across interrupted transitions, saves, deaths,
+  disconnects, and server restarts; define recovery before implementation.
+- Ensure concurrent block breaks and simultaneous arrivals cannot duplicate
+  rewards or corrupt phase progression.
+- Protect the central regenerating block from permanent loss or relocation.
+- Define safe spawn positions and creature placement when island space is limited.
+- Resolve unintended transfer routes through containers, entities, teleportation,
+  and other dimensions without changing unrelated gameplay.
+- Test multiple players, absent/returning players, repeated travel, full inventories,
+  deaths, void falls, reloads, and preservation of the outside character's items.
+- Select precise recipes, resource pools, phase thresholds, and rules with the user
+  when this work becomes active. No code or gameplay behavior changes here.

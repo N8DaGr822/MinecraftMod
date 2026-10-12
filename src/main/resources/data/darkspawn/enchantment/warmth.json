@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.darkspawn.warmth"
+  },
+  "supported_items": "#minecraft:enchantable/armor",
+  "primary_items": "#minecraft:enchantable/armor",
+  "weight": 5,
+  "max_level": 2,
+  "min_cost": {
+    "base": 10,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 30,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "armor"
+  ],
+  "exclusive_set": "#darkspawn:exclusive_set/temperature",
+  "effects": {}
+}

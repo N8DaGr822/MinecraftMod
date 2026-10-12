@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "active=false,facing=north": {
+      "model": "darkspawn:block/quarantine_gate_inactive",
+      "y": 0
+    },
+    "active=true,facing=north": {
+      "model": "darkspawn:block/quarantine_gate",
+      "y": 0
+    },
+    "active=false,facing=east": {
+      "model": "darkspawn:block/quarantine_gate_inactive",
+      "y": 90
+    },
+    "active=true,facing=east": {
+      "model": "darkspawn:block/quarantine_gate",
+      "y": 90
+    },
+    "active=false,facing=south": {
+      "model": "darkspawn:block/quarantine_gate_inactive",
+      "y": 180
+    },
+    "active=true,facing=south": {
+      "model": "darkspawn:block/quarantine_gate",
+      "y": 180
+    },
+    "active=false,facing=west": {
+      "model": "darkspawn:block/quarantine_gate_inactive",
+      "y": 270
+    },
+    "active=true,facing=west": {
+      "model": "darkspawn:block/quarantine_gate",
+      "y": 270
+    }
+  }
+}
