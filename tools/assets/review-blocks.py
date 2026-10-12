@@ -77,17 +77,18 @@ def render(model_id, size=160, scale=5):
     return canvas
 
 
-ids = sys.argv[1:]
-sheet = Image.new("RGB",(1280,len(ids)*188),"#151c27")
-draw = ImageDraw.Draw(sheet)
-for row,crop_id in enumerate(ids):
-    if crop_id == "cooking_station":
-        sheet.paste(render(crop_id,160,5),(0,row*188))
-        draw.text((8,row*188+166),"Cooking Station",fill="white")
-        continue
-    for age in range(8):
-        name = crop_id+("_ripe" if age==7 else f"_crop_stage{age}")
-        sheet.paste(render(name),(age*160,row*188))
-        draw.text((age*160+8,row*188+166),f"{crop_id} / {age}"+(" ripe" if age==7 else ""),fill="white")
-sheet.save(ROOT / "build/art-source/block-review.png")
-print(f"Rendered {len(ids)} block families")
+if __name__ == "__main__":
+    ids = sys.argv[1:]
+    sheet = Image.new("RGB",(1280,len(ids)*188),"#151c27")
+    draw = ImageDraw.Draw(sheet)
+    for row,crop_id in enumerate(ids):
+        if crop_id == "cooking_station":
+            sheet.paste(render(crop_id,160,5),(0,row*188))
+            draw.text((8,row*188+166),"Cooking Station",fill="white")
+            continue
+        for age in range(8):
+            name = crop_id+("_ripe" if age==7 else f"_crop_stage{age}")
+            sheet.paste(render(name),(age*160,row*188))
+            draw.text((age*160+8,row*188+166),f"{crop_id} / {age}"+(" ripe" if age==7 else ""),fill="white")
+    sheet.save(ROOT / "build/art-source/block-review.png")
+    print(f"Rendered {len(ids)} block families")

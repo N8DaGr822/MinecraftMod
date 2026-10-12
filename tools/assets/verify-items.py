@@ -9,7 +9,8 @@ assets = root / "src/main/resources/assets/darkspawn"
 catalog = json.loads(Path(__file__).with_name("item-art.json").read_text())
 ids = sys.argv[1:] or [entry["id"] for entry in catalog]
 assert len(catalog) == len({entry["id"] for entry in catalog})
-assert {entry["id"] for entry in catalog} == {p.stem for p in (assets / "models/item").glob("*.json")}
+# Catalog Scope: Cuisine models have separate geometry and checks in verify-cuisine-art.py.
+assert {entry["id"] for entry in catalog} <= {p.stem for p in (assets / "models/item").glob("*.json")}
 for item_id in ids:
     definition = json.loads((assets / f"items/{item_id}.json").read_text())
     assert definition["model"]["model"] == f"darkspawn:item/{item_id}", item_id
@@ -21,8 +22,8 @@ for item_id in ids:
         alpha = image.getchannel("A")
         assert alpha.getextrema() == (0, 255), item_id
         # Inventory Safety: Leave some true background and enough visible pixels to read.
-        visible = sum(value >= 128 for value in alpha.getdata())
+        visible = sum(value >= 128 for value in alpha.tobytes())
         assert 80 <= visible < 950, (item_id, visible)
     provenance = json.loads((root / f"art/items/{item_id}.json").read_text())
     assert provenance["id"] == item_id and provenance["prompt"], item_id
-print(f"PASS: {len(ids)} item sprites; all catalog IDs match existing item models")
+print(f"PASS: {len(ids)} item sprites; all catalog IDs have existing item models")

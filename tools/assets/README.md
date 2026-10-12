@@ -55,3 +55,65 @@ The seven shadow ecosystem mobs and the summoned queen minion now share the rede
 Use `node tools/assets/shadow-hive.cjs` for a dry run or append `--write` to rebuild these eight projects and their geometry/animation exports. The generic model generator and mob animation pass exclude these bespoke hive assets. The gallery includes two Shadow hive collections. Registered sizes, textures, AI, attacks, and loot are unchanged.
 
 Hive verification: all eight geometry/texture checks passed; animation parity and controller checks passed across 99 non-boss projects; the existing GeckoLib mob/minion asset test passed. Source previews covered all eight castes, warnings, representative walking and final death poses. In-game terrain and combat blending remain playtest checks.
+
+## Starter item theme
+
+Alpha Fang, Moonlit Fang, Living Heartwood, Mutant Wolf Heart, and Ancient Tree Spirit Heart are the reference set for further item artwork. Compare the [packaged preview](../../art/items/starter-theme-preview.png) at actual inventory size before extending the style.
+
+- Use chunky Minecraft pixel shapes, strong charcoal outlines with a deep violet undertone, top-left highlights, and a small set of clearly separated material tones. Keep luminous accents inside the object rather than adding background glow.
+- Preserve biome identity: wolf items use ivory, slate-blue shadows, and icy cyan; tree items use dark oak, warm cut-wood highlights, emerald sap, and a small green leaf. Violet is a shadow accent, not a replacement for each biome's palette.
+- Distinguish item roles by silhouette: Alpha Fang is a twin-fang trophy; Moonlit Fang is one curved tooth with leather binding and a crescent inlay; Living Heartwood is an asymmetric broken shard. Permanent-life rewards use a filled heart with two lobes, a clear notch, and a pointed base.
+- Keep details large enough to survive the shipped 32x32 size. Review the silhouette and identifying motif on both dark and light inventory backgrounds; avoid lettering, frames, floating decorations, or effects that rely on translucent bloom.
+
+The full-size masters live in [art/items/sources](../../art/items/sources); matching `art/items/<id>.json` files preserve their exact built-in image-generation prompts and packaging details. Runtime files remain under `textures/item/<id>.png`, using the existing item model IDs.
+
+Use `import-item.py` for the existing 32x32 RGBA packaging with binary alpha, then run `verify-items.py` and `review-items.py` with the selected IDs. The reference sheet shows each shipped texture enlarged with nearest-neighbor scaling and at 1x on light and dark backgrounds. A Minecraft client check is still needed for lighting and GUI-scale appearance.
+
+## Matching summon and essence items
+
+The [boss-item pair preview](../../art/items/boss-item-pairs-preview.png) preserves early reference variants for Ancient Heartwood and the Mutant Zombie, Fossil Tyrant, and Thunderbird sigil/essence pairs. The complete gallery shows the current shipped designs, including the physical marrow, tooth, feather and quill named in-game. Full-size reference masters and available built-in generation prompts follow the same source and provenance paths as the starter set. Two retained reference sigils (Mutant Zombie and Fossil Tyrant) have preserved source PNGs; their original prompts were unavailable and are explicitly marked in their metadata.
+
+| Family | Shared materials and palette | Summon motif | Essence motif |
+| --- | --- | --- | --- |
+| Mutant Zombie | Cracked dark iron, muted olive, toxic chartreuse | Round claw-mark talisman with a small bone charm | Raw green shard held by broken iron plates |
+| Fossil Tyrant | Sandstone, aged ivory, dark umber, warm amber | Fossil medallion with a large diagonal tooth | Amber shard with embedded teeth and broken stone |
+| Thunderbird | Navy feathers, slate-violet shadows, electric cyan, gold | Feather-edged diamond medallion with a lightning bolt | Blue crystal with a gold fracture and feather base |
+
+Ancient Heartwood completes the tree family's summoning artwork with a round bark-and-root relic and an emerald growth-ring spiral. Its disk silhouette distinguishes it from the broken Living Heartwood shard and the filled Tree Spirit Heart.
+
+For subsequent families, keep summon items visibly constructed as ritual artifacts, essences visibly broken or raw, and permanent-life items heart-shaped. Share the family's materials with its existing heart, retain the charcoal outline and top-left lighting, and keep attached charms and bright accents inside the transparent sprite margins. Avoid floating particles that become noise at inventory size.
+
+Check `lang/en_us.json` before designing from an internal `_sigil` or `_essence` ID. Player-facing names such as Frozen Wyrm Egg, Kraken Pearl, Hexbound Eye, and Freed Soul require those recognizable physical forms rather than generic medallions or crystal shards. `item-art.json` records the corrected subjects while preserving existing gameplay names and IDs.
+
+## Item, crop, food, and station artwork
+
+The original 92-icon inventory-art catalog is `item-art.json`: 22 farming/food icons, three inventory upgrades, 17 heart icons (including the legacy ocean item), 16 summons, 17 essences, and 17 regional materials. The catalog retains existing item IDs. Every runtime icon is a 32x32 RGBA PNG with binary transparency; recipes, registration, stack limits, and gameplay are unchanged.
+
+Open [the portable artwork gallery](item-gallery.html) directly, or visit `/tools/assets/item-gallery.html` on the existing preview server. It embeds the shipped textures and source renders, with name/category filters, enlarged pixels, and native-size light/dark comparisons. Rebuild it with `python tools/assets/build-item-gallery.py` after art changes. Python asset tools require Pillow.
+
+Each of the six crops has eight native Java block models and matching editable projects in `art/blockbench/<crop>_crop/`. Their 128x128 atlases contain four 64x64 material tiles. Age 7 retains the existing `<crop>_ripe` resource ID. The Cooking Station has an editable `art/blockbench/cooking_station/CookingStation.bbmodel` project and a four-tile 128x128 atlas. Its full-cube geometry and collision remain unchanged. Corn fits within one block; crop roots meet the farmland surface at model Y=-1.
+
+Artwork was created with the built-in image-generation tool, then packaged locally with `prepare-texture.py`. Item generation prompts are saved in `art/items/<id>.json`; block prompts are in each crop/station project folder. Reference masters are retained in `art/items/sources/`; other working full-resolution renders are cached in the ignored `build/art-source/` folder. The shipped PNGs and embedded Blockbench textures are sufficient to edit the committed assets.
+
+- `python tools/assets/verify-items.py` checks the 92 cataloged item definitions, texture links, PNG dimensions, transparency, and provenance coverage. Pass IDs to check one completed batch. New cuisine artwork is outside this catalog; use `python tools/assets/verify-cuisine-art.py` for its models, atlas, and crop stages.
+- `python tools/assets/verify-block-art.py` checks all 48 crop stages, eight-age blockstate coverage, legal geometry/UV bounds, embedded texture/export parity, and the full-cube station.
+- `python tools/assets/review-items.py <id> ...` writes an enlarged/native-size contact sheet to `build/art-source/item-review.png`.
+- `python tools/assets/review-blocks.py onion garlic tomato rice corn pepper cooking_station` writes a source-geometry contact sheet to `build/art-source/block-review.png`.
+
+`import-item.py <id> <source.png> <base64-prompt> --new-only` packages a missing icon while preserving any existing runtime PNG. Omit `--new-only` only when intentionally replacing a reviewed asset. The importer changes only the model's `layer0` reference and preserves its formatting.
+
+The crop/station authoring scripts generate initial models and overwrite their exports. Do not rerun them over manually edited Blockbench projects. Keep exported JSON and embedded textures in sync after manual changes. Gallery renders do not reproduce Minecraft lighting, GUI scaling, crop targeting, or in-world appearance; those require a live-client check.
+
+## Additional boss essences
+
+The [boss-essence preview](../../art/items/boss-essences-preview.png) preserves reference variants for five more families, matching their existing hearts while using raw-material silhouettes. The complete artwork gallery shows the current shipped textures.
+
+| Family | Palette | Essence motif |
+| --- | --- | --- |
+| Titan Boa | Jade and emerald, aged ivory, a small amber accent | Scaled green shard with an embedded curved fang |
+| Baba Yaga | Witch violet, dark plum, blackthorn brown, ivory | Forked crystal held by twisted roots with a bone bead |
+| Mountain Titan | Charcoal granite, iron gray, amber-orange | Broad broken stone with one branching mineral fissure |
+| Ice Wyrm | Frosted pale blue, white, cyan, cobalt | Narrow glacial shard with fused hornlets and dragon scales |
+| Kraken | Deep teal, midnight indigo, turquoise | Curved abyssal shard wrapped in tentacles with large suckers |
+
+Keep Mountain Titan's orange inside the stone seam, Ice Wyrm's highlights pale and cold, and Kraken's body dark teal so the families remain distinct at inventory size. Reference PNGs are retained in `art/items/sources/`; current shipped variants use the prompts in `art/items/<id>.json`.
