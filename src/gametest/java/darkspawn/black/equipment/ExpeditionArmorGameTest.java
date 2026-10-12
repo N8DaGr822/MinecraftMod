@@ -139,14 +139,14 @@ public final class ExpeditionArmorGameTest {
 				helper.assertTrue(Temperature.climate(player) == dry, "Extinguished fire provides no heat");
 				level.setBlockAndUpdate(pos.above(14), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState());
 			} catch (RuntimeException | Error failure) { remove(player); helper.setBiome(originalBiome); helper.setTime(originalTime); throw failure; }
-			helper.runAfterDelay(5, () -> {
+			// Shelter Sampling: Sky visibility follows asynchronous lighting, not a fixed number of server ticks.
+			helper.startSequence().thenWaitUntil(() -> helper.assertTrue(!level.canSeeSky(player.blockPosition()), "Roof lighting has reached the player")).thenExecute(() -> {
 				try {
 					helper.assertTrue(Math.abs(Temperature.climate(player)) < TemperatureState.WARNING, "Deep cover moderates desert climate for spelunking");
 					Temperature.state(player).wetSeconds = 1; Temperature.tick(player);
 					helper.assertTrue(Temperature.state(player).wetSeconds == 0, "Sheltered players dry naturally");
 				} finally { level.setBlockAndUpdate(pos.above(14), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()); remove(player); helper.setBiome(originalBiome); helper.setTime(originalTime); }
-				helper.succeed();
-			});
+			}).thenSucceed();
 		});
 	}
 	private static void styleArmor(ServerPlayer player, String style) {
