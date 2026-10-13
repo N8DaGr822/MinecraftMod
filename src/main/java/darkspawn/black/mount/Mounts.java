@@ -22,6 +22,17 @@ public final class Mounts {
     public static final EntityType<RidingGolem> RIDING_GOLEM = register("riding_golem", RidingGolem::new, 1.8F, 2.85F, 2.85F);
     public static final EntityType<Sasquatch> SASQUATCH = register("sasquatch", Sasquatch::new, 1.6F, 2.85F, 2.85F);
     public static final EntityType<Cerberus> CERBERUS = register("cerberus", Cerberus::new, 1.7F, 1.7F, 1.45F);
+    public static final EntityType<Leopard> LEOPARD = register("leopard", Leopard::new, 1.2F, 1.3F, 1.1F);
+    public static final EntityType<GiantScorpion> GIANT_SCORPION = register("giant_scorpion", GiantScorpion::new, 1.7F, 1.5F, .95F);
+    public static final EntityType<Crocodile> CROCODILE = register("crocodile", Crocodile::new, 1.5F, .9F, .7F);
+    public static final EntityType<Seahorse> SEAHORSE = registerSeahorse();
+    public static final EntityType<GiantMole> GIANT_MOLE = register("giant_mole", GiantMole::new, 1.5F, 1.2F, .95F);
+    private static EntityType<Seahorse> registerSeahorse() {
+        var key = ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id("seahorse"));
+        return Registry.register(BuiltInRegistries.ENTITY_TYPE, key,
+            EntityType.Builder.of(Seahorse::new, MobCategory.WATER_CREATURE).sized(1.1F, 2.1F)
+                .passengerAttachments(1.45F).clientTrackingRange(12).updateInterval(1).noLootTable().build(key));
+    }
     private static <T extends PrototypeMount> EntityType<T> register(String id, EntityType.EntityFactory<T> factory, float width, float height, float seat) {
         var key = ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id(id));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, key,
@@ -35,6 +46,13 @@ public final class Mounts {
 				.passengerAttachments(1.35F).clientTrackingRange(12).updateInterval(1).noLootTable().build(key));
 	}
 	public static void initialize() {
+		// Cerberus Rider: Protection ends on dismount and never cancels bypass-invulnerability damage.
+		net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, damage) ->
+			!source.is(net.minecraft.tags.DamageTypeTags.IS_FIRE)
+				|| source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)
+				|| !(entity.getVehicle() instanceof Cerberus mount && mount.isAlive() && mount.getControllingPassenger() == entity));
+		SkyCatSpawning.initialize();
+		MountSpawning.initialize();
 		FabricDefaultAttributeRegistry.register(GRIFFIN, Griffin.attributes());
         FabricDefaultAttributeRegistry.register(WOOLLY_RHINO, WoollyRhino.attributes());
         FabricDefaultAttributeRegistry.register(FLYING_SQUIRREL, FlyingSquirrel.attributes());
@@ -44,6 +62,11 @@ public final class Mounts {
         FabricDefaultAttributeRegistry.register(RIDING_GOLEM, RidingGolem.attributes());
         FabricDefaultAttributeRegistry.register(SASQUATCH, Sasquatch.attributes());
         FabricDefaultAttributeRegistry.register(CERBERUS, Cerberus.attributes());
+        FabricDefaultAttributeRegistry.register(LEOPARD, Leopard.attributes());
+        FabricDefaultAttributeRegistry.register(GIANT_SCORPION, GiantScorpion.attributes());
+        FabricDefaultAttributeRegistry.register(CROCODILE, Crocodile.attributes());
+        FabricDefaultAttributeRegistry.register(SEAHORSE, Seahorse.attributes());
+        FabricDefaultAttributeRegistry.register(GIANT_MOLE, GiantMole.attributes());
 		PayloadTypeRegistry.serverboundPlay().register(GriffinControlsPayload.TYPE, GriffinControlsPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(GriffinControlsPayload.TYPE, (payload, context) -> {
 			if (context.player().getVehicle() instanceof PrototypeMount mount && mount.getId() == payload.entityId()) {

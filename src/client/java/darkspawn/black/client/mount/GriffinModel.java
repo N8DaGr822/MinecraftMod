@@ -116,21 +116,22 @@ public final class GriffinModel extends EntityModel<GriffinRenderState> {
 		super.setupAnim(state);
 		head.xRot = state.xRot * (float) (Math.PI / 180);
 		head.yRot = Math.clamp(state.yRot, -55F, 55F) * (float) (Math.PI / 180);
-		float flap = state.flying ? .15F + (float) Math.sin(state.ageInTicks * .35F) * .5F : .85F;
+		float flight = state.flightPose;
+		float flap = net.minecraft.util.Mth.lerp(flight, .85F, .15F + (float) Math.sin(state.ageInTicks * .35F) * .5F);
 		leftWing.zRot = flap;
 		rightWing.zRot = -flap;
 		// Fold back along the flanks, keeping primaries clear of the ground and rider.
-		leftWing.yRot = state.flying ? -.12F : -.95F;
+		leftWing.yRot = net.minecraft.util.Mth.lerp(flight, -.95F, -.12F);
 		rightWing.yRot = -leftWing.yRot;
-		leftTip.yRot = state.flying ? -.08F : -1.05F;
+		leftTip.yRot = net.minecraft.util.Mth.lerp(flight, -1.05F, -.08F);
 		rightTip.yRot = -leftTip.yRot;
-		leftTip.zRot = state.flying ? (float) Math.sin(state.ageInTicks * .35F - .65F) * .22F : .15F;
+		leftTip.zRot = net.minecraft.util.Mth.lerp(flight, .15F, (float) Math.sin(state.ageInTicks * .35F - .65F) * .22F);
 		rightTip.zRot = -leftTip.zRot;
 		for (int i = 0; i < legs.length; i++) {
-			legs[i].xRot = state.flying ? .7F : (float) Math.cos(state.walkAnimationPos * .65F
-				+ (i == 0 || i == 3 ? 0 : Math.PI)) * state.walkAnimationSpeed * 1.1F;
+			legs[i].xRot = net.minecraft.util.Mth.lerp(flight, (float) Math.cos(state.walkAnimationPos * .65F
+				+ (i == 0 || i == 3 ? 0 : Math.PI)) * state.walkAnimationSpeed * 1.1F, .7F);
 		}
 		tail.yRot = (float) Math.sin(state.ageInTicks * .07F) * .15F;
-		tail.xRot = state.flying ? -.15F : -.35F;
+		tail.xRot = net.minecraft.util.Mth.lerp(flight, -.35F, -.15F);
 	}
 }

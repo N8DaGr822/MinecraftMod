@@ -146,5 +146,5 @@ for (const id of ids) {
   jobs.push([file,model],[`src/main/resources/assets/darkspawn/geckolib/animations/entity/${id}.animation.json`,output]);
   console.log(`${id}: ${modified.join(', ')}`);
 }
-if(write)for(const [file,data]of jobs)fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
+if(write)for(const [file,data]of jobs)fs.writeFileSync(file,file.endsWith('.animation.json')?require('./rig.cjs').animationJson(data):JSON.stringify(data,null,2)+'\n');
 else console.log('Dry run. Pass --write to update the four projects and their animation exports.');

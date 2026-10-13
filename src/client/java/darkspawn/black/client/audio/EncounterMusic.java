@@ -20,15 +20,19 @@ public final class EncounterMusic {
 	private static Object world;
 	private static String key;
 	private static int ticks;
+	private static float warningGain = 1F;
 	private EncounterMusic() {}
 	public static void initialize() { ClientTickEvents.END_CLIENT_TICK.register(EncounterMusic::tick); }
 	public static boolean active() { return key != null || !SCORES.isEmpty(); }
 	private static void tick(Minecraft client) {
 		if (client.level != world) {
 			for (var score : SCORES) client.getSoundManager().stop(score);
-			SCORES.clear(); boss = null; key = null; world = client.level;
+			SCORES.clear(); boss = null; key = null; world = client.level; warningGain = 1F;
 		}
 		if (client.isPaused()) return;
+		// Warning Audibility: Briefly lower only our encounter score while the synchronized telegraph is active.
+		float targetGain = boss != null && boss.isAlive() && CreatureAudio.warning(boss) > 0 ? .45F : 1F;
+		warningGain += Math.clamp(targetGain - warningGain, -.15F, .04F);
 		for (var score : SCORES) {
 			score.age++;
 			if (score.fading && ++score.fadeTicks > 45) {
@@ -74,6 +78,7 @@ public final class EncounterMusic {
 		private int fadeTicks;
 		private int age;
 		private final float targetVolume;
+		private float envelope = .001F;
 		void finish() { stop(); }
 		Score(String key) {
 			super(DarkspawnSounds.get(key), SoundSource.MUSIC, RandomSource.create());
@@ -82,8 +87,9 @@ public final class EncounterMusic {
 			volume = .001F; pitch = 1;
 		}
 		@Override public void tick() {
-			volume = fading ? Math.max(0, volume - .0125F) : Math.min(targetVolume, volume + .00625F);
-			if (fading && volume <= 0) stop();
+			envelope = fading ? Math.max(0, envelope - .0125F) : Math.min(targetVolume, envelope + .00625F);
+			volume = envelope * warningGain;
+			if (fading && envelope <= 0) stop();
 		}
 	}
 }

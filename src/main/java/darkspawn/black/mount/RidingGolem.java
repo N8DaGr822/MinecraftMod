@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
-/** Summon-only riding prototype. */
+/** Naturally spawning riding prototype. */
 public final class RidingGolem extends PrototypeMount {
     public RidingGolem(EntityType<? extends RidingGolem> type, Level level) { super(type, level); }
     public static AttributeSupplier.Builder attributes() {

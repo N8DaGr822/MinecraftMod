@@ -1,0 +1,81 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:written_book_content": {
+                "title": "Quarry Shrine",
+                "author": "An expedition survivor",
+                "pages": [
+                  {
+                    "text": "Quarry Shrine\n\nThis site can be explored before the first Ender Dragon victory. The boss ritual requires that world victory and never starts by itself."
+                  },
+                  {
+                    "text": "Preparation\n\nCombine this region's discovery material with dragon's breath for an alternative summon recipe. Existing summon recipes still work. These supplies are provisions, not victory rewards."
+                  },
+                  {
+                    "text": "Use the Mountain Titan summon on chiseled stone bricks in its mountain habitat under open sky. Reserve a 12-block-wide, 20-block-high space."
+                  }
+                ],
+                "resolved": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 3,
+        "max": 5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_nugget",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:torch",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bread",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "random_sequence": "darkspawn:chests/quarry_shrine"
+}

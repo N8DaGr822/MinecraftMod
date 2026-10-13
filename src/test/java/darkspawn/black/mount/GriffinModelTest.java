@@ -16,6 +16,7 @@ class GriffinModelTest {
 		var state = stateClass.getConstructor().newInstance();
 		for (boolean flying : new boolean[] {false, true}) {
 			stateClass.getField("flying").setBoolean(state, flying);
+			stateClass.getField("flightPose").setFloat(state, flying ? 1F : 0F);
 			for (int frame = 0; frame < 40; frame++) {
 				stateClass.getField("ageInTicks").setFloat(state, frame);
 				modelClass.getMethod("setupAnim", stateClass).invoke(model, state);

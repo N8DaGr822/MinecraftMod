@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AMA",
+    "RDR",
+    "AMA"
+  ],
+  "key": {
+    "A": "darkspawn:contaminated_alloy",
+    "M": "darkspawn:quarantine_module",
+    "R": "minecraft:redstone",
+    "D": "darkspawn:research_data"
+  },
+  "result": {
+    "id": "darkspawn:containment_beacon"
+  }
+}

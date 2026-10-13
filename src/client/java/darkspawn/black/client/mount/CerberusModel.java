@@ -12,15 +12,21 @@ public final class CerberusModel extends EntityModel<GriffinRenderState> {
     private final ModelPart head, tail;
     private final ModelPart[] legs;
 
+
+    private final ModelPart leftHead, rightHead;
+    private final ModelPart tailTip;
     public CerberusModel(ModelPart root) {
         super(root); head=root.getChild("head"); tail=root.getChild("tail");
         legs=new ModelPart[]{root.getChild("front_left"),root.getChild("front_right"),root.getChild("back_left"),root.getChild("back_right")};
 
+
+        leftHead=root.getChild("left_head"); rightHead=root.getChild("right_head");
+        tailTip=tail.getChild("tail_tip");
     }
     public static LayerDefinition createBodyLayer() {
         var mesh=new MeshDefinition(); var root=mesh.getRoot();
         var body = root.addOrReplaceChild("body", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-5, -5, -11, 10, 10, 22), PartPose.offset(0, 7, 0));
+            .texOffs(0, 0).addBox(-7, -5, -11, 14, 10, 22), PartPose.offset(0, 7, 0));
         var left_head = root.addOrReplaceChild("left_head", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-4, -5, -5, 8, 8, 8)
             .texOffs(0, 42).addBox(-3, -1, -9, 6, 4, 5), PartPose.offset(-9, 7, -10));
@@ -30,6 +36,8 @@ public final class CerberusModel extends EntityModel<GriffinRenderState> {
         var left_head_ears = left_head.addOrReplaceChild("left_head_ears", CubeListBuilder.create()
             .texOffs(0, 0).addBox(2, -9, 0, 2, 5, 3)
             .texOffs(0, 0).addBox(-4, -9, 0, 2, 5, 3), PartPose.offset(0, 0, 0));
+        var left_head_neck = root.addOrReplaceChild("left_head_neck", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-4, -3, -5, 8, 9, 9), PartPose.offset(-5.8500000000000005F, 7, -7));
         var left_head_horns = left_head.addOrReplaceChild("left_head_horns", CubeListBuilder.create()
             .texOffs(0, 70).addBox(3, -10, 1, 2, 7, 2)
             .texOffs(0, 70).addBox(-5, -10, 1, 2, 7, 2), PartPose.offset(0, 0, 0));
@@ -42,6 +50,8 @@ public final class CerberusModel extends EntityModel<GriffinRenderState> {
         var head_ears = head.addOrReplaceChild("head_ears", CubeListBuilder.create()
             .texOffs(0, 0).addBox(2, -9, 0, 2, 5, 3)
             .texOffs(0, 0).addBox(-4, -9, 0, 2, 5, 3), PartPose.offset(0, 0, 0));
+        var head_neck = root.addOrReplaceChild("head_neck", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-4, -3, -5, 8, 9, 9), PartPose.offset(0, 7, -7));
         var head_horns = head.addOrReplaceChild("head_horns", CubeListBuilder.create()
             .texOffs(0, 70).addBox(3, -10, 1, 2, 7, 2)
             .texOffs(0, 70).addBox(-5, -10, 1, 2, 7, 2), PartPose.offset(0, 0, 0));
@@ -54,32 +64,48 @@ public final class CerberusModel extends EntityModel<GriffinRenderState> {
         var right_head_ears = right_head.addOrReplaceChild("right_head_ears", CubeListBuilder.create()
             .texOffs(0, 0).addBox(2, -9, 0, 2, 5, 3)
             .texOffs(0, 0).addBox(-4, -9, 0, 2, 5, 3), PartPose.offset(0, 0, 0));
+        var right_head_neck = root.addOrReplaceChild("right_head_neck", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-4, -3, -5, 8, 9, 9), PartPose.offset(5.8500000000000005F, 7, -7));
         var right_head_horns = right_head.addOrReplaceChild("right_head_horns", CubeListBuilder.create()
             .texOffs(0, 70).addBox(3, -10, 1, 2, 7, 2)
             .texOffs(0, 70).addBox(-5, -10, 1, 2, 7, 2), PartPose.offset(0, 0, 0));
         var front_right = root.addOrReplaceChild("front_right", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 11, 4)
-            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(-4, 12, -7));
+            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(-6, 12, -7));
         var back_right = root.addOrReplaceChild("back_right", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 11, 4)
-            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(-4, 12, 8));
+            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(-6, 12, 8));
         var front_left = root.addOrReplaceChild("front_left", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 11, 4)
-            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(4, 12, -7));
+            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(6, 12, -7));
         var back_left = root.addOrReplaceChild("back_left", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 11, 4)
-            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(4, 12, 8));
+            .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(6, 12, 8));
         var tail = root.addOrReplaceChild("tail", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-2, -2, 0, 4, 4, 12)
-            .texOffs(0, 70).addBox(-1, -1, 10, 2, 2, 10), PartPose.offset(0, 10, 10));
+            .texOffs(0, 0).addBox(-2.5F, -2.5F, 0, 5, 5, 8)
+            .texOffs(0, 0).addBox(-1.5F, -1.5F, 7, 3, 3, 9), PartPose.offset(0, 10, 10));
+        var tail_tip = tail.addOrReplaceChild("tail_tip", CubeListBuilder.create()
+            .texOffs(0, 70).addBox(-1, -1, 0, 2, 2, 6), PartPose.offset(0, 0, 15));
         return LayerDefinition.create(mesh,128,128);
     }
     @Override public void setupAnim(GriffinRenderState state) {
         super.setupAnim(state);
         head.yRot=Math.clamp(state.yRot,-40F,40F)*(float)(Math.PI/180);
-        head.xRot=state.xRot*(float)(Math.PI/180);
-        for(int i=0;i<legs.length;i++) legs[i].xRot=state.flying?-.4F:(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+        head.xRot=Math.clamp(state.xRot,-30F,30F)*(float)(Math.PI/180);
+        float flight=state.flightPose;
+        for(int i=0;i<legs.length;i++) {
+            float walk=(float)Math.cos(state.walkAnimationPos*.8F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+            legs[i].xRot=net.minecraft.util.Mth.lerp(flight,walk,-.4F);
+
+
+
+        }
         tail.yRot=(float)Math.sin(state.ageInTicks*.07F)*.12F;
+
+
+
+        leftHead.yRot=head.yRot*.8F+(float)Math.sin(state.ageInTicks*.055F)*.12F; rightHead.yRot=head.yRot*.8F+(float)Math.sin(state.ageInTicks*.055F+2F)*.12F; leftHead.xRot=head.xRot; rightHead.xRot=head.xRot;
+        tailTip.yRot=(float)Math.sin(state.ageInTicks*.07F-.7F)*.2F;
 
     }
 }

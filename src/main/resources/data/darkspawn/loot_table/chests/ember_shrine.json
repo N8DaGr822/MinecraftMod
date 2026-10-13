@@ -1,0 +1,81 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:written_book_content": {
+                "title": "Ember Shrine",
+                "author": "An expedition survivor",
+                "pages": [
+                  {
+                    "text": "Ember Shrine\n\nThis site can be explored before the first Ender Dragon victory. The boss ritual requires that world victory and never starts by itself."
+                  },
+                  {
+                    "text": "Preparation\n\nCombine all three regional organs (Crimson, Warped, Infernal) with dragon's breath for the alternative summon recipe. Existing summon recipes still work. These supplies are provisions, not victory rewards."
+                  },
+                  {
+                    "text": "Use the Netherborn summon on magma in crimson or warped forest, Nether wastes, or basalt deltas. Reserve a 12-block-wide, 14-block-high space. Prepare for fire."
+                  }
+                ],
+                "resolved": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 3,
+        "max": 5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nether_brick",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gold_nugget",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:magma_cream",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "random_sequence": "darkspawn:chests/ember_shrine"
+}

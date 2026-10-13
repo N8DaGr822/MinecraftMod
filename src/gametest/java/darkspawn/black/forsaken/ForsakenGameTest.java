@@ -115,7 +115,10 @@ public final class ForsakenGameTest {
 			helper.assertTrue(Forsaken.state(player).entrance.pos().equals(first) && Forsaken.state(other).entrance.pos().equals(second), "Shared destination does not overwrite entrance ownership");
 			for (var p : new ServerPlayer[] { player, other }) {
 				p.teleportTo(Forsaken.EXIT.getX() + .5, Forsaken.EXIT.getY(), Forsaken.EXIT.getZ() + 1.5); ready(p);
+				ForsakenContent.contaminate(p);
+				helper.assertTrue(p.hasEffect(ForsakenContent.CONTAMINATION), "Exposure exists before extraction");
 				helper.assertTrue(Forsaken.leave(p, Forsaken.EXIT), "Both travelers can extract");
+				helper.assertTrue(!p.hasEffect(ForsakenContent.CONTAMINATION), "Successful extraction cures contamination before saving");
 				var gate = p == player ? first : second;
 				helper.assertTrue(p.level() == helper.getLevel() && p.position().distanceToSqr(Vec3.atCenterOf(gate)) < 40, "Each returns near their own gate");
 				helper.assertTrue(p.getInventory().getItem(0).getHoverName().getString().equals("Expedition supplies"), "Item components survive round trip");

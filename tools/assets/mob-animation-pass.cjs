@@ -279,5 +279,5 @@ for (const entry of roster) {
   jobs.push([file,model],[`src/main/resources/assets/darkspawn/geckolib/animations/entity/${id}.animation.json`,output]);
   console.log(`${id}: ${form.toLowerCase()}, ${behavior.toLowerCase()}, ${model.animations.length} clips`);
 }
-if(write)for(const [file,data]of jobs)fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
+if(write)for(const [file,data]of jobs)fs.writeFileSync(file,file.endsWith('.animation.json')?require('./rig.cjs').animationJson(data):JSON.stringify(data,null,2)+'\n');
 console.log(`${write?'Saved':'Dry run:'} ${changed} clips across ${roster.length} creatures.`);

@@ -1,6 +1,6 @@
 # Darkspawn expansion plan: discover the bosses
 
-Status: **first milestone implemented for alpha.3**, October 9, 2026. Druid Shrines and Hunter Camps have native generation, three templates each, lazy loot chests, and ritual clue books. The remaining 14 boss landmarks are still planned. The acceptance checklist below distinguishes intended live review from automated validation recorded in the development roadmap.
+Status: **all sixteen boss landmark families implemented in development source**, October 13, 2026. The regional pass adds fourteen families and 42 templates to the six existing shrine/camp templates. Every site has a guaranteed clue book and finite provision loot. No new JAR or release is implied. The acceptance checklist below distinguishes intended live review from automated validation recorded in the development roadmap.
 
 ## First playable milestone: forest and taiga
 
@@ -35,7 +35,7 @@ Keep the first structures compact and recognizable. No randomly placed trophy or
 
 ## Second milestone: regional landmarks
 
-Ship in small groups after the first two prove the placement/loot pipeline. The names and sizes below are design proposals.
+Implemented in the regional pass. The table preserves the design direction; authored sites use 25×25 footprints with central ritual clearance and perimeter ruins. The Kraken wreck is an underwater discovery stop, with the ritual performed at the surface. Full procedural buildings, archaeology interactions, and a moving witch hut are not part of these templates.
 
 | Boss | Landmark | Design hook |
 | --- | --- | --- |
@@ -56,9 +56,26 @@ Ship in small groups after the first two prove the placement/loot pipeline. The 
 
 Underground, underwater, Nether, and End placement each need their own terrain tests. Do not reuse a surface-height rule for every structure. Regional particles currently signal suitable habitat, not the presence or direction of one of these future structures.
 
+### Automated verification of the regional pass
+
+The five landmark server tests passed: all 48 templates across four rotations preserve their chests, ritual volumes, saved bounds and rotations; 480 loot rolls preserve readable clues and exclude culinary/trophy victory rewards; native chest placement and repeat opening work across all sixteen sites. Natural generation finds every regional family across seeds `1`, `42`, `7319`, `-49017`, and `20261009`, repeats deterministically, and rejects excluded biome predicates. This tests native generation directly, not a player `/locate` trip. The rare Mushroom Fields sample uses a wider bounded search to obtain eligible terrain; this does not change runtime generation cost or promise a travel distance. Log: `build/regional-landmark-tests.log`.
+
+Compilation, both landmark unit tests, and both existing research-bunker server regressions also passed (`build/regional-bunker-regression.log`). The unit checks validate native palettes/properties, coordinates, loot references, and cavern rejection cases. No packaging or live client testing was performed.
+
+### Regional placement and reproducible assets
+
+- `tools/assets/regional-landmarks.py` authors three variants per family, native NBT, lazy loot tables, biome tags, independent structure sets, and readable voxel blueprints. Running `tools/assets/boss-structures.py` regenerates both generations of landmarks and the shared sixteen-family structure tag.
+- All fourteen site IDs and biome families are listed in the README's **Boss discovery structures** section. Native `/locate structure darkspawn:<site>` and `/place template darkspawn:landmarks/<site>_0` work with these IDs; variants are 0–2.
+- Surface and End sites use 49 terrain samples over the footprint and at most three blocks of sampled cut/fill. Unsupported End columns are rejected. End sites use the existing outer-island boss biome tag.
+- Cave and Nether sites cache 49 noise columns and scan bounded heights, never live chunks. They require foundation support within three blocks, natural center headroom for the boss, an open cardinal edge, retained roof, and no sampled fluid pockets. Cave floors are at or below Y=40; Nether floors are Y=32–96. Perimeter rock can be carved inside the authored footprint; a naturally open cavern is required at the center and an exit edge.
+- Wrecks use ocean-floor heights and require fourteen blocks of open water above the supported seabed. Ice-covered columns are rejected. The flooded hull has side openings and no central ceiling; it does not substitute for the Kraken's open-water ritual.
+- Farm excavation sets exclude village candidate areas and hive sets exclude Ancient City candidate areas within twelve chunks using native structure-set exclusion zones. This is conservative candidate exclusion, not a retroactive scan of generated structures.
+- Template changes affect new terrain only. Existing starts retain their saved IDs and rotations. No bosses or helpers are embedded in templates; no hearts, trophies, premium boss ingredients, or complete summons appear in provision loot.
+- The offline gallery from `tools/assets/preview-structures.cjs` covers all 48 templates. Actual Minecraft lighting, terrain seams, discovery frequency, multiplayer exploration, and final visual balance remain live acceptance work.
+
 ## Following expansions, in priority order
 
-1. **Exploration journal and maps:** combine cookbook, boss clues, discovered landmarks, and existing advancement progress. Add a structure compass only after structure tags and saved discovery ownership are stable.
+1. **Exploration journal and maps:** the unified Journal now combines cookbook knowledge, boss clues, personal landmark visits, consumed hearts and credited kills. See [implementation rules](journal-implementation.md). Discovery maps and a structure compass remain separate work.
 2. **Archaeology and regional loot:** fossil fragments, extinct seeds, fishing clues, and alternate scroll sources. Preserve existing recipes and avoid extra permanent hearts.
 3. **Rematches and cosmetics:** awakened versions of existing bosses, improved trophies, banners, and trims. Reward ingredients/materials/cosmetics; retain the current heart cap.
 4. **Regional events and sound:** bounded optional encounters, distinct warning sounds, and carefully scoped post-victory changes. No unsolicited damage to terrain or builds.

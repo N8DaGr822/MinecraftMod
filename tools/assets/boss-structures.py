@@ -139,4 +139,8 @@ def generate():
         for variant in range(3): print(site,variant,template(site,variant),'blocks')
     write(RES/'tags/worldgen/structure/boss_landmarks.json',{'replace':False,'values':['darkspawn:druid_shrine','darkspawn:hunter_camp']})
 
-if __name__=='__main__': generate()
+if __name__=='__main__':
+    generate()
+    # Generate the regional additions last so the shared landmark tag retains all sixteen families.
+    import runpy
+    runpy.run_path(str(Path(__file__).with_name('regional-landmarks.py')))['generate']()

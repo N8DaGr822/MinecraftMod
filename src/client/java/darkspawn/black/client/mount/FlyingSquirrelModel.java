@@ -12,10 +12,16 @@ public final class FlyingSquirrelModel extends EntityModel<GriffinRenderState> {
     private final ModelPart head, tail;
     private final ModelPart[] legs;
     private final ModelPart leftWing, rightWing;
+
+
+
     public FlyingSquirrelModel(ModelPart root) {
         super(root); head=root.getChild("head"); tail=root.getChild("tail");
         legs=new ModelPart[]{root.getChild("front_left"),root.getChild("front_right"),root.getChild("back_left"),root.getChild("back_right")};
         leftWing=root.getChild("left_wing"); rightWing=root.getChild("right_wing");
+
+
+
     }
     public static LayerDefinition createBodyLayer() {
         var mesh=new MeshDefinition(); var root=mesh.getRoot();
@@ -33,7 +39,8 @@ public final class FlyingSquirrelModel extends EntityModel<GriffinRenderState> {
             .texOffs(96, 100).addBox(3, -3, -5, 2, 3, 2)
             .texOffs(96, 100).addBox(-5, -3, -5, 2, 3, 2), PartPose.offset(0, 0, 0));
         var right_wing = root.addOrReplaceChild("right_wing", CubeListBuilder.create()
-            .texOffs(0, 70).addBox(-10, 0, -8, 10, 1, 17), PartPose.offset(-5, 16, 0));
+            .texOffs(0, 70).addBox(-7, 0, -7, 7, 1, 14)
+            .texOffs(0, 42).addBox(-7, 0, -6, 1, 1, 12), PartPose.offset(-5, 16, 0));
         var front_right = root.addOrReplaceChild("front_right", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 5, 4)
             .texOffs(96, 100).addBox(-2, 4, -3, 4, 1, 5), PartPose.offset(-5, 18, -6));
@@ -41,7 +48,8 @@ public final class FlyingSquirrelModel extends EntityModel<GriffinRenderState> {
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 5, 4)
             .texOffs(96, 100).addBox(-2, 4, -3, 4, 1, 5), PartPose.offset(-5, 18, 6));
         var left_wing = root.addOrReplaceChild("left_wing", CubeListBuilder.create()
-            .texOffs(0, 70).addBox(0, 0, -8, 10, 1, 17), PartPose.offset(5, 16, 0));
+            .texOffs(0, 70).addBox(0, 0, -7, 7, 1, 14)
+            .texOffs(0, 42).addBox(6, 0, -6, 1, 1, 12), PartPose.offset(5, 16, 0));
         var front_left = root.addOrReplaceChild("front_left", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 5, 4)
             .texOffs(96, 100).addBox(-2, 4, -3, 4, 1, 5), PartPose.offset(5, 18, -6));
@@ -49,17 +57,30 @@ public final class FlyingSquirrelModel extends EntityModel<GriffinRenderState> {
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 5, 4)
             .texOffs(96, 100).addBox(-2, 4, -3, 4, 1, 5), PartPose.offset(5, 18, 6));
         var tail = root.addOrReplaceChild("tail", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-4, -3, 0, 8, 6, 7)
-            .texOffs(0, 0).addBox(-6, -6, 5, 12, 9, 12)
-            .texOffs(0, 42).addBox(-5, -8, 14, 10, 8, 5), PartPose.offset(0, 15, 8));
+            .texOffs(0, 0).addBox(-3, -3, 0, 6, 6, 6)
+            .texOffs(0, 0).addBox(-5, -6, 4, 10, 8, 8)
+            .texOffs(0, 0).addBox(-4, -10, 10, 8, 8, 6)
+            .texOffs(0, 42).addBox(-2.5F, -12, 14, 5, 6, 4), PartPose.offset(0, 15, 8));
         return LayerDefinition.create(mesh,128,128);
     }
     @Override public void setupAnim(GriffinRenderState state) {
         super.setupAnim(state);
         head.yRot=Math.clamp(state.yRot,-40F,40F)*(float)(Math.PI/180);
-        head.xRot=state.xRot*(float)(Math.PI/180);
-        for(int i=0;i<legs.length;i++) legs[i].xRot=state.flying?-.4F:(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+        head.xRot=Math.clamp(state.xRot,-30F,30F)*(float)(Math.PI/180);
+        float flight=state.flightPose;
+        for(int i=0;i<legs.length;i++) {
+            float walk=(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+            legs[i].xRot=net.minecraft.util.Mth.lerp(flight,walk,-.4F);
+
+
+            legs[i].zRot=(i%2==0?-1:1)*flight*.9F;
+        }
         tail.yRot=(float)Math.sin(state.ageInTicks*.07F)*.12F;
-        leftWing.zRot=state.flying?-.08F:.85F; rightWing.zRot=-leftWing.zRot; tail.xRot=state.flying?-.1F:-.4F;
+
+
+
+
+
+        leftWing.zRot=net.minecraft.util.Mth.lerp(flight,.85F,-.08F); rightWing.zRot=-leftWing.zRot; tail.xRot=net.minecraft.util.Mth.lerp(flight,-.4F,-.1F);
     }
 }

@@ -12,31 +12,45 @@ public final class SasquatchModel extends EntityModel<GriffinRenderState> {
     private final ModelPart head, tail;
     private final ModelPart[] legs;
 
+
+
+
     public SasquatchModel(ModelPart root) {
         super(root); head=root.getChild("head"); tail=root.getChild("tail");
         legs=new ModelPart[]{root.getChild("front_left"),root.getChild("front_right"),root.getChild("back_left"),root.getChild("back_right")};
+
+
+
 
     }
     public static LayerDefinition createBodyLayer() {
         var mesh=new MeshDefinition(); var root=mesh.getRoot();
         var body = root.addOrReplaceChild("body", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-9, -10, -5, 18, 20, 10)
-            .texOffs(0, 42).addBox(-6, 9, -4, 12, 4, 8), PartPose.offset(0, -1, 0));
+            .texOffs(0, 42).addBox(-6, 9, -4, 12, 4, 8)
+            .texOffs(0, 0).addBox(-8, -13, 1, 16, 9, 7)
+            .texOffs(0, 42).addBox(-6, -6, -6, 12, 10, 2), PartPose.offset(0, -1, 0));
         var head = root.addOrReplaceChild("head", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-5, -9, -5, 10, 10, 10)
-            .texOffs(0, 42).addBox(-4, -3, -7, 8, 4, 3), PartPose.offset(0, -12, 0));
+            .texOffs(0, 42).addBox(-4, -3, -7, 8, 4, 3), PartPose.offset(0, -10, -3));
         var eyes = head.addOrReplaceChild("eyes", CubeListBuilder.create()
             .texOffs(96, 100).addBox(2, -6, -6, 2, 2, 1)
             .texOffs(96, 100).addBox(-4, -6, -6, 2, 2, 1), PartPose.offset(0, 0, 0));
         var front_right = root.addOrReplaceChild("front_right", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-3, -1, -3, 6, 23, 6)
-            .texOffs(0, 42).addBox(-4, 20, -4, 8, 5, 8), PartPose.offset(-11, -8, 0));
+            .texOffs(0, 0).addBox(-3, -1, -3, 6, 11, 6)
+            .texOffs(0, 0).addBox(-3.5F, 11, -3.5F, 7, 10, 7)
+            .texOffs(0, 42).addBox(-4, 20, -4, 8, 5, 8)
+            .texOffs(0, 42).addBox(-4, 22, -5, 8, 3, 2)
+            .texOffs(0, 0).addBox(-4, 4, 0, 8, 7, 5), PartPose.offset(-11, -8, 0));
         var back_right = root.addOrReplaceChild("back_right", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-3, 0, -3, 6, 11, 6)
             .texOffs(0, 42).addBox(-3, 9, -5, 6, 4, 8), PartPose.offset(-4, 11, 0));
         var front_left = root.addOrReplaceChild("front_left", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-3, -1, -3, 6, 23, 6)
-            .texOffs(0, 42).addBox(-4, 20, -4, 8, 5, 8), PartPose.offset(11, -8, 0));
+            .texOffs(0, 0).addBox(-3, -1, -3, 6, 11, 6)
+            .texOffs(0, 0).addBox(-3.5F, 11, -3.5F, 7, 10, 7)
+            .texOffs(0, 42).addBox(-4, 20, -4, 8, 5, 8)
+            .texOffs(0, 42).addBox(-4, 22, -5, 8, 3, 2)
+            .texOffs(0, 0).addBox(-4, 4, 0, 8, 7, 5), PartPose.offset(11, -8, 0));
         var back_left = root.addOrReplaceChild("back_left", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-3, 0, -3, 6, 11, 6)
             .texOffs(0, 42).addBox(-3, 9, -5, 6, 4, 8), PartPose.offset(4, 11, 0));
@@ -44,15 +58,28 @@ public final class SasquatchModel extends EntityModel<GriffinRenderState> {
             .texOffs(0, 42).addBox(-5, -4, 0, 10, 8, 1), PartPose.offset(0, 3, 5));
         var brows = head.addOrReplaceChild("brows", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-5, -8, -6, 10, 3, 2)
-            .texOffs(0, 0).addBox(-4, 0, -6, 8, 4, 4), PartPose.offset(0, 0, 0));
+            .texOffs(0, 0).addBox(-4, 0, -6, 8, 4, 4)
+            .texOffs(0, 0).addBox(-2, 3, -5, 4, 3, 3), PartPose.offset(0, 0, 0));
         return LayerDefinition.create(mesh,128,128);
     }
     @Override public void setupAnim(GriffinRenderState state) {
         super.setupAnim(state);
         head.yRot=Math.clamp(state.yRot,-40F,40F)*(float)(Math.PI/180);
-        head.xRot=state.xRot*(float)(Math.PI/180);
-        for(int i=0;i<legs.length;i++) legs[i].xRot=state.flying?-.4F:(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+        head.xRot=Math.clamp(state.xRot,-30F,30F)*(float)(Math.PI/180);
+        float flight=state.flightPose;
+        for(int i=0;i<legs.length;i++) {
+            float walk=(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+            legs[i].xRot=net.minecraft.util.Mth.lerp(flight,walk,-.4F);
+
+
+
+        }
         tail.yRot=(float)Math.sin(state.ageInTicks*.07F)*.12F;
+        tail.yRot=0;
+
+
+
+
 
     }
 }

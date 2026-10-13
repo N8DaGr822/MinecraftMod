@@ -20,6 +20,9 @@ This explicitly packages the mod without unit tests or a headless test server. K
 | --- | --- |
 | Cuisine models or textures | `.\gradlew.bat checkCuisineArt` and visual review |
 | Mount code/models | `.\gradlew.bat test --tests 'darkspawn.black.mount.*' --max-workers=1` |
+| Companion lifecycle server checks | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:mount_care_game_test*' --max-workers=1` |
+| All mount server regressions | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:*mount*' --max-workers=1` |
+| Mount source/texture parity | `node tools/assets/verify-mounts.cjs` and `node tools/assets/griffin-model.cjs --check`, followed by visual review |
 | Cooking logic | `.\gradlew.bat test --tests 'darkspawn.black.cooking.*' --max-workers=1` |
 | OneBlock logic | `.\gradlew.bat test --tests 'darkspawn.black.oneblock.*' --max-workers=1` |
 | One specific unit test | `.\gradlew.bat test --tests 'darkspawn.black.equipment.TemperatureTest' --max-workers=1` |

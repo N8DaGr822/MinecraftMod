@@ -57,6 +57,7 @@ public final class OneBlockGameTest {
 		var player = player(helper); var other = player(helper);
 		try {
 			InventoryExpansion.setTier(player.getInventory(), 3); ArmorLoadouts.state(player).unlocked = 3;
+			darkspawn.black.journal.Journal.progress(player).discover("entity/leopard");
 			for (int slot = 0; slot < 36; slot++) player.getInventory().setItem(slot, new ItemStack(Items.COBBLESTONE, 64));
 			for (int slot = 43; slot < 70; slot++) player.getInventory().setItem(slot, new ItemStack(Items.IRON_INGOT, 64));
 			var helmet = new ItemStack(Items.DIAMOND_HELMET); helmet.setDamageValue(17); helmet.set(DataComponents.CUSTOM_NAME, Component.literal("Outside heirloom"));
@@ -79,6 +80,7 @@ public final class OneBlockGameTest {
 			helper.assertTrue(player.getEnderChestInventory().getItem(26).getCount() == 19 && ArmorLoadouts.state(player).stored(1, 0).is(Items.NETHERITE_HELMET), "Ender Chest and inactive armor return");
 			travel(helper, player);
 			helper.assertTrue(player.getInventory().getItem(0).is(Items.OAK_LOG) && player.getInventory().getItem(0).getCount() == 7 && player.getEnderChestInventory().getItem(0).getCount() == 9, "OneBlock possessions persist between visits without importing outside items");
+			helper.assertTrue(darkspawn.black.journal.Journal.progress(player).knows("entity/leopard") && !darkspawn.black.journal.Journal.progress(other).knows("entity/leopard"), "Journal knowledge crosses item profiles but remains personal");
 		} finally { remove(player); remove(other); }
 		helper.succeed();
 	}

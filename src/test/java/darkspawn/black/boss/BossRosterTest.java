@@ -458,4 +458,24 @@ class BossRosterTest {
 		assertEquals(2500, BiomeBoss.scaledHealth(1000, 4));
 		assertEquals(2500, BiomeBoss.scaledHealth(1000, 100));
 	}
+
+	@Test void animationTimestampsAreChronologicalInSerializedResources() throws Exception {
+		var ids = new java.util.HashSet<>(CreatureAssets.BOSSES);
+		ids.addAll(CreatureAssets.MOBS); ids.addAll(CreatureAssets.MINIONS);
+		ids.addAll(List.of("ancient_tree_spirit", "mutant_wolf", "mutant_zombie", "endborn"));
+		for (String id : ids) {
+			var animations = resource("/assets/darkspawn/geckolib/animations/entity/" + id + ".animation.json").getAsJsonObject().getAsJsonObject("animations");
+			for (var clip : animations.entrySet()) for (var bone : clip.getValue().getAsJsonObject().getAsJsonObject("bones").entrySet()) {
+				for (var channel : bone.getValue().getAsJsonObject().entrySet()) {
+					if (!channel.getValue().isJsonObject()) continue;
+					double previous = -1;
+					for (String key : channel.getValue().getAsJsonObject().keySet()) {
+						double time = Double.parseDouble(key);
+						assertTrue(time >= previous, id + ": " + clip.getKey() + "/" + bone.getKey() + "/" + channel.getKey());
+						previous = time;
+					}
+				}
+			}
+		}
+	}
 }

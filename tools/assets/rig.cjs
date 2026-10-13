@@ -85,10 +85,20 @@ function exportModel(model) {
     for(const animator of Object.values(a.animators)){const b=out.bones[animator.name]={};for(const k of animator.keyframes){let values=['x','y','z'].map(axis=>Number(k.data_points[0][axis]));if(values.some(v=>!Number.isFinite(v)))throw Error('Non-numeric keyframe in '+a.name);if(k.channel==='rotation')values=rot(values);else if(k.channel==='position')values=flip(values);(b[k.channel]??={})[String(k.time)]=values;}}
     animations.animations[a.name]=out;
   }
-  for(const [file,data]of [[`models/entity/${id}.geo.json`,geometry],[`animations/entity/${id}.animation.json`,animations]])fs.writeFileSync(path.join('src/main/resources/assets/darkspawn/geckolib',file),JSON.stringify(data,null,2)+'\n');
+  for(const [file,data]of [[`models/entity/${id}.geo.json`,geometry],[`animations/entity/${id}.animation.json`,animations]])fs.writeFileSync(path.join('src/main/resources/assets/darkspawn/geckolib',file),file.startsWith('animations/')?animationJson(data):JSON.stringify(data,null,2)+'\n');
+}
+function animationJson(data) {
+  // Keyframe Order: Plain JS objects enumerate integer timestamps before fractions. GeckoLib reads file order.
+  // A proxy orders only timestamp maps during serialization; values and all other property order stay intact.
+  return JSON.stringify(data,(_key,value)=>{
+    if(!value||typeof value!=='object'||Array.isArray(value))return value;
+    const keys=Object.keys(value);
+    if(!keys.length||!keys.every(key=>/^\d+(\.\d+)?$/.test(key)))return value;
+    return new Proxy(value,{ownKeys:()=>keys.sort((a,b)=>Number(a)-Number(b))});
+  },2)+'\n';
 }
 const rotation=(bone,frames)=>[bone,'rotation',frames];
 const position=(bone,frames)=>[bone,'position',frames.map(([t,v])=>[t,v.map(n=>n*16)])];
 const wave=(bone,axis,amount,length,base=0,phase=0)=>rotation(bone,[0,.25,.5,.75,1].map(t=>[t*length,[0,0,0].map((v,i)=>i===axis?base+Math.sin(t*Math.PI*2+phase)*amount:0)]));
-module.exports={Rig,exportModel,materialUVs,rotation,position,wave};
+module.exports={Rig,exportModel,materialUVs,rotation,position,wave,animationJson};
 if(require.main===module){const file=process.argv[2];if(!file)throw Error('Usage: node tools/assets/rig.cjs path/to/Creature.bbmodel');const model=JSON.parse(fs.readFileSync(file,'utf8'));if(!/^[a-z_]+$/.test(model.model_identifier)||!(/^[a-z_]+\.png$/).test(model.textures[0].name))throw Error('Invalid resource identifier');exportModel(model);const match=model.textures[0].source.match(/^data:image\/png;base64,(.+)$/);if(!match)throw Error('Project must embed a PNG texture');fs.writeFileSync(`src/main/resources/assets/darkspawn/textures/entity/${model.textures[0].name}`,Buffer.from(match[1],'base64'));}

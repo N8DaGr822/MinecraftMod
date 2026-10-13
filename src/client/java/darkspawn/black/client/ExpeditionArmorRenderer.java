@@ -76,6 +76,7 @@ public final class ExpeditionArmorRenderer implements ArmorRenderer {
 	}
 
 	public static void initialize() {
+		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "quarantine"), darkspawn.black.forsaken.ForsakenContent.ARMOR.values().toArray(net.minecraft.world.level.ItemLike[]::new));
 		darkspawn.black.equipment.LegendaryArmor.SETS.forEach((name, pieces) -> ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, name), pieces.values().toArray(net.minecraft.world.level.ItemLike[]::new)));
 		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "mountaineering"), ExpeditionArmor.MOUNTAINEERING.values().toArray(net.minecraft.world.level.ItemLike[]::new));
 		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "spelunking"), ExpeditionArmor.SPELUNKING.values().toArray(net.minecraft.world.level.ItemLike[]::new));

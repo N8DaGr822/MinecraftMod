@@ -30,24 +30,28 @@ import net.minecraft.world.phys.Vec3;
 
 public final class BossStructureGameTest {
 	private static final List<String> SITES = List.of("druid_shrine", "hunter_camp");
+	private static final List<String> ALL_SITES = java.util.stream.Stream.concat(SITES.stream(), BossLandmarkStructure.REGIONAL_SITES.keySet().stream().sorted()).toList();
 	@GameTest public void everyTemplateRotationKeepsChestAndRitualClearanceAndSavedIdentity(GameTestHelper helper) {
 		var level=helper.getLevel(); var manager=level.getStructureTemplateManager();
 		var context=StructurePieceSerializationContext.fromLevel(level);
-		for (String site:SITES) for (int variant=0;variant<3;variant++) for (Rotation rotation:Rotation.values()) {
+		for (String site:ALL_SITES) for (int variant=0;variant<3;variant++) for (Rotation rotation:Rotation.values()) {
 			var id=Darkspawn.id("landmarks/"+site+"_"+variant);
 			var template=manager.get(id).orElseThrow();
 			var origin=new BlockPos(0,80,0);
 			var piece=new BossLandmarkStructure.LandmarkPiece(manager,id,origin,rotation);
 			var settings=piece.placeSettings();
 			int r=site.equals("druid_shrine")?15:12;
-			helper.assertTrue(template.getSize().getX()==2*r+1 && template.getSize().getY()==48,"Template dimensions must match surveyed footprint");
+			helper.assertTrue(template.getSize().getX()==2*r+1 && template.getSize().getY()==(BossLandmarkStructure.REGIONAL_SITES.containsKey(site)?28:48),"Template dimensions must match surveyed footprint");
 			var chests=template.filterBlocks(origin,settings,Blocks.CHEST);
 			helper.assertTrue(chests.size()==1 && chests.getFirst().nbt().getStringOr("LootTable", "").equals("darkspawn:chests/"+site),"Exactly one lazy loot chest per rotation");
 			var loaded=BossLandmarkStructure.PIECE.load(context,piece.createTag(context));
 			helper.assertTrue(loaded.getBoundingBox().equals(piece.getBoundingBox()) && loaded.getRotation()==rotation,"Saved pieces preserve template bounds and rotation");
 			// Check explicit air for every block touched by the actual summon bounding box.
 			var air=template.filterBlocks(origin,settings,Blocks.AIR).stream().map(StructureTemplate.StructureBlockInfo::pos).collect(java.util.stream.Collectors.toSet());
-			int half=site.equals("druid_shrine")?10:5, height=site.equals("druid_shrine")?28:9;
+			var profile=BossLandmarkStructure.REGIONAL_SITES.get(site);
+			int half=profile!=null?(int)Math.ceil(profile.width/2):site.equals("druid_shrine")?10:5;
+			int height=profile!=null?(int)profile.height+(profile.flying()?8:0):site.equals("druid_shrine")?28:9;
+			if(profile==darkspawn.black.boss.BossProfile.KRAKEN) { half=0; height=0; } // Discovery wreck; ritual takes place at the surface.
 			for(int x=r-half;x<=r+half;x++) for(int z=r-half;z<=r+half;z++) for(int y=4;y<4+height;y++)
 				helper.assertTrue(air.contains(origin.offset(x,y,z)),"Ritual volume must stay clear: "+id+" "+rotation+" "+x+","+y+","+z);
 			helper.assertTrue(template.filterBlocks(origin,settings,Blocks.STRUCTURE_BLOCK).isEmpty(),"No unresolved markers");
@@ -57,7 +61,7 @@ public final class BossStructureGameTest {
 	@GameTest public void lootAlwaysIncludesReadableClueAndNeverBossVictoryRewards(GameTestHelper helper) {
 		var level=helper.getLevel();
 		var params=new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN,Vec3.ZERO).create(LootContextParamSets.CHEST);
-		for(String site:SITES) {
+		for(String site:ALL_SITES) {
 			var table=level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE,Darkspawn.id("chests/"+site)));
 			for(long seed=1;seed<=30;seed++) {
 				var loot=table.getRandomItems(params,seed);
@@ -74,7 +78,7 @@ public final class BossStructureGameTest {
 		var level=helper.getLevel();
 		// Separate from other test fixtures; only this test requests these disposable test chunks.
 		var origin=new BlockPos(helper.absolutePos(BlockPos.ZERO).getX()+2048,80,helper.absolutePos(BlockPos.ZERO).getZ()+2048);
-		for(String site:SITES) {
+		for(String site:ALL_SITES) {
 			var piece=new BossLandmarkStructure.LandmarkPiece(level.getStructureTemplateManager(),Darkspawn.id("landmarks/"+site+"_0"),origin,Rotation.CLOCKWISE_90);
 			var bounds=piece.getBoundingBox();
 			for(int cx=bounds.minX()>>4;cx<=bounds.maxX()>>4;cx++) for(int cz=bounds.minZ()>>4;cz<=bounds.maxZ()>>4;cz++) level.getChunk(cx,cz);
@@ -128,4 +132,42 @@ public final class BossStructureGameTest {
 		}
 		helper.succeed();
 	}
+	@GameTest public void regionalSitesGenerateInTheirOwnDimensionAndBiome(GameTestHelper helper) {
+		var level=helper.getLevel(); var access=level.registryAccess();
+		var dimensions=access.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.NORMAL).value().createWorldDimensions();
+		for(String site:BossLandmarkStructure.REGIONAL_SITES.keySet().stream().sorted().toList()) {
+			var profile=BossLandmarkStructure.REGIONAL_SITES.get(site);
+			var stem=profile.fireproof()?net.minecraft.world.level.dimension.LevelStem.NETHER:profile==darkspawn.black.boss.BossProfile.VOID_EYE?net.minecraft.world.level.dimension.LevelStem.END:net.minecraft.world.level.dimension.LevelStem.OVERWORLD;
+			var dimension=dimensions.get(stem).orElseThrow();
+			var generator=(NoiseBasedChunkGenerator)dimension.generator();
+			var height=net.minecraft.world.level.LevelHeightAccessor.create(dimension.type().value().minY(),dimension.type().value().height());
+			var holder=access.lookupOrThrow(Registries.STRUCTURE).getOrThrow(ResourceKey.create(Registries.STRUCTURE,Darkspawn.id(site)));
+			var structure=holder.value();
+			var set=access.lookupOrThrow(Registries.STRUCTURE_SET).getOrThrow(ResourceKey.create(Registries.STRUCTURE_SET,Darkspawn.id(site))).value();
+			var placement=(RandomSpreadStructurePlacement)set.placement();
+			for(long seed:new long[]{1,42,7319,-49017,20261009}) {
+			var random=RandomState.create(access.lookupOrThrow(Registries.NOISE),seed,generator.generatorSettings().value());
+			var climate=random.createClimateSampler(SamplerContext.EMPTY_UNCACHED);
+			boolean found=false; int eligible=0;
+			int limit=profile==darkspawn.black.boss.BossProfile.MYCELIAL_SOVEREIGN?120000:12000;
+			for(int region=0;region<limit && !found;region++) {
+				int sign=region%2==0?1:-1;
+				var chunk=placement.getPotentialStructureChunk(seed,sign*(region%109+1)*40,sign*(region/109+1)*40);
+				var survey=new Structure.GenerationContext(access,generator,generator.getBiomeSource(),climate,random,level.getStructureTemplateManager(),seed,chunk,height,structure.biomes()::contains);
+				if(survey.couldValidBiomeExistInTerrainColumn(chunk.getMiddleBlockX(),chunk.getMiddleBlockZ())) eligible++;
+				var start=structure.generate(holder,profile.dimension(),access,generator,generator.getBiomeSource(),climate,random,level.getStructureTemplateManager(),seed,chunk,0,height,structure.biomes()::contains);
+				if(!start.isValid()) continue;
+				var repeat=structure.generate(holder,profile.dimension(),access,generator,generator.getBiomeSource(),climate,random,level.getStructureTemplateManager(),seed,chunk,0,height,structure.biomes()::contains);
+				helper.assertTrue(repeat.isValid() && start.getBoundingBox().equals(repeat.getBoundingBox()),"Regional placement must repeat: "+site);
+				var rejected=structure.generate(holder,profile.dimension(),access,generator,generator.getBiomeSource(),climate,random,level.getStructureTemplateManager(),seed,chunk,0,height,biome->false);
+				helper.assertTrue(!rejected.isValid(),"Excluded biomes must reject "+site);
+				Darkspawn.LOGGER.info("Regional landmark sample site={} seed={} chunk={} bounds={}",site,seed,chunk,start.getBoundingBox());
+				found=true;
+			}
+			helper.assertTrue(found,"No usable regional landmark in "+limit+" candidates: "+site+" seed="+seed+" eligible="+eligible);
+			}
+		}
+		helper.succeed();
+	}
+
 }

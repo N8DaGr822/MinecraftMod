@@ -34,6 +34,7 @@ public class DarkspawnClient implements ClientModInitializer {
 		ArmorLoadoutControls.initialize();
 		TemperatureHud.initialize();
 		OneBlockControls.initialize();
+		JournalControls.initialize();
 		ExpeditionArmorRenderer.initialize();
 		ArmorStyleRenderer.initialize();
 		darkspawn.black.client.mount.GriffinClient.initialize();
@@ -48,10 +49,19 @@ public class DarkspawnClient implements ClientModInitializer {
 		MenuScreens.register(Cooking.MENU, CookingScreen::new);
 		MenuScreens.register(darkspawn.black.storage.Storage.MENU, StorageScreen::new);
 		MenuScreens.register(darkspawn.black.forsaken.Forsaken.MENU, QuarantineScreen::new);
+		darkspawn.black.forsaken.ForsakenContent.MOBS.forEach((kind, type) ->
+			net.minecraft.client.renderer.entity.EntityRenderers.register(type, context -> new CreatureGeoRenderer<>(context, type, kind.width / 3, kind.id)));
+		net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.forsaken.ForsakenContent.SPORE,
+			net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
 		darkspawn.black.ecosystem.RegionalEcosystems.MOBS.forEach((kind, type) ->
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
 						context -> CreatureAssets.MOBS.contains(kind.id()) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, CreatureAssets.texture(kind.id(), kind.region.id())) : new darkspawn.black.client.ecosystem.RegionalMobRenderer(context, kind)));
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+			if (stack.is(darkspawn.black.forsaken.ForsakenContent.BLADE)) lines.add(Component.translatable("tooltip.darkspawn.pulse_blade").withStyle(ChatFormatting.GREEN));
+			if (stack.is(darkspawn.black.forsaken.ForsakenContent.BEACON_ITEM)) lines.add(Component.translatable("tooltip.darkspawn.containment_beacon").withStyle(ChatFormatting.GREEN));
+			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("message.darkspawn.forsaken_scan_mode", Component.translatable("scanner.darkspawn.mode_" + darkspawn.black.forsaken.NestScannerItem.mode(stack))).withStyle(ChatFormatting.AQUA));
+			if (darkspawn.black.forsaken.ForsakenContent.ARMOR.containsValue(stack.getItem())) lines.add(Component.translatable("tooltip.darkspawn.quarantine").withStyle(ChatFormatting.GREEN));
+			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("tooltip.darkspawn.bio_scanner").withStyle(ChatFormatting.GREEN));
 			String legendary = darkspawn.black.equipment.LegendaryArmor.family(stack);
 			if (!legendary.isEmpty()) lines.add(Component.translatable("tooltip.darkspawn.legendary." + legendary).withStyle(ChatFormatting.GOLD));
 			if (darkspawn.black.equipment.ArmorStyles.supports(stack)) {

@@ -13,7 +13,7 @@ function tag(v) {
 const blocks=new Map(), caches=[], buildings=[];
 function put(x,y,z,name,props,nbt) {
   if(x<0||x>=64||z<0||z>=80||y<0||y>=24)throw Error('City bounds: '+[x,y,z]);
-  blocks.set([x,y,z].join(','),{pos:[x,y,z],state:{Name:'minecraft:'+name,...(props?{Properties:props}:{})},...(nbt?{nbt}:{})});
+  blocks.set([x,y,z].join(','),{pos:[x,y,z],state:{Name:name.includes(':')?name:'minecraft:'+name,...(props?{Properties:props}:{})},...(nbt?{nbt}:{})});
 }
 function fill(x1,y1,z1,x2,y2,z2,name,props) { for(let x=x1;x<=x2;x++)for(let y=y1;y<=y2;y++)for(let z=z1;z<=z2;z++)put(x,y,z,name,props); }
 function chest(x,y,z,table,facing='south') { put(x,y,z,'chest',{facing,type:'single',waterlogged:'false'},{id:'minecraft:chest',LootTable:'darkspawn:chests/forsaken_'+table});caches.push({pos:[x,y,z],table}); }
@@ -76,16 +76,25 @@ for(const [x,z]of [[27,26],[36,28],[27,60],[36,58]]){put(x,4,z,'cobblestone');pu
 for(let z=47;z<78;z+=6){put(27,3,z,'sculk');put(36,3,z,'sculk');put(28,4,z,'nether_wart_block');put(35,4,z+1,'nether_wart_block');}
 for(const z of [3,32,44,73]){fill(28,4,z,28,7,z,'iron_bars');put(28,8,z,'sea_lantern');}
 sign(33,4,76,['END OF CITY SLICE','More ruins repeat','every 512 blocks','Extraction: north']);
+// Permanent Nests: Only fresh native city placement creates these; there is no regeneration hook.
+const nests=[[12,4,58],[20,10,64],[46,4,56],[55,10,52]];
+for(const [x,y,z] of nests)put(x,y,z,'darkspawn:infected_nest',null,{id:'darkspawn:infected_nest'});
 const palette=[],indices=new Map(),entries=[];
 for(const b of blocks.values()){const k=JSON.stringify(b.state);if(!indices.has(k)){indices.set(k,palette.length);palette.push(b.state);}entries.push({pos:b.pos,state:indices.get(k),...(b.nbt?{nbt:b.nbt}:{})});}
 // Minecraft 26.3 stores lowercase block-state keys; keep the readable blueprint schema separate.
 const nativePalette=palette.map(s=>({id:s.Name,...(s.Properties?{properties:s.Properties}:{})}));
 const template={DataVersion:5023,size:[64,24,80],palette:nativePalette,blocks:entries,entities:[]};
 const target=path.join(res,'data/darkspawn/structure/forsaken/city_slice.nbt');fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,zlib.gzipSync(Buffer.concat([Buffer.from([10,0,0]),tag(template)[1]])));
-write('art/structures/forsaken_city.json',{size:template.size,anchor:[32,3,0],buildings,caches,districts:[{name:'abandoned',min:[0,0,0],max:[63,23,41]},{name:'infested',min:[0,0,42],max:[63,23,79]}],palette,blocks:entries.filter(b=>palette[b.state].Name!=='minecraft:air')});
+write('art/structures/forsaken_city.json',{size:template.size,anchor:[32,3,0],buildings,caches,nests,districts:[{name:'abandoned',min:[0,0,0],max:[63,23,41]},{name:'infested',min:[0,0,42],max:[63,23,79]}],palette,blocks:entries.filter(b=>palette[b.state].Name!=='minecraft:air')});
 data('worldgen/biome/forsaken.json',{attributes:{'minecraft:visual/sky_color':'#89998f'},carvers:[],downfall:0.2,effects:{water_color:'#526959'},features:Array.from({length:11},()=>[]),has_precipitation:true,temperature:0.65});
 data('worldgen/structure/forsaken_city.json',{type:'darkspawn:forsaken_city',biomes:['darkspawn:forsaken'],spawn_overrides:{},step:'top_layer_modification',terrain_adaptation:'none'});
 data('worldgen/structure_set/forsaken_city.json',{structures:[{structure:'darkspawn:forsaken_city',weight:1}],placement:{type:'minecraft:random_spread',spacing:32,separation:31,salt:12610317}});
 const loot={salvage:[['bread',5,1,3],['iron_nugget',5,3,9],['copper_ingot',4,1,3],['string',3,1,3],['torch',4,2,6]],medical:[['honey_bottle',5,1,2],['golden_carrot',3,1,2],['paper',4,2,5],['golden_apple',1,1,1]],research:[['quartz',4,2,5],['redstone',4,3,8],['iron_ingot',3,1,3],['ender_pearl',1,1,1]],rooftop:[['diamond',1,1,1],['gold_ingot',3,1,3],['iron_ingot',5,2,4],['cooked_beef',5,2,4]]};
-for(const [name,items]of Object.entries(loot))data(`loot_table/chests/forsaken_${name}.json`,{type:'minecraft:chest',pools:[{rolls:{type:'minecraft:uniform',min:2,max:4},entries:items.map(([item,weight,min,max])=>({type:'minecraft:item',name:'minecraft:'+item,weight,modifier:{type:'minecraft:set_count',count:{type:'minecraft:uniform',min,max}}}))}],random_sequence:'darkspawn:chests/forsaken_'+name});
+for(const [name,items]of Object.entries(loot)) {
+  const pools=[{rolls:{type:'minecraft:uniform',min:2,max:4},entries:items.map(([item,weight,min,max])=>({type:'minecraft:item',name:'minecraft:'+item,weight,modifier:{type:'minecraft:set_count',count:{type:'minecraft:uniform',min,max}}}))}];
+  const resource=name==='salvage'?'contaminated_alloy':name==='medical'?'biofiber':'research_data';
+  pools.push({rolls:1,entries:[{type:'minecraft:item',name:'darkspawn:'+resource,modifier:{type:'minecraft:set_count',count:{type:'minecraft:uniform',min:1,max:3}}}]});
+  if(name==='medical'||name==='research'||name==='rooftop')pools.push({rolls:1,entries:[{type:'minecraft:item',name:'darkspawn:quarantine_module',weight:1},{type:'minecraft:empty',weight:4}]});
+  data(`loot_table/chests/forsaken_${name}.json`,{type:'minecraft:chest',pools,random_sequence:'darkspawn:chests/forsaken_'+name});
+}
 console.log(`Forsaken city: ${entries.length} blocks, ${buildings.length} buildings, ${caches.length} finite caches.`);

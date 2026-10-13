@@ -1860,6 +1860,94 @@
       "autouv": 0
     },
     {
+      "name": "chestplate_titan_belly",
+      "uuid": "043bb0bc-fa44-4086-a85d-454c5ea7291f",
+      "type": "cube",
+      "from": [
+        -4.8,
+        13.299999999999999,
+        -4.4
+      ],
+      "to": [
+        4.8,
+        17.4,
+        -2.9000000000000004
+      ],
+      "origin": [
+        0,
+        24,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "box_uv": true,
+      "uv_offset": [
+        64,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        }
+      },
+      "visibility": true,
+      "autouv": 0
+    },
+    {
       "name": "chestplate_sleeve",
       "uuid": "4c4e981d-0e04-478c-a98c-b0f5f997b541",
       "type": "cube",
@@ -4060,6 +4148,94 @@
       "autouv": 0
     },
     {
+      "name": "leggings_titan_thigh",
+      "uuid": "20080246-b1fc-43d1-af67-73b76336bfba",
+      "type": "cube",
+      "from": [
+        -4.699999999999999,
+        6.5,
+        -3.8
+      ],
+      "to": [
+        0.9000000000000004,
+        12,
+        -2.3
+      ],
+      "origin": [
+        -1.9,
+        12,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "box_uv": true,
+      "uv_offset": [
+        64,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        }
+      },
+      "visibility": true,
+      "autouv": 0
+    },
+    {
       "name": "leggings_legendary_tasset",
       "uuid": "d56ac6a9-cc30-4022-a061-f47a06738927",
       "type": "cube",
@@ -5204,6 +5380,94 @@
       "autouv": 0
     },
     {
+      "name": "leggings_titan_thigh",
+      "uuid": "a8fba109-fcda-4a24-a7a0-61889bf17e93",
+      "type": "cube",
+      "from": [
+        -0.8999999999999999,
+        6.5,
+        -3.8
+      ],
+      "to": [
+        4.699999999999999,
+        12,
+        -2.3
+      ],
+      "origin": [
+        1.9,
+        12,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "box_uv": true,
+      "uv_offset": [
+        64,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "texture": 0
+        }
+      },
+      "visibility": true,
+      "autouv": 0
+    },
+    {
       "name": "leggings_legendary_tasset",
       "uuid": "272089f0-f80f-4038-ac38-a2a7985b3e46",
       "type": "cube",
@@ -5859,7 +6123,8 @@
         "48f15e20-371a-4eea-a3ae-55363c751e65",
         "b379fe31-e718-499c-a97c-dfc95f363de6",
         "6a63e4b1-0624-445e-a3ca-129d509a1b0b",
-        "d9a941a1-cf83-49ca-a1a8-2d00a8c66339"
+        "d9a941a1-cf83-49ca-a1a8-2d00a8c66339",
+        "043bb0bc-fa44-4086-a85d-454c5ea7291f"
       ]
     },
     {
@@ -5900,6 +6165,7 @@
         "31932282-96dd-4ae6-a16d-878ee0564eeb",
         "6e0a16da-7a80-4234-a6a8-24cf43f56bc3",
         "e68ea4c0-51a0-4397-a245-7d85f28d5d42",
+        "20080246-b1fc-43d1-af67-73b76336bfba",
         "d56ac6a9-cc30-4022-a061-f47a06738927",
         "4dcd4612-3875-4125-a752-3fa961f35b17",
         "2e6a35a7-a274-4295-ac67-bf0307d4ff75",
@@ -5918,6 +6184,7 @@
         "1cba5a27-120a-4ce4-ae1e-3960274f1a68",
         "1a56c5aa-a515-4697-af50-e94c6bb86f13",
         "f5e44bba-782c-4a84-a057-01c67ea26524",
+        "a8fba109-fcda-4a24-a7a0-61889bf17e93",
         "272089f0-f80f-4038-ac38-a2a7985b3e46",
         "cfb265a7-943e-4053-a3bb-3e01f2afcee7",
         "ef4c76bc-933f-4d78-aee1-3f85bd6d9f12",

@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
-/** Summon-only movement prototype; no taming or cargo yet. */
+/** Naturally spawning movement prototype; no taming or cargo yet. */
 public final class FlyingSquirrel extends PrototypeMount {
     public FlyingSquirrel(EntityType<? extends FlyingSquirrel> type, Level level) { super(type, level); }
     public static AttributeSupplier.Builder attributes() {

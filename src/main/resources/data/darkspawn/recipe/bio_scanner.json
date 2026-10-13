@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "DCD",
+    " R "
+  ],
+  "key": {
+    "A": "darkspawn:contaminated_alloy",
+    "D": "darkspawn:research_data",
+    "C": "darkspawn:parasitic_core",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "darkspawn:bio_scanner"
+  }
+}

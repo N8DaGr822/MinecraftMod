@@ -382,6 +382,25 @@
             0.7
           ],
           "material": 5
+        },
+        {
+          "name": "titan_belly",
+          "slot": "chestplate",
+          "from": [
+            -4.8,
+            6.6,
+            -4.4
+          ],
+          "size": [
+            9.6,
+            4.1,
+            1.5
+          ],
+          "material": 1,
+          "trim_uv": [
+            16,
+            16
+          ]
         }
       ]
     },
@@ -837,6 +856,25 @@
           ]
         },
         {
+          "name": "titan_thigh",
+          "slot": "leggings",
+          "from": [
+            -2.8,
+            0,
+            -3.8
+          ],
+          "size": [
+            5.6,
+            5.5,
+            1.5
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            16
+          ]
+        },
+        {
           "name": "legendary_tasset",
           "slot": "leggings",
           "from": [
@@ -1059,6 +1097,25 @@
           "trim_uv": [
             0,
             21
+          ]
+        },
+        {
+          "name": "titan_thigh",
+          "slot": "leggings",
+          "from": [
+            -2.8,
+            0,
+            -3.8
+          ],
+          "size": [
+            5.6,
+            5.5,
+            1.5
+          ],
+          "material": 1,
+          "trim_uv": [
+            0,
+            16
           ]
         },
         {

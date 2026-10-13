@@ -50,6 +50,7 @@ public final class Forsaken {
 	}
 	public static ForsakenPlayerState state(ServerPlayer player) { return ((ForsakenPlayer) player).darkspawn$forsaken(); }
 	public static void initialize() {
+		ForsakenContent.initialize();
 		ForsakenCityStructure.initialize();
 		ServerPlayerEvents.COPY_FROM.register((old, next, alive) -> state(next).copyFrom(state(old)));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> { entries.accept(GATE_ITEM); entries.accept(KEY); });
@@ -158,6 +159,7 @@ public final class Forsaken {
 	private static boolean teleport(ServerPlayer player, ServerLevel level, Vec3 pos) {
 		if (player.teleport(new TeleportTransition(level, pos, Vec3.ZERO, player.getYRot(), player.getXRot(), TeleportTransition.PLACE_PORTAL_TICKET)) == null) return false;
 		player.fallDistance = 0;
+		if (!level.dimension().equals(LEVEL)) player.removeEffect(ForsakenContent.CONTAMINATION);
 		state(player).lastTravel = level.getServer().overworld().getGameTime();
 		// Reuse the existing player-save accessor: inventory, dimension and extraction link persist together.
 		((darkspawn.black.mixin.OneBlockSaveAccess) level.getServer().getPlayerList()).darkspawn$saveProfile(player);

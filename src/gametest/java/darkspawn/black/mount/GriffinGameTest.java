@@ -50,6 +50,11 @@ public final class GriffinGameTest {
 		return griffin;
 	}
 	private static void mount(Griffin griffin, ServerPlayer player) {
+        // Movement fixtures begin owned; lifecycle tests exercise actual feeding separately.
+        var ownership = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, griffin.level().registryAccess());
+        griffin.saveWithoutId(ownership);
+        ownership.store("MountOwner", net.minecraft.core.UUIDUtil.CODEC, player.getUUID());
+        griffin.load(TagValueInput.create(ProblemReporter.DISCARDING, griffin.level().registryAccess(), ownership.buildResult()));
 		player.teleportTo(griffin.getX(), griffin.getY(), griffin.getZ());
 		griffin.mobInteract(player, InteractionHand.MAIN_HAND);
 		griffin.positionRider(player);
@@ -64,7 +69,7 @@ public final class GriffinGameTest {
 			helper.assertTrue(owner.getVehicle() == griffin, "Empty-hand interaction mounts griffin");
 			helper.assertTrue(!stranger.startRiding(griffin), "Second rider rejected");
 			helper.assertTrue(!griffin.acceptControls(stranger, Griffin.ASCEND), "Non-rider input rejected");
-			helper.assertTrue(!griffin.acceptControls(owner, -1) && !griffin.acceptControls(owner, 64), "Unknown control bits rejected");
+			helper.assertTrue(!griffin.acceptControls(owner, -1) && !griffin.acceptControls(owner, 256), "Unknown control bits rejected");
 			helper.assertTrue(griffin.acceptControls(owner, Griffin.ASCEND), "Current rider accepted");
 			owner.stopRiding();
 			helper.assertTrue(!griffin.acceptControls(owner, Griffin.ASCEND), "Former rider rejected");

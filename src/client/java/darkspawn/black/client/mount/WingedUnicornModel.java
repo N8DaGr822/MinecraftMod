@@ -12,10 +12,16 @@ public final class WingedUnicornModel extends EntityModel<GriffinRenderState> {
     private final ModelPart head, tail;
     private final ModelPart[] legs;
     private final ModelPart leftWing, rightWing;
+    private final ModelPart leftTip, rightTip;
+
+
     public WingedUnicornModel(ModelPart root) {
         super(root); head=root.getChild("head"); tail=root.getChild("tail");
         legs=new ModelPart[]{root.getChild("front_left"),root.getChild("front_right"),root.getChild("back_left"),root.getChild("back_right")};
         leftWing=root.getChild("left_wing"); rightWing=root.getChild("right_wing");
+        leftTip=leftWing.getChild("left_tip"); rightTip=rightWing.getChild("right_tip");
+
+
     }
     public static LayerDefinition createBodyLayer() {
         var mesh=new MeshDefinition(); var root=mesh.getRoot();
@@ -23,7 +29,7 @@ public final class WingedUnicornModel extends EntityModel<GriffinRenderState> {
             .texOffs(0, 0).addBox(-5, -5, -11, 10, 10, 22), PartPose.offset(0, 7, 0));
         var head = root.addOrReplaceChild("head", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-4, -5, -5, 8, 8, 8)
-            .texOffs(0, 42).addBox(-3, -1, -9, 6, 4, 5), PartPose.offset(0, 7, -10));
+            .texOffs(0, 42).addBox(-3, -1, -9, 6, 4, 5), PartPose.offset(0, 1, -15));
         var head_eyes = head.addOrReplaceChild("head_eyes", CubeListBuilder.create()
             .texOffs(96, 100).addBox(3, -3, -4, 2, 2, 2)
             .texOffs(96, 100).addBox(-5, -3, -4, 2, 2, 2), PartPose.offset(0, 0, 0));
@@ -36,7 +42,10 @@ public final class WingedUnicornModel extends EntityModel<GriffinRenderState> {
         var mane = head.addOrReplaceChild("mane", CubeListBuilder.create()
             .texOffs(0, 70).addBox(-2, -5, 2, 4, 17, 4), PartPose.offset(0, 0, 0));
         var neck = root.addOrReplaceChild("neck", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-3, -7, -3, 6, 14, 6), PartPose.offset(0, 10, -9));
+            .texOffs(0, 0).addBox(-3, -12, -3, 6, 15, 7)
+            .texOffs(0, 0).addBox(-4, -6, 1, 8, 8, 6), PartPose.offset(0, 10, -11));
+        var mane_lower = neck.addOrReplaceChild("mane_lower", CubeListBuilder.create()
+            .texOffs(0, 70).addBox(-1.5F, -11, 4, 3, 15, 3), PartPose.offset(0, 0, 0));
         var front_right = root.addOrReplaceChild("front_right", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 11, 4)
             .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(-4, 12, -7));
@@ -50,46 +59,61 @@ public final class WingedUnicornModel extends EntityModel<GriffinRenderState> {
             .texOffs(0, 0).addBox(-2, 0, -2, 4, 11, 4)
             .texOffs(96, 100).addBox(-2, 10, -3, 4, 2, 5), PartPose.offset(4, 12, 8));
         var tail = root.addOrReplaceChild("tail", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-2, -2, 0, 4, 4, 12)
-            .texOffs(0, 70).addBox(-1, -1, 10, 2, 2, 10), PartPose.offset(0, 10, 10));
+            .texOffs(0, 0).addBox(-1.5F, -2, 0, 3, 3, 5)
+            .texOffs(0, 70).addBox(-2, 0, 3, 4, 11, 5)
+            .texOffs(0, 70).addBox(-1.5F, 10, 4, 3, 3, 3), PartPose.offset(0, 10, 10));
         var right_wing = root.addOrReplaceChild("right_wing", CubeListBuilder.create()
-            .texOffs(0, 70).addBox(-18, -1, -5, 18, 2, 12)
-            .texOffs(0, 70).addBox(-29, 0, -2, 13, 1, 10), PartPose.offset(-4, 8, -3));
-        var right_feather_0 = right_wing.addOrReplaceChild("right_feather_0", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-11, 0, 5, 3, 1, 12), PartPose.offset(0, 0, 0));
-        var right_feather_1 = right_wing.addOrReplaceChild("right_feather_1", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-14, 0, 5, 3, 1, 11), PartPose.offset(0, 0, 0));
-        var right_feather_2 = right_wing.addOrReplaceChild("right_feather_2", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-17, 0, 5, 3, 1, 10), PartPose.offset(0, 0, 0));
-        var right_feather_3 = right_wing.addOrReplaceChild("right_feather_3", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-20, 0, 5, 3, 1, 9), PartPose.offset(0, 0, 0));
-        var right_feather_4 = right_wing.addOrReplaceChild("right_feather_4", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-23, 0, 5, 3, 1, 8), PartPose.offset(0, 0, 0));
-        var right_feather_5 = right_wing.addOrReplaceChild("right_feather_5", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(-26, 0, 5, 3, 1, 7), PartPose.offset(0, 0, 0));
+            .texOffs(0, 0).addBox(-12, -1, -4, 12, 2, 3)
+            .texOffs(0, 70).addBox(-12, 0, -1, 12, 1, 10), PartPose.offset(-4, 8, -3));
+        var right_tip = right_wing.addOrReplaceChild("right_tip", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-15, -1, -2, 15, 2, 2)
+            .texOffs(0, 70).addBox(-15, 0, 0, 15, 1, 8), PartPose.offset(-11, 0, -2));
+        var right_feather_0 = right_tip.addOrReplaceChild("right_feather_0", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-3, 0, 5, 3, 1, 13), PartPose.offset(0, 0, 0));
+        var right_feather_1 = right_tip.addOrReplaceChild("right_feather_1", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-6, 0, 5, 3, 1, 12), PartPose.offset(0, 0, 0));
+        var right_feather_2 = right_tip.addOrReplaceChild("right_feather_2", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-9, 0, 5, 3, 1, 11), PartPose.offset(0, 0, 0));
+        var right_feather_3 = right_tip.addOrReplaceChild("right_feather_3", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-12, 0, 5, 3, 1, 10), PartPose.offset(0, 0, 0));
+        var right_feather_4 = right_tip.addOrReplaceChild("right_feather_4", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-15, 0, 5, 3, 1, 9), PartPose.offset(0, 0, 0));
         var left_wing = root.addOrReplaceChild("left_wing", CubeListBuilder.create()
-            .texOffs(0, 70).addBox(0, -1, -5, 18, 2, 12)
-            .texOffs(0, 70).addBox(16, 0, -2, 13, 1, 10), PartPose.offset(4, 8, -3));
-        var left_feather_0 = left_wing.addOrReplaceChild("left_feather_0", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(8, 0, 5, 3, 1, 12), PartPose.offset(0, 0, 0));
-        var left_feather_1 = left_wing.addOrReplaceChild("left_feather_1", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(11, 0, 5, 3, 1, 11), PartPose.offset(0, 0, 0));
-        var left_feather_2 = left_wing.addOrReplaceChild("left_feather_2", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(14, 0, 5, 3, 1, 10), PartPose.offset(0, 0, 0));
-        var left_feather_3 = left_wing.addOrReplaceChild("left_feather_3", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(17, 0, 5, 3, 1, 9), PartPose.offset(0, 0, 0));
-        var left_feather_4 = left_wing.addOrReplaceChild("left_feather_4", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(20, 0, 5, 3, 1, 8), PartPose.offset(0, 0, 0));
-        var left_feather_5 = left_wing.addOrReplaceChild("left_feather_5", CubeListBuilder.create()
-            .texOffs(0, 0).addBox(23, 0, 5, 3, 1, 7), PartPose.offset(0, 0, 0));
+            .texOffs(0, 0).addBox(0, -1, -4, 12, 2, 3)
+            .texOffs(0, 70).addBox(0, 0, -1, 12, 1, 10), PartPose.offset(4, 8, -3));
+        var left_tip = left_wing.addOrReplaceChild("left_tip", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(0, -1, -2, 15, 2, 2)
+            .texOffs(0, 70).addBox(0, 0, 0, 15, 1, 8), PartPose.offset(11, 0, -2));
+        var left_feather_0 = left_tip.addOrReplaceChild("left_feather_0", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(0, 0, 5, 3, 1, 13), PartPose.offset(0, 0, 0));
+        var left_feather_1 = left_tip.addOrReplaceChild("left_feather_1", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(3, 0, 5, 3, 1, 12), PartPose.offset(0, 0, 0));
+        var left_feather_2 = left_tip.addOrReplaceChild("left_feather_2", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(6, 0, 5, 3, 1, 11), PartPose.offset(0, 0, 0));
+        var left_feather_3 = left_tip.addOrReplaceChild("left_feather_3", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(9, 0, 5, 3, 1, 10), PartPose.offset(0, 0, 0));
+        var left_feather_4 = left_tip.addOrReplaceChild("left_feather_4", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(12, 0, 5, 3, 1, 9), PartPose.offset(0, 0, 0));
         return LayerDefinition.create(mesh,128,128);
     }
     @Override public void setupAnim(GriffinRenderState state) {
         super.setupAnim(state);
         head.yRot=Math.clamp(state.yRot,-40F,40F)*(float)(Math.PI/180);
-        head.xRot=state.xRot*(float)(Math.PI/180);
-        for(int i=0;i<legs.length;i++) legs[i].xRot=state.flying?-.4F:(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+        head.xRot=Math.clamp(state.xRot,-30F,30F)*(float)(Math.PI/180);
+        float flight=state.flightPose;
+        for(int i=0;i<legs.length;i++) {
+            float walk=(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+            legs[i].xRot=net.minecraft.util.Mth.lerp(flight,walk,-.4F);
+
+
+
+        }
         tail.yRot=(float)Math.sin(state.ageInTicks*.07F)*.12F;
-        leftWing.zRot=state.flying?(float)Math.sin(state.ageInTicks*.3F)*.45F:.25F; rightWing.zRot=-leftWing.zRot; leftWing.yRot=state.flying?0:-1.25F; rightWing.yRot=-leftWing.yRot;
+
+
+
+
+
+        leftWing.zRot=net.minecraft.util.Mth.lerp(flight,.65F,(float)Math.sin(state.ageInTicks*.3F)*.45F); rightWing.zRot=-leftWing.zRot; leftWing.yRot=net.minecraft.util.Mth.lerp(flight,-1.1F,-.1F); rightWing.yRot=-leftWing.yRot; leftTip.yRot=net.minecraft.util.Mth.lerp(flight,-1.15F,-.08F); rightTip.yRot=-leftTip.yRot; leftTip.zRot=flight*(float)Math.sin(state.ageInTicks*.3F-.65F)*.25F; rightTip.zRot=-leftTip.zRot;
     }
 }

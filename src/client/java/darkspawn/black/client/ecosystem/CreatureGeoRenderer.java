@@ -28,6 +28,7 @@ public final class CreatureGeoRenderer<T extends Mob & AnimatedCreature, R exten
 	@Override
 	public void addRenderData(T entity, Void context, R state, float partialTicks) {
 		int warning = 0; boolean active = false, hiding = false; int role = -1; float shield = 0;
+		if (entity instanceof darkspawn.black.forsaken.Infected infected) warning = infected.warning();
 		if (entity instanceof RegionalMob mob) {
 			warning = mob.warning(); active = mob.active() > 0; hiding = mob.hiding();
 			if (mob.kind() == RegionalKind.VOID_SENTINEL) { shield = (float)Math.toRadians(mob.shieldAngle()); }

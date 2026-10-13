@@ -14,6 +14,6 @@ public final class GriffinRenderer extends MobRenderer<Griffin, GriffinRenderSta
 	@Override public Identifier getTextureLocation(GriffinRenderState state) { return Darkspawn.id("textures/entity/griffin.png"); }
 	@Override public void extractRenderState(Griffin entity, GriffinRenderState state, float partialTick) {
 		super.extractRenderState(entity, state, partialTick);
-		state.flying = entity.flying();
+		state.flying = entity.flying(); state.flightPose = entity.flightPose(partialTick);
 	}
 }

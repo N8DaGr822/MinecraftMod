@@ -1,0 +1,248 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.infected_crawler",
+        "texture_width": 256,
+        "texture_height": 128,
+        "visible_bounds_width": 5,
+        "visible_bounds_height": 5,
+        "visible_bounds_offset": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "pivot": [
+            0,
+            5.0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -6.3,
+                3.5,
+                -4.5
+              ],
+              "size": [
+                12.6,
+                4.0,
+                9.0
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -6,
+                5,
+                2
+              ],
+              "size": [
+                12,
+                5,
+                12
+              ],
+              "uv": [
+                128,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -4,
+                9,
+                6
+              ],
+              "size": [
+                8,
+                2,
+                6
+              ],
+              "uv": [
+                64,
+                64
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head_look",
+          "parent": "body",
+          "pivot": [
+            0,
+            7.5,
+            -3
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "head_look",
+          "pivot": [
+            0,
+            7.5,
+            -3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                7.199999999999999,
+                -12
+              ],
+              "size": [
+                8,
+                2.8000000000000003,
+                8
+              ],
+              "uv": [
+                64,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -3,
+                8.8,
+                -12.3
+              ],
+              "size": [
+                6,
+                1.5,
+                0.5
+              ],
+              "uv": [
+                64,
+                64
+              ]
+            }
+          ]
+        },
+        {
+          "name": "left_arm",
+          "parent": "body",
+          "pivot": [
+            8.64,
+            6.7,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                6.640000000000001,
+                2.0,
+                -9
+              ],
+              "size": [
+                4,
+                4.9,
+                11
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "left_leg",
+          "parent": "root",
+          "pivot": [
+            3.6,
+            3.5999999999999996,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1.6,
+                0,
+                2
+              ],
+              "size": [
+                4,
+                3.8,
+                9
+              ],
+              "uv": [
+                192,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "right_arm",
+          "parent": "body",
+          "pivot": [
+            -8.64,
+            6.7,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -10.64,
+                2.0,
+                -9
+              ],
+              "size": [
+                4,
+                4.9,
+                11
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "right_leg",
+          "parent": "root",
+          "pivot": [
+            -3.6,
+            3.5999999999999996,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5.6,
+                0,
+                2
+              ],
+              "size": [
+                4,
+                3.8,
+                9
+              ],
+              "uv": [
+                192,
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

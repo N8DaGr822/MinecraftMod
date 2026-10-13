@@ -12,23 +12,47 @@ public final class WoollyRhinoModel extends EntityModel<GriffinRenderState> {
     private final ModelPart head, tail;
     private final ModelPart[] legs;
 
+
+
+
     public WoollyRhinoModel(ModelPart root) {
         super(root); head=root.getChild("head"); tail=root.getChild("tail");
         legs=new ModelPart[]{root.getChild("front_left"),root.getChild("front_right"),root.getChild("back_left"),root.getChild("back_right")};
+
+
+
 
     }
     public static LayerDefinition createBodyLayer() {
         var mesh=new MeshDefinition(); var root=mesh.getRoot();
         var body = root.addOrReplaceChild("body", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-10, -8, -13, 20, 16, 26)
-            .texOffs(0, 0).addBox(-11, 5, -11, 22, 5, 23), PartPose.offset(0, 10, 1));
+            .texOffs(0, 0).addBox(-11, 5, -11, 22, 5, 23)
+            .texOffs(0, 0).addBox(-8, -12, -10, 16, 7, 12), PartPose.offset(0, 10, 1));
         var head = root.addOrReplaceChild("head", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-6, -4, -10, 12, 11, 12)
             .texOffs(0, 42).addBox(-5, 1, -15, 10, 7, 7), PartPose.offset(0, 9, -13));
         var horn = head.addOrReplaceChild("horn", CubeListBuilder.create()
-            .texOffs(0, 70).addBox(-2, -3, -13, 4, 6, 4)
-            .texOffs(0, 70).addBox(-1, -8, -12, 2, 6, 2)
+            .texOffs(0, 70).addBox(-2, -3, -13, 4, 5, 4)
+            .texOffs(0, 70).addBox(-1.5F, -6, -14, 3, 4, 3)
+            .texOffs(0, 70).addBox(-0.5F, -9, -14.5F, 1, 4, 1)
             .texOffs(0, 70).addBox(-1, -5, -6, 2, 4, 3), PartPose.offset(0, 0, 0));
+        var fur_right_0 = body.addOrReplaceChild("fur_right_0", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-11, 6, -9, 2, 4, 4), PartPose.offset(0, 0, 0));
+        var fur_right_1 = body.addOrReplaceChild("fur_right_1", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-11, 6, -3, 2, 5, 4), PartPose.offset(0, 0, 0));
+        var fur_right_2 = body.addOrReplaceChild("fur_right_2", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-11, 6, 3, 2, 4, 4), PartPose.offset(0, 0, 0));
+        var fur_right_3 = body.addOrReplaceChild("fur_right_3", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-11, 6, 9, 2, 5, 4), PartPose.offset(0, 0, 0));
+        var fur_left_0 = body.addOrReplaceChild("fur_left_0", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(9, 6, -9, 2, 4, 4), PartPose.offset(0, 0, 0));
+        var fur_left_1 = body.addOrReplaceChild("fur_left_1", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(9, 6, -3, 2, 5, 4), PartPose.offset(0, 0, 0));
+        var fur_left_2 = body.addOrReplaceChild("fur_left_2", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(9, 6, 3, 2, 4, 4), PartPose.offset(0, 0, 0));
+        var fur_left_3 = body.addOrReplaceChild("fur_left_3", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(9, 6, 9, 2, 5, 4), PartPose.offset(0, 0, 0));
         var eyes = head.addOrReplaceChild("eyes", CubeListBuilder.create()
             .texOffs(96, 100).addBox(5, -2, -7, 2, 2, 2)
             .texOffs(96, 100).addBox(-7, -2, -7, 2, 2, 2), PartPose.offset(0, 0, 0));
@@ -55,9 +79,27 @@ public final class WoollyRhinoModel extends EntityModel<GriffinRenderState> {
     @Override public void setupAnim(GriffinRenderState state) {
         super.setupAnim(state);
         head.yRot=Math.clamp(state.yRot,-40F,40F)*(float)(Math.PI/180);
-        head.xRot=state.xRot*(float)(Math.PI/180);
-        for(int i=0;i<legs.length;i++) legs[i].xRot=state.flying?-.4F:(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+        head.xRot=Math.clamp(state.xRot,-30F,30F)*(float)(Math.PI/180);
+        float flight=state.flightPose;
+        for(int i=0;i<legs.length;i++) {
+            float walk=(float)Math.cos(state.walkAnimationPos*.65F+(i==0||i==3?0:Math.PI))*state.walkAnimationSpeed*.8F;
+            legs[i].xRot=net.minecraft.util.Mth.lerp(flight,walk,-.4F);
+
+
+
+        }
         tail.yRot=(float)Math.sin(state.ageInTicks*.07F)*.12F;
 
+
+
+
+
+
+
+        // Attack Recovery: Add to locomotion after the base model resets every part for this entity.
+        root().getChild("head").xRot += 0.32F * state.attackPose;
+        root().getChild("head").z += -2 * state.attackPose;
+        root().getChild("body").xRot += 0.05F * state.attackPose;
+        root().getChild("tail").xRot += -0.3F * state.attackPose;
     }
 }

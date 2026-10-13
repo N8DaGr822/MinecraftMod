@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "darkspawn:deep_dark_hive",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 16,
+    "salt": 73267720,
+    "exclusion_zone": {
+      "other_set": "minecraft:ancient_cities",
+      "chunk_count": 12
+    }
+  }
+}

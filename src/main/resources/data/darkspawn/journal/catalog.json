@@ -1,0 +1,1392 @@
+[
+  {
+    "id": "entity/rotted_zombie",
+    "section": "creatures",
+    "title": "Rotted Zombie",
+    "hint": "Plains and savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 36 health points.\n\nArmored melee undead. Drops rotten flesh.",
+    "entity": "rotted_zombie",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/brute_zombie",
+    "section": "creatures",
+    "title": "Brute Zombie",
+    "hint": "Plains and savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 48 health points.\n\nWarns before a ground smash. Opens and closes wooden doors without breaking them. Drops rotten flesh.",
+    "entity": "brute_zombie",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/leaping_zombie",
+    "section": "creatures",
+    "title": "Leaping Zombie",
+    "hint": "Plains and savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 20 health points.\n\nFast undead with a warned pounce. Drops rotten flesh.",
+    "entity": "leaping_zombie",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/mutant_huskling",
+    "section": "creatures",
+    "title": "Mutant Huskling",
+    "hint": "Plains and savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 50 health points.\n\nThrows debris at range. Drops rotten flesh.",
+    "entity": "mutant_huskling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/failed_mutant",
+    "section": "creatures",
+    "title": "Failed Mutant",
+    "hint": "Plains and savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 100 health points.\n\nRare herald with a warned smash. Drops Mutated Flesh.",
+    "entity": "failed_mutant",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/bone_raptor",
+    "section": "creatures",
+    "title": "Bone Raptor",
+    "hint": "Deserts and badlands. Appears after the world dragon victory.",
+    "body": "Hostile. 24 health points.\n\nPack-spawning predator with a warned pounce. Drops a bone.",
+    "entity": "bone_raptor",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/fossil_scorpion",
+    "section": "creatures",
+    "title": "Fossil Scorpion",
+    "hint": "Deserts and badlands. Appears after the world dragon victory.",
+    "body": "Hostile. 30 health points.\n\nHides while idle; bites apply three seconds of poison. Drops a bone.",
+    "entity": "fossil_scorpion",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/bone_vulture",
+    "section": "creatures",
+    "title": "Bone Vulture",
+    "hint": "Deserts and badlands. Appears after the world dragon victory.",
+    "body": "Hostile. 20 health points.\n\nFlies, collects loose bones, and attacks players at half health or lower. Returns its carried item on death; ordinary drop is a bone.",
+    "entity": "bone_vulture",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/fossilized_husk",
+    "section": "creatures",
+    "title": "Fossilized Husk",
+    "hint": "Deserts and badlands. Appears after the world dragon victory.",
+    "body": "Hostile. 40 health points.\n\nSlow, heavily armored melee undead. Drops a bone.",
+    "entity": "fossilized_husk",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/tyrant_skull",
+    "section": "creatures",
+    "title": "Tyrant Skull",
+    "hint": "Deserts and badlands. Appears after the world dragon victory.",
+    "body": "Passive. 20 health points.\n\nStationary discovery on sand or terracotta. Right-click with a pickaxe for one Ancient Tyrant Fossil, costing one durability. Ordinary attacks cannot excavate it.",
+    "entity": "tyrant_skull",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/storm_finch",
+    "section": "creatures",
+    "title": "Storm Finch",
+    "hint": "Savannas. Appears after the world dragon victory.",
+    "body": "Passive. 8 health points.\n\nSmall passive flier with visible static during thunderstorms. Drops a feather.",
+    "entity": "storm_finch",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shocktalon",
+    "section": "creatures",
+    "title": "Shocktalon",
+    "hint": "Savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 26 health points.\n\nWarned diving attack briefly slows its victim. Drops a feather.",
+    "entity": "shocktalon",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/stormstrider",
+    "section": "creatures",
+    "title": "Stormstrider",
+    "hint": "Savannas. Appears after the world dragon victory.",
+    "body": "Neutral. 32 health points.\n\nFast neutral ground creature with visible static during thunderstorms. Drops a feather.",
+    "entity": "stormstrider",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/thunder_roc",
+    "section": "creatures",
+    "title": "Thunder Roc",
+    "hint": "Savannas. Appears after the world dragon victory.",
+    "body": "Hostile. 90 health points.\n\nRare flying herald fires lightning projectiles and knocks nearby targets back with wing pulses. Drops Charged Feather.",
+    "entity": "thunder_roc",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/tree_viper",
+    "section": "creatures",
+    "title": "Tree Viper",
+    "hint": "Jungles. Appears after the world dragon victory.",
+    "body": "Hostile. 16 health points.\n\nClimbs walls, hides while idle, and applies three seconds of poison on a bite. Drops a vine.",
+    "entity": "tree_viper",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/constrictor",
+    "section": "creatures",
+    "title": "Constrictor",
+    "hint": "Jungles. Appears after the world dragon victory.",
+    "body": "Hostile. 32 health points.\n\nWarns before attacking a fixed constriction area and strongly slowing victims. Drops a vine.",
+    "entity": "constrictor",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/jungle_stalker",
+    "section": "creatures",
+    "title": "Jungle Stalker",
+    "hint": "Jungles. Appears after the world dragon victory.",
+    "body": "Hostile. 30 health points.\n\nHides until prey is close. Its cooldown-limited ambush hit deals extra damage and applies weakness. Drops a vine.",
+    "entity": "jungle_stalker",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/brood_serpent",
+    "section": "creatures",
+    "title": "Brood Serpent",
+    "hint": "Jungles. Appears after the world dragon victory.",
+    "body": "Hostile. 100 health points.\n\nRare large serpent with a warned constriction attack. Drops Titan Scale.",
+    "entity": "brood_serpent",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/bogling",
+    "section": "creatures",
+    "title": "Bogling",
+    "hint": "Swamps. Appears after the world dragon victory.",
+    "body": "Hostile. 16 health points.\n\nBreathes underwater and scavenges loose food, spider eyes, or sugar; retreats with its item. Returns carried property on death. Ordinary drop is a spider eye.",
+    "entity": "bogling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/hexed_frog",
+    "section": "creatures",
+    "title": "Hexed Frog",
+    "hint": "Swamps. Appears after the world dragon victory.",
+    "body": "Hostile. 14 health points.\n\nMelee hits apply either weakness or slowness for three seconds. Drops a spider eye.",
+    "entity": "hexed_frog",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/swamp_wisp",
+    "section": "creatures",
+    "title": "Swamp Wisp",
+    "hint": "Swamps. Appears after the world dragon victory.",
+    "body": "Passive. 10 health points.\n\nPassive flying guide. Follow its particle-marked route to earn glow berries once. Ordinary player-kill drop is a spider eye.",
+    "entity": "swamp_wisp",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/hexbound",
+    "section": "creatures",
+    "title": "Hexbound",
+    "hint": "Swamps. Appears after the world dragon victory.",
+    "body": "Hostile. 28 health points.\n\nUses warned ranged hex projectiles. Drops a spider eye.",
+    "entity": "hexbound",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/babas_familiar",
+    "section": "creatures",
+    "title": "Baba's Familiar",
+    "hint": "Swamps. Appears after the world dragon victory.",
+    "body": "Passive. 30 health points.\n\nRare passive guide. Follow it to its marked destination for one Witch Token; killing it gives no token.",
+    "entity": "babas_familiar",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/stoneback_goat",
+    "section": "creatures",
+    "title": "Stoneback Goat",
+    "hint": "Mountain peaks. Appears after the world dragon victory.",
+    "body": "Neutral. 36 health points.\n\nNeutral armored charger. Takes half damage from projectiles before other defenses. Drops flint.",
+    "entity": "stoneback_goat",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/crag_crawler",
+    "section": "creatures",
+    "title": "Crag Crawler",
+    "hint": "Mountain peaks. Appears after the world dragon victory.",
+    "body": "Hostile. 26 health points.\n\nHides until prey approaches, then uses a stronger ambush bite with weakness on a cooldown. Drops flint.",
+    "entity": "crag_crawler",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/stoneborn",
+    "section": "creatures",
+    "title": "Stoneborn",
+    "hint": "Mountain peaks. Appears after the world dragon victory.",
+    "body": "Hostile. 48 health points.\n\nSlow armored rock creature that throws debris. Drops flint.",
+    "entity": "stoneborn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/titan_spawn",
+    "section": "creatures",
+    "title": "Titan Spawn",
+    "hint": "Mountain peaks. Appears after the world dragon victory.",
+    "body": "Hostile. 120 health points.\n\nRare heavily armored herald throws debris and slams at close range. Drops Titan Stone.",
+    "entity": "titan_spawn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/frostling",
+    "section": "creatures",
+    "title": "Frostling",
+    "hint": "Snowy regions. Appears after the world dragon victory.",
+    "body": "Hostile. 16 health points.\n\nHides while idle and fires frost projectiles. Drops a snowball.",
+    "entity": "frostling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/frozen_husk",
+    "section": "creatures",
+    "title": "Frozen Husk",
+    "hint": "Snowy regions. Appears after the world dragon victory.",
+    "body": "Hostile. 40 health points.\n\nArmored melee undead with slowing hits. Fire deals double damage and briefly activates its thaw state. Drops a snowball.",
+    "entity": "frozen_husk",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/icefang",
+    "section": "creatures",
+    "title": "Icefang",
+    "hint": "Snowy regions. Appears after the world dragon victory.",
+    "body": "Hostile. 26 health points.\n\nPack-spawning predator whose bites apply three seconds of slowness. Drops a snowball.",
+    "entity": "icefang",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/young_wyrm",
+    "section": "creatures",
+    "title": "Young Wyrm",
+    "hint": "Snowy regions. Appears after the world dragon victory.",
+    "body": "Hostile. 90 health points.\n\nRare herald uses ranged frost attacks and retreats below one-quarter health. Drops Wyrm Scale.",
+    "entity": "young_wyrm",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/abyssal_fish",
+    "section": "creatures",
+    "title": "Abyssal Fish",
+    "hint": "Oceans. Appears after the world dragon victory.",
+    "body": "Hostile. 20 health points.\n\nHostile swimmer with melee bites; natural spawning requires dark water. Drops a prismarine shard.",
+    "entity": "abyssal_fish",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/giant_crab",
+    "section": "creatures",
+    "title": "Giant Crab",
+    "hint": "Oceans. Appears after the world dragon victory.",
+    "body": "Neutral. 40 health points.\n\nNeutral armored seabed creature with a warned smash. Attacks from behind deal double damage before other defenses. Drops a prismarine shard.",
+    "entity": "giant_crab",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/siren",
+    "section": "creatures",
+    "title": "Siren",
+    "hint": "Oceans. Appears after the world dragon victory.",
+    "body": "Hostile. 32 health points.\n\nWarns before an attack that pulls victims toward it. Drops a prismarine shard.",
+    "entity": "siren",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/leviathan_spawn",
+    "section": "creatures",
+    "title": "Leviathan Spawn",
+    "hint": "Oceans. Appears after the world dragon victory.",
+    "body": "Hostile. 110 health points.\n\nRare deep-water herald with a warned grab, nearby boat damage, and a retreat into deeper water. Drops Abyssal Scale.",
+    "entity": "leviathan_spawn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/cave_skitterer",
+    "section": "creatures",
+    "title": "Cave Skitterer",
+    "hint": "Caves. Appears after the world dragon victory.",
+    "body": "Hostile. 10 health points.\n\nSmall wall-climbing melee creature that can spawn in groups. Drops string.",
+    "entity": "cave_skitterer",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/web_spitter",
+    "section": "creatures",
+    "title": "Web Spitter",
+    "hint": "Caves. Appears after the world dragon victory.",
+    "body": "Hostile. 24 health points.\n\nClimbs and fires web projectiles, leaving temporary slowing patches without replacing blocks. Drops string.",
+    "entity": "web_spitter",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/brood_carrier",
+    "section": "creatures",
+    "title": "Brood Carrier",
+    "hint": "Caves. Appears after the world dragon victory.",
+    "body": "Hostile. 38 health points.\n\nArmored climber releases a bounded group of temporary skitterer helpers on death. Drops string; helpers have no loot.",
+    "entity": "brood_carrier",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/tunnel_widow",
+    "section": "creatures",
+    "title": "Tunnel Widow",
+    "hint": "Caves. Appears after the world dragon victory.",
+    "body": "Hostile. 90 health points.\n\nRare climber with a warned slowing pounce and a climbing retreat below half health. Drops Brood Fang.",
+    "entity": "tunnel_widow",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_drone",
+    "section": "creatures",
+    "title": "Shadow Drone",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Hostile. 24 health points.\n\nWarned close-range burst applies darkness and consumes the drone. Defeat it before the burst for a sculk vein.",
+    "entity": "shadow_drone",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_stalker",
+    "section": "creatures",
+    "title": "Shadow Stalker",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Hostile. 28 health points.\n\nStops moving when its target looks at it, then resumes stalking when unobserved. Drops a sculk vein.",
+    "entity": "shadow_stalker",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_spitter",
+    "section": "creatures",
+    "title": "Shadow Spitter",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Hostile. 28 health points.\n\nFires acid projectiles and leaves temporary darkness patches. Drops a sculk vein.",
+    "entity": "shadow_spitter",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_guardian",
+    "section": "creatures",
+    "title": "Shadow Guardian",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Hostile. 60 health points.\n\nArmored guardian maintains a local home area and attacks with a warned shockwave. Drops a sculk vein.",
+    "entity": "shadow_guardian",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_larva",
+    "section": "creatures",
+    "title": "Shadow Larva",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Hostile. 8 health points.\n\nNatural larvae can mature into Shadow Drones after about one minute; temporary helpers cannot mature. Drops a sculk vein.",
+    "entity": "shadow_larva",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_egg",
+    "section": "creatures",
+    "title": "Shadow Egg",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Neutral. 10 health points.\n\nStationary neutral egg alerts nearby regional allies when hurt and releases bounded temporary larvae on death. Drops a sculk vein.",
+    "entity": "shadow_egg",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shadow_praetorian",
+    "section": "creatures",
+    "title": "Shadow Praetorian",
+    "hint": "Deep Dark. Appears after the world dragon victory.",
+    "body": "Hostile. 140 health points.\n\nRare armored herald uses warned directional strikes and darkness. Drops Shadow Membrane; Royal Shadow Gland remains boss-only.",
+    "entity": "shadow_praetorian",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/sporeling",
+    "section": "creatures",
+    "title": "Sporeling",
+    "hint": "Mushroom fields. Appears after the world dragon victory.",
+    "body": "Neutral. 12 health points.\n\nNeutral hive creature alerts allies when attacked and grants nearby regional allies brief speed during combat. Drops a brown mushroom.",
+    "entity": "sporeling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/mycelium_crawler",
+    "section": "creatures",
+    "title": "Mycelium Crawler",
+    "hint": "Mushroom fields. Appears after the world dragon victory.",
+    "body": "Hostile. 26 health points.\n\nHides until prey is close, then uses a stronger ambush bite with weakness on a cooldown. Drops a brown mushroom.",
+    "entity": "mycelium_crawler",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/infected_mooshroom",
+    "section": "creatures",
+    "title": "Infected Mooshroom",
+    "hint": "Mushroom fields. Appears after the world dragon victory.",
+    "body": "Hostile. 40 health points.\n\nFires spores and poisons nearby attackers with a cooldown-limited defensive spore response. Drops a brown mushroom.",
+    "entity": "infected_mooshroom",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/sporewalker",
+    "section": "creatures",
+    "title": "Sporewalker",
+    "hint": "Mushroom fields. Appears after the world dragon victory.",
+    "body": "Hostile. 30 health points.\n\nRanged spore attacker. Drops a brown mushroom.",
+    "entity": "sporewalker",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/mycelial_guardian",
+    "section": "creatures",
+    "title": "Mycelial Guardian",
+    "hint": "Mushroom fields. Appears after the world dragon victory.",
+    "body": "Neutral. 110 health points.\n\nRare neutral herald heals one health every two seconds on mycelium and creates temporary spore patches in combat. Drops Mycelial Heart Fragment.",
+    "entity": "mycelial_guardian",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/crimson_ravager",
+    "section": "creatures",
+    "title": "Crimson Ravager",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 50 health points.\n\nCrimson Forest charger with a warned attack. Drops crimson fungus.",
+    "entity": "crimson_ravager",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/fungal_imp",
+    "section": "creatures",
+    "title": "Fungal Imp",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 18 health points.\n\nCrimson Forest melee creature grants nearby regional allies brief speed during combat. Drops crimson fungus.",
+    "entity": "fungal_imp",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/bloodroot",
+    "section": "creatures",
+    "title": "Bloodroot",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 32 health points.\n\nStationary Crimson Forest predator uses warned close-range snares. Drops crimson fungus.",
+    "entity": "bloodroot",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/warped_stalker",
+    "section": "creatures",
+    "title": "Warped Stalker",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Neutral. 40 health points.\n\nWarped Forest creature becomes hostile when stared at and can blink during combat. Drops warped fungus.",
+    "entity": "warped_stalker",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/warped_wisp",
+    "section": "creatures",
+    "title": "Warped Wisp",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 22 health points.\n\nWarped Forest flying spore attacker with short combat blinks. Drops warped fungus.",
+    "entity": "warped_wisp",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/riftling",
+    "section": "creatures",
+    "title": "Riftling",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Neutral. 14 health points.\n\nNeutral Warped Forest flier with short combat blinks. Drops warped fungus.",
+    "entity": "riftling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/ash_ghoul",
+    "section": "creatures",
+    "title": "Ash Ghoul",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 28 health points.\n\nNether Wastes and Basalt Deltas melee creature ignites targets for two seconds. Drops magma cream.",
+    "entity": "ash_ghoul",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/magma_brute",
+    "section": "creatures",
+    "title": "Magma Brute",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 60 health points.\n\nArmored Wastes and Deltas creature uses warned fiery attacks and temporary magma patches. Drops magma cream.",
+    "entity": "magma_brute",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/infernal_hoglin",
+    "section": "creatures",
+    "title": "Infernal Hoglin",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 44 health points.\n\nWastes and Deltas charger with a warned attack. Drops magma cream.",
+    "entity": "infernal_hoglin",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/crimson_spawn",
+    "section": "creatures",
+    "title": "Crimson Spawn",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 120 health points.\n\nRare Crimson Forest herald with a warned charge. Drops Crimson Organ.",
+    "entity": "crimson_spawn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/warped_spawn",
+    "section": "creatures",
+    "title": "Warped Spawn",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 110 health points.\n\nRare Warped Forest herald uses spore projectiles and short combat blinks. Drops Warped Organ.",
+    "entity": "warped_spawn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/infernal_spawn",
+    "section": "creatures",
+    "title": "Infernal Spawn",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Appears after the world dragon victory.",
+    "body": "Hostile. 130 health points.\n\nRare Wastes and Deltas herald uses fiery attacks and temporary magma patches. Drops Infernal Organ.",
+    "entity": "infernal_spawn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/lost_soul",
+    "section": "creatures",
+    "title": "Lost Soul",
+    "hint": "Soul Sand Valley. Appears after the world dragon victory.",
+    "body": "Hostile. 12 health points.\n\nFlying spirit briefly passes obstacles during pursuit. Contact attacks temporarily reduce maximum health by half a heart. Drops a bone.",
+    "entity": "lost_soul",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/bonewalker",
+    "section": "creatures",
+    "title": "Bonewalker",
+    "hint": "Soul Sand Valley. Appears after the world dragon victory.",
+    "body": "Hostile. 28 health points.\n\nMelee undead reconstructs once at half health after ordinary lethal damage. That used revival persists across reloads. Drops a bone on final defeat.",
+    "entity": "bonewalker",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/soulflame_skull",
+    "section": "creatures",
+    "title": "Soulflame Skull",
+    "hint": "Soul Sand Valley. Appears after the world dragon victory.",
+    "body": "Hostile. 22 health points.\n\nFlying ranged soul-bolt attacker. Drops a bone.",
+    "entity": "soulflame_skull",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/tormented",
+    "section": "creatures",
+    "title": "Tormented",
+    "hint": "Soul Sand Valley. Appears after the world dragon victory.",
+    "body": "Hostile. 28 health points.\n\nStationary predator uses warned close-range snares. Drops a bone.",
+    "entity": "tormented",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/soul_keeper",
+    "section": "creatures",
+    "title": "Soul Keeper",
+    "hint": "Soul Sand Valley. Appears after the world dragon victory.",
+    "body": "Hostile. 110 health points.\n\nRare herald fires soul bolts that temporarily reduce maximum health by one heart and calls bounded Lost Soul helpers. Drops Captured Soul.",
+    "entity": "soul_keeper",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/voidling",
+    "section": "creatures",
+    "title": "Voidling",
+    "hint": "The End. Appears after the world dragon victory.",
+    "body": "Hostile. 12 health points.\n\nSmall hostile flier with short combat blinks; natural groups can contain several creatures. Drops chorus fruit.",
+    "entity": "voidling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/end_grazer",
+    "section": "creatures",
+    "title": "End Grazer",
+    "hint": "The End. Appears after the world dragon victory.",
+    "body": "Passive. 26 health points.\n\nPassive creature heals near chorus without consuming the plants and blinks away when injured. Drops chorus fruit.",
+    "entity": "end_grazer",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/shardling",
+    "section": "creatures",
+    "title": "Shardling",
+    "hint": "The End. Appears after the world dragon victory.",
+    "body": "Neutral. 28 health points.\n\nNeutral flier can blink to dodge a projectile when its cooldown is ready. Drops chorus fruit.",
+    "entity": "shardling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/void_ray",
+    "section": "creatures",
+    "title": "Void Ray",
+    "hint": "The End. Appears after the world dragon victory.",
+    "body": "Neutral. 40 health points.\n\nLarge neutral flying melee creature. Drops chorus fruit.",
+    "entity": "void_ray",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/watcher",
+    "section": "creatures",
+    "title": "Watcher",
+    "hint": "The End. Appears after the world dragon victory.",
+    "body": "Hostile. 26 health points.\n\nFlying ranged observer retreats when prey is close. Drops chorus fruit.",
+    "entity": "watcher",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/void_sentinel",
+    "section": "creatures",
+    "title": "Void Sentinel",
+    "hint": "The End. Appears after the world dragon victory.",
+    "body": "Hostile. 110 health points.\n\nRare herald uses void projectiles, combat blinks, rotating defensive fragments, and bounded Voidling helpers. Strike between its shield fragments. Drops Watcher Fragment.'''.splitlines())",
+    "entity": "void_sentinel",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/barkling",
+    "section": "creatures",
+    "title": "Barkling",
+    "hint": "Forests. Appears after the world dragon victory.",
+    "body": "Neutral walking sapling with 16 HP. Freezes near unprovoked players and retaliates with thrown sticks. Use shears to harvest one Wild Herbs; costs one durability and regrows after five minutes of world time.",
+    "entity": "barkling",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/hollowed",
+    "section": "creatures",
+    "title": "Hollowed",
+    "hint": "Forests. Appears after the world dragon victory.",
+    "body": "Slow armored wooden humanoid with 36 HP. Melee hits apply Slowness III for two seconds. Player kills drop one Wild Herbs.",
+    "entity": "hollowed",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/rootcrawler",
+    "section": "creatures",
+    "title": "Rootcrawler",
+    "hint": "Forests. Appears after the world dragon victory.",
+    "body": "Low tangled roots with 24 HP. Marks a fixed spot for 1.25 seconds, then strikes within 1.5 blocks. Player kills drop one Wild Herbs.",
+    "entity": "rootcrawler",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/ancient_ent",
+    "section": "creatures",
+    "title": "Ancient Ent",
+    "hint": "Forests. Appears after the world dragon victory.",
+    "body": "Rare 100 HP herald with a wider three-block root strike. Player kills drop Wild Herbs and Ancient Heartwood, providing another route to summon the Tree Spirit.",
+    "entity": "ancient_ent",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/dire_wolf",
+    "section": "creatures",
+    "title": "Dire Wolf",
+    "hint": "Taigas. Appears after the world dragon victory.",
+    "body": "28 HP pack predator; drops one bone.",
+    "entity": "dire_wolf",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/frostfang",
+    "section": "creatures",
+    "title": "Frostfang",
+    "hint": "Taigas. Appears after the world dragon victory.",
+    "body": "30 HP; walks on powder snow, successful bites inflict Slowness I for three seconds; drops one bone.",
+    "entity": "frostfang",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/ravaged_wolf",
+    "section": "creatures",
+    "title": "Ravaged Wolf",
+    "hint": "Taigas. Appears after the world dragon victory.",
+    "body": "44 HP with enlarged, uneven forelimbs; at or below 35% health while targeting prey, frenzies for five seconds with +35% movement speed and +2 attack damage. Fifteen-second trigger cooldown; drops one rabbit hide.",
+    "entity": "ravaged_wolf",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/alpha_dire_wolf",
+    "section": "creatures",
+    "title": "Alpha Dire Wolf",
+    "hint": "Taigas. Appears after the world dragon victory.",
+    "body": "Rare 90 HP herald; howls to boost its pack and marks a landing before a short pounce. Drops one bone and the existing Moonlit Fang boss summon.",
+    "entity": "alpha_dire_wolf",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/griffin",
+    "section": "mounts",
+    "title": "Griffin",
+    "hint": "Exposed jagged, frozen or stony peaks at Y128 or higher.",
+    "body": "Flight and hover.\n\nBonding item: Raw rabbit. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "griffin",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/cerberus",
+    "section": "mounts",
+    "title": "Cerberus",
+    "hint": "Nether biomes below Y120 on dry supported ground.",
+    "body": "Fast ground travel.\n\nBonding item: Bone. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.\n\nThe mount and mounted owner are immune to fire and lava damage. Rider protection ends immediately on dismount. Cooldown: Passive. Hold G (rebindable) while riding to use active abilities.\n\nFire and lava immunity protects the mount and mounted owner; it ends immediately on dismount.",
+    "entity": "cerberus",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/flying_squirrel",
+    "section": "mounts",
+    "title": "Flying Squirrel",
+    "hint": "Surface forests and taigas.",
+    "body": "Ground travel and downward gliding.\n\nBonding item: Sweet berries. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "flying_squirrel",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/winged_unicorn",
+    "section": "mounts",
+    "title": "Winged Unicorn",
+    "hint": "End island surfaces at Y30 or higher.",
+    "body": "Flight and hover.\n\nBonding item: Golden apple. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "winged_unicorn",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/woolly_rhino",
+    "section": "mounts",
+    "title": "Woolly Rhino",
+    "hint": "Snowy plains, ice spikes, snowy taiga, grove, snowy slopes, frozen or jagged peaks.",
+    "body": "Ground travel.\n\nBonding item: Wheat. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.\n\nUp to one second of faster ground travel; contact deals 10 damage and knockback, once per enemy per charge. Actual movement is required. Cooldown: 5 seconds. Hold G (rebindable) while riding to use active abilities.",
+    "entity": "woolly_rhino",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/dragon_mount",
+    "section": "mounts",
+    "title": "Riding Dragon",
+    "hint": "Covered Overworld caves below Y48, with lava within six blocks horizontally and three vertically.",
+    "body": "Flight and hover.\n\nBonding item: Cooked beef. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.\n\nAimed eight-block cone deals 8 fire damage and three seconds of burning. Fire-immune enemies retain their immunity. Cooldown: 4 seconds. Hold G (rebindable) while riding to use active abilities.",
+    "entity": "dragon_mount",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/riding_golem",
+    "section": "mounts",
+    "title": "Riding Golem",
+    "hint": "Covered Overworld caves below Y48.",
+    "body": "Slow ground travel.\n\nBonding item: Iron ingot. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "riding_golem",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/sasquatch",
+    "section": "mounts",
+    "title": "Sasquatch",
+    "hint": "Snowy taiga and grove surfaces.",
+    "body": "Ground travel.\n\nBonding item: Apple. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "sasquatch",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/poptart_cat",
+    "section": "mounts",
+    "title": "Poptart Cat",
+    "hint": "Very rare open upper Overworld air, normally Y272-311.",
+    "body": "Flight, hover and rear rainbow trail.\n\nBonding item: Cookie. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "poptart_cat",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/leopard",
+    "section": "mounts",
+    "title": "Jungle Leopard",
+    "hint": "Jungle, sparse jungle and bamboo jungle surfaces.",
+    "body": "Fast ground travel and a higher jump.\n\nBonding item: Raw chicken. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "leopard",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/seahorse",
+    "section": "mounts",
+    "title": "Giant Seahorse",
+    "hint": "Ocean water with room for the full body and water above and below.",
+    "body": "Controlled swimming; very slow on land.\n\nBonding item: Kelp. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "seahorse",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/giant_scorpion",
+    "section": "mounts",
+    "title": "Giant Scorpion",
+    "hint": "Desert surfaces.",
+    "body": "Ground travel.\n\nBonding item: Spider eye. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.\n\nNearest hostile in a forward cone within 3.5 blocks takes 4 damage and Poison I for five seconds. Poison immunity still applies. Cooldown: 3 seconds. Hold G (rebindable) while riding to use active abilities.",
+    "entity": "giant_scorpion",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/crocodile",
+    "section": "mounts",
+    "title": "Swamp Crocodile",
+    "hint": "Swamp and mangrove swamp banks near water.",
+    "body": "Ground travel and controlled swimming.\n\nBonding item: Raw cod. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.\n\nNearest hostile in a forward cone within 3.5 blocks takes 8 damage and Slowness I for two seconds, on land or underwater. Cooldown: 2 seconds. Hold G (rebindable) while riding to use active abilities.",
+    "entity": "crocodile",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/giant_mole",
+    "section": "mounts",
+    "title": "Giant Mole",
+    "hint": "Super rare in Soul Sand Valley below Y120, on dry supported ground.",
+    "body": "Ground travel and tunneling.\n\nBonding item: Beetroot. Feed three times, at least two seconds apart. Owner-only riding; no saddle.\n\nWASD and mouse steer. Space jumps or rises; X descends in air or water. Shift dismounts. Giant Mole: hold V while moving to dig.\n\nSneak-use empty-handed opens care: Follow/Stay, nine cargo slots, breeding and accepted ownership transfers. Defeated owned mounts recover with a Veterinary Kit. Companion Capsules store unoccupied mounts. Breed healthy same-species adults belonging to one owner while both Stay.",
+    "entity": "giant_mole",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/ancient_tree_spirit",
+    "section": "bosses",
+    "title": "Ancient Tree Spirit",
+    "hint": "Forests. Find its landmark and ritual clues.",
+    "body": "Solo health: 800.\n\nRitual: Moss block in a supported forest clearing; 21 by 21 clear floor and 28 blocks of height.\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "ancient_tree_spirit",
+    "site": "",
+    "boss": "ancient_tree_spirit"
+  },
+  {
+    "id": "entity/mutant_wolf",
+    "section": "bosses",
+    "title": "Giant Mutated Wolf",
+    "hint": "Taigas. Find its landmark and ritual clues.",
+    "body": "Solo health: 900.\n\nRitual: Bone block in a supported taiga at night.\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "mutant_wolf",
+    "site": "",
+    "boss": "mutant_wolf"
+  },
+  {
+    "id": "entity/mutant_zombie",
+    "section": "bosses",
+    "title": "Giant Mutant Zombie",
+    "hint": "Plains and savannas. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,000.\n\nRitual: Hay bale in plains or meadows\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "mutant_zombie",
+    "site": "",
+    "boss": "mutant_zombie"
+  },
+  {
+    "id": "entity/fossil_tyrant",
+    "section": "bosses",
+    "title": "Fossil Tyrant",
+    "hint": "Deserts and badlands. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,200.\n\nRitual: Bone block in desert or badlands\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "fossil_tyrant",
+    "site": "",
+    "boss": "fossil_tyrant"
+  },
+  {
+    "id": "entity/thunder_bird",
+    "section": "bosses",
+    "title": "Thunder Bird",
+    "hint": "Savannas. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,100.\n\nRitual: Unoxidized copper block in savanna during a thunderstorm\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "thunder_bird",
+    "site": "",
+    "boss": "thunder_bird"
+  },
+  {
+    "id": "entity/titan_boa",
+    "section": "bosses",
+    "title": "Titan Boa",
+    "hint": "Jungles. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,100.\n\nRitual: Moss block in jungle\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "titan_boa",
+    "site": "",
+    "boss": "titan_boa"
+  },
+  {
+    "id": "entity/baba_yaga",
+    "section": "bosses",
+    "title": "Baba Yaga",
+    "hint": "Swamps. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,200.\n\nRitual: Empty cauldron in swamp at night\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "baba_yaga",
+    "site": "",
+    "boss": "baba_yaga"
+  },
+  {
+    "id": "entity/mountain_titan",
+    "section": "bosses",
+    "title": "Mountain Titan",
+    "hint": "Mountain peaks. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,500.\n\nRitual: Chiseled stone bricks in mountains\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "mountain_titan",
+    "site": "",
+    "boss": "mountain_titan"
+  },
+  {
+    "id": "entity/ice_wyrm",
+    "section": "bosses",
+    "title": "Ice Wyrm",
+    "hint": "Snowy regions. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,300.\n\nRitual: Blue ice in frozen lands\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "ice_wyrm",
+    "site": "",
+    "boss": "ice_wyrm"
+  },
+  {
+    "id": "entity/kraken",
+    "section": "bosses",
+    "title": "Kraken",
+    "hint": "Oceans. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,500.\n\nRitual: Cast into open ocean water at least seven blocks deep\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "kraken",
+    "site": "",
+    "boss": "kraken"
+  },
+  {
+    "id": "entity/cave_crawler",
+    "section": "bosses",
+    "title": "Giant Cave Crawler",
+    "hint": "Caves. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,100.\n\nRitual: Cobweb in cave biomes, or ordinary caves below Y48; excludes Deep Dark\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "cave_crawler",
+    "site": "",
+    "boss": "cave_crawler"
+  },
+  {
+    "id": "entity/shadow_creeper_queen",
+    "section": "bosses",
+    "title": "Shadow Creeper Queen",
+    "hint": "Deep Dark. Find its landmark and ritual clues.",
+    "body": "Solo health: 2,400.\n\nRitual: Sculk in a large Deep Dark cavern\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "shadow_creeper_queen",
+    "site": "",
+    "boss": "shadow_creeper_queen"
+  },
+  {
+    "id": "entity/mycelial_sovereign",
+    "section": "bosses",
+    "title": "The Mycelial Sovereign",
+    "hint": "Mushroom fields. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,400.\n\nRitual: Mycelium in mushroom fields\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "mycelial_sovereign",
+    "site": "",
+    "boss": "mycelial_sovereign"
+  },
+  {
+    "id": "entity/netherborn",
+    "section": "bosses",
+    "title": "The Netherborn",
+    "hint": "Crimson and warped forests, Nether wastes and basalt deltas. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,500.\n\nRitual: Magma in crimson/warped forests, Nether wastes, or basalt deltas\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "netherborn",
+    "site": "",
+    "boss": "netherborn"
+  },
+  {
+    "id": "entity/soulbound_colossus",
+    "section": "bosses",
+    "title": "The Soulbound Colossus",
+    "hint": "Soul Sand Valley. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,700.\n\nRitual: Soul sand in a Soul Sand Valley\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "soulbound_colossus",
+    "site": "",
+    "boss": "soulbound_colossus"
+  },
+  {
+    "id": "entity/void_eye",
+    "section": "bosses",
+    "title": "The Void Eye",
+    "hint": "The End. Find its landmark and ritual clues.",
+    "body": "Solo health: 1,800.\n\nRitual: Obsidian on an outer End island\n\nRequires the world dragon victory, non-Peaceful difficulty and clear space. Failed rituals preserve the summon. Read the landmark ritual book and item tooltip for preparation.\n\nHealth scales at summoning for up to four nearby Survival players. Watch attack warnings; phases change at 70% and 35% health.\n\nA consumed heart is tracked separately from a credited kill. Fifteen different hearts finish the health track; there are sixteen families.",
+    "entity": "void_eye",
+    "site": "",
+    "boss": "void_eye"
+  },
+  {
+    "id": "landmark/farm_excavation",
+    "section": "landmarks",
+    "title": "Farm Excavation",
+    "hint": "Plains and meadows. Explore newly generated terrain.",
+    "body": "Associated boss: Mutant Zombie.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "farm_excavation",
+    "boss": "mutant_zombie"
+  },
+  {
+    "id": "landmark/fossil_altar",
+    "section": "landmarks",
+    "title": "Fossil Altar",
+    "hint": "Desert and badlands. Explore newly generated terrain.",
+    "body": "Associated boss: Fossil Tyrant.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "fossil_altar",
+    "boss": "fossil_tyrant"
+  },
+  {
+    "id": "landmark/storm_altar",
+    "section": "landmarks",
+    "title": "Storm Altar",
+    "hint": "Savanna. Explore newly generated terrain.",
+    "body": "Associated boss: Thunder Bird.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "storm_altar",
+    "boss": "thunder_bird"
+  },
+  {
+    "id": "landmark/serpent_sanctuary",
+    "section": "landmarks",
+    "title": "Serpent Sanctuary",
+    "hint": "Jungle. Explore newly generated terrain.",
+    "body": "Associated boss: Titan Boa.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "serpent_sanctuary",
+    "boss": "titan_boa"
+  },
+  {
+    "id": "landmark/witch_hut",
+    "section": "landmarks",
+    "title": "Witch Hut",
+    "hint": "Swamp. Explore newly generated terrain.",
+    "body": "Associated boss: Baba Yaga.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "witch_hut",
+    "boss": "baba_yaga"
+  },
+  {
+    "id": "landmark/quarry_shrine",
+    "section": "landmarks",
+    "title": "Quarry Shrine",
+    "hint": "Mountain habitats. Explore newly generated terrain.",
+    "body": "Associated boss: Mountain Titan.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "quarry_shrine",
+    "boss": "mountain_titan"
+  },
+  {
+    "id": "landmark/frozen_nest",
+    "section": "landmarks",
+    "title": "Frozen Nest",
+    "hint": "Frozen lands. Explore newly generated terrain.",
+    "body": "Associated boss: Ice Wyrm.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "frozen_nest",
+    "boss": "ice_wyrm"
+  },
+  {
+    "id": "landmark/expedition_wreck",
+    "section": "landmarks",
+    "title": "Expedition Wreck",
+    "hint": "Open oceans. Explore newly generated terrain.",
+    "body": "Associated boss: Kraken.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "expedition_wreck",
+    "boss": "kraken"
+  },
+  {
+    "id": "landmark/webbed_outpost",
+    "section": "landmarks",
+    "title": "Webbed Outpost",
+    "hint": "Cave biomes. Explore newly generated terrain.",
+    "body": "Associated boss: Cave Crawler.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "webbed_outpost",
+    "boss": "cave_crawler"
+  },
+  {
+    "id": "landmark/deep_dark_hive",
+    "section": "landmarks",
+    "title": "Deep Dark Hive",
+    "hint": "Deep Dark. Explore newly generated terrain.",
+    "body": "Associated boss: Shadow Creeper Queen.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "deep_dark_hive",
+    "boss": "shadow_creeper_queen"
+  },
+  {
+    "id": "landmark/fungal_court",
+    "section": "landmarks",
+    "title": "Fungal Court",
+    "hint": "Mushroom fields. Explore newly generated terrain.",
+    "body": "Associated boss: Mycelial Sovereign.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "fungal_court",
+    "boss": "mycelial_sovereign"
+  },
+  {
+    "id": "landmark/ember_shrine",
+    "section": "landmarks",
+    "title": "Ember Shrine",
+    "hint": "Netherborn biomes. Explore newly generated terrain.",
+    "body": "Associated boss: Netherborn.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "ember_shrine",
+    "boss": "netherborn"
+  },
+  {
+    "id": "landmark/soul_reliquary",
+    "section": "landmarks",
+    "title": "Soul Reliquary",
+    "hint": "Soul Sand Valley. Explore newly generated terrain.",
+    "body": "Associated boss: Soulbound Colossus.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "soul_reliquary",
+    "boss": "soulbound_colossus"
+  },
+  {
+    "id": "landmark/end_observatory",
+    "section": "landmarks",
+    "title": "End Observatory",
+    "hint": "Outer End islands. Explore newly generated terrain.",
+    "body": "Associated boss: Void Eye.\n\nSearch for a ritual book and finite supplies. Existing explored chunks are preserved. Visiting records this landmark family; the Journal does not locate undiscovered structures.",
+    "entity": "",
+    "site": "end_observatory",
+    "boss": "void_eye"
+  },
+  {
+    "id": "landmark/research_bunker",
+    "section": "landmarks",
+    "title": "Research Bunker",
+    "hint": "New Overworld plains, forests, birch forests and taigas.",
+    "body": "Read the Quarantine Protocol and use the research archive. Research persists per player; an activated gate can be used by everyone.",
+    "entity": "",
+    "site": "research_bunker",
+    "boss": ""
+  },
+  {
+    "id": "guide/starting",
+    "section": "overview",
+    "title": "Your expedition",
+    "hint": "",
+    "body": "Discover creatures within 24 blocks with a clear line of sight. Enter native landmark bounds to record visits. Discoveries belong to you and survive death.\n\nCooking knowledge, consumed hearts and Forsaken research use your existing records. Boss defeats use Minecraft credited-kill statistics; historical shared participation cannot be reconstructed.\n\nRefresh after exploring to update this snapshot. The Journal does not load terrain, award progress, consume items or pause the world.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "guide/companion_care",
+    "section": "overview",
+    "title": "Companion care",
+    "hint": "",
+    "body": "Feed species-specific foods to build trust. Only owners ride; no saddle is needed. Sneak-use opens commands and cargo.\n\nBreeding needs healthy adult parents of the same species and owner, both on Stay. Babies cannot be ridden. Defeated owned companions become recoverable using a Veterinary Kit.\n\nOwnership transfer requires a nearby recipient to accept. Cargo stays with the mount. Capsule and recovery travel respect OneBlock item separation.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "forsaken/travel",
+    "section": "forsaken",
+    "title": "Research and travel",
+    "hint": "Find an Overworld research bunker and use its archive.",
+    "body": "Find a research bunker and use its archive. Repair the 5 by 5 obsidian gate border and use a Containment Key after the world dragon victory. Empty-hand use enters. The Extraction Terminal returns you near your entrance. Normal inventory and death rules apply.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "forsaken/threats",
+    "section": "forsaken",
+    "title": "Threats and contamination",
+    "hint": "Find an Overworld research bunker and use its archive.",
+    "body": "Four infected roles patrol cities. Nests drop one Parasitic Core when destroyed. Combat, explosions and breaking blocks increase shared local pressure; quiet time reduces it. Contamination lasts up to 60 seconds. Honey, milk, extraction or death clears it. Quarantine Armor shortens exposure; the full set prevents new exposure.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "forsaken/equipment",
+    "section": "forsaken",
+    "title": "Expedition equipment",
+    "hint": "Find an Overworld research bunker and use its archive.",
+    "body": "Smith Quarantine Armor from a Module template, iron armor and Biofiber. Smith the Pulse Blade from a Module, iron sword and Core. Charge Use for 1.5 seconds and release: four-block infected-only pulse, eight-second cooldown.\n\nA Containment Beacon costs 4 Alloy, 2 Modules, 2 Redstone and 1 Data. One Core fuels five minutes within 16 blocks; existing enemies remain.\n\nThe Bio-Scanner costs 1 Alloy, 2 Data, 1 Core and 1 Redstone. Sneak-use cycles nests, resources/caches and local pressure; scans share five seconds of cooldown.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "forsaken/resources",
+    "section": "forsaken",
+    "title": "Resources and rewards",
+    "hint": "Find an Overworld research bunker and use its archive.",
+    "body": "Alloy: salvage caches. Biofiber: infected and medical caches. Core: destroyed nests. Research Data: annex and roof caches. Modules: occasional medical/research/roof cache rewards, or craft from 4 Biofiber, 2 Alloy, 2 Data and 1 Core. Caches do not restock.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "landmark/druid_shrine",
+    "section": "landmarks",
+    "title": "Druid Shrine",
+    "hint": "Forests. Explore new terrain.",
+    "body": "Look for the ritual book and prepared clearing. Supplies are finite; visits record the family without locating other sites.",
+    "entity": "",
+    "site": "druid_shrine",
+    "boss": "ancient_tree_spirit"
+  },
+  {
+    "id": "landmark/hunter_camp",
+    "section": "landmarks",
+    "title": "Hunter Camp",
+    "hint": "Taigas. Explore new terrain.",
+    "body": "Look for the ritual book and prepared clearing. Supplies are finite; visits record the family without locating other sites.",
+    "entity": "",
+    "site": "hunter_camp",
+    "boss": "mutant_wolf"
+  },
+  {
+    "id": "entity/infected_wanderer",
+    "section": "forsaken",
+    "title": "Infected Wanderer",
+    "hint": "Ruined cities in Forsaken.",
+    "body": "Read its attack warnings. Avoid nest clusters, carry honey or milk, and keep an extraction route clear. Quarantine Armor helps prevent contamination.",
+    "entity": "infected_wanderer",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/infected_crawler",
+    "section": "forsaken",
+    "title": "Infected Crawler",
+    "hint": "Ruined cities in Forsaken.",
+    "body": "Read its attack warnings. Avoid nest clusters, carry honey or milk, and keep an extraction route clear. Quarantine Armor helps prevent contamination.",
+    "entity": "infected_crawler",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/spore_spitter",
+    "section": "forsaken",
+    "title": "Spore Spitter",
+    "hint": "Ruined cities in Forsaken.",
+    "body": "Read its attack warnings. Avoid nest clusters, carry honey or milk, and keep an extraction route clear. Quarantine Armor helps prevent contamination.",
+    "entity": "spore_spitter",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "entity/assimilated_brute",
+    "section": "forsaken",
+    "title": "Assimilated Brute",
+    "hint": "Ruined cities in Forsaken.",
+    "body": "Read its attack warnings. Avoid nest clusters, carry honey or milk, and keep an extraction route clear. Quarantine Armor helps prevent contamination.",
+    "entity": "assimilated_brute",
+    "site": "",
+    "boss": ""
+  }
+]

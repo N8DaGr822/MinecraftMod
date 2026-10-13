@@ -11,6 +11,7 @@ The hive uses breathy hisses, short chitin-like clicks, and a low resonant voice
 - Regional atmosphere retains its existing post-dragon eligibility, per-player rate limits, and Ambient volume category.
 - The client selects the nearest living boss within 64 blocks and retains it until it dies, unloads, or moves beyond 80 blocks. This includes creative auditioning; spectators and dead players do not select encounters. Proximity selects music, not combat participation.
 - Phase changes crossfade between streamed scores. The mix gain rises from .36 to .46 to .56 across phases, accompanying the denser percussion. Fade-in is approximately three to four-and-a-half seconds; fade-out takes at most two-and-a-quarter seconds. At most two score instances coexist. Dimension change/disconnect stops the old world's scores immediately. Pause follows the game; muted/reloaded channels can recover when audible. Music volume controls these scores; entity sounds use Hostile Creatures.
+- During the selected boss's synchronized warning, the encounter score ducks to 45% of its normal gain over four ticks and recovers over fourteen ticks after the warning. Crossfade envelopes continue independently; no other audio category or user volume setting is changed. The nine mounts use quiet native animal/material cues, separate from the 115-creature custom audio catalog.
 - Vanilla background music is suspended while an encounter score or its fade is active. Normal music scheduling resumes afterward. Jukebox records are not controlled by this feature.
 
 ## Author and audition

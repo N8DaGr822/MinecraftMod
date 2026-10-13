@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "darkspawn:block/containment_beacon"
+    },
+    "active=true": {
+      "model": "darkspawn:block/containment_beacon_active"
+    }
+  }
+}

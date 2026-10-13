@@ -60,6 +60,8 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.boss.EquipmentPowers.initialize();
 		ForestEcosystem.initialize();
 		darkspawn.black.oneblock.OneBlock.initialize();
+		// Recovery Inventory: Restore OneBlock profiles before delivering companion tokens on join.
+		darkspawn.black.mount.MountCompanions.initialize();
 		darkspawn.black.forsaken.Forsaken.initialize();
 		darkspawn.black.starter.TestingCamp.initialize();
 		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
@@ -67,6 +69,7 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.ecosystem.RegionalEcosystems.initialize();
 		darkspawn.black.ecosystem.RegionalAtmosphere.initialize();
 		darkspawn.black.worldgen.BossLandmarkStructure.initialize();
+		darkspawn.black.journal.Journal.initialize();
 		PayloadTypeRegistry.serverboundPlay().register(SortInventoryPayload.TYPE, SortInventoryPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(SortInventoryPayload.TYPE,
 				(payload, context) -> InventorySorter.sort(context.player(), payload.stateId()));

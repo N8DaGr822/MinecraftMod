@@ -13,6 +13,6 @@ public final class DragonMountRenderer extends MobRenderer<DragonMount, GriffinR
     @Override public GriffinRenderState createRenderState() { return new GriffinRenderState(); }
     @Override public Identifier getTextureLocation(GriffinRenderState state) { return Darkspawn.id("textures/entity/dragon_mount.png"); }
     @Override public void extractRenderState(DragonMount entity, GriffinRenderState state, float partialTick) {
-        super.extractRenderState(entity, state, partialTick); state.flying = entity.flying();
+        super.extractRenderState(entity, state, partialTick); state.flying = entity.flying(); state.flightPose = entity.flightPose(partialTick); state.attackPose = entity.attackPose(partialTick);
     }
 }

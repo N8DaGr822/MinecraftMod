@@ -80,10 +80,62 @@ Loot is ordinary expedition salvage for now. The five exclusive resource types a
 
 Manual acceptance: discover a fresh site in a world with structures enabled, verify every route using normal movement, inspect sign/lighting/sky readability, loot with two players, then restart and revisit edited buildings and emptied chests. No client playtest is claimed by the layout preview.
 
+## Increment 3 Threats contamination and rewards
+
+Four standalone Forsaken enemies use authored rigs with idle, movement, warning, impact and death clips. Wanderers have 24 health and charge from slow patrols; Crawlers have 16 health, a low silhouette and flanking approach; Spore Spitters have 22 health, retreat at close range and fire physical spore projectiles; Brutes have 60 health, 10 armor, heavy knockback and slow swings. Spitters and Brutes belong to the infested district; Brutes require pressure of at least 50. Windups last 16 ticks, or 24 for Brutes. Impact checks range and sight again, so moving away or taking cover works.
+
+### Permanent nests and migration
+
+Four biological nest blocks are authored in the hospital and annex, on ground and upper floors. Mining or destroying one yields a single Parasitic Core through its native loot table. It has no obtainable placeable item, Silk Touch does not return the nest, and no regeneration hook recreates it. Native chunk saves preserve its removal. Creative breaking follows normal no-drop rules. Removal lowers city pressure by 25, ends an active surge and suppresses unrelated district spawns for 6,000 ticks (five minutes). Other intact nests continue spawning.
+
+Only new city placement gains nests. Existing cities, player construction, emptied caches and broken blocks are not rebuilt. Existing unopened lazy-loot caches use the updated loot tables when first opened; already-opened caches are never refilled. Managed infected can appear in the known bounds of existing cities as well as new ones. Explore a wholly fresh site for the complete nest loop.
+
+### Bounded local pressure
+
+One saved pressure value belongs to each 512-block grid cell's 64 by 80 city footprint; nearby players share it. Accepted combat adds 6, an explosion adds 15, and block breaking adds 3, throttled to one contribution per city per second. Pressure caps at 100 and decays by one every 100 quiet ticks. At 25, players receive warning feedback; at 50 the district attempts two spawns per five seconds and nests shorten their interval. At 75 a surge can begin: three district attempts per five seconds for at most 600 ticks, with 2,400 ticks between surge starts.
+
+Each city allows at most 12 nearby living infected, and Forsaken allows at most 64 loaded infected. Every district and nest shares a world budget of eight attempts per second, including failed attempts. District spawning checks players once per five seconds and deduplicates their cities. Normal nest intervals are 800 active ticks, falling to 400 at pressure 50, with at most two placement attempts per interval. Only loaded chunks are eligible. Natural candidates stay 12 blocks from players; nest candidates stay four blocks away. Creatures require clear space, solid support, the world border, a nearby living Survival player and enabled mob spawning. Peaceful difficulty stops spawning.
+
+Pressure, suppression and surge timestamps survive saves/restarts. Unloaded areas decay lazily using elapsed world ticks; time while the server is stopped does not count. Nest timers reset on reload, so missed waves are never replayed. Saved pressure entries are pruned when quiet and expired, with a defensive 4,096-entry limit. Spawning counts loaded entities at most once per active spawn second; it never loads terrain to count or create infected. These are initial balance defaults, not a completed large-server performance claim.
+
+### Contamination and protection
+
+Infected hits, spore impacts and standing within three blocks of an active nest cause a non-stacking Contamination effect: 15% slower movement for up to 1,200 ticks. A later exposure can refresh the timer. Completed honey or milk consumption cures it; successful extraction clears it before the player's travel save. Native death clears effects. There is no permanent mutation or Overworld infection spread.
+
+Each equipped Quarantine Armor piece shortens new exposure by 300 ticks. All four pieces prevent new contamination entirely; equipping them does not retroactively cure an existing effect. Armor uses iron-tier defense (2/6/5/2), durability factor 18, and iron repair materials. The authored yellow sealed suit has a dark visor, paired respirator filters and a rear scrubber.
+
+### Resource and equipment loop
+
+| Resource | Source | Current use |
+| --- | --- | --- |
+| Contaminated Alloy | Guaranteed 1–3 in salvage caches | Modules and scanner |
+| Biofiber | Player-killed infected: 1, or 3 from Brutes; medical caches: 1–3 | Modules and armor smithing |
+| Parasitic Core | One per destroyed nest | Modules and scanner |
+| Research Data | Guaranteed 1–3 in annex and rooftop caches | Modules and scanner |
+| Quarantine Module | 20% extra roll in medical/research/rooftop caches; also craftable | Armor smithing template |
+
+The module recipe is `BAB / DCD / BAB`: B = Biofiber, A = Alloy, D = Data, C = Core. Smithing uses one module, an iron armor piece and one Biofiber to make the corresponding quarantine piece. The native smithing transform preserves damage, names, enchantments and other components. The scanner recipe has rows ` A `, `DCD`, and ` R `: A = Alloy, D = Data, C = Core, R = Redstone.
+
+Use the Bio-Scanner in Forsaken to report the closest active nest's coordinates and distance. It searches only block-entity maps in at most 25 already-loaded chunks, within a three-dimensional 32-block radius. It has a five-second cooldown and does not reveal unloaded structures or regenerate destroyed nests.
+
+### Authoring and verification
+
+`python tools/assets/forsaken-content.py` generates four creature rigs, their textures and animation clips, quarantine armor geometry, inventory icons, recipes, and nest/effect assets. `python tools/assets/verify-forsaken-content.py` validates the asset contract and renders [the content preview](../art/forsaken/content-preview.png). City generation and route validation continue through the existing city scripts. The preview is authored geometry, not a gameplay screenshot.
+
+Compilation, all 17 targeted Forsaken GameTests, the GeckoLib runtime model/animation bake test, and both asset/route validators passed. Targeted checks cover pressure caps, shared throttling, lazy decay, serialized cooldowns, honey/milk cures, all four armor protection levels, outside-dimension isolation, scanner radius and loaded-chunk behavior, single core drops, permanent template nests, spawn caps/gamerules, smithing components, and the existing travel/city regression tests. See `build/forsaken-tests.log`. No JAR is packaged by this increment. Visual feel, long expeditions and actual multiplayer load remain live acceptance work.
+
+## Increment 4: expedition tools
+
+The Pulse Blade is a native iron-tier sword with 500 durability and a 25% melee bonus against infected. Smith one using a Quarantine Module template, iron sword base and Parasitic Core addition; existing item components survive the upgrade. Main-hand Use charges for 30 ticks, with sparks and a ready chime. Release after charging pulses for 10 damage against visible, non-allied infected within four blocks, capped at 16 targets. A valid pulse costs eight durability and starts a 160-tick cooldown even when no target qualifies. Early release costs nothing. Players, pets and blocks are excluded from the pulse.
+
+Containment Beacons use the recipe `AMA / RDR / AMA`: A = Alloy, M = Module, R = Redstone, D = Data. Place the reusable block in Forsaken, then use one Core for 6,000 ticks of suppression in a three-dimensional 16-block radius. Both nest and district spawn paths consult the same boolean protection query. Existing infected remain, overlaps do not amplify protection, and active top-ups consume nothing. Empty-hand use reports remaining time. Breaking returns one device without its fuel data. Absolute world-time deadlines persist across saves and unloading; server downtime does not advance world time. Queries inspect at most nine already-loaded chunk maps. These devices do not disable unrelated mod or command spawns.
+
+Sneak-use the Bio-Scanner to cycle three persisted modes. Nests retains its original search. Resources and caches finds the nearest dropped exclusive material or unresolved Forsaken cache within 32 blocks; it reads only the loot-table identity, never inventory contents or loot generation. Opened containers stop producing cache signals. Local infestation reports the player's current city pressure, district and remaining surge time. All modes share one 100-tick native cooldown; switching modes cannot reset it. Scanning never loads chunks. The pressure mode reports the current zone, not distant cities.
+
+New textures, handheld blade model, four-part beacon geometry, lit/unlit states, recipes and tooltips accompany these mechanics. See [the tools preview](../art/forsaken/expedition-tools-preview.png). Compilation, all 21 targeted Forsaken GameTests, the GeckoLib asset bake test and the asset validator passed (`build/forsaken-tools-tests.log`). New checks cover pulse charge, targeting, cover, durability, cooldown, melee bonus, beacon persistence/expiry/overlap and drops, both suppressed spawn paths, native recipes, scanner mode data, shared cooldown, loaded-area bounds and untouched cache loot. Live visual feel and multiplayer pacing remain acceptance work. No JAR is packaged by this increment.
+
 ## Remaining increments
 
-1. Threat loop: four enemy roles, permanent nest destruction, temporary contamination and bounded local pressure. Define caps, decay/restart behavior and contamination cure before implementation.
-2. Reward loop: five exclusive resources with useful purposes, quarantine protection and a nest scanner. Pulse Blade, beacon and expanded scanning follow afterward.
-3. Full expedition review: tune pacing, rewards and multiplayer performance against an agreed player-count/server budget.
+1. Full expedition review: tune pacing, rewards and multiplayer performance against an agreed player-count/server budget.
 
 Procedural metropolis generation, spreading infection, mutation trees, bosses and Overworld outbreaks remain deferred. Activity-based proficiency is still paused.

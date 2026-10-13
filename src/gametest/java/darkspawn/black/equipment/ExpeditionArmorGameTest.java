@@ -123,7 +123,8 @@ public final class ExpeditionArmorGameTest {
 		helper.succeed();
 	}
 
-	@GameTest(skyAccess = true) public void temperatureSamplesBiomeShelterWetnessAndCampfires(GameTestHelper helper) {
+	// Shelter Timing: Allow asynchronous skylight updates to finish during the full server suite.
+	@GameTest(skyAccess = true, maxTicks = 100) public void temperatureSamplesBiomeShelterWetnessAndCampfires(GameTestHelper helper) {
 		var player = player(helper); var level = helper.getLevel(); var pos = player.blockPosition();
 		var originalBiome = level.getBiome(pos).unwrapKey().orElseThrow(); long originalTime = level.getOverworldClockTime();
 		helper.setBiome(net.minecraft.world.level.biome.Biomes.DESERT); helper.setTime(6000);

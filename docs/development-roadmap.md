@@ -2,7 +2,25 @@
 
 **V2 release preparation (2026-10-09):** `2.0.0-alpha.1` is packaged for upload. Full build passed with 63 unit tests and all 85 server GameTests; no publication performed. Current instructions: [Modrinth release](modrinth-release.md). Earlier alpha records below remain historical.
 
-## Current increment: instant testing camp (2026-10-12)
+## Current increment Unified Darkspawn Journal (2026-10-13)
+
+A free inventory Journal now combines personal creature and landmark discoveries with existing cooking knowledge, consumed boss hearts, credited kills and Forsaken research. Its seven tabs include all 82 regional creatures, 14 mounts, 16 bosses, four infected and 17 landmark families. Unseen species use authored silhouettes and habitat hints. Server observations require proximity and line of sight; landmark checks use loaded native starts. Knowledge survives death and OneBlock inventory changes without transferring items. Search, pagination and Refresh are included.
+
+[Implementation and migration rules](journal-implementation.md) describe the first-pass limits. Map coordinates, structure compasses and archaeology remain later exploration work. Compilation, three Journal unit tests, four Journal server tests, nine OneBlock regression tests and the portrait validator passed. Live UI and narration acceptance is pending. No JAR was packaged or version changed.
+
+## Previous increment Forsaken threats and rewards (2026-10-13)
+
+The first Forsaken threat/reward loop now includes four infected roles, four permanent nests in fresh cities, recoverable contamination, saved shared city pressure with bounded surges, five useful exclusive resources, a complete Quarantine Armor set, and a loaded-area nest scanner. Existing cities and inventories remain intact; opened caches do not restock. Armor uses the existing smithing pattern and retains native item components. Pulse Blade, reusable core-fueled containment beacons and three scanner modes are implemented. The next Forsaken milestone is expedition pacing and multiplayer balance review.
+
+[Implementation and balance rules](forsaken-implementation.md#increment-3-threats-contamination-and-rewards), [asset preview](../art/forsaken/content-preview.png), and the shareable implementation guide describe what is present versus deferred. Compilation, all 17 Forsaken server tests, the runtime model/animation bake test, and asset/route checks passed. No release version changed or JAR was packaged; live encounter feel and multiplayer capacity remain acceptance work.
+
+## Previous increment: all regional boss landmarks (2026-10-13)
+
+All sixteen boss families now have discovery structures. The regional increment adds fourteen families, each with three variants, guaranteed ritual books, finite supplies, and native locate support. The existing shrine/camp/bunker generation path and saved IDs are preserved. Surface, seabed, cavern, Nether and End placement use appropriate bounded surveys, with candidate exclusions around villages and Ancient Cities. The Kraken wreck directs players to the surface for its existing boat/open-water ritual.
+
+Source and placement details are in [the updated landmark plan](boss-structures-plan.md) and player README. Verification and live acceptance are recorded in the landmark plan. No JAR was packaged and no release version changed. The unified Journal is now implemented; discovery maps, archaeology and regional loot remain next exploration increments.
+
+## Previous increment: instant testing camp (2026-10-12)
 
 Added an opt-in Creative/command Testing Camp item for rapid playtesting. One use on flat ground builds crafting and cooking stations, a fifteen-bookshelf enchanting setup, an irrigated nine-crop plot, an inactive bonfire with its foundation, and signed supply barrels. Supplies include the dragon combat kit, recipe-derived ingredients, prepared meals/feasts, cookbook/scrolls, all fifteen iron/diamond armor styles, expedition and legendary sets, farming, crafting, storage and travel materials. An in-game guide covers the test route. Existing progression and gamerules are preserved.
 
@@ -387,6 +405,8 @@ For each milestone: inspect the closest existing implementation, agree material 
 
 ## Deferred expansion backlog
 
+The October 13, 2026 [Seasonal Fabric Minecraft Server design specification v0.1](seasonal-server-design-v0.1.md) is saved for later planning. It covers paid admission, seasonal resets, validated leaderboards, cosmetic awards, a permanent Hall of Fame, PvP zones and death rules, and exact 12 × 12 × 12 bonfire sanctuaries. The supplied specification preserves agreed directions, proposals, example prices and remaining decisions separately. Its sanctuary design is a future server proposal; it does not change the existing bonfire ward or the active implementation order.
+
 The first selected mount is a mountaintop griffin; raw rabbit and gradual trust are proposed taming mechanics. The bonfire must prevent wandering hostiles such as creepers from entering its protected volume as well as suppress hostile spawning. Mount storage and paid vet recovery remain part of the companion plan.
 
 Confirmed direction for the ships, mounts, and base expansion: mounts and the fuel-free bonfire are the first user priorities; lost mounts have paid recovery through a vet villager. Bonfire protection targets about 75 blocks horizontally, 5–10 below, and 20 above. Pirate exploration blends fantasy and cannon-focused naval warfare, ships and airplanes use bounded editable platforms, and pirate access plus flight are available before the Ender Dragon. These new access rules do not alter the existing boss/ecosystem gates. See the brainstorm's confirmed decisions for details; implementation has not started under this planning request.
@@ -395,11 +415,11 @@ The same brainstorm also includes a proposed modern inventory hub: a clearer inv
 
 The October 10, 2026 [ships, mounts, and base upgrades brainstorm](vehicles-mounts-and-base-ideas.md) records buildable battleships and airplanes, cannon ammunition, a pirate dimension, the full proposed mount roster and portable storage, Dump Chests with Sorting Tubes and filtered Sorting Chests ending in storage/refiltering/disposal options, a large-radius bonfire, and three accessory slots. Its design suggestions and prototype order remain open for discussion and do not change the active roadmap.
 
-Status: **first two boss structures implemented; remaining 14 landmarks next, other ideas saved for later**. Follow the [ordered expansion plan](boss-structures-plan.md). The source brief is preserved verbatim in [future-expansion-notes.txt](future-expansion-notes.txt); examples and numerical targets below are proposals, not current functionality.
+Status: **all sixteen boss landmark families implemented in development source; unified Journal implemented; discovery maps next in the exploration plan, other ideas saved for later**. Follow the [ordered expansion plan](boss-structures-plan.md). The source brief is preserved verbatim in [future-expansion-notes.txt](future-expansion-notes.txt); examples and numerical targets below are proposals, not current functionality.
 
 | Later idea | Preserved direction and dependency |
 | --- | --- |
-| Boss discovery structures | Druid shrines and hunter camps implemented in alpha.3. Next: excavation sites, storm altars, witch-hut variants, frozen nests, wrecks, Deep Dark hives, Nether shrines, fossil altars, End observatories. Reuse the native generation/loot pipeline and add placement rules appropriate to each terrain type. |
+| Boss discovery structures | All sixteen families now implemented, including the regional excavation, altar, hut, nest, wreck, hive, Nether, and End sites. Live terrain, visual and rarity acceptance remains; future variants can reuse the existing pipeline. |
 | Additional rare minibosses | Alpha Dire Wolf, Fossil Raptor Matriarch, Storm Roc, Jungle Broodmother, Cave Widow, Shadow Praetorian, Netherborn Spawn, Void Sentinel; ingredients, summon components, cosmetics, or enchantment materials, **no permanent hearts**. Already-planned regional heralds such as the taiga Alpha remain in the active ecosystem scope; this proposal does not add a second Alpha encounter. |
 | Small thematic enchantment set | Hunter, Butcher, Forager, Soulward, Venom Guard, Shadow Sight, Deep Diver. Optional advantages; never mandatory keys to a boss. Define compatibility and stacking with meal/equipment powers first. |
 | Utility equipment | Hunter's Compass for boss structures, Ingredient Pouch, Quiver, Explorer's Pack. Reuse inventory upgrades and preserve item ownership/save rules instead of creating overlapping storage systems. |

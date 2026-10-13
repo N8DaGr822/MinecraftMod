@@ -13,6 +13,6 @@ public final class WingedUnicornRenderer extends MobRenderer<WingedUnicorn, Grif
     @Override public GriffinRenderState createRenderState() { return new GriffinRenderState(); }
     @Override public Identifier getTextureLocation(GriffinRenderState state) { return Darkspawn.id("textures/entity/winged_unicorn.png"); }
     @Override public void extractRenderState(WingedUnicorn entity, GriffinRenderState state, float partialTick) {
-        super.extractRenderState(entity, state, partialTick); state.flying = entity.flying();
+        super.extractRenderState(entity, state, partialTick); state.flying = entity.flying(); state.flightPose = entity.flightPose(partialTick);
     }
 }

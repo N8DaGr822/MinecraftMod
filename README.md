@@ -8,6 +8,12 @@ Fabric mod for Minecraft **26.3**, with inventory upgrades, 16 post-dragon biome
 
 Use `/give @s darkspawn:testing_camp`, then right-click the top of a center ground block in a flat **21 x 21** clearing with four blocks of headroom. The camp builds crafting/cooking stations, an enchanting setup, a crop plot, an inactive bonfire, and signed supply barrels with ingredients, meals, armor, and utilities. It includes an in-game testing guide. See [Testing Camp](docs/testing-camp.md) for contents and a quick playtest route.
 
+## Creature mounts
+
+Fourteen rideable mounts now have natural habitats: griffins on mountain peaks, Cerberus in the Nether, flying squirrels in forests, winged unicorns in the End, woolly rhinos in snowy lands, riding dragons near cave lava, golems in caves, Sasquatch in snowy forests, very rare Nyan-inspired Poptart Cats near the Overworld ceiling, jungle leopards, ocean seahorses, desert scorpions, swamp crocodiles, and super-rare digging moles in Soul Sand Valley. Mount encounters do not require dragon progression. See [habitats, controls and prototype boundaries](docs/mount-prototypes.md).
+
+Tame each mount with three preferred-item feedings, two seconds apart; then its owner can ride with an empty hand. No saddle is required. Food also heals owned mounts by two hearts. Ownership and trust survive saves; existing ownerless mounts must be tamed normally. WASD steers, Space jumps or rises, X descends, and Shift dismounts. Seahorses and crocodiles swim with Space/X depth control; V plus movement lets giant moles tunnel. Flying squirrels glide downward; griffins, dragons, unicorns and cats fly and hover. G activates owner-controlled, hostile-only dragon breath, rhino charge (while moving forward), scorpion poison sting or crocodile bite, with saved cooldowns. Cerberus is fire/lava immune and protects its mounted owner; rider protection ends on dismount. Sneak-right-click an owned mount empty-handed for Follow/Stay, nine cargo slots, breeding and recipient-approved transfer. Capsules store mounts and cargo; Veterinary Kits heal or restore defeated owned mounts. See [companion care](docs/mount-prototypes.md#companion-care) for recipes and limits. See [mount abilities](docs/mount-prototypes.md#combat-abilities) for ranges and cooldowns.
+
 ## Cooking Station and meals
 
 Craft a **Cooking Station** using four iron ingots, one campfire, and three planks:
@@ -278,15 +284,31 @@ Exposure and wetness persist through saves, reconnects, loadout changes, and liv
 
 These are initial playtest values. Check mountain-to-cave transitions, exposed deserts, wet freezing terrain, and Nether lava edges with each suit, including real two-client synchronization and HUD readability at different GUI scales. Both client and server need the updated mod.
 
+## Darkspawn Journal
+
+Open **Journal** from the inventory (or expanded Creative storage screen). Browse Wildlife, Mounts, Bosses, Cooking, Forsaken and Sites; search a section and use separate entry/detail page controls. The world keeps running while you read.
+
+Observe a creature within 24 blocks with clear line of sight, or enter a native landmark, to record a personal discovery. Undiscovered creatures show silhouettes and habitat hints. Discoveries survive death and OneBlock travel. Existing cookbook knowledge, consumed boss hearts, credited kills and Forsaken research appear automatically; these remain separate kinds of progress. Use **Refresh** after exploring. The Journal never locates unloaded structures, opens loot or grants rewards. [Rules and limits](docs/journal-implementation.md).
+
 ## The Forsaken: ruined-city expedition prototype
 
-The Forsaken now has access, extraction and a first ruined-city slice; infected enemies and the exclusive reward loop are still upcoming. Find a **research bunker in new Overworld chunks**, read its Quarantine Protocol book, and use the research archive to permanently unlock gate/key fabrication. Every visitor can learn from the same archive.
+The Forsaken now includes travel, a ruined city, infected enemies, destructible nests, local threat pressure and exclusive equipment rewards. Find a **research bunker in new Overworld chunks**, read its Quarantine Protocol book, and use the research archive to permanently unlock gate/key fabrication. Every visitor can learn from the same archive.
 
 Repair the bunker's **5×5 obsidian frame**, keeping the 3×3 opening clear and the controller at bottom center. Craft a reusable **Containment Key** at the archive (hover over the fabrication buttons for costs), then use it on the controller after the server's first Ender Dragon victory. Empty-hand use of an active controller enters Forsaken. Everyone can travel through an opened gate, including players without the schematic. Researched players can build personal gates and sneak-use a controller for fabrication.
 
 The lit quarantine landing has an **Extraction Terminal** that returns each traveler near their own entrance. Bring normal supplies: inventories, equipment and salvage travel with you. Normal server death and keepInventory rules apply. Install on clients and server, then restart to load the dimension.
 
-In fresh Forsaken terrain, the first city lies south of the landing: apartments and shops lead across a marked quarantine boundary to an infested hospital and research annex. Ten finite scavenging caches reward ground, upper-floor, rooftop and tunnel exploration. A rooftop crossing provides an alternative route; the central street remains clear for retreat. Infestation is visual until the next threat-system increment.
+In fresh Forsaken terrain, the first city lies south of the landing: apartments and shops lead across a marked quarantine boundary to an infested hospital and research annex. Ten finite scavenging caches reward ground, upper-floor, rooftop and tunnel exploration. A rooftop crossing provides an alternative route; the central street remains clear for retreat. Four permanent nests occupy the infested hospital and annex in newly generated cities. Infected Wanderers charge, Crawlers flank, Spore Spitters attack from range, and Assimilated Brutes appear under high local pressure.
+
+Contamination slows movement by 15% for at most 60 seconds. Honey, milk, successful extraction or death clears it. Each Quarantine Armor piece reduces new exposure by 15 seconds; a complete set prevents it. Use the Bio-Scanner to locate the nearest loaded nest within 32 blocks, with a five-second cooldown. Destroying a nest awards one Parasitic Core and suppresses unrelated district spawns for five minutes. Other intact nests remain active.
+
+Combat, explosions and block breaking raise shared city pressure; quiet time lowers it. Spawns are capped at 12 infected per city and 64 loaded infected across Forsaken, with at most eight spawn attempts per second. Peaceful difficulty and the mob-spawning gamerule are respected. A high-pressure surge lasts at most 30 seconds and has a two-minute cooldown.
+
+Contaminated Alloy comes from salvage caches, Biofiber from infected and medical caches, Research Data from annex and rooftop caches, and Quarantine Modules occasionally from medical/research/roof caches. Craft a module from 4 Biofiber, 2 Alloy, 2 Data and 1 Core. Smith an iron armor piece with a module as the template and Biofiber as the addition; native item components are preserved. The scanner recipe uses 1 Alloy, 2 Data, 1 Core and 1 Redstone.
+
+Smith a **Pulse Blade** from a Quarantine Module template, an iron sword and a Parasitic Core. Hold Use for 1.5 seconds and release a 4-block, line-of-sight pulse against infected only (10 damage, 8-second cooldown, 8 durability). Normal melee gains 25% damage against infected.
+
+Craft a **Containment Beacon** from 4 Alloy, 2 Modules, 2 Redstone and 1 Data. Place it in Forsaken and fuel it with one Core for five minutes of suppression within 16 blocks. Existing infected remain; overlaps do not stack. Breaking returns the reusable device but loses fuel. Sneak-use the **Bio-Scanner** to cycle nests, dropped resources/unopened caches, and local infestation pressure. All modes share a five-second cooldown; resource scans never generate container loot.
 
 Cities repeat every 512 blocks along both axes. Existing explored chunks are preserved; older saves need a fresh site to see the city. See [access rules, city layout, recipes and remaining milestones](docs/forsaken-implementation.md) and the [layout preview](art/structures/forsaken-city-preview.html).
 
@@ -627,7 +649,7 @@ Craft a **Cookbook** with a book and Wild Herbs. Right-click it for categorized 
 - Discover **Frost Garlic Soup** in igloo chests, **Jungle Pepper Skewer** in jungle temple chests, and **Marsh Rice Bowl** in dungeon chests. These three new station recipes require their scroll. Mineshaft chests provide an alternate Shadow Stew source; fishing treasure can include Captain's Chowder. Each source adds a 50% scroll roll when that loot table is rolled, without rewriting existing inventories.
 - **Frostguard** shields weaken a successfully blocked attacker for three seconds; **Venomshot** bows apply Poison I for three seconds; **Highland** armor reduces the fall-damage multiplier by 0.25, once regardless of equipped piece count. Smith with an amethyst shard and Ice Wyrm, Titan Boa, or Mountain Titan essence respectively. Powers replace the existing item empowerment and preserve other item data.
 - After the world's first dragon victory, suitable regional habitats occasionally show small particle wisps and quiet ambient sounds. These identify habitat, not an active boss or generated structure. Particle bursts are limited to seven per player every ten seconds; sound cues occur at most once per minute and respect the ambient volume category.
-- **Boss discovery structures:** the Overgrown Druid Shrine and Abandoned Hunter Camp now generate in new terrain. Landmarks for the other 14 families remain in the [expansion plan](docs/boss-structures-plan.md).
+- **Boss discovery structures:** the Overgrown Druid Shrine and Abandoned Hunter Camp now generate in new terrain. All fourteen additional families now have regional landmarks; see the [landmark catalog and placement rules](docs/boss-structures-plan.md).
 
 Artwork sources, generation prompts, and reproduction commands are recorded in [art provenance](art/cuisine-art-provenance.md). Run `node tools/assets/preview-cuisine.cjs` to create an offline textured model gallery at `build/art-review/cuisine.html`.
 
@@ -635,10 +657,31 @@ Artwork sources, generation prompts, and reproduction commands are recorded in [
 
 Explore forest biomes for the **Overgrown Druid Shrine**, a ruined stone circle with roots, a broken arch, and an offering shelter. Search taigas for the **Abandoned Hunter Camp**, with a spruce shelter, supply cache, unlit hearth, and marked posts. Each has three variants and four possible rotations.
 
+All sixteen boss families now have discovery landmarks, with three templates and four rotations each. The additional sites are:
+
+| Region | Landmark ID | Boss |
+| --- | --- | --- |
+| Plains and meadows | `farm_excavation` | Mutant Zombie |
+| Desert and badlands | `fossil_altar` | Fossil Tyrant |
+| Savanna | `storm_altar` | Thunder Bird |
+| Jungle | `serpent_sanctuary` | Titan Boa |
+| Swamp | `witch_hut` | Baba Yaga |
+| Mountain habitats | `quarry_shrine` | Mountain Titan |
+| Frozen lands | `frozen_nest` | Ice Wyrm |
+| Open oceans | `expedition_wreck` | Kraken |
+| Cave biomes | `webbed_outpost` | Cave Crawler |
+| Deep Dark | `deep_dark_hive` | Shadow Creeper Queen |
+| Mushroom fields | `fungal_court` | Mycelial Sovereign |
+| Netherborn biomes | `ember_shrine` | Netherborn |
+| Soul Sand Valley | `soul_reliquary` | Soulbound Colossus |
+| Outer End islands | `end_observatory` | Void Eye |
+
+The new sites occupy 25×25 blocks. Surface and island sites require supported, gently sloping terrain. Cave and Nether sites use a bounded cavern survey with solid foundations, natural boss headroom, a retained roof, no sampled fluid pockets, and an opening to the existing cavern. Wrecks require a supported seabed and at least fourteen blocks of open water, with an unobstructed ascent route. Return to the surface to perform the Kraken ritual. Farm excavations avoid village candidate areas; Deep Dark hives avoid Ancient City candidate areas through native twelve-chunk exclusion zones. These conservative checks can make sites scarce, especially on rare mushroom islands.
+
 - Shrines occupy a 31×31 footprint; camps occupy 25×25. The central moss or bone block marks a prepared ritual clearing. Explicit air in the templates clears natural vegetation during generation; there is no recurring clearing or block-changing effect after generation.
 - Each chest guarantees a readable three-page ritual guide and several modest food, seed, or crafting-material rolls. It never gives a boss heart, trophy, premium culinary ingredient, or complete summon. Chests use ordinary shared inventory and generate their loot once.
-- Both sites can be explored before the dragon fight. Bosses still require the existing crafted summon, world dragon victory, valid biome, space, and other ritual conditions. The wolf additionally requires night. Finding a landmark is optional; portable rituals keep working.
-- Natural placement uses independent structure sets with 40-chunk spacing and 16-chunk separation. Those are candidate-grid settings, not a guaranteed distance between landmarks. Unsuitable biome, water, steep terrain, or insufficient world height rejects a site.
+- All sites can be explored before the dragon fight. Bosses still require the existing crafted summon, world dragon victory, valid biome, space, and other ritual conditions. The wolf and Baba Yaga require night; Thunder Bird requires thunder. Finding a landmark is optional; portable rituals keep working.
+- Natural placement uses independent structure sets with 40-chunk spacing and 16-chunk separation. Those are candidate-grid settings, not a guaranteed distance between landmarks. Each family applies its habitat-specific terrain checks; unsuitable biome, unsupported ground, unsuitable fluids, or insufficient world height rejects a site.
 - Existing worlds gain sites only in **newly generated terrain**. Nothing retroactively places a site into an explored chunk or modifies an opened chest. Blocks placed later by players remain untouched.
 
 With cheats or operator permission, locate the nearest eligible site:
@@ -646,11 +689,13 @@ With cheats or operator permission, locate the nearest eligible site:
 ```mcfunction
 /locate structure darkspawn:druid_shrine
 /locate structure darkspawn:hunter_camp
+/locate structure darkspawn:deep_dark_hive
+/locate structure darkspawn:expedition_wreck
 ```
 
-For a disposable test world, `/place structure darkspawn:druid_shrine` or `/place structure darkspawn:hunter_camp` uses the normal terrain suitability checks. To inspect a specific design at an explicit position, use `/place template darkspawn:landmarks/druid_shrine_0 ~ ~ ~` (or `hunter_camp_0`, variants 0–2). Template placement deliberately writes the entire clearing, including air; reserve empty test space. The center is at local `(15,3,15)` for shrines and `(12,3,12)` for camps.
+For a disposable test world, `/place structure darkspawn:druid_shrine` or `/place structure darkspawn:hunter_camp` uses the normal terrain suitability checks. To inspect a specific design at an explicit position, use `/place template darkspawn:landmarks/druid_shrine_0 ~ ~ ~` (or `hunter_camp_0`, variants 0–2). Template placement deliberately writes the entire clearing, including air; reserve empty test space. The center is at local `(15,3,15)` for shrines and `(12,3,12)` for camps and the fourteen regional sites. Use any landmark ID above in the same commands.
 
-Editable generation source: `tools/assets/boss-structures.py`. Voxel blueprints: `art/structures/`. Native templates: `data/darkspawn/structure/landmarks/` inside the JAR. Run `node tools/assets/preview-structures.cjs` for an offline layout gallery. Live travel-distance tuning, terrain seams at old/new chunk borders, and two-client exploration remain playtest checks.
+Editable generation sources: `tools/assets/boss-structures.py` and `tools/assets/regional-landmarks.py`. The first command regenerates all sixteen families. Voxel blueprints: `art/structures/`. Native templates: `data/darkspawn/structure/landmarks/` inside the JAR. Run `node tools/assets/preview-structures.cjs` for an offline layout gallery. Live travel-distance tuning, terrain seams at old/new chunk borders, and two-client exploration remain playtest checks.
 
 All meal effects replace the previous meal while preserving independently applied potions:
 

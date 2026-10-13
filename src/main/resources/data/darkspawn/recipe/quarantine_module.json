@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BAB",
+    "DCD",
+    "BAB"
+  ],
+  "key": {
+    "A": "darkspawn:contaminated_alloy",
+    "B": "darkspawn:biofiber",
+    "D": "darkspawn:research_data",
+    "C": "darkspawn:parasitic_core"
+  },
+  "result": {
+    "id": "darkspawn:quarantine_module"
+  }
+}

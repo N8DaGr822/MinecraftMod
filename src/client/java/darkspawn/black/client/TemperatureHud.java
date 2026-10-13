@@ -30,12 +30,18 @@ public final class TemperatureHud {
 			var label = Component.translatable("temperature.darkspawn.reading", Component.translatable("temperature.darkspawn." + status), Component.translatable("temperature.darkspawn." + trend));
 			if (state.wetSeconds > 0) label.append(Component.translatable("temperature.darkspawn.wet"));
 			int color = magnitude < TemperatureState.WARNING ? 0xFFB8D8AC : state.exposure < 0 ? 0xFF82CFFF : 0xFFFFA565;
-			graphics.fill(5, 5, Math.max(111, 11 + client.font.width(label)), 29, 0xA0000000);
-			graphics.text(client.font, label, 8, 8, color, true);
-			graphics.fill(8, 22, 108, 25, 0xFF444444);
-			graphics.fill(40, 22, 76, 25, 0xFF52734A);
-			int marker = 8 + Math.round((state.exposure + 100) / 2);
-			graphics.fill(Math.clamp(marker, 8, 106), 21, Math.clamp(marker, 8, 106) + 2, 26, color);
+			// HUD Layout: Wrap translated/wetness labels inside the viewport and place the gauge below all lines.
+			int available = Math.max(1, Math.min(240, graphics.guiWidth() - 16));
+			var lines = client.font.split(label, available);
+			int gaugeY = 12 + lines.size() * client.font.lineHeight;
+			int panelWidth = Math.min(available, Math.max(100, lines.stream().mapToInt(client.font::width).max().orElse(0)));
+			graphics.fill(5, 5, 11 + panelWidth, gaugeY + 7, 0xA0000000);
+			for (int i = 0; i < lines.size(); i++) graphics.text(client.font, lines.get(i), 8, 8 + i * client.font.lineHeight, color, true);
+			int gaugeWidth = Math.min(100, available);
+			graphics.fill(8, gaugeY, 8 + gaugeWidth, gaugeY + 3, 0xFF444444);
+			graphics.fill(8 + gaugeWidth * 32 / 100, gaugeY, 8 + gaugeWidth * 68 / 100, gaugeY + 3, 0xFF52734A);
+			int marker = 8 + Math.round((state.exposure + 100) / 200 * Math.max(0, gaugeWidth - 2));
+			graphics.fill(marker, gaugeY - 1, marker + Math.min(2, gaugeWidth), gaugeY + 4, color);
 		});
 	}
 }

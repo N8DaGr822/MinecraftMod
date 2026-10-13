@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BossStructureTest {
 	@BeforeAll static void init() { TestBootstrap.initialize(); }
 	@Test void nativePalettesHaveNoUnknownBlocksPropertiesEntitiesOrDuplicateCoordinates() throws Exception {
-		for(String site:List.of("druid_shrine","hunter_camp")) for(int variant=0;variant<3;variant++) {
+		for(String site:java.util.stream.Stream.concat(java.util.stream.Stream.of("druid_shrine","hunter_camp"), BossLandmarkStructure.REGIONAL_SITES.keySet().stream()).toList()) for(int variant=0;variant<3;variant++) {
 			String path="/data/darkspawn/structure/landmarks/"+site+"_"+variant+".nbt";
 			try(var stream=getClass().getResourceAsStream(path)) {
 				assertNotNull(stream,path);
@@ -49,4 +49,24 @@ class BossStructureTest {
 			}
 		}
 	}
+	@Test void cavernSurveyRejectsFluidsUnsupportedFloorsBlockedEntrancesAndMissingRoof() {
+		var states = new net.minecraft.world.level.block.state.BlockState[160];
+		java.util.Arrays.fill(states, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState());
+		for (int y=41;y<=68;y++) states[y]=net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+		var column=new net.minecraft.world.level.NoiseColumn(-64,states);
+		var columns=new net.minecraft.world.level.NoiseColumn[49];
+		java.util.Arrays.fill(columns,column);
+		assertTrue(BossLandmarkStructure.supportsCavern(columns,-24,22));
+		states[42]=net.minecraft.world.level.block.Blocks.WATER.defaultBlockState();
+		assertFalse(BossLandmarkStructure.supportsCavern(columns,-24,22));
+		states[42]=net.minecraft.world.level.block.Blocks.STONE.defaultBlockState();
+		assertFalse(BossLandmarkStructure.supportsCavern(columns,-24,22));
+		states[42]=net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+		for(int y=37;y<=40;y++) states[y]=net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+		assertFalse(BossLandmarkStructure.supportsCavern(columns,-24,22));
+		states[40]=net.minecraft.world.level.block.Blocks.STONE.defaultBlockState();
+		for(int y=69;y<=88;y++) states[y]=net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+		assertFalse(BossLandmarkStructure.supportsCavern(columns,-24,22));
+	}
+
 }

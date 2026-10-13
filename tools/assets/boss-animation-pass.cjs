@@ -103,5 +103,5 @@ for(const entry of roster){
   jobs.push([file,model],[`src/main/resources/assets/darkspawn/geckolib/animations/entity/${id}.animation.json`,output]);
   count+=changed;console.log(id+': '+changed+' polished clips');
 }
-if(process.argv.includes('--write'))for(const [file,data]of jobs)fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
+if(process.argv.includes('--write'))for(const [file,data]of jobs)fs.writeFileSync(file,file.endsWith('.animation.json')?require('./rig.cjs').animationJson(data):JSON.stringify(data,null,2)+'\n');
 console.log(`${process.argv.includes('--write')?'Saved':'Dry run:'} ${count} clips across ${roster.length} bosses.`);

@@ -1,0 +1,81 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:written_book_content": {
+                "title": "Fossil Altar",
+                "author": "An expedition survivor",
+                "pages": [
+                  {
+                    "text": "Fossil Altar\n\nThis site can be explored before the first Ender Dragon victory. The boss ritual requires that world victory and never starts by itself."
+                  },
+                  {
+                    "text": "Preparation\n\nCombine this region's discovery material with dragon's breath for an alternative summon recipe. Existing summon recipes still work. These supplies are provisions, not victory rewards."
+                  },
+                  {
+                    "text": "Use the Fossil Tyrant summon on bone in desert or badlands, under open sky. Reserve a 12-block-wide, 14-block-high space."
+                  }
+                ],
+                "resolved": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 3,
+        "max": 5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bread",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:torch",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "random_sequence": "darkspawn:chests/fossil_altar"
+}

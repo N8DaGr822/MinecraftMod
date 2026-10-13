@@ -1,0 +1,81 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:written_book_content": {
+                "title": "End Observatory",
+                "author": "An expedition survivor",
+                "pages": [
+                  {
+                    "text": "End Observatory\n\nThis site can be explored before the first Ender Dragon victory. The boss ritual requires that world victory and never starts by itself."
+                  },
+                  {
+                    "text": "Preparation\n\nCombine this region's discovery material with dragon's breath for an alternative summon recipe. Existing summon recipes still work. These supplies are provisions, not victory rewards."
+                  },
+                  {
+                    "text": "Use the Void Eye summon on obsidian on an outer End island. It appears eight blocks above the altar and needs a 10-block-wide, 10-block-high space. Stay on supported ground."
+                  }
+                ],
+                "resolved": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 3,
+        "max": 5
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:chorus_fruit",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ender_pearl",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:end_stone",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "random_sequence": "darkspawn:chests/end_observatory"
+}

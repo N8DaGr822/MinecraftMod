@@ -1,7 +1,7 @@
 {
   "parent": "darkspawn:item/titan_chestplate",
   "textures": {
-    "trim": "darkspawn:item/style_trim_border"
+    "trim": "darkspawn:equipment/style_trim_border"
   },
   "elements": [
     {
@@ -612,6 +612,74 @@
             8,
             6,
             12
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        4.742574257425742,
+        3.0965346534653477,
+        5.297029702970296
+      ],
+      "to": [
+        11.396039603960396,
+        5.938118811881189,
+        6.336633663366336
+      ],
+      "faces": {
+        "north": {
+          "texture": "#armor",
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#armor",
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#armor",
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#armor",
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#armor",
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#armor",
+          "uv": [
+            4,
+            0,
+            6,
+            4
           ]
         }
       }
@@ -2146,6 +2214,80 @@
         11.237772277227723,
         9.83430693069307,
         6.559554455445544
+      ],
+      "faces": {
+        "north": {
+          "texture": "#trim",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        },
+        "south": {
+          "texture": "#trim",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        },
+        "east": {
+          "texture": "#trim",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        },
+        "west": {
+          "texture": "#trim",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        },
+        "up": {
+          "texture": "#trim",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        },
+        "down": {
+          "texture": "#trim",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "from": [
+        4.727574257425743,
+        3.0815346534653476,
+        5.282029702970297
+      ],
+      "to": [
+        11.411039603960397,
+        5.953118811881189,
+        6.351633663366336
       ],
       "faces": {
         "north": {

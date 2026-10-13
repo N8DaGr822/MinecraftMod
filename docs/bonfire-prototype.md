@@ -4,7 +4,7 @@ The first bonfire checkpoint implements a fuel-free base ward and a prototype fo
 
 ## Build and use
 
-Use the bonfire checkpoint JAR from `build/bonfire-verification/libs/darkspawn-2.0.0-alpha.1.jar` in a test instance. It also includes the griffin prototype. Replace the previous Darkspawn JAR; both clients and the server need the updated mod, Fabric API, and GeckoLib.
+Use the current playable JAR indexed in `build/libs/README.md` in a test instance. Older checkpoints are archived under `build/libs/archive`. Replace the previous Darkspawn JAR; both clients and the server need the updated mod, Fabric API, and GeckoLib. Source edits do not update that JAR. Compile with `gradlew.bat classes clientClasses --max-workers=1`; package with `gradlew.bat playBuild --max-workers=1` only when explicitly requested. See [the testing workflow](testing-workflow.md).
 
 Craft the Barracks Bonfire from two iron ingots, two copper ingots, one campfire, and three stone bricks:
 

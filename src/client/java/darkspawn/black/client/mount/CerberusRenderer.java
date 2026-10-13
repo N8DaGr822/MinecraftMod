@@ -13,6 +13,6 @@ public final class CerberusRenderer extends MobRenderer<Cerberus, GriffinRenderS
     @Override public GriffinRenderState createRenderState() { return new GriffinRenderState(); }
     @Override public Identifier getTextureLocation(GriffinRenderState state) { return Darkspawn.id("textures/entity/cerberus.png"); }
     @Override public void extractRenderState(Cerberus entity, GriffinRenderState state, float partialTick) {
-        super.extractRenderState(entity, state, partialTick); state.flying = entity.flying();
+        super.extractRenderState(entity, state, partialTick); state.flying = entity.flying(); state.flightPose = entity.flightPose(partialTick);
     }
 }

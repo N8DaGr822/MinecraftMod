@@ -312,6 +312,24 @@ for(const [family,config] of Object.entries(families)) {
       const dragon=family==='dragonlord',phoenix=family==='phoenix',voidwalker=family==='voidwalker',titan=family==='titan',reaper=family==='soul_reaper';
       plate('body','chestplate','legendary_cuirass',[-4.55,1,-3.8],[9.1,7.5,1.2],1,[16,16]);
       box('body','chestplate','heart_gem',[-.8,2.3,-4.6],[1.6,2.2,.7],5);
+      // Legendary Identity: Different profiles remain readable even without their palette or trim.
+      if(dragon) {
+        for(let i=0;i<3;i++)plate('body','chestplate','dragon_breast_scale_'+i,[-3.8+i*.55,3+i*1.8,-4.15],[7.6-i*1.1,1.6,.6],2,[16,16]);
+        for(let i=0;i<4;i++)box('head','helmet','dragon_crest_'+i,[-.55,-10.6-i*.3,-3+i*2],[1.1,2.6,1.5],4);
+      }
+      if(phoenix)for(const sign of [-1,1])for(let i=0;i<4;i++) {
+        box('body','chestplate','phoenix_back_feather_'+sign+'_'+i,[sign<0?-3.8-i*.6:2.8+i*.6,1+i*1.3,2.5],[1,5.5-i*.7,1],i%2?4:5);
+        box('head','helmet','phoenix_crown_'+sign+'_'+i,[sign<0?-2.6-i*.55:1.6+i*.55,-9.8-i*.5,1+i*.8],[1,2.8,1.1],i%2?5:4);
+      }
+      if(voidwalker)for(let i=0;i<3;i++)box('left_arm','chestplate','void_shard_'+i,[3.5+i*.7,-4.4-i*.8,-2.5+i*1.8],[1,3.4,1.1],5);
+      if(titan) {
+        plate('body','chestplate','titan_belly',[-4.8,6.6,-4.4],[9.6,4.1,1.5],1,[16,16]);
+        for(const part of ['left_leg','right_leg'])plate(part,'leggings','titan_thigh',[-2.8,0,-3.8],[5.6,5.5,1.5],1,[0,16]);
+      }
+      if(reaper) {
+        for(let i=0;i<5;i++)box('body','chestplate','reaper_mantle_'+i,[-4.5+i*1.8,0,2.7],[1.8,11+(i%2)*2,.8],6);
+        for(const part of ['left_leg','right_leg'])box(part,'leggings','reaper_robe',[-2.35,0,2],[4.7,7.5,.8],6);
+      }
       if(dragon || phoenix)for(const sign of [-1,1])for(let i=0;i<3;i++) {
         const x=sign<0?-3.8-i*.55:2.8+i*.55;
         box('head','helmet','horn_'+sign+'_'+i,[x,-9.4-i*1.2,-1.7],[1,1.5,2],dragon?4:5);
@@ -489,7 +507,7 @@ for(const [family,config] of Object.entries(families)) {
     if(config.style){
       // Inventory Trim Preview: Colored borders show material while wearable rendering retains the actual pattern.
       const overlay=elements.filter((e,i)=>selected[i].trim_uv).map(e=>({...e,from:e.from.map(n=>n-.015),to:e.to.map(n=>n+.015),faces:Object.fromEntries(Object.keys(e.faces).map(f=>[f,{texture:'#trim',uv:[0,0,16,16],tintindex:0}]))}));
-      resource(`assets/darkspawn/models/item/${id}_trim.json`,{parent:`darkspawn:item/${id}`,textures:{trim:'darkspawn:item/style_trim_border'},elements:[...elements,...overlay]});
+      resource(`assets/darkspawn/models/item/${id}_trim.json`,{parent:`darkspawn:item/${id}`,textures:{trim:'darkspawn:equipment/style_trim_border'},elements:[...elements,...overlay]});
       if(!config.legendary)continue;
     }
     resource(`assets/darkspawn/items/${id}.json`,{model:{type:'minecraft:model',model:`darkspawn:item/${id}`}});
@@ -512,6 +530,9 @@ function itemStyle(metal,style,slot){return{type:'minecraft:select',property:'mi
 for(const metal of ['iron','diamond'])for(const slot of ['helmet','chestplate','leggings','boots'])resource(`assets/minecraft/items/${metal}_${slot}.json`,{model:{type:'minecraft:select',property:'minecraft:component',component:'darkspawn:armor_style',cases:armorStyles.filter(s=>s!=='classic').map(style=>({when:style,model:itemStyle(metal,style,slot)})),fallback:itemStyle(metal,'classic',slot)}});
 const trimBorder=Buffer.alloc(16*16*4);for(let y=0;y<16;y++)for(let x=0;x<16;x++)if(y<2||y>=14){const i=(y*16+x)*4;trimBorder.fill(255,i,i+4);}
 fs.writeFileSync(path.join(res,'assets/darkspawn/textures/item/style_trim_border.png'),png(16,16,trimBorder));
+// Item Baking: Equipment sprites use the blocks atlas; their trim must use that same atlas on Minecraft 26.3.
+resource('assets/minecraft/atlases/blocks.json',{sources:[{type:'minecraft:directory',source:'equipment',prefix:'equipment/'}]});
+fs.writeFileSync(path.join(res,'assets/darkspawn/textures/equipment/style_trim_border.png'),png(16,16,trimBorder));
 for(const retired of ['royal_guard','arbalist','brawler'])for(const folder of ['recipe','advancement/recipes']) {
   const retiredFile=path.join(res,'data/darkspawn',folder,'armor_style_'+retired+'.json');
   if(fs.existsSync(retiredFile))fs.unlinkSync(retiredFile);

@@ -18,6 +18,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class ArmorStylesTest {
 	@BeforeAll static void initialize() { TestBootstrap.initialize(); }
 
+	@Test void trimmedItemModelsKeepAllSpritesOnTheEquipmentAtlas() throws Exception {
+		var sources = json("/assets/minecraft/atlases/blocks.json").getAsJsonArray("sources");
+		assertTrue(java.util.stream.StreamSupport.stream(sources.spliterator(), false).map(com.google.gson.JsonElement::getAsJsonObject)
+			.anyMatch(source -> "minecraft:directory".equals(source.get("type").getAsString())
+				&& "equipment".equals(source.get("source").getAsString()) && "equipment/".equals(source.get("prefix").getAsString())),
+			"Equipment inventory sprites must be stitched into the blocks atlas");
+		var families = java.util.stream.Stream.concat(LegendaryArmor.NAMES.stream(), ArmorStyles.STYLES.stream()
+			.flatMap(style -> java.util.stream.Stream.of("iron_" + style, "diamond_" + style))).toList();
+		for (String family : families) for (String slot : java.util.List.of("helmet", "chestplate", "leggings", "boots")) {
+			String id = family + "_" + slot;
+			var base = json("/assets/darkspawn/models/item/" + id + ".json").getAsJsonObject("textures");
+			var trim = json("/assets/darkspawn/models/item/" + id + "_trim.json").getAsJsonObject("textures");
+			assertTrue(base.get("armor").getAsString().startsWith("darkspawn:equipment/"), id);
+			assertTrue(trim.get("trim").getAsString().startsWith("darkspawn:equipment/"), id + " must not mix the items and blocks atlases");
+			try (var texture = getClass().getResourceAsStream("/assets/darkspawn/textures/" + trim.get("trim").getAsString().substring(10) + ".png")) {
+				assertNotNull(texture, id);
+			}
+		}
+	}
+
 	@Test void stylesPreserveVanillaIdentityComponentsAndCanBeReset() {
 		var lookup = VanillaRegistries.createWorldLookup();
 		for (var item : java.util.List.of(Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
