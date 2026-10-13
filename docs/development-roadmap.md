@@ -2,7 +2,13 @@
 
 **V2 release preparation (2026-10-09):** `2.0.0-alpha.1` is packaged for upload. Full build passed with 63 unit tests and all 85 server GameTests; no publication performed. Current instructions: [Modrinth release](modrinth-release.md). Earlier alpha records below remain historical.
 
-## Current increment: The Forsaken city slice (2026-10-12)
+## Current increment: instant testing camp (2026-10-12)
+
+Added an opt-in Creative/command Testing Camp item for rapid playtesting. One use on flat ground builds crafting and cooking stations, a fifteen-bookshelf enchanting setup, an irrigated nine-crop plot, an inactive bonfire with its foundation, and signed supply barrels. Supplies include the dragon combat kit, recipe-derived ingredients, prepared meals/feasts, cookbook/scrolls, all fifteen iron/diamond armor styles, expedition and legendary sets, farming, crafting, storage and travel materials. An in-game guide covers the test route. Existing progression and gamerules are preserved.
+
+The complete placement area is checked before construction; occupied terrain, protected positions, fluids, unloaded chunks and intersecting entities cause refusal without a partial camp. Full build passed with **80 unit tests and all 162 server GameTests**, including three camp tests covering actual item placement/consumption, obstructions, supply capacity, loaded cooking recipe coverage and armor style samples. Fixed legacy non-UTF-8 dashes in English names during package validation. Checkpoint JAR: `build/testing-camp-verification/libs/darkspawn-2.0.0-alpha.1.jar`. [Usage and contents](testing-camp.md). Live appearance and multiplayer usability remain playtest checks.
+
+## Previous increment: The Forsaken city slice (2026-10-12)
 
 The first authored city adds two visually distinct districts, four reusable building designs, ten finite scavenging caches, upper floors, a rooftop circuit with a broken span, and a short maintenance tunnel. Dedicated native structures generate only in new Forsaken terrain, using a 64×80-block slice on a 512-block grid. Saved starts preserve looted containers and player edits; existing chunks are not retrofitted. Ordinary salvage tables are separate for housing/shops, medical rooms, research rooms and the roof cache. Exclusive resources and actual infestation mechanics remain for subsequent increments.
 
@@ -380,6 +386,14 @@ The implemented choices above supersede the original candidate values below. Thr
 For each milestone: inspect the closest existing implementation, agree material gameplay choices, implement a playable increment, run focused tests followed by the required build, update the roadmap and player guide, and review the result. Keep subsequent commits focused on one milestone or a coherent part of it. Publish only when requested.
 
 ## Deferred expansion backlog
+
+The first selected mount is a mountaintop griffin; raw rabbit and gradual trust are proposed taming mechanics. The bonfire must prevent wandering hostiles such as creepers from entering its protected volume as well as suppress hostile spawning. Mount storage and paid vet recovery remain part of the companion plan.
+
+Confirmed direction for the ships, mounts, and base expansion: mounts and the fuel-free bonfire are the first user priorities; lost mounts have paid recovery through a vet villager. Bonfire protection targets about 75 blocks horizontally, 5–10 below, and 20 above. Pirate exploration blends fantasy and cannon-focused naval warfare, ships and airplanes use bounded editable platforms, and pirate access plus flight are available before the Ender Dragon. These new access rules do not alter the existing boss/ecosystem gates. See the brainstorm's confirmed decisions for details; implementation has not started under this planning request.
+
+The same brainstorm also includes a proposed modern inventory hub: a clearer inventory layout, richer item and character information, and eventual accessory, companion, storage, and journal integration. Its first proposed increment builds on the existing inventory rows and Sort action; later panels depend on their respective systems.
+
+The October 10, 2026 [ships, mounts, and base upgrades brainstorm](vehicles-mounts-and-base-ideas.md) records buildable battleships and airplanes, cannon ammunition, a pirate dimension, the full proposed mount roster and portable storage, Dump Chests with Sorting Tubes and filtered Sorting Chests ending in storage/refiltering/disposal options, a large-radius bonfire, and three accessory slots. Its design suggestions and prototype order remain open for discussion and do not change the active roadmap.
 
 Status: **first two boss structures implemented; remaining 14 landmarks next, other ideas saved for later**. Follow the [ordered expansion plan](boss-structures-plan.md). The source brief is preserved verbatim in [future-expansion-notes.txt](future-expansion-notes.txt); examples and numerical targets below are proposals, not current functionality.
 

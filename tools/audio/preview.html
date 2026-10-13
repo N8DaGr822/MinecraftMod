@@ -7,7 +7,7 @@
 <script>
 const $=id=>document.getElementById(id);let sounds,roster;
 Promise.all([fetch('/sounds.json').then(r=>r.json()),fetch('/roster.json').then(r=>r.json())]).then(([s,r])=>{sounds=s;roster=r;for(const e of r){$('creature').add(new Option(e.id.replaceAll('_',' '),e.id));if(e.category==='boss')$('boss').add(new Option(e.id.replaceAll('_',' '),e.id));}$('boss').value='shadow_creeper_queen';$('creature').value='shadow_drone';music();voice();});
-function music(){const entry=sounds['music.'+$('boss').value+'.'+$('phase').value].sounds[0];$('music').pause();$('music').src='/sounds/'+entry.name.split(':')[1]+'.ogg';$('theme').textContent='Theme: '+entry.name.split('/')[1].replaceAll('_',' · ')+' · 30-second streamed loop';}
+function music(){const entry=sounds['music.'+$('boss').value+'.'+$('phase').value].sounds[0];$('music').pause();$('music').volume=({1:.36,2:.46,3:.56})[$('phase').value];$('music').src='/sounds/'+entry.name.split(':')[1]+'.ogg';$('theme').textContent='Theme: '+entry.name.split('/')[1].replaceAll('_',' · ')+' · 30-second streamed loop';}
 function voice(){const entry=sounds['entity.'+$('creature').value+'.'+$('cue').value].sounds[Number($('variant').value)];$('voice').pause();$('voice').src='/sounds/'+entry.name.split(':')[1]+'.ogg';$('voice').preservesPitch=false;$('voice').playbackRate=entry.pitch;$('voiceInfo').textContent='Regional voice · pitch '+entry.pitch.toFixed(2)+'×';}
 $('boss').onchange=music;$('phase').onchange=music;for(const id of ['creature','cue','variant'])$(id).onchange=voice;
 // Compare one recording at a time so warnings remain readable during auditioning.

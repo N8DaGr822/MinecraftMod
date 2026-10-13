@@ -131,7 +131,7 @@ public final class AgricultureGameTest {
 		});
 	}
 
-	@GameTest
+	@GameTest(maxTicks = 100)
 	public void invalidSoilAndDarknessRejectPlantingWithoutConsumingSeeds(GameTestHelper helper) {
 		var level = helper.getLevel();
 		BlockPos pos = plot(helper);
@@ -153,14 +153,15 @@ public final class AgricultureGameTest {
 			}
 			level.setBlockAndUpdate(pos.above(), Blocks.GLOWSTONE.defaultBlockState());
 			level.setBlockAndUpdate(pos.below(), Blocks.STONE.defaultBlockState());
-			helper.runAfterDelay(5, () -> {
+			// The light engine is asynchronous; wait for the required brightness rather
+			// than assuming every machine and test batch finishes propagation in five ticks.
+			helper.succeedWhen(() -> {
 				helper.assertTrue(level.getRawBrightness(pos, 0) >= 9, "Soil fixture must be lit");
 				for (var crop : Agriculture.CROPS) {
 					ItemStack seeds = new ItemStack(crop.seeds());
 					plant(helper, pos, seeds);
 					helper.assertTrue(level.getBlockState(pos).isAir() && seeds.getCount() == 1, "Stone must reject planting without consuming the seed");
 				}
-				helper.succeed();
 			});
 		});
 	}

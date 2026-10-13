@@ -36,6 +36,7 @@ public class DarkspawnClient implements ClientModInitializer {
 		OneBlockControls.initialize();
 		ExpeditionArmorRenderer.initialize();
 		ArmorStyleRenderer.initialize();
+		darkspawn.black.client.mount.GriffinClient.initialize();
 		darkspawn.black.client.boss.BossClient.initialize();
 		darkspawn.black.client.audio.EncounterMusic.initialize();
 		darkspawn.black.ecosystem.ForestEcosystem.MOBS.forEach((kind, type) ->

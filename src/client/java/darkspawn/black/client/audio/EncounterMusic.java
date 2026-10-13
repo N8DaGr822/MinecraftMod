@@ -73,14 +73,16 @@ public final class EncounterMusic {
 		private boolean fading;
 		private int fadeTicks;
 		private int age;
+		private final float targetVolume;
 		void finish() { stop(); }
 		Score(String key) {
 			super(DarkspawnSounds.get(key), SoundSource.MUSIC, RandomSource.create());
+			targetVolume = key.endsWith(".3") ? .56F : key.endsWith(".2") ? .46F : .36F;
 			looping = true; delay = 0; relative = true; attenuation = SoundInstance.Attenuation.NONE;
 			volume = .001F; pitch = 1;
 		}
 		@Override public void tick() {
-			volume = fading ? Math.max(0, volume - .0125F) : Math.min(.5F, volume + .00625F);
+			volume = fading ? Math.max(0, volume - .0125F) : Math.min(targetVolume, volume + .00625F);
 			if (fading && volume <= 0) stop();
 		}
 	}

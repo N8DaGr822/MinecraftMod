@@ -499,8 +499,12 @@ public final class BossEncounterGameTest {
 	public void treeDefeatLastsThreeSecondsWithoutRepeatingRewards(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = player(helper);
+		// Keep drops in the test's tracked chunk, even when this fixture lies on a
+		// chunk edge. Items spawned outside it may not be visible to entity queries yet.
+		Vec3 rewardPosition = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(2, 3, 2)));
+		player.teleportTo(rewardPosition.x, rewardPosition.y, rewardPosition.z);
 		AncientTreeSpirit boss = new AncientTreeSpirit(BossEntities.TREE_SPIRIT, level);
-		boss.setPos(player.position().add(20, 0, 0));
+		boss.setPos(player.position().add(2, 0, 0));
 		level.addFreshEntity(boss);
 		try {
 			for (int tick = 0; tick < 60; tick++) { boss.commonTick(); boss.customServerAiStep(level); }

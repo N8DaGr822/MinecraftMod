@@ -1,9 +1,33 @@
 {
-	"schemaVersion": 1,
-	"id": "darkspawn-gametest",
-	"version": "1.0.0",
-	"name": "Darkspawn Server Tests",
-	"environment": "server",
-	"entrypoints": {"fabric-gametest": ["darkspawn.black.boss.BossEncounterGameTest", "darkspawn.black.cooking.CookingGameTest", "darkspawn.black.cooking.AgricultureGameTest", "darkspawn.black.cooking.CuisineGameTest", "darkspawn.black.ecosystem.ForestGameTest", "darkspawn.black.ecosystem.TaigaGameTest", "darkspawn.black.ecosystem.RegionalGameTest", "darkspawn.black.worldgen.BossStructureGameTest", "darkspawn.black.storage.StorageGameTest", "darkspawn.black.inventory.ArmorLoadoutGameTest", "darkspawn.black.equipment.ExpeditionArmorGameTest", "darkspawn.black.oneblock.OneBlockGameTest", "darkspawn.black.forsaken.ForsakenGameTest", "darkspawn.black.forsaken.ForsakenCityGameTest"]},
-	"depends": {"darkspawn": "*", "fabric-gametest-api-v1": "*"}
+  "schemaVersion": 1,
+  "id": "darkspawn-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.boss.BossEncounterGameTest",
+      "darkspawn.black.cooking.CookingGameTest",
+      "darkspawn.black.cooking.AgricultureGameTest",
+      "darkspawn.black.cooking.CuisineGameTest",
+      "darkspawn.black.ecosystem.ForestGameTest",
+      "darkspawn.black.ecosystem.TaigaGameTest",
+      "darkspawn.black.ecosystem.RegionalGameTest",
+      "darkspawn.black.worldgen.BossStructureGameTest",
+      "darkspawn.black.storage.StorageGameTest",
+      "darkspawn.black.inventory.ArmorLoadoutGameTest",
+      "darkspawn.black.equipment.ExpeditionArmorGameTest",
+      "darkspawn.black.oneblock.OneBlockGameTest",
+      "darkspawn.black.forsaken.ForsakenGameTest",
+      "darkspawn.black.forsaken.ForsakenCityGameTest",
+      "darkspawn.black.mount.GriffinGameTest",
+      "darkspawn.black.bonfire.BonfireGameTest",
+      "darkspawn.black.starter.DragonStarterChestGameTest",
+      "darkspawn.black.starter.TestingCampGameTest"
+    ]
+  },
+  "depends": {
+    "darkspawn": "*",
+    "fabric-gametest-api-v1": "*"
+  }
 }

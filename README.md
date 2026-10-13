@@ -4,6 +4,10 @@ Fabric mod for Minecraft **26.3**, with inventory upgrades, 16 post-dragon biome
 
 **Current release candidate: 2.0.0-alpha.1.** Adds the first [boss discovery structures](#boss-discovery-structures) alongside the [cuisine and progression expansion](#expanded-cuisine-and-progression). Intended for playtesting. The earlier live session reported working inventory, cooking/food, and Tree Spirit weapon empowerment. Tree Spirit combat pressure, animation polish, and live heart-persistence verification remain open. Preparing this candidate does not mean it has been published on Modrinth; the [upload instructions](docs/modrinth-release.md) describe the current candidate.
 
+## Instant testing camp
+
+Use `/give @s darkspawn:testing_camp`, then right-click the top of a center ground block in a flat **21 x 21** clearing with four blocks of headroom. The camp builds crafting/cooking stations, an enchanting setup, a crop plot, an inactive bonfire, and signed supply barrels with ingredients, meals, armor, and utilities. It includes an in-game testing guide. See [Testing Camp](docs/testing-camp.md) for contents and a quick playtest route.
+
 ## Cooking Station and meals
 
 Craft a **Cooking Station** using four iron ingots, one campfire, and three planks:

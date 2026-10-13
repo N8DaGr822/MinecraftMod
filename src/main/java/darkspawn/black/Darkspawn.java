@@ -46,6 +46,9 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.boss.BossEffects.initialize();
 		BossItems.register();
 		BossEntities.register();
+		darkspawn.black.mount.Mounts.initialize();
+		darkspawn.black.bonfire.Bonfires.initialize();
+		darkspawn.black.starter.DragonStarterChest.initialize();
 		darkspawn.black.boss.Endborn.initializeSpawning();
 		BossEmpowerment.initialize();
 		BossHearts.initialize();
@@ -58,6 +61,7 @@ public class Darkspawn implements ModInitializer {
 		ForestEcosystem.initialize();
 		darkspawn.black.oneblock.OneBlock.initialize();
 		darkspawn.black.forsaken.Forsaken.initialize();
+		darkspawn.black.starter.TestingCamp.initialize();
 		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
 		darkspawn.black.ecosystem.EcosystemEffects.initialize();
 		darkspawn.black.ecosystem.RegionalEcosystems.initialize();

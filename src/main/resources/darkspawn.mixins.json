@@ -3,6 +3,8 @@
 	"package": "darkspawn.black.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
+		"BonfireMovementMixin",
+		"BonfireServerMixin",
 		"ExampleMixin",
 		"InventoryExpansionMixin",
 		"InventoryMenuExpansionMixin",
