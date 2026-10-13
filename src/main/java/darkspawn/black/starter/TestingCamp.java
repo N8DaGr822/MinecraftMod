@@ -28,7 +28,8 @@ import net.minecraft.world.phys.AABB;
 public final class TestingCamp extends Item {
 	public static final int RADIUS = 10;
 	public static final Item ITEM = Registry.register(BuiltInRegistries.ITEM, Darkspawn.id("testing_camp"),
-		new TestingCamp(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Darkspawn.id("testing_camp"))).stacksTo(1)));
+		new TestingCamp(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Darkspawn.id("testing_camp"))).stacksTo(1).component(DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(List.of(
+			Component.translatable("tooltip.darkspawn.testing_camp.area"), Component.translatable("tooltip.darkspawn.testing_camp.use"))))));
 	public record Supply(String name, List<ItemStack> items) { }
 	private TestingCamp(Properties properties) { super(properties); }
 	public static void initialize() {
@@ -36,7 +37,11 @@ public final class TestingCamp extends Item {
 	}
 	@Override public InteractionResult useOn(UseOnContext context) {
 		Player player = context.getPlayer();
-		if (player == null || !player.mayBuild() || context.getClickedFace() != Direction.UP) return InteractionResult.FAIL;
+		if (player == null || !player.mayBuild()) return InteractionResult.FAIL;
+		if (context.getClickedFace() != Direction.UP) {
+			if (context.getLevel() instanceof ServerLevel) player.sendOverlayMessage(Component.translatable("tooltip.darkspawn.testing_camp.use"));
+			return InteractionResult.FAIL;
+		}
 		if (!(context.getLevel() instanceof ServerLevel level)) return InteractionResult.SUCCESS;
 		String error = place(level, context.getClickedPos(), player, context.getItemInHand());
 		if (error != null) {
@@ -60,11 +65,14 @@ public final class TestingCamp extends Item {
 		var result = new ArrayList<Supply>();
 		var guide = new ItemStack(Items.WRITTEN_BOOK);
 		var guidePages = List.of(
-			"DARKSPAWN TEST CAMP\n\nStart here: take the dragon kit, cookbook and scrolls. Switch to Survival for real food, equipment and crafting behavior. Supplies are finite; place another camp in a clear area to restock.",
-			"COOKING\n\nUse scrolls to learn locked recipes. Open the cookbook, then put its ingredients into the Cooking Station beside the crafting table. Pantry barrels include every loaded cooking ingredient. Finished meals let you compare buffs immediately.",
-			"FARMING AND ARMOR\n\nThe irrigated plot has all nine crops. Try seeds and bone meal. Compare iron/diamond styles, five expedition sets and five legendary sets. Use the inventory's loadouts. XP bottles and lapis support enchanting.",
-			"BASE TESTS\n\nThe bonfire starts OFF. Empty-hand right-click enables it; sneak-click cycles range. Keep it OFF for nearby hostile tests. Build a sorting line using the storage barrel. Use a bed from that barrel to set your spawn in the Overworld.",
-			"TRAVEL AND FLIGHT\n\n/summon darkspawn:griffin\nRide empty-handed; Space rises, X descends, Shift dismounts. OneBlock is in the inventory menu. Quarantine Gates still require dragon completion and a valid frame. This camp does not unlock progression or change gamerules.");
+			"TESTING CAMP\n\nTake the dragon kit, cookbook and scrolls. Switch to Survival to test normal mechanics. Follow the signs clockwise around the camp. Place another camp in clear ground to restock.",
+			"COOKING\n\nUse scrolls to learn recipes. Open the cookbook, then combine the listed ingredients at the Cooking Station. Pantry barrels contain all cooking ingredients; meal barrels provide ready-made samples.",
+			"FARMING\n\nAll nine crops are planted. Use seeds and bone meal from the Farming barrel. The central lamp lights the plot at night. Take a bed from Base supplies and place it in the Overworld to set your spawn.",
+			"ARMOR\n\nCompare complete iron/diamond styles, expedition gear and legendary sets. Try inventory loadouts. Combat tools include a spear, axe, trident, mace and crossbow for testing each weapon bonus.",
+			"WORKSHOP\n\nFurnace, smoker and blast furnace have coal. The brewing stand has blaze powder; fill bottles at the water cauldron. Use XP bottles and lapis at the enchanting table. Keep the bookshelf gaps clear.",
+			"BASE TESTS\n\nBonfire starts OFF. Empty-hand right-click enables it; sneak-click cycles range. Keep it off for hostile tests. Build a sorting line with the Base supplies. Spawn eggs are in Combat tools.",
+			"GRIFFIN FLIGHT\n\n/summon darkspawn:griffin\n\nRide empty-handed. Default keys: Space rises, X descends, Shift dismounts. Rebind Descend / Land in Controls. Test flight in open space away from the camp.",
+			"TRAVEL\n\nOneBlock is in the inventory menu. Quarantine Gates still require dragon completion and a valid frame. The camp does not change progression, time, weather or gamerules.");
 		guide.set(DataComponents.WRITTEN_BOOK_CONTENT, new net.minecraft.world.item.component.WrittenBookContent(
 			net.minecraft.server.network.Filterable.passThrough("Testing Camp Guide"), "Darkspawn", 0,
 			guidePages.stream().map(text -> net.minecraft.server.network.Filterable.passThrough((Component) Component.literal(text))).toList(), true));
@@ -98,12 +106,7 @@ public final class TestingCamp extends Item {
 		LegendaryArmor.SETS.values().forEach(set -> set.values().forEach(item -> add(legendary, item, 1)));
 		LegendaryArmor.CORES.values().forEach(item -> add(legendary, item, 16));
 		result.add(new Supply("07 Legendary armor and cores", legendary));
-		for (String style : ArmorStyles.STYLES) {
-			var armor = new ArrayList<ItemStack>();
-			for (Item item : new Item[] {Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
-				Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS}) armor.add(ArmorStyles.apply(new ItemStack(item), style));
-			result.add(new Supply("Style: " + style.replace('_', ' '), armor));
-		}
+
 		result.add(new Supply("08 Crafting and fuel", stacks(64, Items.COAL, Items.IRON_INGOT, Items.COPPER_INGOT, Items.GOLD_INGOT,
 			Items.DIAMOND, Items.NETHERITE_INGOT, Items.LEATHER, Items.PAPER, Items.OAK_LOG, Items.OAK_PLANKS, Items.STICK,
 			Items.COBBLESTONE, Items.STRING, Items.FLINT, Items.LAPIS_LAZULI, Items.EXPERIENCE_BOTTLE, Items.BOOK,
@@ -114,13 +117,25 @@ public final class TestingCamp extends Item {
 		for (String id : List.of("dump_chest", "sorting_chest", "sorting_tube", "bank_chest", "leather_inventory_upgrade",
 			"iron_inventory_upgrade", "diamond_inventory_upgrade", "quarantine_gate", "containment_key")) add(utilities, BuiltInRegistries.ITEM.getValue(Darkspawn.id(id)), 16);
 		result.add(new Supply("09 Base, storage and travel", utilities));
+		result.add(new Supply("10 Combat tools", stacks(1, Items.DIAMOND_AXE, Items.DIAMOND_SPEAR, Items.TRIDENT,
+			Items.MACE, Items.CROSSBOW, Items.DIAMOND_SHOVEL, Items.FISHING_ROD)));
+		result.add(new Supply("11 Target practice", stacks(16, Items.TARGET, Items.ARMOR_STAND, Items.ARROW,
+			Items.ZOMBIE_SPAWN_EGG, Items.SKELETON_SPAWN_EGG, Items.CREEPER_SPAWN_EGG)));
+		for (String style : ArmorStyles.STYLES) {
+			var armor = new ArrayList<ItemStack>();
+			for (Item item : new Item[] {Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS,
+				Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS}) armor.add(ArmorStyles.apply(new ItemStack(item), style));
+			result.add(new Supply("Style: " + style.replace('_', ' '), armor));
+		}
 		return result;
 	}
 
 	public static List<BlockPos> barrelPositions(BlockPos center) {
 		var positions = new ArrayList<BlockPos>();
-		for (int x = -9; x <= 9; x += 2) { positions.add(center.offset(x, 1, -9)); positions.add(center.offset(x, 1, 9)); }
-		for (int z = -7; z <= 7; z += 2) { positions.add(center.offset(-9, 1, z)); positions.add(center.offset(9, 1, z)); }
+		for (int x = -9; x <= 9; x += 2) positions.add(center.offset(x, 1, -9));
+		for (int z = -7; z <= 9; z += 2) positions.add(center.offset(9, 1, z));
+		for (int x = 7; x >= -9; x -= 2) positions.add(center.offset(x, 1, 9));
+		for (int z = 7; z >= -7; z -= 2) positions.add(center.offset(-9, 1, z));
 		return positions;
 	}
 
@@ -140,14 +155,23 @@ public final class TestingCamp extends Item {
 			if (player != null && (!level.mayInteract(player, pos) || !player.mayUseItemAt(pos, Direction.UP, kit)))
 				return "You cannot build throughout this camp area.";
 			var state = level.getBlockState(pos);
-			if (y == 0 && state.isFaceSturdy(level, pos, Direction.UP) && level.getBlockEntity(pos) == null) continue;
+			if (y == 0 && state.isFaceSturdy(level, pos, Direction.UP) && state.getFluidState().isEmpty() && level.getBlockEntity(pos) == null) continue;
 			if (!state.canBeReplaced() || !state.getFluidState().isEmpty() || level.getBlockEntity(pos) != null)
 				return "Camp blocked at " + pos.toShortString() + ". Choose flat, open ground: 21 x 21 with four blocks of headroom.";
 			if (y == 0) plan.put(pos, Blocks.STONE_BRICKS.defaultBlockState());
 		}
 		Block[] stations = {Blocks.CRAFTING_TABLE, Cooking.STATION, Blocks.FURNACE, Blocks.SMOKER, Blocks.BLAST_FURNACE,
 			Blocks.STONECUTTER, Blocks.SMITHING_TABLE, Blocks.ANVIL, Blocks.GRINDSTONE, Blocks.BREWING_STAND};
-		for (int i = 0; i < stations.length; i++) plan.put(center.offset(-5 + i, 1, -6), stations[i].defaultBlockState());
+		for (int i = 0; i < stations.length; i++) {
+			var station = stations[i].defaultBlockState();
+			var facing = net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+			if (station.hasProperty(facing)) station = station.setValue(facing, Direction.SOUTH);
+			plan.put(center.offset(-5 + i, 1, -6), station);
+		}
+		plan.put(center.offset(6, 1, -6), Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
+		// Accepted replaceable plants in these gaps must not block bookshelf power.
+		for (int x = 4; x <= 6; x++) for (int z = -4; z <= -2; z++) for (int y = 1; y <= 2; y++)
+			plan.put(center.offset(x, y, z), Blocks.AIR.defaultBlockState());
 		plan.put(center.offset(5, 1, -3), Blocks.ENCHANTING_TABLE.defaultBlockState());
 		for (int x = 3; x <= 7; x++) for (int z = -5; z <= -1; z++)
 			if (x == 3 || x == 7 || z == -5 || z == -1) if (!(x == 5 && z == -1)) plan.put(center.offset(x, 1, z), Blocks.BOOKSHELF.defaultBlockState());
@@ -170,6 +194,14 @@ public final class TestingCamp extends Item {
 			&& !level.getEntities((net.minecraft.world.entity.Entity) null, new AABB(entry.getKey()), entity -> entity.isAlive() && !entity.isSpectator()).isEmpty())
 			return "A player or entity is in the camp's building area. Move them clear and try again.";
 		plan.forEach(level::setBlockAndUpdate);
+		for (int x = -3; x <= -1; x++) {
+			var furnace = (net.minecraft.world.Container) level.getBlockEntity(center.offset(x, 1, -6));
+			furnace.setItem(1, new ItemStack(Items.COAL, 32));
+			furnace.setChanged();
+		}
+		var brewing = (net.minecraft.world.Container) level.getBlockEntity(center.offset(4, 1, -6));
+		brewing.setItem(4, new ItemStack(Items.BLAZE_POWDER, 32));
+		brewing.setChanged();
 		for (int i = 0; i < pages.size(); i++) {
 			var barrel = (BarrelBlockEntity) level.getBlockEntity(barrels.get(i));
 			var label = new ItemStack(Items.BARREL);

@@ -1,6 +1,7 @@
 """Validate runtime atlas dimensions, native geometry, UVs, and model references."""
 import json
 import struct
+import re
 from pathlib import Path
 from cuisine import MEALS, BOSSES, FEASTS
 
@@ -10,9 +11,26 @@ for file,size in [('textures/block/cuisine_atlas.png',512),('icon.png',256)]:
     raw=(assets/file).read_bytes()
     assert raw[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',raw[16:24])==(size,size),file
 models=[]
+ingredients=[row.split('|')[1] for row in BOSSES.splitlines()]
+source=(root/'src/main/java/darkspawn/black/cooking/Cuisine.java').read_text()
+registered=set(re.findall(r'INGREDIENTS.put\(BossKind\.[A-Z_]+, register\("([^"]+)"',source))
+assert registered==set(ingredients),'Boss ingredient artwork catalog differs from runtime registrations'
+signatures=[]
+for name in ingredients:
+    elements=json.loads((assets/f'models/item/{name}.json').read_text())['elements']
+    assert elements,name
+    signatures.append(json.dumps(elements,sort_keys=True))
+assert len(set(signatures))==len(ingredients),'Boss ingredients must have distinct models'
+meals=[row.split('|')[0] for row in MEALS.splitlines()]+[row.split('|')[2] for row in BOSSES.splitlines()]
+# Ignore textures and labels: recoloring the same generic geometry is insufficient.
+silhouettes=[]
+for name in meals:
+    elements=json.loads((assets/f'models/item/{name}.json').read_text())['elements']
+    silhouettes.append(tuple(sorted(tuple(e['from']+e['to']) for e in elements)))
+assert len(set(silhouettes))==len(meals),'Meals must differ in geometry, not just material or labels'
 for row in MEALS.splitlines(): models.append('item/'+row.split('|')[0])
 for row in BOSSES.splitlines():
-    boss,_,meal,*_=row.split('|'); models += ['item/'+meal,'block/'+boss+'_trophy']
+    boss,ingredient,meal,*_=row.split('|'); models += ['item/'+ingredient,'item/'+meal,'block/'+boss+'_trophy']
 for row in FEASTS.splitlines():
     name=row.split('|')[0]
     states=json.loads((assets/f'blockstates/{name}.json').read_text())['variants']

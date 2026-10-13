@@ -1,7 +1,10 @@
 // Offline orthographic review of the actual Java model geometry and UV atlas.
 const fs=require('node:fs'), path=require('node:path');
 const root=path.resolve(__dirname,'../..'), assets=path.join(root,'src/main/resources/assets/darkspawn');
-const ids=[...fs.readdirSync(path.join(assets,'models/block')).filter(n=>n.endsWith('_trophy.json')).map(n=>'block/'+n),
+const ingredients=fs.readFileSync(path.join(__dirname,'cuisine.py'),'utf8').match(/BOSSES = '''([\s\S]*?)'''/)[1].split(/\r?\n/).map(row=>'item/'+row.split('|')[1]+'.json');
+const catalog=fs.readFileSync(path.join(__dirname,'cuisine.py'),'utf8');
+const meals=[...catalog.match(/MEALS = '''([\s\S]*?)'''/)[1].split(/\r?\n/).map(row=>row.split('|')[0]),...catalog.match(/BOSSES = '''([\s\S]*?)'''/)[1].split(/\r?\n/).map(row=>row.split('|')[2])].map(id=>'item/'+id+'.json');
+const ids=process.argv.includes('--meals') ? meals : process.argv.includes('--ingredients') ? ingredients : [...ingredients,...fs.readdirSync(path.join(assets,'models/block')).filter(n=>n.endsWith('_trophy.json')).map(n=>'block/'+n),
  ...['hunters_stew','garlic_bread','vegetable_pizza','berry_pie','chocolate_cake','tropical_skewer','frost_garlic_soup','marsh_rice_bowl'].map(n=>'item/'+n+'.json'),
  ...['hunters_feast_6','ocean_feast_6','nether_feast_6','ender_banquet_6','hero_feast_6','hero_feast_2'].map(n=>'block/'+n+'.json')];
 const models=ids.map(id=>({id,model:JSON.parse(fs.readFileSync(path.join(assets,'models',id),'utf8'))}));

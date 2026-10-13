@@ -21,10 +21,5 @@ jobs:
           distribution: 'microsoft'
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
-      - name: build
-        run: ./gradlew build
-      - name: capture build artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: Artifacts
-          path: build/libs/
+      - name: full verification
+        run: ./gradlew fullCheck --max-workers=1 -PpythonExecutable=python3

@@ -75,9 +75,10 @@ def ids(parts): return [('darkspawn:' + p[1:] if p.startswith('@') else 'minecra
 
 def generate():
     lang = json.loads((RES / 'assets/darkspawn/lang/en_us.json').read_text(encoding='utf-8'))
-    def item(name, texture):
+    def item(name, texture=None):
         write(RES / f'assets/darkspawn/items/{name}.json', {'model': {'type': 'minecraft:model', 'model': f'darkspawn:item/{name}'}})
-        write(RES / f'assets/darkspawn/models/item/{name}.json', {'parent': 'minecraft:item/generated', 'textures': {'layer0': 'minecraft:item/' + texture}})
+        if texture is not None:
+            write(RES / f'assets/darkspawn/models/item/{name}.json', {'parent': 'minecraft:item/generated', 'textures': {'layer0': 'minecraft:item/' + texture}})
         lang['item.darkspawn.' + name] = title(name)
     def recipe(name, parts):
         write(RES / f'data/darkspawn/recipe/{name}.json', {'type': 'darkspawn:cooking', 'ingredients': ids(parts), 'result': {'id': 'darkspawn:' + name}})
@@ -91,7 +92,7 @@ def generate():
     code = []
     for boss, ingredient, meal, effect, texture in bosses:
         rows.append([meal, effect, 'Boss Cuisine', f'@{ingredient} @rice @butter @wild_herbs', 'rabbit_stew'])
-        item(ingredient, 'sugar' if 'salt' in ingredient else 'honey_bottle' if ingredient == 'ancient_sap' else 'rabbit')
+        item(ingredient)  # Native ingredient geometry is authored by cuisine_art.
         code.append(f'  INGREDIENTS.put(BossKind.{boss.upper()}, register("{ingredient}", Item::new));')
         name = boss + '_trophy'
         block(name, {'': {'model': 'darkspawn:block/' + name}}, [])

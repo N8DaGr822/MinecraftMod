@@ -1,0 +1,4 @@
+// Preserve earlier checkpoint JARs while packaging the ingredient artwork.
+gradle.beforeProject { project ->
+    project.layout.buildDirectory.set(project.layout.projectDirectory.dir('build/boss-ingredients-verification'))
+}

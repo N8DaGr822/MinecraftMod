@@ -31,6 +31,8 @@ public final class TestingCampGameTest {
 	public void campBuildsStationsAndSuppliesWithoutActivatingWard(GameTestHelper helper) {
 		var center = prepare(helper, 60);
 		try {
+			// Natural clearings can contain replaceable vegetation between the table and shelves.
+			helper.getLevel().setBlockAndUpdate(center.offset(4, 1, -3), Blocks.SHORT_GRASS.defaultBlockState());
 			var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
 			var kit = new ItemStack(TestingCamp.ITEM);
 			var context = new net.minecraft.world.item.context.UseOnContext(helper.getLevel(), player,
@@ -43,6 +45,19 @@ public final class TestingCampGameTest {
 			var core = helper.getLevel().getBlockState(center.offset(-4, 2, -2));
 			helper.assertTrue(core.is(Bonfires.CORE) && core.getValue(BonfireBlock.PHASE) == 0, "Ward starts off for hostile tests");
 			helper.assertTrue(helper.getLevel().getBlockState(center).is(Blocks.STONE), "Existing ground preserved");
+			var table = center.offset(5, 1, -3);
+			long shelves = net.minecraft.world.level.block.EnchantingTableBlock.BOOKSHELF_OFFSETS.stream()
+				.filter(offset -> net.minecraft.world.level.block.EnchantingTableBlock.isValidBookShelf(helper.getLevel(), table, offset)).count();
+			helper.assertTrue(shelves == 15, "All fifteen bookshelves provide power despite pre-existing grass");
+			for (int x = -3; x <= -1; x++) {
+				var pos = center.offset(x, 1, -6);
+				var furnace = (net.minecraft.world.Container) helper.getLevel().getBlockEntity(pos);
+				helper.assertTrue(furnace.getItem(1).is(Items.COAL) && furnace.getItem(1).getCount() == 32, "Furnaces are ready with fuel");
+				helper.assertTrue(helper.getLevel().getBlockState(pos).getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING)
+					== net.minecraft.core.Direction.SOUTH, "Workstations face the central aisle");
+			}
+			var brewing = (net.minecraft.world.Container) helper.getLevel().getBlockEntity(center.offset(4, 1, -6));
+			helper.assertTrue(brewing.getItem(4).is(Items.BLAZE_POWDER), "Brewing stand starts fueled");
 			int expected = TestingCamp.supplies(helper.getLevel()).stream().mapToInt(s -> s.items().size()).sum();
 			int actual = 0;
 			for (var pos : TestingCamp.barrelPositions(center)) if (helper.getLevel().getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
@@ -69,12 +84,21 @@ public final class TestingCampGameTest {
 			helper.assertTrue(barrel.getItem(0).getCount() == 7, "Original contents preserved");
 			helper.assertTrue(helper.getLevel().getBlockState(center.offset(-5, 1, -6)).isAir(), "No partial crafting station placed");
 			helper.assertTrue(helper.getLevel().getBlockState(TestingCamp.barrelPositions(center).getFirst()).isAir(), "No partial supplies placed");
+			helper.getLevel().setBlockAndUpdate(obstruction, Blocks.AIR.defaultBlockState());
+			helper.getLevel().setBlockAndUpdate(center, Blocks.OAK_SLAB.defaultBlockState()
+				.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.SLAB_TYPE, net.minecraft.world.level.block.state.properties.SlabType.TOP)
+				.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED, true));
+			helper.assertTrue(TestingCamp.place(helper.getLevel(), center, null, new ItemStack(TestingCamp.ITEM)) != null, "Waterlogged supporting blocks also refuse placement");
+			helper.assertTrue(helper.getLevel().getBlockState(center.offset(-5, 1, -6)).isAir(), "Waterlogged refusal leaves stations unplaced");
 		} finally { clear(helper, center); }
 		helper.succeed();
 	}
 	@GameTest
 	public void pantryCoversLoadedCookingRecipesAndAllStyles(GameTestHelper helper) {
 		var supplies = TestingCamp.supplies(helper.getLevel());
+		var weapons = supplies.stream().filter(s -> s.name().equals("10 Combat tools")).findFirst().orElseThrow().items();
+		for (var item : java.util.List.of(Items.DIAMOND_AXE, Items.DIAMOND_SPEAR, Items.TRIDENT, Items.MACE, Items.CROSSBOW))
+			helper.assertTrue(weapons.stream().anyMatch(stack -> stack.is(item)), "Style-specific weapons are supplied");
 		var pantry = supplies.stream().filter(s -> s.name().contains("Cooking ingredients")).findFirst().orElseThrow().items();
 		helper.getLevel().getServer().getRecipeManager().getRecipes().forEach(holder -> {
 			if (holder.value() instanceof CookingRecipe recipe) recipe.ingredients().forEach(ingredient ->

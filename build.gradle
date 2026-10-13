@@ -55,6 +55,45 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	// Model tests load client classes as well as the common mod classes.
+	classpath += sourceSets.client.output
+	systemProperty 'fabric.classPathGroups', (sourceSets.main.output.files + sourceSets.client.output.files).collect { it.absolutePath }.join(File.pathSeparator)
+	maxParallelForks = 1
+	jvmArgs '-XX:ActiveProcessorCount=2'
+}
+
+def gameTestFilter = providers.gradleProperty('gameTestFilter')
+tasks.named('runGameTest') {
+	// Avoid competing Minecraft/JUnit processes on development machines.
+	mustRunAfter tasks.named('test')
+	jvmArgs '-XX:ActiveProcessorCount=2'
+	if (gameTestFilter.isPresent()) {
+		if (gameTestFilter.get().isBlank()) throw new GradleException('gameTestFilter must not be blank')
+		systemProperty 'fabric-api.gametest.filter', gameTestFilter.get()
+	}
+}
+
+tasks.register('playBuild') {
+	group = 'build'
+	description = 'Build the playable JAR without starting unit tests or a GameTest server.'
+	dependsOn tasks.named('assemble')
+}
+
+tasks.register('checkCuisineArt', Exec) {
+	group = 'verification'
+	description = 'Check cuisine models, textures and item references without starting Minecraft.'
+	commandLine providers.gradleProperty('pythonExecutable').getOrElse('python'), 'tools/assets/verify-cuisine-art.py'
+}
+
+tasks.register('fullCheck') {
+	group = 'verification'
+	description = 'Pre-push checks without packaging: all unit tests, server GameTests and cuisine assets.'
+	dependsOn tasks.named('check'), tasks.named('test'), tasks.named('runGameTest'), tasks.named('checkCuisineArt')
+}
+
+// A pre-push run must not accidentally inherit a narrowed server-test selection.
+if (gameTestFilter.isPresent() && gradle.startParameter.taskNames.any { it.tokenize(':').last() in ['fullCheck', 'build', 'check'] }) {
+	throw new GradleException('Use runGameTest with -PgameTestFilter for targeted checks; fullCheck/build/check must be unfiltered.')
 }
 
 processResources {

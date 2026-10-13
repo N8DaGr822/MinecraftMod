@@ -1,0 +1,14 @@
+// Keep the checkpoint artifact separate and include client models in unit tests.
+gradle.beforeProject { project ->
+    project.layout.buildDirectory.set(project.layout.projectDirectory.dir('build/mounts-verification'))
+    project.afterEvaluate {
+        project.tasks.named('test') {
+            classpath += project.sourceSets.client.output
+            systemProperty 'fabric.classPathGroups', (project.sourceSets.main.output.files + project.sourceSets.client.output.files).collect { it.absolutePath }.join(File.pathSeparator)
+            jvmArgs '-XX:ActiveProcessorCount=2'
+        }
+        project.tasks.named('runGameTest') {
+            jvmArgs '-XX:ActiveProcessorCount=2'
+        }
+    }
+}

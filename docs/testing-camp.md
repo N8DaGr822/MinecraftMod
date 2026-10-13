@@ -6,19 +6,19 @@ Get **Darkspawn Testing Camp** from Creative's Functional Blocks tab, or run:
 /give @s darkspawn:testing_camp
 ```
 
-Right-click the **top of the center ground block** in a flat, open area. The camp needs a **21 x 21 footprint and four blocks of headroom**. It preserves solid ground and fills gaps with stone bricks. Obstructions, fluids, protected positions, unloaded chunks, world boundaries, and entities occupying new solid blocks cause the entire placement to be refused before building. The message identifies blocked terrain. Grass and other replaceable vegetation can be replaced at construction positions.
+Right-click the **top of the center ground block** in a flat, open area. The item tooltip lists the **21 x 21 footprint and four blocks of headroom**; clicking a side reminds you to use the top. The camp preserves solid ground and fills gaps with stone bricks. Obstructions, fluids (including waterlogged ground), protected positions, unloaded chunks, world boundaries, and entities occupying new solid blocks cause the entire placement to be refused before building. The message identifies blocked terrain. Grass and other replaceable vegetation can be replaced at construction positions and is cleared from the enchanting setup's bookshelf gaps.
 
 There is no survival recipe or automatic placement when joining. One kit is consumed on successful Survival placement; Creative retains it. Use a disposable testing world. The camp is made of ordinary persistent blocks: dismantle it normally. Place another kit in another clear area to restock; placing over an existing camp is rejected.
 
 ## Ready-to-use stations
 
-The north workbench row has a crafting table, Darkspawn Cooking Station, furnace, smoker, blast furnace, stonecutter, smithing table, anvil, grindstone, and brewing stand. The east corner has an enchanting table with fifteen bookshelves. Fuel, lapis, XP bottles, and brewing supplies are in the crafting barrel. Supply your own brewing water using the included buckets and bottles.
+The north workbench row has a crafting table, Darkspawn Cooking Station, furnace, smoker, blast furnace, stonecutter, smithing table, anvil, grindstone, and brewing stand. Directional workstations face south into the central aisle. The furnace, smoker, and blast furnace each start with 32 coal; the brewing stand has 32 blaze powder. A full water cauldron beside the row supplies bottles. Refill it with the supplied water buckets. The east corner has an enchanting table with fifteen unobstructed bookshelves. Extra fuel, lapis, XP bottles, and brewing supplies are in the crafting barrel.
 
 The northwest bonfire has its copper/stone-brick foundation already built. It starts **off** so ordinary hostile testing works. Right-click with an empty hand to activate; sneak-right-click to change radius. The southeast irrigated, illuminated plot has all nine Darkspawn crops planted at their first growth stage. Seeds, produce, bone meal, and a hoe are provided. Beds are in the utility barrel; place one in the Overworld to set your respawn point.
 
 ## Organized supplies
 
-Barrels around the perimeter have visible signs and named inventories. Large categories span numbered barrels.
+Barrels around the perimeter have visible signs and named inventories. Follow them clockwise from the northwest corner: guide, combat kit, pantry, prepared food, farming/equipment, utilities, then armor styles. Large categories span numbered barrels.
 
 - **Start here:** a short in-game testing guide.
 - **Dragon combat kit:** the full enchanted diamond kit, food, potions, and travel supplies from Dragon Starter Chest.
@@ -31,6 +31,8 @@ Barrels around the perimeter have visible signs and named inventories. Large cat
 - **Armor styles:** each of the fifteen styles in complete iron and diamond sets, one labeled barrel per style.
 - **Crafting and fuel:** metals, wood, basic materials, books, lapis, XP bottles, coal, and brewing supplies.
 - **Base, storage and travel:** bonfire supplies, beds, storage chests and tubes, inventory upgrades, Quarantine Gates and keys, and obsidian.
+- **Combat tools:** diamond axe and spear, trident, mace, crossbow, shovel, and fishing rod.
+- **Target practice:** targets, armor stands, arrows, and zombie/skeleton/creeper spawn eggs. Keep the bonfire off when testing ordinary hostiles.
 
 All stacks respect normal stack limits. If data packs add more ingredients than the camp's 36 barrel positions can hold, placement refuses rather than losing supplies.
 

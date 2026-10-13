@@ -1,0 +1,4 @@
+// Keep the meal artwork checkpoint separate from previous releases.
+gradle.beforeProject { project ->
+    project.layout.buildDirectory.set(project.layout.projectDirectory.dir('build/meal-art-verification'))
+}
