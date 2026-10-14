@@ -18,6 +18,7 @@ public final class InventoryExpansion {
 	public static final int FIRST_EXTRA_SLOT = 43;
 	public static final int STORAGE_SIZE = FIRST_EXTRA_SLOT + EXTRA_SLOTS;
 	public static final int FIRST_EXTRA_MENU_SLOT = 46;
+	public static final int TRASH_MENU_SLOT = FIRST_EXTRA_MENU_SLOT + EXTRA_SLOTS;
 
 	private InventoryExpansion() {
 	}
@@ -44,6 +45,8 @@ public final class InventoryExpansion {
 	}
 
 	public static void initialize() {
+		PayloadTypeRegistry.serverboundPlay().register(TrashInventoryPayload.TYPE, TrashInventoryPayload.CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(TrashInventoryPayload.TYPE, (payload, context) -> emptyTrash(context.player(), payload.stateId()));
 		PayloadTypeRegistry.clientboundPlay().register(InventoryTierPayload.TYPE, InventoryTierPayload.CODEC);
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> sync(handler.player));
 		// Respawn: Capacity is permanent; vanilla inventory copying/dropping still controls the items.
@@ -51,6 +54,15 @@ public final class InventoryExpansion {
 				setTier(newPlayer.getInventory(), tier(oldPlayer.getInventory())));
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> sync(newPlayer));
 		ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> sync(player));
+	}
+
+	public static void emptyTrash(ServerPlayer player, int stateId) {
+		// Trash Authority: Delete only the staged stack from the current server menu revision.
+		if (!player.isAlive() || player.isSpectator() || player.containerMenu != player.inventoryMenu
+			|| !player.inventoryMenu.getCarried().isEmpty()) return;
+		if (player.inventoryMenu.getStateId() != stateId) { player.inventoryMenu.broadcastFullState(); return; }
+		player.inventoryMenu.getSlot(TRASH_MENU_SLOT).set(net.minecraft.world.item.ItemStack.EMPTY);
+		player.inventoryMenu.broadcastChanges();
 	}
 
 	public static void sync(ServerPlayer player) {

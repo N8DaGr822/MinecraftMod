@@ -48,10 +48,37 @@ for (let variant = 0; variant < 3; variant++) {
   put(17,4,13,'chest',{facing:'west',type:'single',waterlogged:'false'},{id:'minecraft:chest',LootTable:'darkspawn:chests/research_bunker'});
   for(let x=-2;x<=2;x++) for(let y=0;y<=4;y++) if(Math.abs(x)===2||y===0||y===4) put(12+x,4+y,7,'obsidian');
   put(12,4,7,'darkspawn:quarantine_gate',{active:'false',facing:'south'}); put(10,8,7,'air'); // Repairable damaged frame.
+  // Containment Lab: Observation glazing separates the portal from a two-door airlock.
+  fill(5,3,5,19,3,17,'smooth_stone');
+  fill(5,4,10,19,9,10,'smooth_quartz');
+  fill(9,5,10,16,8,10,'cyan_stained_glass');
+  fill(5,4,14,7,8,14,'smooth_quartz');
+  fill(7,4,11,7,8,13,'smooth_quartz');
+  fill(5,9,11,7,9,14,'smooth_quartz');
+  for(const z of [10,14]) {
+    put(6,4,z,'iron_door',{facing:'north',half:'lower',hinge:'left',open:'false',powered:'false'});
+    put(6,5,z,'iron_door',{facing:'north',half:'upper',hinge:'left',open:'false',powered:'false'});
+    for(const dz of [-1,1]) put(6,4,z+dz,'stone_pressure_plate',{powered:'false'});
+  }
+  // Keep the archive reachable from the observation room; the original chest stays finite.
+  for(const x of [10,13,16]) {
+    put(x,4,12,'smooth_quartz'); put(x,5,12,'black_concrete');
+    put(x,5,13,'heavy_weighted_pressure_plate',{power:'0'});
+    put(x,6,12,variant===1?'lime_stained_glass':'cyan_stained_glass');
+    put(x,7,12,'sea_lantern');
+    put(x,4,15,'polished_blackstone_brick_stairs',{facing:'north',half:'bottom',shape:'straight',waterlogged:'false'});
+  }
+  for(const x of [8,17]) {
+    fill(x,4,5,x,8,5,'polished_deepslate');
+    for(const y of [5,7]) put(x,y,6,'lightning_rod',{facing:'south',powered:'false',waterlogged:'false'});
+  }
+  for(let x=9;x<=16;x++) put(x,3,9,x%2?'yellow_concrete':'black_concrete');
+  for(const z of [6,8,16]) { put(5,9,z,'sea_lantern'); put(19,9,z,'sea_lantern'); }
   for(let n=0;n<5;n++) put(5+n*3,10,5+variant*3,'mossy_stone_bricks');
   const palette=[]; const indices=new Map(); const entries=[];
   for(const b of blocks.values()) { const key=JSON.stringify(b.state); if(!indices.has(key)){indices.set(key,palette.length);palette.push(b.state);} entries.push({pos:b.pos,state:indices.get(key),...(b.nbt?{nbt:b.nbt}:{})}); }
   const template={DataVersion:5000,size:[25,13,25],palette,blocks:entries,entities:[]};
+  if (variant === 0) { fs.mkdirSync(path.join(root,'build'),{recursive:true}); fs.writeFileSync(path.join(root,'build/research-bunker-preview.json'),JSON.stringify(template)); }
   const target=path.join(res,`data/darkspawn/structure/landmarks/research_bunker_${variant}.nbt`); fs.mkdirSync(path.dirname(target),{recursive:true}); fs.writeFileSync(target,zlib.gzipSync(Buffer.concat([Buffer.from([10,0,0]),tag(template)[1]])));
 }
 console.log('Authored Forsaken gate models, foundation data, and three research bunkers.');

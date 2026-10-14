@@ -53,7 +53,7 @@ public final class BonfireWards {
 			BlockPos pos = iterator.next();
 			if (!level.hasChunkAt(pos) || !level.getBlockState(pos).is(Bonfires.CORE)) { iterator.remove(); continue; }
 			var state = level.getBlockState(pos);
-			if (state.getValue(BonfireBlock.PHASE) > 0 && foundation(level, pos)) result.add(new WardVolume(pos, state.getValue(BonfireBlock.RANGE) * 25));
+			if (state.getValue(BonfireBlock.PHASE) > 0 && foundation(level, pos)) result.add(WardVolume.forTier(pos, state.getValue(BonfireBlock.RANGE)));
 		}
 		return result;
 	}
@@ -140,8 +140,9 @@ public final class BonfireWards {
 	public static void preview(ServerLevel level, ServerPlayer viewer, WardVolume ward) {
 		for (int i = 0; i < 96; i++) {
 			double angle = i * Math.PI / 48;
-			double x = ward.center().getX() + .5 + Math.cos(angle) * ward.radius();
-			double z = ward.center().getZ() + .5 + Math.sin(angle) * ward.radius();
+			double edge = ward.radius() / Math.max(Math.abs(Math.cos(angle)), Math.abs(Math.sin(angle)));
+			double x = ward.center().getX() + Math.cos(angle) * edge;
+			double z = ward.center().getZ() + Math.sin(angle) * edge;
 			for (double y : new double[] {ward.bottom(), ward.center().getY() + .5, ward.top()})
 				level.sendParticles(viewer, ParticleTypes.END_ROD, true, true, x, y, z, 1, 0, 0, 0, 0);
 		}

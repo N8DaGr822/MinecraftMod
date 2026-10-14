@@ -1,0 +1,126 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/iron_block",
+    "ball": "minecraft:block/iron_block"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        3,
+        5
+      ],
+      "to": [
+        11,
+        13,
+        11
+      ],
+      "faces": {
+        "up": {
+          "texture": "#ball"
+        },
+        "down": {
+          "texture": "#ball"
+        },
+        "north": {
+          "texture": "#ball"
+        },
+        "south": {
+          "texture": "#ball"
+        },
+        "east": {
+          "texture": "#ball"
+        },
+        "west": {
+          "texture": "#ball"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        5,
+        5
+      ],
+      "to": [
+        13,
+        11,
+        11
+      ],
+      "faces": {
+        "up": {
+          "texture": "#ball"
+        },
+        "down": {
+          "texture": "#ball"
+        },
+        "north": {
+          "texture": "#ball"
+        },
+        "south": {
+          "texture": "#ball"
+        },
+        "east": {
+          "texture": "#ball"
+        },
+        "west": {
+          "texture": "#ball"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        5,
+        3
+      ],
+      "to": [
+        11,
+        11,
+        13
+      ],
+      "faces": {
+        "up": {
+          "texture": "#ball"
+        },
+        "down": {
+          "texture": "#ball"
+        },
+        "north": {
+          "texture": "#ball"
+        },
+        "south": {
+          "texture": "#ball"
+        },
+        "east": {
+          "texture": "#ball"
+        },
+        "west": {
+          "texture": "#ball"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        25,
+        35,
+        0
+      ],
+      "scale": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

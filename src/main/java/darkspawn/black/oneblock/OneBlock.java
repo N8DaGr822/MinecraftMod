@@ -99,7 +99,7 @@ public final class OneBlock {
 			// Renewable Essentials: Every phase continues to supply dirt/wood and samples previous pools.
 			int phase = level.getRandom().nextInt(4) == 0 ? level.getRandom().nextInt(data.phase + 1) : data.phase;
 			data.resource = data.total % 10 == 0 ? 0 : data.total % 10 == 1 ? 1 : POOLS[phase][level.getRandom().nextInt(POOLS[phase].length)];
-			if (data.total % 25 == 0) supply(level, data.phase);
+			if (data.total % 100 == 0) supply(level, data.phase);
 			if (data.total % 50 == 0) creature(level, data.phase);
 		}
 		level.setBlockAndUpdate(CORE_POS, CORE.defaultBlockState().setValue(OneBlockCore.RESOURCE, data.resource));
@@ -157,6 +157,7 @@ public final class OneBlock {
 			|| player.containerMenu != player.inventoryMenu || !player.inventoryMenu.getCarried().isEmpty()
 			|| !player.getShoulderEntityLeft().isEmpty() || !player.getShoulderEntityRight().isEmpty() || ArmorLoadouts.state(player).pending >= 0) return false;
 		for (int slot = 1; slot <= 4; slot++) if (!player.inventoryMenu.getSlot(slot).getItem().isEmpty()) return false;
+		if (player.inventoryMenu.getSlot(darkspawn.black.inventory.InventoryExpansion.TRASH_MENU_SLOT).hasItem()) return false;
 		for (var entity : player.level().getEntities(player, player.getBoundingBox().inflate(16))) {
 			if (entity instanceof net.minecraft.world.entity.Leashable leash && leash.getLeashHolder() == player) return false;
 		}

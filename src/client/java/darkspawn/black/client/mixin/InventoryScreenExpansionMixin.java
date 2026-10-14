@@ -47,17 +47,19 @@ public abstract class InventoryScreenExpansionMixin extends AbstractContainerScr
 			graphics.blit(pipeline, texture, x, y, u, v, width, height, textureWidth, textureHeight);
 			return;
 		}
-		// Inventory Layout: Repeat vanilla slot-row artwork; keep the crafting area and hotbar intact.
-		graphics.blit(pipeline, texture, x, y, 0, 0, width, 137, textureWidth, textureHeight);
-		for (int row = 0; row < 3; row++) {
-			graphics.blit(pipeline, texture, x, y + 137 + row * 18, 0, 83, width, 18, textureWidth, textureHeight);
-			if (row >= InventoryExpansion.tier(minecraft.player.getInventory())) {
-				graphics.fill(x + 7, y + 137 + row * 18, x + 169, y + 155 + row * 18, 0xAA555555);
-				graphics.text(font, Component.translatable("container.darkspawn.locked_row." + (row + 1)),
-						x + 12, y + 142 + row * 18, 0xFFFFFFFF, true);
-			}
+		darkspawn.black.client.UiTheme.panel(graphics, x, y, width, imageHeight);
+		graphics.fill(x + 26, y + 7, x + 77, y + 78, 0xFF243C42);
+		for (var slot : menu.slots) {
+			darkspawn.black.client.UiTheme.slot(graphics, x + slot.x, y + slot.y, slot.index == InventoryExpansion.TRASH_MENU_SLOT);
+			if (!slot.isActive()) graphics.fill(x+slot.x,y+slot.y,x+slot.x+16,y+slot.y+16,0xBB566F73);
 		}
-		graphics.blit(pipeline, texture, x, y + 191, 0, 137, width, 29, textureWidth, textureHeight);
+		graphics.text(font, ">", x + 137, y + 32, darkspawn.black.client.UiTheme.INK, false);
+		if (!menu.getSlot(InventoryExpansion.TRASH_MENU_SLOT).hasItem()) {
+			int bx=x+156, by=y+65;
+			graphics.fill(bx,by+3,bx+8,by+11,0xFF8C4848);
+			graphics.fill(bx-1,by,bx+9,by+2,0xFF8C4848);
+		}
+
 	}
 
 	@Redirect(method = { "init", "containerTick" }, at = @At(value = "INVOKE",

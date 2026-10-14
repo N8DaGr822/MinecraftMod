@@ -372,10 +372,10 @@ public final class MutantWolf extends Monster implements GeoEntity {
 		for (ServerPlayer player : players) {
 			Vec3 delta = player.position().subtract(center);
 			if (delta.horizontalDistanceSqr() <= radius * radius && delta.y >= -2 && delta.y <= 5 && hasLineOfSight(player)) {
-				float damage = phase() == 3 ? 16 : 12;
+				float damage = (phase() == 3 ? 16 : 12) * 1.25F;
 				if (player.hurtServer(level, damageSources().mobAttack(this), damage)) {
 					player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, variant() == 1 ? 80 : 40, 1));
-					player.knockback(1.2, -delta.x, -delta.z, damageSources().mobAttack(this), damage);
+					player.knockback(2, -delta.x, -delta.z, damageSources().mobAttack(this), damage);
 				}
 			}
 		}

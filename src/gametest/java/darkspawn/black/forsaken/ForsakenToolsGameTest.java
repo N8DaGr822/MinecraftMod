@@ -37,7 +37,7 @@ public final class ForsakenToolsGameTest {
 		var mob = ForsakenContent.MOBS.get(Infected.Kind.WANDERER).create(level, EntitySpawnReason.COMMAND);
 		mob.setPos(Vec3.atBottomCenterOf(pos)); mob.setNoAi(true); mob.setNoGravity(true); level.addFreshEntity(mob); return mob;
 	}
-	@GameTest public void pulseRequiresChargeAndOnlyHitsVisibleNearbyInfected(GameTestHelper helper) {
+	@GameTest(maxTicks=200) public void pulseRequiresChargeAndOnlyHitsVisibleNearbyInfected(GameTestHelper helper) {
 		var level = helper.getLevel().getServer().getLevel(Forsaken.LEVEL); var pos = new BlockPos(24576, 110, 40); chunks(level, pos, true);
 		for (var at : BlockPos.betweenClosed(pos.offset(-6, -1, -6), pos.offset(6, 4, 6))) level.setBlockAndUpdate(at, Blocks.AIR.defaultBlockState());
 		var player = player(level, pos); var blade = new ItemStack(ForsakenContent.BLADE); player.setItemInHand(InteractionHand.MAIN_HAND, blade);
@@ -45,7 +45,9 @@ public final class ForsakenToolsGameTest {
 		var pet = darkspawn.black.mount.Mounts.LEOPARD.create(level, EntitySpawnReason.COMMAND);
 		pet.setPos(Vec3.atBottomCenterOf(pos.north(2))); pet.setNoAi(true); level.addFreshEntity(pet); float petHealth = pet.getHealth();
 		for (var at : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(-1, 3, 1))) level.setBlockAndUpdate(at, Blocks.STONE.defaultBlockState());
-		helper.runAfterDelay(5, () -> {
+		helper.startSequence().thenWaitUntil(() -> {
+            for(int x=-1;x<=1;x++)for(int z=-1;z<=1;z++)helper.assertTrue(level.isPositionTickingWithEntitiesLoaded(new net.minecraft.world.level.ChunkPos((pos.getX()>>4)+x,(pos.getZ()>>4)+z).pack()),"Pulse fixture chunks are entity-ready");
+        }).thenExecute(() -> {
 		try {
 			ForsakenContent.BLADE.use(level, player, InteractionHand.MAIN_HAND);
 			helper.assertTrue(!ForsakenContent.BLADE.releaseUsing(blade, level, player, 72000 - 29) && blade.getDamageValue() == 0 && !player.getCooldowns().isOnCooldown(blade), "Early release is free and does not attack");
@@ -60,10 +62,11 @@ public final class ForsakenToolsGameTest {
 		helper.succeed();
 		});
 	}
-	@GameTest public void scannerLeavesCacheLootUnresolvedAndSharesModeCooldown(GameTestHelper helper) {
+	@GameTest(maxTicks=200) public void scannerLeavesCacheLootUnresolvedAndSharesModeCooldown(GameTestHelper helper) {
 		var level = helper.getLevel().getServer().getLevel(Forsaken.LEVEL); var pos = new BlockPos(28672, 110, 40); chunks(level, pos, true);
 		var player = player(level, pos); var scanner = new ItemStack(ForsakenContent.SCANNER); player.setItemInHand(InteractionHand.MAIN_HAND, scanner);
-		helper.runAfterDelay(5, () -> {
+		// Entity Fixture: Wait for query visibility instead of assuming five ticks loads the remote chunk.
+		helper.startSequence().thenWaitUntil(() -> helper.assertTrue(level.isPositionTickingWithEntitiesLoaded(new net.minecraft.world.level.ChunkPos(pos.getX() >> 4, pos.getZ() >> 4).pack()), "Scanner fixture chunk is entity-ready")).thenExecute(() -> {
 		// Fixture Isolation: Failed earlier runs may have saved resource drops in this remote test area.
 		level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, new net.minecraft.world.phys.AABB(pos).inflate(32)).forEach(net.minecraft.world.entity.item.ItemEntity::discard);
 		level.setBlockAndUpdate(pos.east(3), Blocks.CHEST.defaultBlockState());
@@ -83,7 +86,7 @@ public final class ForsakenToolsGameTest {
 			cache.setLootTable(null);
 			helper.assertTrue(NestScannerItem.resources(level, pos) == null, "Resolved containers no longer report unopened-cache signals");
 			var drop = new net.minecraft.world.entity.item.ItemEntity(level, pos.getX() + 2, pos.getY(), pos.getZ(), new ItemStack(ForsakenContent.CORE)); level.addFreshEntity(drop);
-			helper.assertTrue(NestScannerItem.resources(level, pos).kind().equals("resource"), "Dropped exclusive materials produce resource signals"); drop.discard();
+			helper.assertTrue(NestScannerItem.resources(level, pos) != null && NestScannerItem.resources(level, pos).kind().equals("resource"), "Dropped exclusive materials produce resource signals"); drop.discard();
 		} finally { level.setBlockAndUpdate(cache.getBlockPos(), Blocks.AIR.defaultBlockState()); remove(player); chunks(level, pos, false); }
 		helper.succeed();
 		});

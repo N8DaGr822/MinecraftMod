@@ -23,25 +23,34 @@ public final class TemperatureHud {
 			if (player == null || player.isCreative() || player.isSpectator()) return;
 			var state = Temperature.state(player);
 			float magnitude = Math.abs(state.exposure);
-			String status = magnitude >= TemperatureState.DANGER ? (state.exposure < 0 ? "freezing" : "overheating")
-				: magnitude >= TemperatureState.STRAIN ? (state.exposure < 0 ? "shivering" : "heat_strain")
-				: magnitude >= TemperatureState.WARNING ? (state.exposure < 0 ? "cold" : "hot") : "comfortable";
-			String trend = state.target > state.exposure + .5F ? "warming" : state.target < state.exposure - .5F ? "cooling" : "steady";
-			var label = Component.translatable("temperature.darkspawn.reading", Component.translatable("temperature.darkspawn." + status), Component.translatable("temperature.darkspawn." + trend));
-			if (state.wetSeconds > 0) label.append(Component.translatable("temperature.darkspawn.wet"));
-			int color = magnitude < TemperatureState.WARNING ? 0xFFB8D8AC : state.exposure < 0 ? 0xFF82CFFF : 0xFFFFA565;
-			// HUD Layout: Wrap translated/wetness labels inside the viewport and place the gauge below all lines.
-			int available = Math.max(1, Math.min(240, graphics.guiWidth() - 16));
-			var lines = client.font.split(label, available);
-			int gaugeY = 12 + lines.size() * client.font.lineHeight;
-			int panelWidth = Math.min(available, Math.max(100, lines.stream().mapToInt(client.font::width).max().orElse(0)));
-			graphics.fill(5, 5, 11 + panelWidth, gaugeY + 7, 0xA0000000);
-			for (int i = 0; i < lines.size(); i++) graphics.text(client.font, lines.get(i), 8, 8 + i * client.font.lineHeight, color, true);
-			int gaugeWidth = Math.min(100, available);
-			graphics.fill(8, gaugeY, 8 + gaugeWidth, gaugeY + 3, 0xFF444444);
-			graphics.fill(8 + gaugeWidth * 32 / 100, gaugeY, 8 + gaugeWidth * 68 / 100, gaugeY + 3, 0xFF52734A);
-			int marker = 8 + Math.round((state.exposure + 100) / 200 * Math.max(0, gaugeWidth - 2));
-			graphics.fill(marker, gaugeY - 1, marker + Math.min(2, gaugeWidth), gaugeY + 4, color);
+			int color = magnitude < TemperatureState.WARNING ? 0xFF75C9A6 : state.exposure < 0 ? 0xFF82CFFF : 0xFFFFA565;
+			// Climate HUD: Occupy the row above hunger; leave vanilla breath and mount health readable.
+			int x = graphics.guiWidth() / 2 + 10;
+			int y = graphics.guiHeight() - 51;
+			if (player.isUnderWater() || player.getAirSupply() < player.getMaxAirSupply()) y -= 10;
+			if (player.isPassenger()) y -= 20;
+			graphics.fill(x-2,y-2,x+82,y+9,0xB014282E);
+			// Thermometer: Color and fill communicate comfort without a persistent text paragraph.
+			graphics.fill(x+2,y,x+5,y+6,0xFFE1E7DE);
+			graphics.fill(x+1,y+5,x+6,y+8,color);
+			graphics.fill(x+3,y+1,x+4,y+6,color);
+			for (int i=0;i<10;i++) {
+				int segment = x+10+i*5;
+				graphics.fill(segment,y+2,segment+3,y+7,i < Math.max(1,Math.round(magnitude/10)) ? color : 0xFF405B60);
+			}
+			int trend = state.target > state.exposure+.5F ? -1 : state.target < state.exposure-.5F ? 1 : 0;
+			int arrowX=x+65;
+			graphics.fill(arrowX,y+1,arrowX+1,y+7,color);
+			if (trend != 0) {
+				int tip = trend < 0 ? y+1 : y+6;
+				for (int i=0;i<3;i++) graphics.fill(arrowX-i,tip-trend*i,arrowX+i+1,tip-trend*i+1,color);
+			} else graphics.fill(arrowX-2,y+3,arrowX+3,y+4,color);
+			if (state.wetSeconds > 0) {
+				graphics.fill(x+75,y+1,x+76,y+3,0xFF82CFFF);
+				graphics.fill(x+74,y+3,x+77,y+5,0xFF82CFFF);
+				graphics.fill(x+73,y+5,x+78,y+7,0xFF82CFFF);
+			}
+
 		});
 	}
 }

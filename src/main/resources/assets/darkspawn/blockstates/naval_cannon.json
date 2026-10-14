@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "darkspawn:block/naval_cannon",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "darkspawn:block/naval_cannon",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "darkspawn:block/naval_cannon",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "darkspawn:block/naval_cannon",
+      "y": 0
+    }
+  }
+}

@@ -91,7 +91,7 @@ public final class BossBolt extends ThrowableItemProjectile {
 	protected void onHitEntity(EntityHitResult hit) {
 		super.onHitEntity(hit);
 		if (level() instanceof ServerLevel server && hit.getEntity() instanceof LivingEntity target
-				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), damage)) {
+				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), damage * (getOwner() instanceof BiomeBoss ? 1.25F : 1F))) {
 			BossEffects.apply(target, kind());
 			if (getOwner() instanceof darkspawn.black.ecosystem.RegionalMob owner) { owner.onProjectileHit(target); }
 		}

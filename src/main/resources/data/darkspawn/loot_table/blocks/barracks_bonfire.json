@@ -6,7 +6,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "darkspawn:barracks_bonfire"
+          "name": "darkspawn:barracks_bonfire",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "darkspawn:barracks_bonfire",
+              "properties": [
+                "range"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

@@ -4,38 +4,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/** Finite cylinder. Swept checks prevent fast movement from crossing both sides in one tick. */
-public record WardVolume(BlockPos center, int radius) {
-	public double bottom() { return center.getY() - 10; }
-	public double top() { return center.getY() + 21; }
-	public AABB bounds() { return new AABB(center.getX() + .5 - radius, bottom(), center.getZ() + .5 - radius,
-		center.getX() + .5 + radius, top(), center.getZ() + .5 + radius); }
-	public boolean contains(Vec3 point) {
-		double x = point.x - center.getX() - .5, z = point.z - center.getZ() - .5;
-		return point.y >= bottom() && point.y < top() && x * x + z * z <= radius * radius;
+/** Block-aligned sanctuary. Swept body checks prevent fast movement through its walls. */
+public record WardVolume(BlockPos center, int radius, int height) {
+	public static WardVolume forTier(BlockPos center, int tier) {
+		return switch (tier) {
+			case 2 -> new WardVolume(center, 12, 12);
+			case 3 -> new WardVolume(center, 16, 20);
+			case 4 -> new WardVolume(center, 25, 30);
+			default -> new WardVolume(center, 6, 12);
+		};
 	}
-	public boolean intersects(AABB box) {
-		double x = Math.clamp(center.getX() + .5, box.minX, box.maxX) - center.getX() - .5;
-		double z = Math.clamp(center.getZ() + .5, box.minZ, box.maxZ) - center.getZ() - .5;
-		return box.maxY > bottom() && box.minY < top() && x * x + z * z <= radius * radius;
-	}
+	// Sanctuary Bounds: One third below the core, two thirds above; even widths align to whole blocks.
+	public double bottom() { return center.getY() - height / 3; }
+	public double top() { return bottom() + height; }
+	public AABB bounds() { return new AABB(center.getX() - radius, bottom(), center.getZ() - radius,
+		center.getX() + radius, top(), center.getZ() + radius); }
+	public boolean contains(Vec3 point) { return bounds().contains(point); }
+	public boolean intersects(AABB box) { return bounds().intersects(box); }
 	public boolean crosses(AABB box, Vec3 movement) {
 		if (intersects(box) || intersects(box.move(movement))) return true;
-		// Expand the cylinder by the entity's horizontal half-diagonal, conservatively
-		// accounting for the full body rather than testing just the feet.
-		double lo = 0, hi = 1;
-		if (Math.abs(movement.y) < 1e-9) {
-			if (box.maxY <= bottom() || box.minY >= top()) return false;
-		} else {
-			double a = (bottom() - box.maxY) / movement.y, b = (top() - box.minY) / movement.y;
-			lo = Math.max(0, Math.min(a, b)); hi = Math.min(1, Math.max(a, b));
-			if (lo > hi) return false;
-		}
-		double x = box.getCenter().x - center.getX() - .5, z = box.getCenter().z - center.getZ() - .5;
-		if (movement.y == 0 && x * movement.x + z * movement.z >= 0) return false;
-		double length = movement.x * movement.x + movement.z * movement.z;
-		double t = length < 1e-9 ? lo : Math.clamp(-(x * movement.x + z * movement.z) / length, lo, hi);
-		double expanded = radius + Math.hypot(box.getXsize(), box.getZsize()) / 2;
-		return Math.pow(x + movement.x * t, 2) + Math.pow(z + movement.z * t, 2) <= expanded * expanded;
+		// Minkowski Expansion: Trace the entity center against the ward expanded by its half extents.
+		AABB expanded = bounds().inflate(box.getXsize() / 2, box.getYsize() / 2, box.getZsize() / 2);
+		return expanded.clip(box.getCenter(), box.getCenter().add(movement)).isPresent();
 	}
 }

@@ -1388,5 +1388,35 @@
     "entity": "assimilated_brute",
     "site": "",
     "boss": ""
+  },
+  {
+    "id": "pirate/travel",
+    "section": "overview",
+    "title": "Pirate Seas",
+    "hint": "Pre-dragon ocean exploration. Craft a Sea Gate and use it in the Overworld.",
+    "body": "Sea Gate recipe: CPC / IKI / CPC. C = copper ingot, P = prismarine shard, I = iron ingot, K = compass. Place the gate on land and use it with an empty hand. No frame or dragon victory is required.\n\nYou keep your normal survival inventory. Arrive at the shared harbor at 0, 0. The glowing Harbor Return beside the plaza returns each traveler near their own entrance. Clear your cursor and trash slot and dismount before travel. If the entrance is obstructed, return attempts the Overworld spawn without breaking blocks.\n\nThe chandlery has shared, finite starter boats and supplies. Plant saplings and craft replacement boats. Sail about 190 blocks east to Castaway Cove; farther out, look for ruined forts and beached wrecks. Treasure does not refill. Use ordinary boats or build a larger vessel at the harbor Shipyard. See the Ships, Cannons and Crew overview.\n\nNormal survival death and bed rules apply. Mark your harbor coordinates before sailing.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "pirate/naval",
+    "section": "overview",
+    "title": "Ships, Cannons and Crew",
+    "hint": "Build at the harbor Shipyard (0, 65, 24). Recruit crew while docked in the protected harbor.",
+    "body": "A small ship costs 105 oak planks plus a crafted Ship Helm. The Shipyard places a 7x15 platform 20 blocks SOUTH of the station in clear water. Build up to six blocks above its deck, at most 512 captured blocks and four cannons. Keep the full plank floor, central helm and clear passenger seats. Only wood, wool, glass, stairs/slabs/fences, ladders, lanterns and naval components can sail. Use the 27-slot hold instead of ordinary chests.\n\nFive NPC ship victories unlock an 11x23 platform, eight blocks above deck, 1024 captured blocks and eight guns. Expand a docked ship for 148 oak planks. PvP kills grant no rank.\n\nWASD sails; Z/C fire port/starboard; G selects a ship; U opens the hold and crew orders; R docks when stopped in clear water. Sailing uses seats for up to four players. Shift leaves your seat into the water. Walk and edit only when docked.\n\nFirst mate: 12 emeralds, coordinates marked-target broadsides when ordered. Shipworker: 12 emeralds, consumes stocked oak planks to repair and reduce fire. Cannoneer: 8 emeralds each, one firing gun per gunner; captain can fire one alone. Lookout: 12 emeralds, reports loaded ships and islands up to 192 blocks. One of each specialist; four/eight cannoneers. Assigned crew are lost when the vessel sinks.\n\nStock solid or incendiary shot in the hold. Incendiary is selected first. Cannons consume one round each and share a three-second reload. NPC patrols approach sailing ships outside harbor. Player-owned ships are valid targets when PvP is enabled. No terrain explosions or direct player damage. Harbor radius 96 is protected. Sinking drops hold contents once; ordinary dropped-item despawn applies.",
+    "entity": "",
+    "site": "",
+    "boss": ""
+  },
+  {
+    "id": "pirate/harbor",
+    "section": "overview",
+    "title": "Breaker's Rest and the Logbound Compass",
+    "hint": "Talk to Old Salt Briggs on the harbor plaza. Exploration contracts are optional.",
+    "body": "Briggs offers harbor guidance and one free calibrated Logbound Compass per player. Leave an empty inventory slot. If it is lost, bring one ordinary compass for a replacement; saved route progress is preserved.\n\nFollow the compass east to Castaway Cove. After entering the island boundary, spend nine minutes there to recalibrate. Time pauses when you leave, die or log out. Use the compass to check destination name, horizontal distance, guided discovery count and remaining time; leaving the island shows paused. It then charts an unvisited seeded island. Study each destination to continue the route. The compass remembers visited coordinates through death and save/load. If no destination is found nearby, sail farther and retry. New terrain includes coves, forts, wrecks, beacon towers, tidal shrines and mangrove camps. Ordinary exploration remains unrestricted.\n\nAccept the Cove Survey from Briggs or the Harbor Contract Board at 2, 65, 3. Visit Castaway Cove after accepting, then return and claim four emeralds with an empty inventory slot. The reward pays once per player. You may abandon and accept again before claiming. The survey does not require a compass or faction. Cycle contracts to inspect Pale Gull cargo (six emeralds), examine the Tideglass Shrine cache (eight), or reach Lastlight Beacon lantern platform (six). Accept before completing the objective; return here to claim once per contract. Shared, emptied caches count. Island clues are retained under Landmarks; the starter cove stays safe, while other islands have small native enemy groups.\n\nNew harbors include the Rusty Anchor tavern and market shelter. Existing harbor buildings and finite supplies are preserved. The shipyard remains south of the plaza. Faction contracts are also available: Corsair cargo, Fleet dispatches and a Drowned offering. See Factions and Captaincy for standing, earned crew prices and all three ship tiers.",
+    "entity": "",
+    "site": "",
+    "boss": ""
   }
 ]

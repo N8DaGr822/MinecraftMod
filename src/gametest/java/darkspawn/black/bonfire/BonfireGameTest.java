@@ -16,9 +16,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 public final class BonfireGameTest {
-	private static BlockPos core(GameTestHelper helper) {
+	private static BlockPos core(GameTestHelper helper) { return core(helper, 0); }
+	private static BlockPos core(GameTestHelper helper, int rise) {
 		// Keep the ward away from neighboring tests' living players and encounter mobs.
-		BlockPos pos = helper.absolutePos(new BlockPos(2, 6, 1024));
+		BlockPos pos = helper.absolutePos(new BlockPos(2, 6 + rise, 1024));
 		for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
 			var block = x == 0 && z == 0 ? BuiltInRegistries.BLOCK.getValue(Identifier.withDefaultNamespace("copper_block")) : Blocks.STONE_BRICKS;
 			helper.getLevel().setBlockAndUpdate(pos.offset(x, -1, z), block.defaultBlockState());
@@ -64,7 +65,7 @@ public final class BonfireGameTest {
 	@GameTest(skyAccess = true)
 	public void actualMovementRejectsWalkingKnockbackAndFalling(GameTestHelper helper) {
 		var pos = core(helper);
-		var mob = creeper(helper, Vec3.atBottomCenterOf(pos.offset(30, 0, 0)));
+		var mob = creeper(helper, Vec3.atBottomCenterOf(pos.offset(10, 0, 0)));
 		try {
 			helper.getLevel().addFreshEntity(mob); enable(helper, pos);
 			Vec3 before = mob.position();
@@ -85,21 +86,22 @@ public final class BonfireGameTest {
 		try {
 			helper.getLevel().addFreshEntity(mob);
 			// The first safe-search candidate lies east, beyond the ward and explosion margin.
-			for (int x = 36; x <= 40; x++) for (int z = -2; z <= 2; z++) {
+			for (int x = 18; x <= 22; x++) for (int z = -2; z <= 2; z++) {
 				helper.getLevel().setBlockAndUpdate(pos.offset(x, -1, z), Blocks.STONE.defaultBlockState());
 				for (int y = 0; y < 4; y++) helper.getLevel().setBlockAndUpdate(pos.offset(x, y, z), Blocks.AIR.defaultBlockState());
 			}
 			enable(helper, pos);
 			helper.assertTrue(!BonfireWards.guard(mob), "Safe loaded destination allows clearing");
-			helper.assertTrue(!new WardVolume(pos, 25).intersects(mob.getBoundingBox()), "Hostile moved outside");
+			helper.assertTrue(!WardVolume.forTier(pos, 1).intersects(mob.getBoundingBox()), "Hostile moved outside");
 			helper.assertTrue(mob.isAlive() && mob.getHealth() == mob.getMaxHealth(), "Clearing does not kill or damage");
 		} finally { mob.discard(); remove(helper, pos); }
 		helper.succeed();
 	}
 	@GameTest(skyAccess = true)
 	public void trappedIgnitedCreeperIsPausedBeforeItsFuseTicks(GameTestHelper helper) {
-		var pos = core(helper);
-		var mob = creeper(helper, Vec3.atBottomCenterOf(pos.above(15)));
+		// Quarantine Fixture: Neighboring tests must not supply a safe relocation platform.
+		var pos = core(helper, 64);
+		var mob = creeper(helper, Vec3.atBottomCenterOf(pos.above(7)));
 		try {
 			helper.getLevel().addFreshEntity(mob); mob.ignite(); enable(helper, pos);
 			for (int tick = 0; tick < 40; tick++) helper.getLevel().tickNonPassenger(mob);
@@ -111,8 +113,8 @@ public final class BonfireGameTest {
 	@GameTest(skyAccess = true)
 	public void lightsOnlyReplaceAirAndCleanUpWithoutDeletingBuildingBlocks(GameTestHelper helper) {
 		var pos = core(helper);
-		var light = pos.offset(-17, 0, -9);
-		var occupied = pos.offset(-9, 0, -9);
+		var light = pos.offset(-6, 4, -6);
+		var occupied = pos.offset(2, 4, -6);
 		try {
 			helper.getLevel().setBlockAndUpdate(light, Blocks.AIR.defaultBlockState());
 			helper.getLevel().setBlockAndUpdate(occupied, Blocks.DIAMOND_BLOCK.defaultBlockState());
@@ -135,7 +137,7 @@ public final class BonfireGameTest {
 	@GameTest(skyAccess = true)
 	public void overlappingWardKeepsLightsAndProtectionAfterOneCoreBreaks(GameTestHelper helper) {
 		var first = core(helper);
-		var second = first.offset(8, 0, 0);
+		var second = first.offset(4, 0, 0);
 		try {
 			for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
 				helper.getLevel().setBlockAndUpdate(second.offset(x, -1, z), helper.getLevel().getBlockState(first.offset(x, -1, z)));

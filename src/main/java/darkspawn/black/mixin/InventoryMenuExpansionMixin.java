@@ -26,6 +26,13 @@ public abstract class InventoryMenuExpansionMixin extends AbstractContainerMenu 
 		for (int slot = 0; slot < InventoryExpansion.EXTRA_SLOTS; slot++) {
 			addSlot(new ExpandedInventorySlot(inventory, slot));
 		}
+		// Trash Safety: A reversible staging slot, excluded from automatic shift-click destinations.
+		addSlot(new net.minecraft.world.inventory.Slot(new net.minecraft.world.SimpleContainer(1), 0, 152, 62));
+	}
+
+	@Inject(method = "removed", at = @At("TAIL"))
+	private void darkspawn$returnTrash(Player player, CallbackInfo callback) {
+		if (!player.level().isClientSide()) clearContainer(player, getSlot(InventoryExpansion.TRASH_MENU_SLOT).container);
 	}
 
 	@Redirect(method = "quickMoveStack", at = @At(value = "INVOKE",

@@ -139,3 +139,7 @@ New textures, handheld blade model, four-part beacon geometry, lit/unlit states,
 1. Full expedition review: tune pacing, rewards and multiplayer performance against an agreed player-count/server budget.
 
 Procedural metropolis generation, spreading infection, mutation trees, bosses and Overworld outbreaks remain deferred. Activity-based proficiency is still paused.
+
+## October 14 presentation pass
+
+Research bunkers now have glass observation windows, a two-door pressure-plate airlock, console/screen stations, seating and gate equipment. Saved gate coordinates and the damaged frame, archive and finite chest remain. New generation receives these templates; existing sites are not rebuilt. Eleven resource/tool/armor items now use native cuboid models with depth, and worn quarantine armor has raised respirator, harness, seal and cartridge details. Asset and route previews are under `art/forsaken`; in-game visual acceptance remains pending.

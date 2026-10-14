@@ -163,6 +163,8 @@ public final class ForsakenGameTest {
 			var template = manager.getOrCreate(Darkspawn.id("landmarks/research_bunker_" + variant));
 			var settings = new StructurePlaceSettings().setRotation(rotation).setRotationPivot(new BlockPos(12, 0, 12));
 			helper.assertTrue(template.getSize().getX() == 25, "Bunker template loads with its bounded footprint");
+			helper.assertTrue(template.filterBlocks(BlockPos.ZERO, settings, Blocks.IRON_DOOR).size() == 4, "Two complete doors separate the airlock");
+			helper.assertTrue(template.filterBlocks(BlockPos.ZERO, settings, net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.withDefaultNamespace("cyan_stained_glass"))).size() >= 32, "Portal has a full observation window");
 			helper.assertTrue(template.filterBlocks(BlockPos.ZERO, settings, Forsaken.ARCHIVE).size() == 1, "Every bunker includes recoverable research");
 			var gates = template.filterBlocks(BlockPos.ZERO, settings, Forsaken.GATE);
 			helper.assertTrue(gates.size() == 1 && !gates.getFirst().state().getValue(QuarantineGateBlock.ACTIVE), "Every bunker starts with an inactive gate");

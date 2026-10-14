@@ -8,7 +8,7 @@ import net.minecraft.world.level.saveddata.SavedDataType;
 
 public final class OneBlockProgress extends SavedData {
 	public static final String[] PHASES = { "grassland", "stone", "farmland", "deep_caves", "nether", "end" };
-	public static final int[] REQUIRED = { 100, 200, 250, 350, 450, 0 };
+	public static final int[] REQUIRED = { 300, 600, 800, 1000, 1200, 0 };
 	public static final Codec<OneBlockProgress> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 		Codec.intRange(0, 5).fieldOf("phase").forGetter(value -> value.phase),
 		Codec.intRange(0, Integer.MAX_VALUE).fieldOf("breaks").forGetter(value -> value.breaks),

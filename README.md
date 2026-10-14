@@ -1,8 +1,28 @@
 # Darkspawn
 
+Current increment: [ship names, flags, earned cargo upgrades, the first Seven Seals clue, and Mara/Bram/Nell recruitment](docs/shattered-seas/ship-identity-seals-and-officers.md). Nell now sings four user-supplied recordings through streamed ship-following audio.
+
 Fabric mod for Minecraft **26.3**, with inventory upgrades, 16 post-dragon biome bosses, the Endborn, equipment empowerment, and permanent boss-heart progression.
 
 **Current release candidate: 2.0.0-alpha.1.** Adds the first [boss discovery structures](#boss-discovery-structures) alongside the [cuisine and progression expansion](#expanded-cuisine-and-progression). Intended for playtesting. The earlier live session reported working inventory, cooking/food, and Tree Spirit weapon empowerment. Tree Spirit combat pressure, animation polish, and live heart-persistence verification remain open. Preparing this candidate does not mean it has been published on Modrinth; the [upload instructions](docs/modrinth-release.md) describe the current candidate.
+
+## October 14 development changes
+
+The inventory, Journal, Cooking Station, storage, research and companion screens share new expedition styling. Loadouts sit in a side column. Comfort is an icon gauge above hunger: green is comfortable, blue is cold, orange is heat; more filled segments mean more exposure, the arrow shows trend, and the droplet means wet. The gauge moves above breath and mounted health indicators.
+
+The green **trash slot** beside the inventory crafting area stages one stack. Take it back to cancel, or press **Destroy** to permanently remove that stack. Closing returns staged items, and OneBlock travel waits until trash and crafting slots are empty. Shift-click never automatically sends items to trash.
+
+Bonfires now upgrade through **12x12x12 -> 24x24x12 -> 32x32x20 -> 50x50x30** rectangular areas. See [costs and existing-save behavior](docs/bonfire-prototype.md). Boss attacks deal 25% more direct damage; melee/area hits and repeated non-pull hazards have stronger knockback. Native damage cooldowns and resistance still apply. Hearts and boss health are unchanged.
+
+New research bunkers isolate the portal behind observation glass and a two-door airlock, with consoles and experimental equipment. Existing sites are not rebuilt. Forsaken armor has more raised detail, and eleven Forsaken items have 3D inventory/held models. These source changes require a separately requested play build before appearing in an installed JAR.
+
+## Pirate Seas
+
+The [Logbound Compass prototype](docs/shattered-seas/logbound-compass.md) now guides a personal voyage to Castaway Cove, recalibrates after nine minutes on each discovered island, and charts new destinations without repeating visited coordinates. Six island types now populate fresh terrain. Talk to [Old Salt Briggs](docs/shattered-seas/harbor-and-contracts.md) at the harbor for a free calibrated compass and optional cove, wreck, shrine and beacon contracts. Island visits now reveal Journal clues and small persistent enemy encounters, with naval salvage rewards. Use the compass for destination, distance, guided discovery count and study progress.
+
+Future direction: [The Shattered Seas design and implementation roadmap](docs/shattered-seas/project-overview.md), including factions, optional lore and the Logbound Compass. The current source also includes [three faction activities and saved standings](docs/shattered-seas/factions.md), earned crew offers, and [three ship sizes with independent captain progression](docs/shattered-seas/player-progression.md). [Faction membership, local diplomacy and loyal Piglin/Illager/undead recruits](docs/shattered-seas/factions.md#membership-and-local-diplomacy) are now implemented; [Repeatable voyages, Garrick's rescue and faction patrols](docs/shattered-seas/repeat-voyages-and-garrick.md) are also implemented; later narrative systems remain planned.
+
+A pre-dragon exploration dimension now has a craftable Sea Gate, shared harbor, lighthouse, boat supplies, scattered islands, ruined forts and beached wrecks. Each traveler retains survival inventory and returns to their own Overworld entrance. See [recipe, travel rules and first voyage](docs/pirate-dimension.md). The next source increment adds [editable ships, cannons and crew](docs/naval-gameplay.md): a 7×15 starter platform upgrades to 11×23 after five NPC victories. Sail seated, dock to edit, recruit four crew roles, and fight NPC or player-owned vessels outside the protected harbor.
 
 ## Instant testing camp
 
@@ -320,16 +340,16 @@ Everyone joins **one persistent island**, starting with a 3×3 dirt footing and 
 
 | Shared phase | Breaks to unlock the next phase | Main additions |
 | --- | --- | --- |
-| Grassland | 100 | Dirt, grass, oak wood; basic supplies and farm animals |
-| Stone | 200 | Stone, coal, iron, copper, gravel; lava for a cobblestone generator |
-| Farmland | 250 | Sand, clay, moss; crop and sugar-cane supplies |
-| Deep Caves | 350 | Redstone, lapis, gold, diamonds; zombie encounters |
-| Nether | 450 | Netherrack, quartz, soul sand, glowstone; brewing supplies and zombified piglins |
+| Grassland | 300 | Dirt, grass, oak wood; basic supplies and farm animals |
+| Stone | 600 | Stone, coal, iron, copper, gravel; lava for a cobblestone generator |
+| Farmland | 800 | Sand, clay, moss; crop and sugar-cane supplies |
+| Deep Caves | 1000 | Redstone, lapis, gold, diamonds; zombie encounters |
+| Nether | 1200 | Netherrack, quartz, soul sand, glowstone; brewing supplies and zombified piglins |
 | End | Endless | End stone and mixed advanced resources; pearls, obsidian, and Endermen |
 
 Counts apply **within each phase**. Reaching the threshold unlocks **Next phase** in the inventory; anyone on the island can activate it when the group is ready. Hover over that button to see the current phase and count. Gathering continues in the current phase until activation. Returning players join the group's current phase immediately. Later pools retain earlier resources, with guaranteed dirt/wood turns every ten breaks.
 
-A supply chest is attempted every 25 successful resource breaks, and a vanilla creature every 50. They require free supported space near the source and do not overwrite builds or spawn into players; expand the footing and leave room nearby. If there is no suitable space, that attempt is skipped and the next milestone tries again. Creature attempts stop while eight mobs are within 32 blocks. These are classic resource/creature milestones, with no Darkspawn boss events or distant islands. Nether and End are resource phases in this same dimension, not travel to the server's existing Nether or End.
+A supply chest is attempted every 100 successful resource breaks, and a vanilla creature every 50. They require free supported space near the source and do not overwrite builds or spawn into players; expand the footing and leave room nearby. If there is no suitable space, that attempt is skipped and the next milestone tries again. Creature attempts stop while eight mobs are within 32 blocks. These are classic resource/creature milestones, with no Darkspawn boss events or distant islands. Nether and End are resource phases in this same dimension, not travel to the server's existing Nether or End.
 
 **Only possessions are separate.** Main inventory, hotbar, all equipment, extra storage rows, inactive armor sets, and Ender Chest contents switch to the player's saved OneBlock items on arrival and back on return. Bundles, shulker boxes, and bank contents remain inside their respective item profiles. First entry starts empty. Character upgrades—including boss hearts, inventory capacity, and unlocked loadouts—remain shared, as do XP, health, hunger, effects, and other character progress. No normal item imports or exports are available. Native portals, entity transfers, and cross-boundary teleport commands cannot bypass the menu/profile switch.
 

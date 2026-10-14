@@ -2,6 +2,8 @@
 
 The free Journal button is available from the Survival inventory and the expanded Creative storage screen. It opens a read-only, non-pausing screen with Guide, Wildlife, Mounts, Bosses, Cooking, Forsaken and Sites tabs. Search matches the displayed title and text in the selected section. List and detail pages have separate navigation. Refresh requests current progress; it does not award discoveries or consume items.
 
+October 14: the Journal shares the expedition UI palette and focused-button styling with the other mod screens. Search, personal discovery, snapshots and page navigation retain their existing behavior.
+
 ## Discovery and existing saves
 
 - Each player's newly observed species and visited landmark families are saved separately and survive death, reconnection and world saves. Old saves start with an empty observation record, without deleting or respawning anything.

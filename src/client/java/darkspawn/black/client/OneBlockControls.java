@@ -24,9 +24,9 @@ public final class OneBlockControls {
 		ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
 			if (!(screen instanceof InventoryScreen) || !ClientPlayNetworking.canSend(OneBlockActionPayload.TYPE)) return;
 			// Inventory UI: The narrow left margin avoids covering slots, including the expanded inventory.
-			var travel = Button.builder(Component.empty(), button -> ClientPlayNetworking.send(new OneBlockActionPayload(0)))
+			var travel = darkspawn.black.client.UiTheme.button(Component.empty(), button -> ClientPlayNetworking.send(new OneBlockActionPayload(0)))
 				.bounds(6, 6, 62, 20).build();
-			var advance = Button.builder(Component.translatable("button.darkspawn.oneblock_advance"), button -> ClientPlayNetworking.send(new OneBlockActionPayload(1)))
+			var advance = darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.oneblock_advance"), button -> ClientPlayNetworking.send(new OneBlockActionPayload(1)))
 				.bounds(6, 30, 62, 20).build();
 			Runnable refresh = () -> {
 				if (client.player == null) { travel.active = false; advance.active = false; return; }

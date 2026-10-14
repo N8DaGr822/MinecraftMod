@@ -51,6 +51,20 @@ public final class OneBlockGameTest {
 		player.connection.handleAcceptPlayerLoad(new net.minecraft.network.protocol.game.ServerboundPlayerLoadedPacket()); player.hasChangedDimension(); player.setOnGround(true);
 	}
 	private static void remove(ServerPlayer player) { player.level().getServer().getPlayerList().remove(player); player.discard(); }
+	@GameTest public void stagedTrashCannotCrossInventoryProfiles(GameTestHelper helper) {
+		var player = player(helper);
+		try {
+			var trash = player.inventoryMenu.getSlot(InventoryExpansion.TRASH_MENU_SLOT);
+			trash.set(new ItemStack(Items.DIAMOND, 2));
+			helper.assertTrue(!OneBlock.travel(player) && !OneBlock.island(player.level()) && trash.getItem().getCount() == 2, "Staged trash blocks travel without consuming it");
+			player.inventoryMenu.removed(player);
+			travel(helper, player);
+			helper.assertTrue(player.getInventory().countItem(Items.DIAMOND) == 0, "Returned trash stays in its original profile");
+			travel(helper, player);
+			helper.assertTrue(player.getInventory().countItem(Items.DIAMOND) == 2, "Returning restores exactly the original items");
+		} finally { remove(player); }
+		helper.succeed();
+	}
 	private static void travel(GameTestHelper helper, ServerPlayer player) { ready(player); helper.assertTrue(OneBlock.travel(player), "Safe OneBlock travel must succeed: alive=" + player.isAlive() + ", mode=" + player.gameMode() + ", ground=" + player.onGround() + ", loading=" + player.isChangingDimension() + ", loaded=" + player.connection.hasClientLoaded() + ", hurt=" + OneBlock.state(player).hurtTicks + ", using=" + player.isUsingItem() + ", menu=" + (player.containerMenu == player.inventoryMenu)); ready(player); }
 
 	@GameTest public void profilesPreserveFullInventoriesEquipmentAndSharedUpgrades(GameTestHelper helper) {
@@ -155,12 +169,12 @@ public final class OneBlockGameTest {
 		var player = player(helper);
 		try {
 			travel(helper, player); var level = player.level(); var data = OneBlock.progress(level);
-			data.phase = 0; data.breaks = 99; data.total = 0; data.resource = 0; data.lastBreakTick = Long.MIN_VALUE;
+			data.phase = 0; data.breaks = OneBlockProgress.REQUIRED[0] - 1; data.total = 0; data.resource = 0; data.lastBreakTick = Long.MIN_VALUE;
 			level.setBlockAndUpdate(OneBlock.CORE_POS, OneBlock.CORE.defaultBlockState());
 			helper.assertTrue(player.gameMode.destroyBlock(OneBlock.CORE_POS), "Native mining can break the central resource");
-			helper.assertTrue(level.getBlockState(OneBlock.CORE_POS).is(OneBlock.CORE) && data.breaks == 100 && data.ready() && data.phase == 0, "Block regenerates and threshold unlocks without auto-advancing");
+			helper.assertTrue(level.getBlockState(OneBlock.CORE_POS).is(OneBlock.CORE) && data.breaks == OneBlockProgress.REQUIRED[0] && data.ready() && data.phase == 0, "Block regenerates and threshold unlocks without auto-advancing");
 			player.gameMode.destroyBlock(OneBlock.CORE_POS);
-			helper.assertTrue(data.breaks == 100, "Two breaks in one tick cannot double-award shared progress");
+			helper.assertTrue(data.breaks == OneBlockProgress.REQUIRED[0], "Two breaks in one tick cannot double-award shared progress");
 			OneBlock.request(player, 1); helper.assertTrue(data.phase == 1 && data.breaks == 0, "Explicit activation advances the whole island");
 			level.setBlockAndUpdate(OneBlock.CORE_POS, Blocks.AIR.defaultBlockState()); OneBlock.ensureIsland(level);
 			helper.assertTrue(level.getBlockState(OneBlock.CORE_POS).is(OneBlock.CORE) && data.breaks == 0, "Environmental recovery never awards progression");
@@ -193,7 +207,7 @@ public final class OneBlockGameTest {
 			var level = player.level(); var data = OneBlock.progress(level);
 			try {
 				for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) if (x != 0 || z != 0) level.setBlockAndUpdate(OneBlock.CORE_POS.offset(x, 0, z), Blocks.DIRT.defaultBlockState());
-				data.phase = 0; data.total = 24; data.lastBreakTick = Long.MIN_VALUE;
+				data.phase = 0; data.total = 99; data.lastBreakTick = Long.MIN_VALUE;
 				player.gameMode.destroyBlock(OneBlock.CORE_POS);
 				boolean supply = false;
 				for (var pos : BlockPos.betweenClosed(OneBlock.CORE_POS.offset(-2, 1, -2), OneBlock.CORE_POS.offset(2, 1, 2))) {

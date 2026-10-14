@@ -380,9 +380,9 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 		for (ServerPlayer player : players) {
 			Vec3 delta = player.position().subtract(center);
 			if (delta.horizontalDistanceSqr() <= radius * radius && delta.y >= -2 && delta.y <= 6 && hasLineOfSight(player)) {
-				if (player.hurtServer(level, damageSources().mobAttack(this), phase() == 3 ? 14 : 10)) {
+				if (player.hurtServer(level, damageSources().mobAttack(this), (phase() == 3 ? 14 : 10) * 1.25F)) {
 					player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 50, 2));
-					player.knockback(1.2, -delta.x, -delta.z, damageSources().mobAttack(this), phase() == 3 ? 14 : 10);
+					player.knockback(2, -delta.x, -delta.z, damageSources().mobAttack(this), (phase() == 3 ? 14 : 10) * 1.25F);
 				}
 			}
 		}

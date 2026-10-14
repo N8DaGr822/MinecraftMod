@@ -90,6 +90,21 @@ part('body', [0,0,0], [('chestplate',[-4.5,-.4,-2.5],[9,12.8,5],4),('chestplate'
 for side, sign in [('right',-1),('left',1)]:
     part(side+'_arm',[sign*5,2,0],[('chestplate',[-2.5,-2.5,-2.5],[5,12,5],4),('chestplate',[-2.6,6,-2.6],[5.2,2,5.2],6)])
     part(side+'_leg',[sign*1.9,12,0],[('leggings',[-2.3,-.2,-2.3],[4.6,8.4,4.6],4),('boots',[-2.5,7.5,-2.8],[5,4.8,5.3],6)])
+# Sealed Suit: Raised seams, harness, visor rim, knee guards and scrubber cartridges.
+for entry in parts:
+    extras = []
+    if entry['name'] == 'head':
+        extras = [('helmet',[-4,-7.7,-5],[8,.5,.8],1),('helmet',[-4,-4.2,-5],[8,.5,.8],1),
+                  ('helmet',[-1,-2.8,-5.5],[2,1.3,1],6),('helmet',[-3.3,-2.8,-5.8],[1.7,1.7,.5],1),('helmet',[1.6,-2.8,-5.8],[1.7,1.7,.5],1)]
+    elif entry['name'] == 'body':
+        extras = [('chestplate',[-3.7,0,-3],[1,11,.6],6),('chestplate',[2.7,0,-3],[1,11,.6],6),
+                  ('chestplate',[-4,8,-3.3],[8,1.3,1],6),('chestplate',[-3.8,2,5],[2.3,6,1.5],1),
+                  ('chestplate',[1.5,2,5],[2.3,6,1.5],1),('chestplate',[-1,8,-3.8],[2,1.5,.7],1)]
+    elif entry['name'].endswith('_arm'):
+        extras = [('chestplate',[-2.8,-1.5,-2.8],[5.6,2,5.6],6),('chestplate',[-2.7,4,-2.9],[5.4,2,.7],1)]
+    else:
+        extras = [('leggings',[-2,4,-2.8],[4,2.5,.8],6),('boots',[-2.6,10,-3.4],[5.2,2,6],6),('boots',[-2.7,8,-3],[5.4,.8,5.7],4)]
+    entry['cubes'].extend(dict(slot=slot, **{'from':start},size=size,material=material) for slot,start,size,material in extras)
 asset('geometry/armor/quarantine.json', dict(parts=parts))
 atlas('textures/equipment/quarantine.png', PALETTE)
 asset('equipment/quarantine.json', {'layers': {'humanoid': [{'texture':'minecraft:iron'}], 'humanoid_leggings':[{'texture':'minecraft:iron'}]}})
@@ -124,7 +139,34 @@ for index,name in enumerate(names):
     asset('items/'+name+'.json',dict(model=dict(type='minecraft:model',model='darkspawn:item/'+name)))
     asset('models/item/'+name+'.json',dict(parent='minecraft:item/generated',textures=dict(layer0='darkspawn:item/'+name)))
 
-asset('models/item/pulse_blade.json',dict(parent='minecraft:item/handheld',textures=dict(layer0='darkspawn:item/pulse_blade')))
+# Item Geometry: Real depth in hand and inventory, sharing the suit's material atlas.
+def item_model(name, boxes):
+    elements=[]
+    for start,size,material in boxes:
+        u=(material%4)*4;v=(material//4)*8
+        elements.append({'from':start,'to':[a+b for a,b in zip(start,size)],'faces':{face:{'texture':'#all','uv':[u,v,u+2,v+2]} for face in ['north','south','east','west','up','down']}})
+    asset('models/item/'+name+'.json',dict(parent='minecraft:block/block',textures={'particle':'darkspawn:equipment/quarantine','all':'darkspawn:equipment/quarantine'},elements=elements,
+        display={'gui':{'rotation':[15,-25,0],'translation':[0,0,0],'scale':[.9,.9,.9]},'ground':{'scale':[.5,.5,.5]},
+                 'firstperson_righthand':{'rotation':[0,-90,15],'translation':[0,2,0],'scale':[.65,.65,.65]},
+                 'thirdperson_righthand':{'rotation':[0,90,0],'translation':[0,1,0],'scale':[.55,.55,.55]}}))
+item_model('contaminated_alloy',[([2,3,4],[12,5,8],1),([3,8,5],[10,2,6],2),([4,5,3.7],[2,2,.5],5),([10,6,3.7],[3,1,.5],5)])
+item_model('biofiber',[([3,2,6],[2,12,3],0),([7,1,5],[2,13,4],5),([11,3,6],[2,11,3],0),([2,6,4.5],[12,2,5],4)])
+item_model('parasitic_core',[([4,3,4],[8,10,8],7),([2,5,5],[12,5,6],2),([5,5,2],[6,6,12],5),([6,6,1],[4,4,1],0)])
+item_model('research_data',[([3,1,5],[10,14,5],6),([4,3,4],[8,10,1],1),([5,5,3.8],[6,1,.3],5),([5,8,3.8],[4,1,.3],5),([5,13,4],[6,1,1],4)])
+item_model('quarantine_module',[([2,3,3],[12,10,10],6),([3,4,2],[10,8,1],4),([5,6,1.5],[6,4,1],5),([1,6,5],[1,4,6],1),([14,6,5],[1,4,6],1)])
+item_model('bio_scanner',[([3,1,5],[10,12,5],4),([4,4,4],[8,8,1],6),([5,6,3.5],[6,5,.5],5),([5,2,3.5],[2,1,1],1),([9,2,3.5],[2,1,1],1),([10,13,6],[1,3,1],1)])
+item_model('pulse_blade',[([7,0,7],[2,4,2],6),([4,4,6],[8,1.5,4],4),([6.5,5.5,7],[3,9.5,2],1),([7.5,6,6.5],[1,9,.5],5),([9.5,7,7],[1,6,2],6)])
+for slot in ['helmet','chestplate','leggings','boots']:
+    boxes=[]
+    for entry in parts:
+        for box in entry['cubes']:
+            if box['slot']==slot:
+                start=[a+b for a,b in zip(entry['origin'],box['from'])];start[1]=-start[1]-box['size'][1]
+                boxes.append((start,box['size'],box['material']))
+    lo=[min(b[0][i] for b in boxes) for i in range(3)];hi=[max(b[0][i]+b[1][i] for b in boxes) for i in range(3)]
+    scale=14/max(b-a for a,b in zip(lo,hi))
+    item_model('quarantine_'+slot,[([8+(p[i]-(lo[i]+hi[i])/2)*scale for i in range(3)],[s*scale for s in size],m) for p,size,m in boxes])
+
 for active in [False,True]:
     texture=Image.new('RGB',(16,16),PALETTE[6]);d=ImageDraw.Draw(texture)
     d.rectangle((0,0,15,2),fill=PALETTE[4]);d.rectangle((0,13,15,15),fill=PALETTE[4]);d.ellipse((4,4,11,11),fill=PALETTE[5] if active else PALETTE[2])

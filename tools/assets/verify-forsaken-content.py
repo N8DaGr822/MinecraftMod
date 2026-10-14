@@ -85,7 +85,13 @@ for name in ['containment_beacon', 'containment_beacon_active']:
     for element in model['elements']:
         assert all(0<=a<b<=16 for a,b in zip(element['from'],element['to']))
 assert set(json.loads((ASSETS/'blockstates/containment_beacon.json').read_text())['variants'])=={'active=false','active=true'}
-assert json.loads((ASSETS/'models/item/pulse_blade.json').read_text())['parent']=='minecraft:item/handheld'
+for name in ['contaminated_alloy','biofiber','parasitic_core','research_data','quarantine_module','bio_scanner','pulse_blade','quarantine_helmet','quarantine_chestplate','quarantine_leggings','quarantine_boots']:
+    model=json.loads((ASSETS/f'models/item/{name}.json').read_text())
+    assert len(model['elements'])>=3
+    for element in model['elements']:
+        assert all(0<=a<b<=16 for a,b in zip(element['from'],element['to'])), name
+        assert len(element['faces'])==6
+
 loot=json.loads((RES/'data/darkspawn/loot_table/blocks/containment_beacon.json').read_text())
 assert 'copy_components' not in json.dumps(loot) and 'copy_nbt' not in json.dumps(loot)
 preview=Image.new('RGB',(1200,350),(20,29,32)); pen=ImageDraw.Draw(preview)

@@ -54,6 +54,31 @@ public final class BossEncounterGameTest {
 		player.discard();
 	}
 
+	@GameTest(skyAccess = true, maxTicks = 60)
+	public void strongerAreaHitsApplyDamageAndRepeatedLaunches(GameTestHelper helper) {
+		var level=helper.getLevel(); var player=player(helper);
+		var boss=new BiomeBoss(BossEntities.BIOME_BOSSES.get(BossProfile.MUTANT_ZOMBIE),level,BossProfile.MUTANT_ZOMBIE);
+		player.connection.handleAcceptPlayerLoad(new net.minecraft.network.protocol.game.ServerboundPlayerLoadedPacket());
+		player.hasChangedDimension(); player.getAbilities().invulnerable=false;
+		player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100); player.setHealth(100);
+		// Damage Fixture: Keep both actors out of neighboring fights and prevent incidental movement between strikes.
+		var origin=player.position().add(0,128,1024); player.teleportTo(origin.x,origin.y,origin.z); player.setNoGravity(true);
+		boss.setNoAi(true); boss.setNoGravity(true); boss.setPos(origin.add(-3,0,0)); level.addFreshEntity(boss);
+		Runnable strike=() -> {
+			player.setPos(origin); player.setDeltaMovement(Vec3.ZERO); player.setOnGround(true);
+			float health=player.getHealth();
+			boss.strikeArea(level,boss.position(),6,6,10,BossBolt.Kind.PHYSICAL,false);
+			helper.assertTrue(Math.abs(health-player.getHealth()-12.5F)<.001,"Raw outgoing damage increases exactly 25 percent");
+			helper.assertTrue(player.getDeltaMovement().horizontalDistanceSqr()>1,"Accepted hit launches the player: " + player.getDeltaMovement() + ", resistance=" + player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+		};
+		try { strike.run(); } catch (RuntimeException failure) { boss.discard(); removePlayer(player); throw failure; }
+		// Real elapsed ticks exercise repeated impact without bypassing the native hit cooldown.
+		helper.runAfterDelay(25,() -> {
+			try { strike.run(); helper.succeed(); }
+			finally { boss.discard(); removePlayer(player); }
+		});
+	}
+
 	@GameTest(skyAccess = true, maxTicks = 100)
 	public void allBossesTickThroughPhasesAndSurviveSaveLoad(GameTestHelper helper) {
 		ServerLevel level = helper.getLevel();
@@ -604,14 +629,17 @@ public final class BossEncounterGameTest {
 		ServerLevel level = helper.getLevel();
 		ServerPlayer player = player(helper);
 		BiomeBoss boss = new BiomeBoss(BossEntities.BIOME_BOSSES.get(BossProfile.KRAKEN), level, BossProfile.KRAKEN);
-		boss.setPos(player.position().add(20, 20, 0));
+		var origin=player.position().add(0,128,2048); player.teleportTo(origin.x,origin.y,origin.z); player.setNoGravity(true);
+		boss.setNoAi(true); boss.setNoGravity(true); boss.setPos(origin.add(20,0,0));
 		boss.prepareEncounter(level);
 		for (int x = -2; x <= 2; x++) {
-			for (int z = -2; z <= 2; z++) { level.getChunk((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z); }
+			for (int z = -2; z <= 2; z++) { level.setChunkForced((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z,true); }
 		}
 		level.addFreshEntity(boss);
-		// Entity Sections: Finish loading the spawn chunks before querying newly added tentacles.
-		helper.runAfterDelay(3, () -> {
+		// Entity Sections: Require every spawn-ring chunk to be queryable before creating tentacles.
+		helper.startSequence().thenWaitUntil(() -> {
+			for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)helper.assertTrue(level.isPositionTickingWithEntitiesLoaded(new net.minecraft.world.level.ChunkPos((boss.blockPosition().getX()>>4)+x,(boss.blockPosition().getZ()>>4)+z).pack()),"Tentacle chunks are entity-ready");
+		}).thenExecute(() -> {
 			try {
 				boss.customServerAiStep(level);
 				var arms = level.getEntitiesOfClass(BossMinion.class, boss.getBoundingBox().inflate(64), boss::ownsSummon);
@@ -623,7 +651,10 @@ public final class BossEncounterGameTest {
 				for (BossMinion arm : arms) { helper.assertTrue(arm.role() == BossMinion.Role.TENTACLE, "Wrong Kraken appendage role"); }
 				boss.discard();
 				for (BossMinion arm : arms) { helper.assertTrue(arm.isRemoved(), "Tentacle survived the end of its encounter"); }
-			} finally { boss.discard(); removePlayer(player); }
+			} finally {
+				for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)level.setChunkForced((boss.blockPosition().getX()>>4)+x,(boss.blockPosition().getZ()>>4)+z,false);
+				boss.discard(); removePlayer(player);
+			}
 			helper.succeed();
 		});
 	}

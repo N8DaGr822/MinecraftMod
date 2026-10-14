@@ -50,6 +50,54 @@ public final class ArmorLoadoutGameTest {
 		return player;
 	}
 	private static void remove(ServerPlayer player) { player.level().getServer().getPlayerList().remove(player); player.discard(); }
+	@GameTest public void bonfireUpgradesChargeInOrderAndStopAtFinalTier(GameTestHelper helper) {
+		var player = player(helper); var level=helper.getLevel();
+		var pos=helper.absolutePos(new BlockPos(3,3,3));
+		var core=darkspawn.black.bonfire.Bonfires.CORE;
+		var range=darkspawn.black.bonfire.BonfireBlock.RANGE;
+		var hit=new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(pos),net.minecraft.core.Direction.UP,pos,false);
+		try {
+			level.setBlockAndUpdate(pos,core.defaultBlockState()); player.setShiftKeyDown(true);
+			level.getBlockState(pos).useWithoutItem(level,player,hit);
+			helper.assertTrue(level.getBlockState(pos).getValue(range)==1,"Missing payment leaves starter tier intact");
+			var materials=new net.minecraft.world.item.Item[]{Items.IRON_INGOT,Items.GOLD_INGOT,Items.DIAMOND};
+			int[] costs={8,4,2};
+			for(int i=0;i<3;i++) {
+				player.getInventory().setItem(9,new ItemStack(materials[i],costs[i]+1));
+				level.getBlockState(pos).useWithoutItem(level,player,hit);
+				helper.assertTrue(level.getBlockState(pos).getValue(range)==i+2 && player.getInventory().getItem(9).getCount()==1,"Upgrade consumes exactly its cost");
+			}
+			level.getBlockState(pos).useWithoutItem(level,player,hit);
+			helper.assertTrue(level.getBlockState(pos).getValue(range)==4 && player.getInventory().getItem(9).getCount()==1,"Final tier neither wraps nor charges");
+		} finally { level.setBlockAndUpdate(pos,net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()); remove(player); }
+		helper.succeed();
+	}
+	@GameTest
+	public void trashRequiresCurrentRevisionAndReturnsUnconfirmedItems(GameTestHelper helper) {
+		var player = player(helper);
+		try {
+			var menu = player.inventoryMenu;
+			var slot = menu.getSlot(InventoryExpansion.TRASH_MENU_SLOT);
+			var named = new ItemStack(Items.DIAMOND, 3);
+			named.set(DataComponents.CUSTOM_NAME, Component.literal("Recover me"));
+			slot.set(named.copy()); menu.broadcastChanges();
+			InventoryExpansion.emptyTrash(player, menu.getStateId() - 1);
+			helper.assertTrue(ItemStack.matches(slot.getItem(), named), "Stale deletion cannot destroy the staged stack");
+			menu.setCarried(new ItemStack(Items.APPLE));
+			InventoryExpansion.emptyTrash(player, menu.getStateId());
+			helper.assertTrue(slot.hasItem(), "Carried items block deletion"); menu.setCarried(ItemStack.EMPTY);
+			menu.removed(player);
+			helper.assertTrue(!slot.hasItem() && player.getInventory().countItem(Items.DIAMOND) == 3, "Closing returns staged items once");
+			helper.assertTrue(player.getInventory().getItem(0).getHoverName().getString().equals("Recover me"), "Return preserves item components");
+			slot.set(new ItemStack(Items.COBBLESTONE, 64)); menu.broadcastChanges();
+			InventoryExpansion.emptyTrash(player, menu.getStateId());
+			helper.assertTrue(!slot.hasItem() && player.getInventory().countItem(Items.DIAMOND) == 3, "Explicit deletion touches only the trash slot");
+			player.getInventory().setItem(9, new ItemStack(Items.DIRT, 64));
+			menu.quickMoveStack(player, 9);
+			helper.assertTrue(!slot.hasItem(), "Shift-click never automatically trashes items");
+		} finally { remove(player); }
+		helper.succeed();
+	}
 	private static ArmorLoadoutPayload request(ServerPlayer player, int target) {
 		return new ArmorLoadoutPayload(target, ArmorLoadouts.state(player).revision, player.inventoryMenu.getStateId());
 	}

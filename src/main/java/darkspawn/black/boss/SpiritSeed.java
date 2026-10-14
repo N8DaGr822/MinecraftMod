@@ -53,7 +53,7 @@ public final class SpiritSeed extends ThrowableItemProjectile {
 	protected void onHitEntity(EntityHitResult hit) {
 		super.onHitEntity(hit);
 		if (level() instanceof ServerLevel server) {
-			hit.getEntity().hurtServer(server, damageSources().thrown(this, getOwner()), 10);
+			hit.getEntity().hurtServer(server, damageSources().thrown(this, getOwner()), 12.5F);
 		}
 	}
 

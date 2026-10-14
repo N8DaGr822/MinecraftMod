@@ -61,9 +61,14 @@ public final class BossHazard extends Entity {
 		for (var player : server.players()) {
 			Vec3 delta = player.position().subtract(position());
 			if (!BiomeBoss.eligible(player) || delta.horizontalDistanceSqr() > radius() * radius() || delta.y < -2 || delta.y > 6) { continue; }
-			if (player.hurtServer(server, damageSources().mobAttack(boss), 4)) { BossEffects.apply(player, kind); }
+			if (player.hurtServer(server, damageSources().mobAttack(boss), 5)) {
+				BossEffects.apply(player, kind);
+				// Boss Impact: Each accepted hazard tick can launch again; pull attacks retain their identity.
+				if (attack() != BossAttack.WHIRLPOOL && attack() != BossAttack.VOID_RIFTS)
+					player.knockback(2, -delta.x, -delta.z, damageSources().mobAttack(boss), 5);
+			}
 			if (attack() == BossAttack.WHIRLPOOL || attack() == BossAttack.VOID_RIFTS) {
-				player.knockback(0.4, delta.x, delta.z, damageSources().mobAttack(boss), 4);
+				player.knockback(0.4, delta.x, delta.z, damageSources().mobAttack(boss), 5);
 			}
 		}
 	}

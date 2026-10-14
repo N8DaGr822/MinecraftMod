@@ -41,7 +41,7 @@ public final class FrostShard extends ThrowableItemProjectile {
 	protected void onHitEntity(EntityHitResult hit) {
 		super.onHitEntity(hit);
 		if (level() instanceof ServerLevel server && hit.getEntity() instanceof LivingEntity target
-				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), 10)) {
+				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), 12.5F)) {
 			target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1));
 		}
 	}

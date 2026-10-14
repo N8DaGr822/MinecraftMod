@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "PCP",
+    "PPP"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "#minecraft:planks",
+    "C": "minecraft:crafting_table"
+  },
+  "result": {
+    "id": "darkspawn:shipyard",
+    "count": 1
+  }
+}

@@ -138,7 +138,11 @@ for theme_index,(theme,bosses) in enumerate(THEMES.items()):
             events[f'music.{boss}.{intensity}']={'sounds':[{'name':f'darkspawn:music/{theme}_{intensity}','stream':True}]}
 
 ROOT.mkdir(parents=True,exist_ok=True)
-(ROOT/'sounds.json').write_text(json.dumps(events,indent=2)+'\n')
+# User Recordings: Keep imported shanties when regenerating synthesized creature audio.
+manifest_path=ROOT/'sounds.json'
+if manifest_path.exists():
+    events.update({key:value for key,value in json.loads(manifest_path.read_text(encoding='utf-8')).items() if key.startswith('shanty.')})
+manifest_path.write_text(json.dumps(events,indent=2)+'\n',encoding='utf-8')
 langpath=ROOT/'lang/en_us.json';lang=json.loads(langpath.read_text());lang.update(subtitles)
 langpath.write_text(json.dumps(lang,indent=2,ensure_ascii=False)+'\n')
 Path('tools/audio/analysis.json').write_text(json.dumps(report,indent=2)+'\n')

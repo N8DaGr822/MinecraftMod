@@ -25,7 +25,7 @@ public final class MountCareScreen extends AbstractContainerScreen<MountMenu> {
         containerTick();
     }
     private void button(int action, String key, int x, int y, int width) {
-        buttons.put(action, addRenderableWidget(Button.builder(Component.translatable("mount.darkspawn." + key),
+        buttons.put(action, addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("mount.darkspawn." + key),
             ignored -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action))
             .bounds(leftPos+x, topPos+y, width, 18).tooltip(Tooltip.create(Component.translatable("mount.darkspawn."+key+"_hint"))).build()));
     }
@@ -44,11 +44,10 @@ public final class MountCareScreen extends AbstractContainerScreen<MountMenu> {
     }
     @Override public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.fill(leftPos, topPos, leftPos+imageWidth, topPos+imageHeight, 0xFF37312B);
-        graphics.fill(leftPos+2, topPos+2, leftPos+imageWidth-2, topPos+imageHeight-2, 0xFFC6BFAF);
+        darkspawn.black.client.UiTheme.panel(graphics, leftPos, topPos, imageWidth, imageHeight);
         for (var slot : menu.slots) {
             int x = leftPos+slot.x, y = topPos+slot.y;
-            graphics.fill(x-1,y-1,x+17,y+17,0xFF625C54); graphics.fill(x,y,x+16,y+16,0xFF91897C);
+            graphics.fill(x-1,y-1,x+17,y+17,0xFF566F73); graphics.fill(x,y,x+16,y+16,0xFFB0C1B9);
         }
     }
 }

@@ -24,15 +24,15 @@ public final class BonfireBlockEntity extends BlockEntity {
 			entity.resetLighting();
 			return;
 		}
-		int radius = state.getValue(BonfireBlock.RANGE) * 25;
+		WardVolume volume = WardVolume.forTier(pos, state.getValue(BonfireBlock.RANGE));
+		int radius = volume.radius();
 		if (radius != entity.lastRange) { entity.lastRange = radius; entity.resetLighting(); }
-		WardVolume volume = new WardVolume(pos, radius);
 		// Spread light updates across ticks. Only already-loaded chunks and empty space are touched.
-		int side = radius * 2 / 8 + 1, total = side * side * 4;
+		int side = (radius * 2 + 7) / 8, total = side * side * ((volume.height() + 7) / 8);
 		for (int i = 0; i < 16; i++) {
 			int index = entity.lightCursor++;
 			int x = index % side, z = index / side % side, y = index / (side * side);
-			BlockPos light = pos.offset(-radius + x * 8, -8 + y * 8, -radius + z * 8);
+			BlockPos light = new BlockPos(pos.getX() - radius + x * 8, (int) volume.bottom() + y * 8, pos.getZ() - radius + z * 8);
 			if (volume.contains(Vec3.atCenterOf(light)) && level.hasChunkAt(light) && !level.isOutsideBuildHeight(light)) {
 				BlockState existing = level.getBlockState(light);
 				if (existing.isAir() && !existing.is(Bonfires.LIGHT)) level.setBlock(light, Bonfires.LIGHT.defaultBlockState(), 3);

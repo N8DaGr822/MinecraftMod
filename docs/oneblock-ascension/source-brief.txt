@@ -1,0 +1,72 @@
+OneBlock Ascension
+You are the lead Java/Minecraft mod engineer working in this repository. Build OneBlock Ascension, a server-authoritative multiplayer Minecraft Java game mode for NeoForge first and Fabric second, using OneBlock_Ascension_Spec_v0.2.md as the product and architecture source of truth.
+Operating instructions
+1. Inspect the repository before changing files. Preserve any existing project structure, naming, and work that already meets the specification. Do not delete or rewrite unrelated code.
+2. Read the complete technical specification. If it is not present in the repository, ask for that file or use the requirements reproduced below. Do not assume a referenced file exists without checking.
+3. Validate Minecraft, NeoForge, Fabric, Architectury, Java, Gradle, and required mod versions against actual current documentation/available artifacts before introducing dependencies. Preferred compatibility baseline is Minecraft 1.21.1 + Java 21, but make a short, evidence-based adjustment if the selected supported toolchain requires it. Pin the chosen versions. Do not invent loader events, registry methods, or Gradle coordinates.
+4. Use Java, Gradle, a pure-Java domain module, a shared common application module, and thin platform adapters. If fully configuring Fabric in the first pass risks delaying a runnable NeoForge project, leave Fabric as a clean, documented follow-on without faking support. Do not merge loader-specific implementation into the domain layer.
+5. Execute in milestones, with compile/test/launch checks after each. Implement M0 and M1 first, then stop with a precise summary and plan for M2. Do not present a speculative full implementation as completed work.
+6. Do not claim tests passed unless you actually ran them. If an environment cannot run Minecraft, run all possible compilation and pure-Java tests, and explicitly mark runtime tests as unverified.
+7. Prefer small, maintainable classes and interfaces over god objects. Enforce server-side authority for all state changes. Do not introduce unnecessary REST APIs, cloud services, or an external database into the MVP.
+Product requirements
+- One regenerating resource block per team island in a void dimension; independent phase state per island.
+- Separate islands for teams of up to six players; team roles and protection so visitors can travel but cannot mine other teams' generators or edit structures.
+- Balanced survival, RPG, and automation: phases + objectives + encounter gates + machine upgrades.
+- Future data-driven 12-phase roadmap, but MVP implements three phases: Genesis (250 breaks), Caverns (500 breaks), Verdant Wilds (600 breaks).
+- Phase completion requires break threshold AND required objectives AND required encounters; post-threshold mining must not deadlock the generator.
+- One Cave Guardian event, one collection upgrade, and one bounded auto-miner later in the MVP.
+- Persistent teams/islands/generator/progression/bridge ownership/rewards; safe restart reconciliation and idempotent progress.
+Hard island/bridge requirements — non-negotiable
+Implement against the following design, replacing any older 1,024-block spacing assumption:
+CARDINAL_CENTER_SPACING = 250 blocks
+CLAIM_HALF_EXTENT       = 100 blocks on X and Z (square claim)
+STARTER_PLATFORM        = 5 x 5 blocks at Y = 80
+ISLAND_GRID_CENTER      = (gridX * 250, 80, gridZ * 250)
+CARDINAL_NEIGHBORS     = cells exactly 1 apart along one grid axis
+VISITOR_ENTRY           = allowed
+VISITOR_BUILD           = denied
+VISITOR_GENERATOR_USE   = denied
+BRIDGE_CORRIDOR_WIDTH   = 7 block columns
+BRIDGE_BUILD_Y_RANGE   = 72..96 (inclusive)
+BRIDGE_TARGET           = must be an allocated cardinal-neighbor island
+OFFLINE_AUTOMATION      = disabled
+BRIDGE_CHUNK_LOADING    = disabled
+The square claim test is abs(x-centerX) <= 100 && abs(z-centerZ) <= 100. Example: island A at (0,0) owns X -100..100; island B at (250,0) owns X 150..350; the neutral integer block columns are X 101..149 inclusive (49 columns; a 50-block geometric edge-to-edge distance). The E/W corridor is Z -3..3 along the gap; N/S is symmetric. 250 refers to center-to-center distance, not bridge length from a 5 x 5 starter platform.
+Bridges must be player-built; never spawn automatic connections. Building within one's own claim follows team permissions. Building within the neutral zone is allowed only in a valid corridor between two allocated cardinal neighbors and within the allowed height band. Visitors may traverse bridges and enter other claims, but cannot alter protected claim blocks. Persist per-block team ownership of neutral bridge blocks, with a corridor ID, and protect against unauthorized breaking and supported explosion/piston/fluid/machine mutations. If a team or island is archived, remove only its own bridge blocks via a resumable cleanup job. Do not permit general-purpose building in the void outside these corridors. Neither bridges nor offline islands force chunks to stay loaded. Implement more invasive mod interoperability behind tested adapters; do not claim universal protection from every third-party mod.
+Create a versioned config schema with these defaults. Treat changes to spacing/claim geometry on populated worlds as migration-required (reject hot reload, report why). Test the exact inclusive claim math and corridor cells.
+Architecture and state invariants
+- Domain model: TeamState, IslandState, GeneratorState, PhaseProgress, BridgeCorridorState, BridgeBlockOwnership, RewardLedger, UpgradeState, EncounterState.
+- Core services: IslandService, TeamService, ProtectionService, BridgeService, GeneratorService, PhaseService, ObjectiveService, EncounterService, UpgradeService, PersistencePort.
+- One confirmed eligible generator break => one and only one progress increment. Canceled, unauthorized, stale, and duplicate attempts => zero.
+- Generator phases: READY, PENDING, REGENERATING, LOCKED, ERROR; idempotent regeneration by (islandId, generationIndex).
+- Store persistent identifiers and a schema version. Use Minecraft SavedData or a compatible world data abstraction, selected after verifying the pinned loader API. On reload/restart reconcile world block vs. generator state without extra rewards or progress.
+- Phase content is data-driven via validated JSON/datapacks. Content reload must preserve previous valid configuration when validation fails. Items/rewards require unique ledger IDs.
+- Gameplay and world mutation occur on the correct server thread; clients are never authoritative over progress/ownership/rewards.
+- common should not import Create or other optional external mod APIs directly; optional integrations live behind adapters.
+Milestones, in order
+- M0 — Toolchain and build: create/repair reproducible Gradle multi-module project, pin Minecraft/Java/loader versions, initialize NeoForge, introduce testable pure Java domain module, configure test commands, document exact dev server command.
+- M1 — World/islands/teams: void dimension, grid allocation with 250-block spacing, persistent cell assignment, 5 x 5 platform Y=80, team creation/join/rejoin, owner/member identity, spawn/home command, claim geometry and basic block/generator ownership protections. Verify two teams cannot edit one another's claims and continue to own the same island after restart.
+- M2 — Bridges: neutral corridor geometry, placement/removal validation, per-block ownership ledger, visitor crossing, archiving cleanup, supported griefing protections, acceptance tests.
+- M3 — Generator: guarded successful-break handling, weighted resource pool, idempotent reappearance, save/restart repair, bounded generation.
+- M4 — Phases: implement 3 MVP JSON phases, mining counters, submission objectives, guaranteed resources, rewards, validation and atomic reload.
+- M5 — RPG + automation: Cave Guardian encounter and cleanup; collector; simple auto-miner using shared generator service and output backpressure.
+- M6 — Hardening: SavedData and client networking, compatibility tests, world backup/restore verification, profiling with 25 active islands.
+- M7 — Fabric parity: implement adapter and test the same observable game rules using the Fabric loader.
+Your immediate task: M0 and M1 only
+Proceed without asking for confirmation if the repository and dependencies are accessible:
+1. Report the actual repository contents and any conflicts with the proposed module layout.
+2. Verify compatible platform/toolchain versions and write a concise docs/DECISIONS.md explaining the pinned versions and why.
+3. Implement a buildable minimal mod using domain, common, and neoforge modules (adapt to the existing build if present). Include basic automated unit tests for grid placement, unique allocation, claims, and team authorization.
+4. Implement server-side island creation, durable identity, 250-block cell allocation, starter platform, home/spawn flow, and ownership enforcement through the verified loader hooks. Keep protected generation and deeper bridge behavior for their respective milestones; define extension points now.
+5. Add docs/ROADMAP.md with M2–M7 and a bridge acceptance test checklist.
+6. Run build/tests that the environment actually supports. Include reproduction commands. Finish with files changed, verified behavior, test results, limitations, risks, and the next smallest implementation step. Do not state M2–M7 are implemented.
+Acceptance tests to preserve from the start
+- Two newly created islands occupy distinct durable grid cells and have centers exactly 250 blocks apart when cardinal neighbors.
+- No pair of 201-by-201 square claims overlaps at that spacing.
+- For east neighbor (250,0), A owns -100..100; B owns 150..350; free neutral columns 101..149.
+- Non-members cannot build/mine inside other teams' claims; visiting and travel may be allowed.
+- Team membership and allocated grid cell remain stable after reload.
+- Future M2: neutral corridor is seven blocks wide, preserves owner/team ledger across restart, and never allows accidental modifications in another claim.
+- Future M3: generator progress is exactly once per confirmed break and zero for canceled/duplicate actions.
+Output expectations
+Work in the repository; prefer actual implementation over just a written plan. Provide a concise summary at each milestone: what changed, why, problem solved, tradeoffs/risks, tests run, and next step. When a constraint cannot be verified, state the uncertainty and choose a safe, compilable subset rather than inventing APIs. Preserve existing work and avoid unrelated refactors.

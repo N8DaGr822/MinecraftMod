@@ -39,7 +39,7 @@ public final class StorageScreen extends AbstractContainerScreen<StorageMenu> {
 		containerTick();
 	}
 	private void button(int action, String label, int x, int y, int width) {
-		Button button = Button.builder(Component.translatable("storage.darkspawn." + label), ignored ->
+		Button button = darkspawn.black.client.UiTheme.button(Component.translatable("storage.darkspawn." + label), ignored ->
 			ClientPlayNetworking.send(new StorageActionPayload(menu.containerId, menu.getStateId(), action, search.getValue())))
 			.bounds(leftPos + x, topPos + y, width, 18)
 			.tooltip(Tooltip.create(Component.translatable("storage.darkspawn." + label + "_hint"))).build();
@@ -74,13 +74,12 @@ public final class StorageScreen extends AbstractContainerScreen<StorageMenu> {
 	}
 	@Override public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
 		super.extractBackground(graphics, mouseX, mouseY, partialTick);
-		graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, 0xFF37312B);
-		graphics.fill(leftPos + 2, topPos + 2, leftPos + imageWidth - 2, topPos + imageHeight - 2, 0xFFC6BFAF);
+		darkspawn.black.client.UiTheme.panel(graphics, leftPos, topPos, imageWidth, imageHeight);
 		for (Slot slot : menu.slots) {
 			if (!slot.isActive()) { continue; }
 			int x = leftPos + slot.x, y = topPos + slot.y;
-			graphics.fill(x - 1, y - 1, x + 17, y + 17, 0xFF625C54);
-			graphics.fill(x, y, x + 16, y + 16, slot.index >= StorageMenu.FILTER_START && slot.index < StorageMenu.PLAYER_START ? 0xFF658A84 : 0xFF91897C);
+			graphics.fill(x - 1, y - 1, x + 17, y + 17, 0xFF566F73);
+			graphics.fill(x, y, x + 16, y + 16, slot.index >= StorageMenu.FILTER_START && slot.index < StorageMenu.PLAYER_START ? 0xFF658A84 : 0xFFB0C1B9);
 		}
 	}
 	@Override protected void extractSlots(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
@@ -101,14 +100,14 @@ public final class StorageScreen extends AbstractContainerScreen<StorageMenu> {
 	}
 	@Override protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractLabels(graphics, mouseX, mouseY);
-		if (menu.kind() != 0) { graphics.text(font, Component.translatable("storage.darkspawn.filters"), 8, 51, 0xFF40372D, false); }
+		if (menu.kind() != 0) { graphics.text(font, Component.translatable("storage.darkspawn.filters"), 8, 51, darkspawn.black.client.UiTheme.INK, false); }
 		if (menu.isBank()) {
-			graphics.text(font, Component.translatable(menu.trashView() ? "storage.darkspawn.trash_page" : "storage.darkspawn.bank_page", menu.page() + 1, menu.pages()), 88, 48, 0xFF40372D, false);
-			graphics.text(font, Component.translatable("storage.darkspawn.capacity", menu.variants(), 256 << menu.tier()), 60, 120, 0xFF40372D, false);
-			graphics.text(font, Component.translatable(menu.resorting() ? "storage.darkspawn.resorting" : "storage.darkspawn.withdraw_hint"), 60, 132, 0xFF40372D, false);
+			graphics.text(font, Component.translatable(menu.trashView() ? "storage.darkspawn.trash_page" : "storage.darkspawn.bank_page", menu.page() + 1, menu.pages()), 88, 48, darkspawn.black.client.UiTheme.INK, false);
+			graphics.text(font, Component.translatable("storage.darkspawn.capacity", menu.variants(), 256 << menu.tier()), 60, 120, darkspawn.black.client.UiTheme.INK, false);
+			graphics.text(font, Component.translatable(menu.resorting() ? "storage.darkspawn.resorting" : "storage.darkspawn.withdraw_hint"), 60, 132, darkspawn.black.client.UiTheme.INK, false);
 		} else {
-			graphics.text(font, Component.translatable(menu.kind() == 0 ? "storage.darkspawn.dump_hint" : "storage.darkspawn.filter_hint"), 8, 25, 0xFF40372D, false);
-			graphics.text(font, Component.translatable("storage.darkspawn.direction_hint"), 8, 125, 0xFF40372D, false);
+			graphics.text(font, Component.translatable(menu.kind() == 0 ? "storage.darkspawn.dump_hint" : "storage.darkspawn.filter_hint"), 8, 25, darkspawn.black.client.UiTheme.INK, false);
+			graphics.text(font, Component.translatable("storage.darkspawn.direction_hint"), 8, 125, darkspawn.black.client.UiTheme.INK, false);
 		}
 	}
 	@Override protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {

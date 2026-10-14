@@ -38,6 +38,7 @@ public class DarkspawnClient implements ClientModInitializer {
 		ExpeditionArmorRenderer.initialize();
 		ArmorStyleRenderer.initialize();
 		darkspawn.black.client.mount.GriffinClient.initialize();
+		darkspawn.black.client.pirate.ShipClient.initialize();
 		darkspawn.black.client.boss.BossClient.initialize();
 		darkspawn.black.client.audio.EncounterMusic.initialize();
 		darkspawn.black.ecosystem.ForestEcosystem.MOBS.forEach((kind, type) ->
@@ -122,7 +123,7 @@ public class DarkspawnClient implements ClientModInitializer {
 
 		ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
 			if (screen instanceof CreativeModeInventoryScreen && ClientPlayNetworking.canSend(SortInventoryPayload.TYPE)) {
-				Screens.getWidgets(screen).add(Button.builder(Component.translatable("button.darkspawn.expanded_inventory"),
+				Screens.getWidgets(screen).add(darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.expanded_inventory"),
 						button -> client.gui.setScreen(new ExpandedInventoryScreen(client.player)))
 						.bounds(width - 116, 6, 110, 20).build());
 			}
@@ -130,10 +131,20 @@ public class DarkspawnClient implements ClientModInitializer {
 				return;
 			}
 
+			var trash = UiTheme.button(Component.translatable("button.darkspawn.empty_trash"), button -> {
+				if (client.player != null) ClientPlayNetworking.send(new darkspawn.black.inventory.TrashInventoryPayload(client.player.inventoryMenu.getStateId()));
+			}).bounds(width - 68, 30, 62, 20)
+				.tooltip(Tooltip.create(Component.translatable("tooltip.darkspawn.empty_trash"))).build();
+			Runnable updateTrash = () -> trash.active = canSort(client)
+				&& ClientPlayNetworking.canSend(darkspawn.black.inventory.TrashInventoryPayload.TYPE)
+				&& client.player.inventoryMenu.getSlot(InventoryExpansion.TRASH_MENU_SLOT).hasItem();
+			updateTrash.run(); Screens.getWidgets(screen).add(trash);
+			ScreenEvents.afterTick(screen).register(current -> updateTrash.run());
+
 			// Inventory UI: Anchor outside the inventory so opening the recipe book cannot cover slots.
-			Button sortButton = Button.builder(Component.translatable("button.darkspawn.sort_inventory"),
+			Button sortButton = darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.sort_inventory"),
 					button -> requestSort(client))
-					.bounds(width - 86, 6, 80, 20)
+					.bounds(width - 68, 6, 62, 20)
 					.tooltip(Tooltip.create(Component.translatable("tooltip.darkspawn.sort_inventory")))
 					.build();
 			sortButton.active = canSort(client);

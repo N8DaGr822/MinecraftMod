@@ -172,6 +172,7 @@ public final class BossLandmarkStructure extends Structure {
 			super.addAdditionalSaveData(context, tag);
 			tag.store("LandmarkRotation", Rotation.CODEC, getRotation());
 		}
+		public Identifier templateId() { return makeTemplateLocation(); }
 		@Override protected void handleDataMarker(String marker, BlockPos pos, ServerLevelAccessor level, RandomSource random, BoundingBox bounds) {
 			// Templates contain native chest block entities with lazy loot tables, and no data markers.
 		}

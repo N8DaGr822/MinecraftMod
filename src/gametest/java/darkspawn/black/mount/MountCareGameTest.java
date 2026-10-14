@@ -167,22 +167,27 @@ public final class MountCareGameTest {
         } finally {a.discard();b.discard();cleanup(owner);}
         helper.succeed();
     }
-    @GameTest(skyAccess=true,maxTicks=80)
+    @GameTest(skyAccess=true,maxTicks=200)
     public void followMovesGroundAndFlyingMountsThenStayStopsThem(GameTestHelper helper) {
         var owner=player(helper);var ground=spawn(helper,Mounts.LEOPARD);
+        // Follow Fixture: Other companion tests share the high platform elevation; keep this live path isolated.
+        ground.setPos(ground.position().add(0,0,2048));ground.setOnGround(true);
         var flyer=Mounts.GRIFFIN.create(helper.getLevel(),EntitySpawnReason.COMMAND);
         own(ground,owner);flyer.assignOwner(owner.getUUID());flyer.setPos(ground.position().add(0,3,2));helper.getLevel().addFreshEntity(flyer);
         for(int x=-5;x<=15;x++)for(int z=-5;z<=5;z++)helper.getLevel().setBlockAndUpdate(ground.blockPosition().offset(x,-1,z),Blocks.STONE.defaultBlockState());
         owner.teleportTo(ground.getX()+10,ground.getY(),ground.getZ());
-        var start=ground.position();var air=flyer.position();ground.care.setFollowing(true);flyer.care.setFollowing(true);
-        helper.runAfterDelay(35,()->{
+        var start=ground.position();var air=flyer.position();var chunk=new net.minecraft.world.level.ChunkPos(ground.blockPosition().getX()>>4,ground.blockPosition().getZ()>>4);
+        for(int x=-1;x<=1;x++)for(int z=-1;z<=1;z++)helper.getLevel().setChunkForced(chunk.x()+x,chunk.z()+z,true);
+        helper.startSequence().thenWaitUntil(()->{
+            for(int x=-1;x<=1;x++)for(int z=-1;z<=1;z++)helper.assertTrue(helper.getLevel().isPositionTickingWithEntitiesLoaded(new net.minecraft.world.level.ChunkPos(chunk.x()+x,chunk.z()+z).pack()),"Follow fixture chunks are entity-ready");
+        }).thenExecute(()->{ground.care.setFollowing(true);flyer.care.setFollowing(true);}).thenExecuteAfter(35,()->{
             helper.assertTrue(ground.getX()>start.x+1,"Ground companion follows using navigation; x="+ground.getX()+" start="+start.x);
             helper.assertTrue(flyer.getX()>air.x+1,"Flying companion follows owner");
-            // The settling flyer must not physically push the ground mount during its Stay assertion.
-            flyer.discard();ground.care.setFollowing(false);var stopped=ground.position();
+            // Stay Fixture: Neither the settling flyer nor its nearby owner may physically push the mount.
+            flyer.discard();ground.care.setFollowing(false);owner.teleportTo(ground.getX()+20,ground.getY(),ground.getZ());var stopped=ground.position();
             helper.runAfterDelay(10,()->{try {
                 helper.assertTrue(ground.position().distanceToSqr(stopped)<.1,"Stay stops ground movement; before="+stopped+" after="+ground.position());helper.succeed();
-            }finally{ground.discard();flyer.discard();cleanup(owner);}});
+            }finally{ground.discard();flyer.discard();cleanup(owner);for(int x=-1;x<=1;x++)for(int z=-1;z<=1;z++)helper.getLevel().setChunkForced(chunk.x()+x,chunk.z()+z,false);}});
         });
     }
 

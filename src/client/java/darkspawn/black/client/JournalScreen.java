@@ -31,23 +31,23 @@ public final class JournalScreen extends Screen {
         int tabWidth=(width-16)/SECTIONS.length;
         for (int i=0;i<SECTIONS.length;i++) {
             String tab=SECTIONS[i];
-            addRenderableWidget(Button.builder(Component.translatable("journal.darkspawn."+tab), pressed -> { section=tab; selected=0; listPage=0; detailPage=0; filter(); })
-                .bounds(8+i*tabWidth,32,tabWidth-2,20).build());
+            addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn."+tab), pressed -> { section=tab; selected=0; listPage=0; detailPage=0; filter(); })
+                .bounds(8+i*tabWidth,32,tabWidth-2,20).tooltip(Tooltip.create(Component.translatable("journal.darkspawn."+tab))).build());
         }
         var search = addRenderableWidget(new EditBox(font,8,59,width-16,18,Component.translatable("journal.darkspawn.search")));
         search.setMaxLength(64); search.setValue(query); search.setHint(Component.translatable("journal.darkspawn.search"));
         search.setResponder(value -> { query=value; selected=0; listPage=0; detailPage=0; filter(); });
         for(int i=0;i<rows;i++) {
             final int row=i;
-            entryButtons.add(addRenderableWidget(Button.builder(Component.empty(), pressed -> { selected=listPage*rows+row; detailPage=0; update(); })
+            entryButtons.add(addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.empty(), pressed -> { selected=listPage*rows+row; detailPage=0; update(); })
                 .bounds(8,88+i*22,listWidth,20).build()));
         }
-        previous=addRenderableWidget(Button.builder(Component.literal("<"), b -> { listPage--; update(); }).bounds(8,height-48,28,18).build());
-        next=addRenderableWidget(Button.builder(Component.literal(">"), b -> { listPage++; update(); }).bounds(40,height-48,28,18).build());
-        detailPrevious=addRenderableWidget(Button.builder(Component.translatable("journal.darkspawn.previous"), b -> { detailPage--; update(); }).bounds(listWidth+24,height-28,70,20).build());
-        detailNext=addRenderableWidget(Button.builder(Component.translatable("journal.darkspawn.next"), b -> { detailPage++; update(); }).bounds(width-78,height-28,70,20).build());
-        addRenderableWidget(Button.builder(Component.translatable("gui.back"), b -> onClose()).bounds(8,height-26,listWidth,20).build());
-        refresh=addRenderableWidget(Button.builder(Component.translatable("journal.darkspawn.refresh"), b -> request()).bounds(width-78,6,70,20).build());
+        previous=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.literal("<"), b -> { listPage--; update(); }).bounds(8,height-48,28,18).build());
+        next=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.literal(">"), b -> { listPage++; update(); }).bounds(40,height-48,28,18).build());
+        detailPrevious=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn.previous"), b -> { detailPage--; update(); }).bounds(listWidth+24,height-28,70,20).build());
+        detailNext=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn.next"), b -> { detailPage++; update(); }).bounds(width-78,height-28,70,20).build());
+        addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("gui.back"), b -> onClose()).bounds(8,height-26,listWidth,20).build());
+        refresh=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn.refresh"), b -> request()).bounds(width-78,6,70,20).build());
         filter(); if (!requested) request();
     }
     private void request() { requested=true; refreshTicks=20; ClientPlayNetworking.send(new JournalRequestPayload()); }
@@ -80,8 +80,8 @@ public final class JournalScreen extends Screen {
         scheduleNarration();
     }
     @Override public void extractRenderState(GuiGraphicsExtractor graphics,int mouseX,int mouseY,float delta) {
-        graphics.fill(0,0,width,height,0xFF262C2B);
-        graphics.fill(listWidth+18,82,width-8,height-34,0xFFE1D8BC);
+        graphics.fill(0,0,width,height,0xFF14282E);
+        UiTheme.panel(graphics,listWidth+18,82,width-listWidth-26,height-116);
         graphics.text(font,title,8,12,0xFFF3E8CA,false);
         var entry=current();
         if(entry!=null) {
@@ -91,18 +91,18 @@ public final class JournalScreen extends Screen {
                 graphics.blit(RenderPipelines.GUI_TEXTURED,texture,x,88,0,0,56,56,56,56);
             } else {
                 graphics.fill(x+6,94,x+43,132,entry.discovered()?0xFF756543:0xFF313A38);
-                graphics.text(font,entry.discovered()?"J":"?",x+21,109,0xFFE1D8BC,false);
+                graphics.text(font,entry.discovered()?"J":"?",x+21,109,UiTheme.PAPER,false);
             }
             var heading=font.split(Component.literal(entry.title()),Math.max(40,width-x-76));
-            for(int i=0;i<Math.min(4,heading.size());i++)graphics.text(font,heading.get(i),x+64,90+i*10,0xFF272E2A,false);
-            graphics.text(font,entry.discovered()?"Discovered":"Habitat hint",x+64,134,0xFF535B49,false);
+            for(int i=0;i<Math.min(4,heading.size());i++)graphics.text(font,heading.get(i),x+64,90+i*10,UiTheme.INK,false);
+            graphics.text(font,entry.discovered()?"Discovered":"Habitat hint",x+64,134,0xFF42665D,false);
             var lines=lines();int from=detailPage*detailRows();
-            for(int i=from;i<Math.min(lines.size(),from+detailRows());i++)graphics.text(font,lines.get(i),x,154+(i-from)*10,0xFF272E2A,false);
-            graphics.text(font,(detailPage+1)+"/"+Math.max(1,(lines.size()+detailRows()-1)/detailRows()),width/2,height-43,0xFFE1D8BC,false);
-        } else graphics.text(font,received?"No matching entries":"Loading journal...",listWidth+26,94,0xFF272E2A,false);
+            for(int i=from;i<Math.min(lines.size(),from+detailRows());i++)graphics.text(font,lines.get(i),x,154+(i-from)*10,UiTheme.INK,false);
+            graphics.text(font,(detailPage+1)+"/"+Math.max(1,(lines.size()+detailRows()-1)/detailRows()),width/2,height-43,UiTheme.PAPER,false);
+        } else graphics.text(font,received?"No matching entries":"Loading journal...",listWidth+26,94,UiTheme.INK,false);
         long known=entries.stream().filter(e -> e.section().equals(section)&&e.discovered()).count();
         long total=entries.stream().filter(e -> e.section().equals(section)).count();
-        graphics.text(font,known+"/"+total,76,height-43,0xFFE1D8BC,false);
+        graphics.text(font,known+"/"+total,76,height-43,UiTheme.PAPER,false);
         super.extractRenderState(graphics,mouseX,mouseY,delta);
     }
     @Override public Component getNarrationMessage() {

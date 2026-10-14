@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "darkspawn:block/ship_helm",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "darkspawn:block/ship_helm",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "darkspawn:block/ship_helm",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "darkspawn:block/ship_helm",
+      "y": 270
+    }
+  }
+}

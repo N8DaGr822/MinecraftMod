@@ -336,7 +336,8 @@ class InventorySorterTest {
 	void inventoryMenuKeepsVanillaSlotIdsAndGatesExtraRows() {
 		Inventory inventory = new Inventory(null, new EntityEquipment());
 		InventoryMenu menu = new InventoryMenu(inventory, true, null);
-		assertEquals(73, menu.slots.size());
+		assertEquals(74, menu.slots.size());
+		assertNotSame(inventory, menu.getSlot(InventoryExpansion.TRASH_MENU_SLOT).container, "Trash is staged separately from saved inventory profiles.");
 		assertEquals(39, menu.getSlot(5).getContainerSlot());
 		assertEquals(0, menu.getSlot(36).getContainerSlot());
 		assertEquals(40, menu.getSlot(45).getContainerSlot());

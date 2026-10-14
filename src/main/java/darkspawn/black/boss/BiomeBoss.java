@@ -395,7 +395,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 				for (ServerPlayer player : level.players()) {
 					Vec3 delta = player.getEyePosition().subtract(getEyePosition());
 					if (eligible(player) && delta.lengthSqr() < 18 * 18 && delta.normalize().dot(direction) > 0.4 && hasLineOfSight(player)) {
-						hit(level, player, damage + 4, boltKind());
+						if (hit(level, player, damage + 4, boltKind())) player.knockback(2, -delta.x, -delta.z, damageSources().mobAttack(this), (damage + 4) * 1.25F);
 					}
 				}
 			}
@@ -493,7 +493,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 		}
 	}
 	private boolean hit(ServerLevel level, ServerPlayer player, float damage, BossBolt.Kind kind) {
-		if (!player.hurtServer(level, damageSources().mobAttack(this), damage)) { return false; }
+		if (!player.hurtServer(level, damageSources().mobAttack(this), damage * 1.25F)) { return false; }
 		BossEffects.apply(player, kind);
 		return true;
 	}
@@ -502,7 +502,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 		for (ServerPlayer player : level.players()) {
 			Vec3 delta = player.position().subtract(center);
 			if (eligible(player) && delta.horizontalDistanceSqr() <= radius * radius && delta.y >= -2 && delta.y <= height && hasLineOfSight(player)) {
-				if (hit(level, player, damage, kind)) { player.knockback(1, -delta.x, -delta.z, damageSources().mobAttack(this), damage); }
+				if (hit(level, player, damage, kind)) { player.knockback(2, -delta.x, -delta.z, damageSources().mobAttack(this), damage * 1.25F); }
 			}
 		}
 		if (ships) {
@@ -571,7 +571,8 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 		setDeltaMovement(delta.x, pouncing ? delta.y : getDeltaMovement().y, delta.z);
 		for (ServerPlayer player : level.players()) {
 			if (eligible(player) && getBoundingBox().inflate(1).intersects(player.getBoundingBox()) && hasLineOfSight(player) && chargeHits.add(player.getUUID())) {
-				hit(level, player, profile == BossProfile.NETHERBORN && variant() == 0 ? 20 : 16, boltKind());
+				float damage = profile == BossProfile.NETHERBORN && variant() == 0 ? 20 : 16;
+				if (hit(level, player, damage, boltKind())) player.knockback(2, getX() - player.getX(), getZ() - player.getZ(), damageSources().mobAttack(this), damage * 1.25F);
 			}
 		}
 		chargeTicks++;

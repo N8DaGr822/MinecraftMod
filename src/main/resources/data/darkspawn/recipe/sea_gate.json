@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CPC",
+    "IKI",
+    "CPC"
+  ],
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "P": "minecraft:prismarine_shard",
+    "I": "minecraft:iron_ingot",
+    "K": "minecraft:compass"
+  },
+  "result": {
+    "id": "darkspawn:sea_gate",
+    "count": 1
+  }
+}

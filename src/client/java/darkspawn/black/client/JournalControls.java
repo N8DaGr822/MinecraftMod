@@ -18,7 +18,7 @@ public final class JournalControls {
         });
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
             if (!(screen instanceof InventoryScreen) || !ClientPlayNetworking.canSend(JournalRequestPayload.TYPE)) return;
-            var button = Button.builder(Component.translatable("button.darkspawn.journal"), pressed -> client.gui.setScreen(new JournalScreen(screen)))
+            var button = darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.journal"), pressed -> client.gui.setScreen(new JournalScreen(screen)))
                 .bounds(6,54,62,20).build();
             Runnable refresh = () -> button.active = client.player != null && client.player.inventoryMenu.getCarried().isEmpty();
             refresh.run(); Screens.getWidgets(screen).add(button);
