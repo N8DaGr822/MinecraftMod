@@ -15,7 +15,7 @@ public abstract class MealPhysiologyMixin {
 	@Inject(method = "decreaseAirSupply", at = @At("RETURN"), cancellable = true)
 	private void breathe(int air, CallbackInfoReturnable<Integer> ci) {
 		LivingEntity entity = (LivingEntity) (Object) this;
-		if (entity.hasEffect(MealEffects.DEEP_BREATH) && entity.tickCount % 2 == 0) ci.setReturnValue(air);
+		if ((entity.hasEffect(MealEffects.DEEP_BREATH) || entity instanceof net.minecraft.world.entity.player.Player p && darkspawn.black.inventory.Accessories.equipped(p,1)) && entity.tickCount % 2 == 0) ci.setReturnValue(air);
 	}
 	@ModifyVariable(method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z", at = @At("HEAD"), argsOnly = true)
 	private MobEffectInstance poison(MobEffectInstance effect) {

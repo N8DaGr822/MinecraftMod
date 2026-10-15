@@ -55,10 +55,12 @@ public final class TreeSpiritSummonItem extends Item {
 			return fail(player, "boss_needs_space");
 		}
 		boss.prepareEncounter(level);
+        if(!AwakenedRematches.prepare(player,boss,BossKind.ANCIENT_TREE_SPIRIT))return InteractionResult.FAIL;
 		if (!level.addFreshEntity(boss)) {
 			return InteractionResult.FAIL;
 		}
 		context.getItemInHand().consume(1, player);
+        AwakenedRematches.consume(player,boss);
 		darkspawn.black.cooking.Culinary.award(player, "first_summon", "earned");
 		player.sendOverlayMessage(Component.translatable("message.darkspawn.tree_awakened"));
 		return InteractionResult.SUCCESS;

@@ -8,6 +8,8 @@
     "fabric-gametest": [
       "darkspawn.black.boss.BossEncounterGameTest",
       "darkspawn.black.cooking.CookingGameTest",
+      "darkspawn.black.cooking.ExpansionBrewingGameTest",
+      "darkspawn.black.endgame.EndgameGameTest",
       "darkspawn.black.cooking.AgricultureGameTest",
       "darkspawn.black.cooking.CuisineGameTest",
       "darkspawn.black.ecosystem.ForestGameTest",
@@ -31,7 +33,8 @@
       "darkspawn.black.mount.MountHabitatGameTest",
       "darkspawn.black.bonfire.BonfireGameTest",
       "darkspawn.black.starter.DragonStarterChestGameTest",
-      "darkspawn.black.starter.TestingCampGameTest"
+      "darkspawn.black.starter.TestingCampGameTest",
+      "darkspawn.black.inventory.FieldUtilitiesGameTest"
     ]
   },
   "depends": {

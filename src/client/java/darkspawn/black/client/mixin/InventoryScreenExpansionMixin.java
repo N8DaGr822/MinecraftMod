@@ -51,6 +51,11 @@ public abstract class InventoryScreenExpansionMixin extends AbstractContainerScr
 		graphics.fill(x + 26, y + 7, x + 77, y + 78, 0xFF243C42);
 		for (var slot : menu.slots) {
 			darkspawn.black.client.UiTheme.slot(graphics, x + slot.x, y + slot.y, slot.index == InventoryExpansion.TRASH_MENU_SLOT);
+            if(minecraft.player!=null&&slot.container==minecraft.player.getInventory()){
+                if(darkspawn.black.inventory.Accessories.state(minecraft.player).favorite(slot.getContainerSlot()))graphics.fill(x+slot.x,y+slot.y-2,x+slot.x+16,y+slot.y,0xFFE2C366);
+                String query=darkspawn.black.client.InventoryHubControls.query;
+                if(!query.isEmpty()&&slot.hasItem()&&!slot.getItem().getHoverName().getString().toLowerCase(java.util.Locale.ROOT).contains(query.toLowerCase(java.util.Locale.ROOT)))graphics.fill(x+slot.x,y+slot.y,x+slot.x+16,y+slot.y+16,0x99566F73);
+            }
 			if (!slot.isActive()) graphics.fill(x+slot.x,y+slot.y,x+slot.x+16,y+slot.y+16,0xBB566F73);
 		}
 		graphics.text(font, ">", x + 137, y + 32, darkspawn.black.client.UiTheme.INK, false);
@@ -61,6 +66,12 @@ public abstract class InventoryScreenExpansionMixin extends AbstractContainerScr
 		}
 
 	}
+
+    // Accessory Layout: Shorten only the player portrait to reserve its bottom row for three equipment slots.
+    @Redirect(method="extractBackground",at=@At(value="INVOKE",target="Lnet/minecraft/client/gui/screens/inventory/InventoryScreen;extractEntityInInventoryFollowsMouse(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIIIIFFFLnet/minecraft/world/entity/LivingEntity;)V"))
+    private void darkspawn$portrait(GuiGraphicsExtractor g,int x0,int y0,int x1,int y1,int size,float offset,float mx,float my,net.minecraft.world.entity.LivingEntity entity){
+        InventoryScreen.extractEntityInInventoryFollowsMouse(g,x0,y0,x1,imageHeight>166?y1-20:y1,imageHeight>166?22:size,offset,mx,my,entity);
+    }
 
 	@Redirect(method = { "init", "containerTick" }, at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/player/LocalPlayer;hasInfiniteMaterials()Z"))

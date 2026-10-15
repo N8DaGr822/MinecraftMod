@@ -58,6 +58,66 @@ public final class ShipsGameTest {
 		}
 		for(var passenger:java.util.List.copyOf(ship.getPassengers())){passenger.stopRiding();if(!(passenger instanceof net.minecraft.world.entity.player.Player))passenger.discard();}ship.discard();
 	}
+    @GameTest public void advancedRefitsAndCrewCarePreserveSavesAndPayment(GameTestHelper helper) {
+        var pos=location(helper);var p=player(helper,pos.above());var ship=build(helper,p,pos);
+        try {
+            var ledger=SeaLedger.get(p.level());ledger.fort(new SeaLedger.Fort(pos,p.getUUID(),"Test port",0,0));ledger.homePort(new SeaLedger.HomePort(p.getUUID(),pos,1));
+            Pirate.state(p).navalVictories=5;p.getInventory().clearContent();for(int i=0;i<3;i++)p.getInventory().setItem(i,new ItemStack(Items.OAK_PLANKS,64));
+            helper.assertTrue(ship.upgrade(p)==null,"Expanded platform prerequisite");p.getInventory().setItem(3,new ItemStack(Items.IRON_INGOT,64));p.getInventory().setItem(4,new ItemStack(Items.EMERALD,64));
+            ship.cargo.setItem(0,new ItemStack(Items.DIAMOND,3));helper.assertTrue(ship.refitClass(p,1)&&ship.maxHull()==340&&ship.classSpeed()==1.25,"Clipper trades hull for speed");
+            helper.assertTrue(ship.refitClass(p,2)&&ship.maxHull()==500&&ship.cargo.getItem(0).getCount()==3,"Ironclad preserves hold and custom platform");
+            helper.assertTrue(ship.recruit(p,PirateShip.WORKER),"Owned upgraded port can recruit crew");int before=p.getInventory().countItem(Items.EMERALD);
+            helper.assertTrue(ship.supportCrew(p,true)&&!ship.supportCrew(p,true)&&p.getInventory().countItem(Items.EMERALD)==before-1&&ship.morale()==90,"Wages charge exactly once during coverage");
+            p.getInventory().setItem(5,new ItemStack(Items.BREAD,2));helper.assertTrue(ship.supportCrew(p,false)&&ship.morale()==100&&ship.crewEfficiency()==1.15,"Provisions provide capped efficiency bonus");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());ship.saveWithoutId(saved);var restored=new PirateShip(Ships.SHIP,p.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            helper.assertTrue(restored.shipClass()==2&&restored.morale()==100&&restored.maxHull()==500,"Class and care state survive load");restored.discard();
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void specialAmmunitionPreservesCostsAndDamageRules(GameTestHelper helper){
+        var pos=location(helper);var captain=player(helper,pos.above());var ship=build(helper,captain,pos);var enemy=PirateShip.spawnEnemy(captain.level(),pos.east(40));
+        try{
+            captain.level().setBlockAndUpdate(pos.offset(3,1,3),Ships.CANNON.defaultBlockState());helper.assertTrue(ship.launch(captain)==null,"Launch fixture");
+            ship.cargo.setItem(0,new ItemStack(Ships.SHOT,8));ship.cycleAmmunition(captain);ship.cycleAmmunition(captain);
+            helper.assertTrue(ship.fire(false)==0&&ship.cargo.getItem(0).getCount()==8,"Explicit chain selection never consumes solid shot");ship.cargo.setItem(1,new ItemStack(Ships.CHAIN_SHOT,2));
+            helper.assertTrue(ship.fire(false)==1&&ship.cargo.getItem(1).getCount()==1,"One shot consumes one chain round");
+            float hull=enemy.hull();helper.assertTrue(enemy.cannonDamage(ship,Ships.CHAIN_SHOT)&&enemy.hull()==hull-6,"Chain has reduced hull damage");
+            helper.assertTrue(enemy.cannonDamage(ship,Ships.PIERCING_SHOT)&&enemy.hull()==hull-34,"Piercing damage adds 28");
+            var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,captain.registryAccess());enemy.saveWithoutId(output);
+            var input=TagValueInput.create(ProblemReporter.DISCARDING,captain.registryAccess(),output.buildResult());helper.assertTrue(input.getIntOr("RiggingDamage",0)==200,"Ten-second rigging penalty is saved");
+            enemy.setPos(.5,64,60.5);hull=enemy.hull();helper.assertTrue(!enemy.cannonDamage(ship,Ships.PIERCING_SHOT)&&enemy.hull()==hull,"New ammunition honors harbor protection");
+        }finally{enemy.discard();clear(ship);remove(captain);}helper.succeed();
+    }
+    @GameTest public void factionClassesKeepSizeAndRequireEarnedRank(GameTestHelper helper) {
+        var pos=location(helper);var p=player(helper,pos.above());var ship=build(helper,p,pos);
+        try {
+            var ledger=SeaLedger.get(p.level());ledger.fort(new SeaLedger.Fort(pos,p.getUUID(),"Test port",0,0));ledger.homePort(new SeaLedger.HomePort(p.getUUID(),pos,1));
+            Pirate.state(p).navalVictories=5;p.getInventory().clearContent();for(int i=0;i<3;i++)p.getInventory().setItem(i,new ItemStack(Items.OAK_PLANKS,64));
+            helper.assertTrue(ship.upgrade(p)==null,"Expanded prerequisite");
+            p.getInventory().setItem(3,new ItemStack(Items.IRON_INGOT,64));p.getInventory().setItem(4,new ItemStack(Items.EMERALD,64));
+            helper.assertTrue(!ship.refitClass(p,3)&&p.getInventory().countItem(Items.IRON_INGOT)==64,"Unqualified refit never charges");
+            for(int i=0;i<3;i++){
+                var state=Pirate.state(p);var faction=PirateProgression.Faction.values()[i];state.factionMembership=faction.id;state.factionRanks[i]=3;state.factionStanding[i]=60;
+                p.getInventory().setItem(3,new ItemStack(Items.IRON_INGOT,64));
+                helper.assertTrue(ship.refitClass(p,i+3)&&ship.width()==11&&ship.gunLimit()==8,"Faction classes preserve size and crew limits");
+            }
+            helper.assertTrue(ship.cycleAmmunition(p)&&ship.cycleAmmunition(p)&&ship.ammunition()==2,"Explicit chain shot selection");
+            helper.assertTrue(ship.toggleExpedition(p)&&ship.crewExpedition(),"Expedition starts docked");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());ship.saveWithoutId(saved);var restored=new PirateShip(Ships.SHIP,p.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            helper.assertTrue(restored.shipClass()==5&&restored.ammunition()==2&&restored.crewExpedition(),"New class, ammunition and expedition survive reload");restored.discard();
+        }finally{clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void dockedRoamingRecallsOriginalCrewBeforeLaunch(GameTestHelper helper) {
+        var pos=location(helper);var p=player(helper,pos.above());var ship=build(helper,p,pos);
+        try {
+            var ledger=SeaLedger.get(p.level());ledger.fort(new SeaLedger.Fort(pos,p.getUUID(),"Test port",0,0));ledger.homePort(new SeaLedger.HomePort(p.getUUID(),pos,1));p.getInventory().setItem(0,new ItemStack(Items.EMERALD,32));
+            helper.assertTrue(ship.recruit(p,PirateShip.WORKER),"One sailor joins");var sailor=ship.getPassengers().getFirst();var id=sailor.getUUID();
+            helper.assertTrue(ship.toggleCrewRoaming(p),"Captain enables docked walking");ship.tickCount=20;ship.tick();
+            helper.assertTrue(!sailor.isPassenger()&&ship.crew(PirateShip.WORKER)==1,"Roaming sailor remains counted in original crew");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());ship.saveWithoutId(saved);var restored=new PirateShip(Ships.SHIP,p.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            helper.assertTrue(restored.crewRoaming(),"Roaming preference survives reload");restored.discard();
+            var launchError=ship.launch(p);helper.assertTrue(launchError==null&&sailor.getVehicle()==ship&&ship.crewMembers().getFirst().getUUID().equals(id),"Launch recalls original crew: "+launchError+" | removed="+sailor.isRemoved()+" vehicle="+sailor.getVehicle());
+        } finally {for(var sailor:ship.crewMembers())sailor.discard();clear(ship);remove(p);}helper.succeed();
+    }
     @GameTest public void cargoPredictionUsesSyncedCapacityWithoutShipReference(GameTestHelper helper) {
         var pos=location(helper);var captain=player(helper,pos.above());
         captain.level().setBlockAndUpdate(pos.above(),Ships.SHIPYARD.defaultBlockState());

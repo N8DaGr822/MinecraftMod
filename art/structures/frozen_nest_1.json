@@ -22,6 +22,12 @@
       "Name": "minecraft:snow_block"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:blue_ice"
     },
     {
@@ -1276,7 +1282,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/frozen_nest"
+      }
     },
     {
       "pos": [
@@ -2020,7 +2030,7 @@
         3,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -2860,7 +2870,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/frozen_nest"
+      }
     },
     {
       "pos": [
@@ -4108,7 +4122,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4116,7 +4130,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4124,7 +4138,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4132,7 +4146,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4140,7 +4154,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4148,7 +4162,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4156,7 +4170,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4164,7 +4178,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4172,7 +4186,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4180,7 +4194,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4188,7 +4202,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4196,7 +4210,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4204,7 +4218,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4276,7 +4290,7 @@
         4,
         12
       ],
-      "state": 5,
+      "state": 6,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/frozen_nest"
@@ -4384,7 +4398,7 @@
         5,
         2
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4392,7 +4406,7 @@
         5,
         2
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4400,7 +4414,7 @@
         5,
         2
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4408,7 +4422,7 @@
         5,
         2
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4656,7 +4670,7 @@
         7,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4672,7 +4686,7 @@
         7,
         20
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4696,7 +4710,7 @@
         7,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4712,7 +4726,7 @@
         7,
         20
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [

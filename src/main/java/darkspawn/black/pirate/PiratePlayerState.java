@@ -19,6 +19,7 @@ public final class PiratePlayerState {
 	public int pirateClues;
 	public int[] factionStanding = {0,0,-25};
 	public int[] factionContracts = new int[3];
+	public int[] factionRanks = new int[3];
 	public int factionObjectives;
 	public String factionMembership="";
     public int[] repeatContracts=new int[3];
@@ -45,6 +46,7 @@ public final class PiratePlayerState {
             int index=faction.ordinal();
             factionStanding[index]=Math.clamp(input.getIntOr("darkspawn_standing_"+faction.id,faction.initial),-100,100);
             factionContracts[index]=Math.clamp(input.getIntOr("darkspawn_contract_"+faction.id,0),0,2);
+            factionRanks[index]=Math.clamp(input.getIntOr("darkspawn_rank_"+faction.id,0),0,5);
             repeatContracts[index]=Math.clamp(input.getIntOr("darkspawn_repeat_"+faction.id,0),0,2);
             repeatAvailableAt[index]=Math.max(0,input.getLongOr("darkspawn_repeat_after_"+faction.id,0));
         }
@@ -61,8 +63,8 @@ public final class PiratePlayerState {
 		lastTravel = Long.MIN_VALUE;
 		for(int i=0;i<3;i++)islandContracts[i]=Math.clamp(input.getIntOr("darkspawn_island_contract_"+i,0),0,2);
 		islandObjectives=input.getIntOr("darkspawn_island_objectives",0)&7;
-		pirateClues=input.getIntOr("darkspawn_pirate_clues",0)&63;
-		logboundKind=Math.clamp(input.getIntOr("darkspawn_logbound_kind",-1),-1,5);
+		pirateClues=input.getIntOr("darkspawn_pirate_clues",0)&((1<<IslandDiscoveries.NAMES.length)-1);
+		logboundKind=Math.clamp(input.getIntOr("darkspawn_logbound_kind",-1),-1,IslandDiscoveries.NAMES.length-1);
 		logboundCompassIssued = input.getBooleanOr("darkspawn_logbound_issued", false);
 		harborContract = Math.clamp(input.getIntOr("darkspawn_harbor_contract", 0), 0, 2);
 		harborSurveyed = input.getBooleanOr("darkspawn_harbor_surveyed", false);
@@ -88,6 +90,7 @@ public final class PiratePlayerState {
         for(var faction:PirateProgression.Faction.values()) {
             output.putInt("darkspawn_standing_"+faction.id,factionStanding[faction.ordinal()]);
             output.putInt("darkspawn_contract_"+faction.id,factionContracts[faction.ordinal()]);
+            output.putInt("darkspawn_rank_"+faction.id,factionRanks[faction.ordinal()]);
             output.putInt("darkspawn_repeat_"+faction.id,repeatContracts[faction.ordinal()]);
             output.putLong("darkspawn_repeat_after_"+faction.id,repeatAvailableAt[faction.ordinal()]);
         }
@@ -116,6 +119,7 @@ public final class PiratePlayerState {
 		if (entrance != null) output.store("darkspawn_pirate_entrance", GlobalPos.CODEC, entrance);
 	}
 	public void copyFrom(PiratePlayerState old) {
+        factionRanks=old.factionRanks.clone();
         renown=old.renown;infamy=old.infamy;seals=old.seals;ending=old.ending;ghostVoyage=old.ghostVoyage;conqueredForts=new java.util.ArrayList<>(old.conqueredForts);
 		// Expedition Death: Return links survive; vanilla owns active inventory and respawn.
 		firstSealClue=old.firstSealClue;sealContract=old.sealContract;officerContracts=old.officerContracts.clone();

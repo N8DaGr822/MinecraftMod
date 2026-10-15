@@ -34,7 +34,10 @@ public final class LogboundCompass extends Item {
 	public static final Item ITEM = Registry.register(BuiltInRegistries.ITEM, Darkspawn.id("logbound_compass"), new LogboundCompass());
 	private LogboundCompass() {
 		super(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Darkspawn.id("logbound_compass")))
-			.stacksTo(1).component(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.empty(), false)));
+			.stacksTo(1).component(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.empty(), false))
+            .component(DataComponents.LORE,new net.minecraft.world.item.component.ItemLore(java.util.List.of(
+                Component.literal("Sneak-use on a player to invite; they do the same to accept."),
+                Component.literal("Sneak-use in air away from shore services to leave/disband.")))));
 	}
 	public static void initialize() {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> entries.accept(ITEM));
@@ -48,7 +51,15 @@ public final class LogboundCompass extends Item {
 				player.sendOverlayMessage(Component.translatable("message.darkspawn.logbound_wrong_dimension"));
 			} else {
 				if(player.isShiftKeyDown()&&SeaMenu.available(serverPlayer)){SeaMenu.open(serverPlayer);return InteractionResult.SUCCESS;}
+                if(player.isShiftKeyDown()&&PartyNavigation.get(serverPlayer.level()).leave(player.getUUID())) {
+                    Ships.message(serverPlayer,"Navigation party left or disbanded. Your personal chart is active.");
+                    updateTarget(player.getItemInHand(hand),serverPlayer);return InteractionResult.SUCCESS;
+                }
                 var state = Pirate.state(serverPlayer);
+                if(PartyNavigation.guide(serverPlayer)!=null) {
+                    updateTarget(player.getItemInHand(hand),serverPlayer);
+                    player.sendOverlayMessage(Component.literal(status(serverPlayer)));return InteractionResult.SUCCESS;
+                }
 				if (state.logboundDestination.isEmpty()) state.logboundDestination = FIRST_COVE;
 				observeArrival(serverPlayer);
 				if (destination(state) != null && state.logboundArrived && state.logboundSecondsRemaining == 0) advanceRoute(serverPlayer);
@@ -63,7 +74,8 @@ public final class LogboundCompass extends Item {
 	}
 	private static void updateTarget(ItemStack stack, ServerPlayer player) {
 		// Personal Navigation: Item copies carry only a display target, never the holder's discovery progress.
-		var pos = destination(Pirate.state(player));
+		var guide = PartyNavigation.guide(player);
+		var pos = destination(Pirate.state(guide == null ? player : guide));
 		var target = pos == null ? Optional.<GlobalPos>empty() : Optional.of(GlobalPos.of(Pirate.LEVEL, pos));
 		var tracker = new LodestoneTracker(target, false);
 		if (!tracker.equals(stack.get(DataComponents.LODESTONE_TRACKER))) stack.set(DataComponents.LODESTONE_TRACKER, tracker);
@@ -90,6 +102,13 @@ public final class LogboundCompass extends Item {
 	public static void tickNavigation(ServerPlayer player) {
 		HarborGuide.observeContract(player);
 		IslandDiscoveries.observe(player);
+        var guide=PartyNavigation.guide(player);
+        if(guide!=null) {
+            // Shared Charts: Only physical arrival earns a discovery; personal study pauses while following.
+            var target=destination(Pirate.state(guide));var state=Pirate.state(player);
+            if(player.isAlive()&&!player.isSpectator()&&target!=null&&insideIsland(player.blockPosition(),target)&&!state.logboundVisited.contains(target))state.logboundVisited.add(target);
+            return;
+        }
 		if (observeArrival(player)) return;
 		var state = Pirate.state(player);
 		// Island Study: Only online, living, non-spectator time inside the current discovered island counts.
@@ -142,11 +161,13 @@ public final class LogboundCompass extends Item {
 		return null;
 	}
 	public static String status(ServerPlayer player) {
-		var state=Pirate.state(player);var target=destination(state);
+        var guide=PartyNavigation.guide(player);
+        var navigator=guide==null?player:guide;
+		var state=Pirate.state(navigator);var target=destination(state);
 		if(target==null)return "No available chart. Your saved progress is preserved.";
 		String name=FIRST_COVE.equals(state.logboundDestination)?IslandDiscoveries.NAMES[0]:state.logboundKind>=0&&state.logboundKind<IslandDiscoveries.NAMES.length?IslandDiscoveries.NAMES[state.logboundKind]:"Charted island";
 		long distance=Math.round(Math.hypot(target.getX()+.5-player.getX(),target.getZ()+.5-player.getZ()));
-		String study=!state.logboundArrived?"Sailing":state.logboundSecondsRemaining==0?"Ready to chart":String.format(java.util.Locale.ROOT,"Study %d:%02d%s",state.logboundSecondsRemaining/60,state.logboundSecondsRemaining%60,insideIsland(player.blockPosition(),target)?"":" (paused)");
-		return name+" | "+distance+" blocks | Discovered "+state.logboundVisited.size()+" | "+study;
+		String study=!state.logboundArrived?"Sailing":state.logboundSecondsRemaining==0?"Ready to chart":String.format(java.util.Locale.ROOT,"Study %d:%02d%s",state.logboundSecondsRemaining/60,state.logboundSecondsRemaining%60,insideIsland(navigator.blockPosition(),target)?"":" (paused)");
+		return (guide==null?"":"Following "+guide.getName().getString()+" | ")+name+" | "+distance+" blocks | Discovered "+Pirate.state(player).logboundVisited.size()+" | "+study+(guide==null?"":" | Personal route paused");
 	}
 }

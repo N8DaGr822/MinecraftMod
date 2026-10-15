@@ -28,6 +28,13 @@ public abstract class InventoryMenuExpansionMixin extends AbstractContainerMenu 
 		}
 		// Trash Safety: A reversible staging slot, excluded from automatic shift-click destinations.
 		addSlot(new net.minecraft.world.inventory.Slot(new net.minecraft.world.SimpleContainer(1), 0, 152, 62));
+        var accessories=owner==null?new net.minecraft.world.SimpleContainer(3):darkspawn.black.inventory.Accessories.state(owner).slots;
+        for(int i=0;i<3;i++) addSlot(new net.minecraft.world.inventory.Slot(accessories,i,26+i*18,62){
+            @Override public boolean isActive(){return owner==null||!owner.level().isClientSide()||darkspawn.black.inventory.Accessories.state(owner).connected;}
+            @Override public boolean mayPlace(ItemStack stack){return isActive()&&darkspawn.black.inventory.Accessories.ITEMS.contains(stack.getItem());}
+            @Override public boolean mayPickup(Player player){return isActive();}
+            @Override public int getMaxStackSize(){return 1;}
+        });
 	}
 
 	@Inject(method = "removed", at = @At("TAIL"))
@@ -40,7 +47,7 @@ public abstract class InventoryMenuExpansionMixin extends AbstractContainerMenu 
 	private boolean darkspawn$shiftClickOverflow(InventoryMenu menu, ItemStack stack, int start, int end,
 			boolean backwards, Player player, int sourceSlot) {
 		boolean moved = moveItemStackTo(stack, start, end, backwards);
-		if (!stack.isEmpty() && sourceSlot < InventoryExpansion.FIRST_EXTRA_MENU_SLOT && (start == 9 || start == 36)) {
+		if (!stack.isEmpty() && (sourceSlot < InventoryExpansion.FIRST_EXTRA_MENU_SLOT || sourceSlot >= darkspawn.black.inventory.Accessories.FIRST_MENU_SLOT) && (start == 9 || start == 36)) {
 			moved |= moveItemStackTo(stack, InventoryExpansion.FIRST_EXTRA_MENU_SLOT,
 					InventoryExpansion.FIRST_EXTRA_MENU_SLOT + InventoryExpansion.unlockedSlots(player.getInventory()), false);
 		}

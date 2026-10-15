@@ -41,7 +41,15 @@ class StorageAssetsTest {
 				}
 				assertEquals(6, element.getAsJsonObject().getAsJsonObject("faces").size());
 			}
-			assertEquals("darkspawn:block/" + id, json("/assets/darkspawn/items/" + id + ".json").getAsJsonObject("model").get("model").getAsString());
+			assertEquals("darkspawn:item/" + id, json("/assets/darkspawn/items/" + id + ".json").getAsJsonObject("model").get("model").getAsString());
+			// Inventory Artwork: Custom materials retain the placed block's authored geometry.
+			var itemModel = json("/assets/darkspawn/models/item/" + id + ".json");
+			assertEquals(model.get("elements"), itemModel.get("elements"));
+			for (var texture : itemModel.getAsJsonObject("textures").entrySet()) {
+				String resource = texture.getValue().getAsString();
+				assertTrue(resource.startsWith("darkspawn:"), resource);
+				assertNotNull(getClass().getResource("/assets/darkspawn/textures/" + resource.substring(10) + ".png"), resource);
+			}
 			assertTrue(names.has("block.darkspawn." + id));
 			assertNotNull(Recipe.CODEC.parse(ops, json("/data/darkspawn/recipe/" + id + ".json")).getOrThrow());
 			var pool = json("/data/darkspawn/loot_table/blocks/" + id + ".json").getAsJsonArray("pools").get(0).getAsJsonObject();

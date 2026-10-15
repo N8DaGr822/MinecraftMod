@@ -330,10 +330,14 @@ public final class BossEncounterGameTest {
 		MutantWolf boss = new MutantWolf(BossEntities.MUTANT_WOLF, level);
 		boss.setPos(Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(30, 3, 10))));
 		for (int x = -2; x <= 2; x++) {
-			for (int z = -2; z <= 2; z++) { level.getChunk((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z); }
+			for (int z = -2; z <= 2; z++) { level.setChunkForced((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z, true); }
 		}
-		// Entity Sections: Load the pack spawn chunks before resolving wolves by UUID for cleanup assertions.
-		helper.runAfterDelay(3, () -> {
+		// Entity Sections: Terrain loading alone does not make pack UUIDs queryable.
+		helper.startSequence().thenWaitUntil(() -> {
+			for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) {
+				helper.assertTrue(level.isPositionTickingWithEntitiesLoaded(new net.minecraft.world.level.ChunkPos((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z).pack()), "Pack chunks are entity-ready");
+			}
+		}).thenExecute(() -> {
 			ServerPlayer player = player(helper);
 			level.addFreshEntity(boss);
 			boss.setOnGround(true);
@@ -378,7 +382,10 @@ public final class BossEncounterGameTest {
 				helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, area, item -> !previousItems.contains(item.getUUID())).size() == drops.size(),
 						"Collapse, repeated death, or reload duplicated the wolf's rewards");
 				drops.forEach(ItemEntity::discard);
-			} finally { boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player); }
+			} finally {
+				for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) { level.setChunkForced((boss.blockPosition().getX() >> 4) + x, (boss.blockPosition().getZ() >> 4) + z, false); }
+				boss.die(level.damageSources().generic()); boss.discard(); removePlayer(player);
+			}
 			helper.succeed();
 		});
 	}

@@ -22,6 +22,12 @@
       "Name": "minecraft:polished_andesite"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:chiseled_stone_bricks"
     },
     {
@@ -1315,7 +1321,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/quarry_shrine"
+      }
     },
     {
       "pos": [
@@ -2059,7 +2069,7 @@
         3,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -2899,7 +2909,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/quarry_shrine"
+      }
     },
     {
       "pos": [
@@ -4083,7 +4097,7 @@
         4,
         8
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4091,7 +4105,7 @@
         4,
         9
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4099,7 +4113,7 @@
         4,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4107,7 +4121,7 @@
         4,
         13
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4115,7 +4129,7 @@
         4,
         16
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4123,7 +4137,7 @@
         4,
         17
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4155,7 +4169,7 @@
         4,
         8
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4163,7 +4177,7 @@
         4,
         9
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4171,7 +4185,7 @@
         4,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4179,7 +4193,7 @@
         4,
         13
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4187,7 +4201,7 @@
         4,
         16
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4195,7 +4209,7 @@
         4,
         17
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4235,7 +4249,7 @@
         4,
         8
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4243,7 +4257,7 @@
         4,
         9
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4251,7 +4265,7 @@
         4,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4259,7 +4273,7 @@
         4,
         13
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4267,7 +4281,7 @@
         4,
         16
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4275,7 +4289,7 @@
         4,
         17
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4539,7 +4553,7 @@
         4,
         12
       ],
-      "state": 4,
+      "state": 5,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/quarry_shrine"
@@ -4551,7 +4565,7 @@
         5,
         8
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4559,7 +4573,7 @@
         5,
         9
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4567,7 +4581,7 @@
         5,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4575,7 +4589,7 @@
         5,
         13
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4583,7 +4597,7 @@
         5,
         16
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4591,7 +4605,7 @@
         5,
         17
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4623,7 +4637,7 @@
         5,
         8
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4631,7 +4645,7 @@
         5,
         9
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4639,7 +4653,7 @@
         5,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4647,7 +4661,7 @@
         5,
         13
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4655,7 +4669,7 @@
         5,
         16
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4663,7 +4677,7 @@
         5,
         17
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4703,7 +4717,7 @@
         5,
         8
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4711,7 +4725,7 @@
         5,
         9
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4719,7 +4733,7 @@
         5,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4727,7 +4741,7 @@
         5,
         13
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4735,7 +4749,7 @@
         5,
         16
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -4743,7 +4757,7 @@
         5,
         17
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [

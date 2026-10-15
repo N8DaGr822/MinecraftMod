@@ -27,7 +27,7 @@ The current source offers 7x15, 11x23 and 15x31 platforms. Five NPC victories st
 
 
 
-Sloop, Brig, Frigate and Legendary Galleon are proposed future classes with increasing crew, cargo, equipment and prestige. The three current platform sizes are not four completed ship classes. Names, independent/faction flags and earned cargo upgrades are implemented; advanced upgrades and faction-specific vessels remain future work. Both faction members and independent players can own ships.
+Sloop, Brig, Frigate and Legendary Galleon are proposed future classes with increasing crew, cargo, equipment and prestige. The three current platform sizes are not four completed ship classes. Names, independent/faction flags and earned cargo upgrades are implemented; Clipper, Ironclad and three earned faction specializations now extend these platforms. See [current ship rules](../endgame-expansion-playtest.md); distinct faction hull designs remain future work. Both faction members and independent players can own ships.
 
 
 
@@ -47,7 +47,7 @@ Preserve the user's initial first mate, shipworker (repair), cannoneer and crow'
 
 
 
-Paid ordinary crew, standing-based Piglin/Pillager/Husk offers, Garrick's rescue and officer commissions are implemented. Hired crew have persistent captain ownership; resignation does not transfer or dismiss them. Cursed-artifact recruitment and a dynamic morale/loyalty system influenced by quests, victories, rewards or betrayal remain proposals.
+Paid ordinary crew, standing-based Piglin/Pillager/Husk offers, Garrick's rescue and officer commissions are implemented. Hired crew have persistent captain ownership; resignation does not transfer or dismiss them. Docked roaming, shore support and forgiving wages/provisions morale are implemented. Cursed-artifact recruitment and a deeper loyalty system influenced by quests, victories or betrayal remain proposals.
 
 
 

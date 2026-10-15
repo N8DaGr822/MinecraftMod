@@ -22,6 +22,12 @@
       "Name": "minecraft:moss_block"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:air"
     },
     {
@@ -1278,7 +1284,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/serpent_sanctuary"
+      }
     },
     {
       "pos": [
@@ -2862,7 +2872,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/serpent_sanctuary"
+      }
     },
     {
       "pos": [
@@ -3998,7 +4012,7 @@
         4,
         6
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4006,7 +4020,7 @@
         4,
         7
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4014,7 +4028,7 @@
         4,
         8
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4022,7 +4036,7 @@
         4,
         9
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4030,7 +4044,7 @@
         4,
         10
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4038,7 +4052,7 @@
         4,
         11
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4046,7 +4060,7 @@
         4,
         12
       ],
-      "state": 4,
+      "state": 5,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/serpent_sanctuary"
@@ -4058,7 +4072,7 @@
         4,
         13
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4066,7 +4080,7 @@
         4,
         14
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4074,7 +4088,7 @@
         4,
         15
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4082,7 +4096,7 @@
         4,
         16
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4090,7 +4104,7 @@
         4,
         17
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4098,7 +4112,7 @@
         4,
         18
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4106,7 +4120,7 @@
         4,
         19
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4154,7 +4168,7 @@
         4,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4162,7 +4176,7 @@
         4,
         3
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4170,7 +4184,7 @@
         4,
         4
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4178,7 +4192,7 @@
         4,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4186,7 +4200,7 @@
         4,
         3
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4194,7 +4208,7 @@
         4,
         4
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4202,7 +4216,7 @@
         4,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4210,7 +4224,7 @@
         4,
         3
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4218,7 +4232,7 @@
         4,
         4
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4226,7 +4240,7 @@
         4,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4234,7 +4248,7 @@
         4,
         3
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4242,7 +4256,7 @@
         4,
         4
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4250,7 +4264,7 @@
         4,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4706,7 +4720,7 @@
         9,
         2
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4714,7 +4728,7 @@
         9,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4722,7 +4736,7 @@
         9,
         4
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4730,7 +4744,7 @@
         9,
         2
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4738,7 +4752,7 @@
         9,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4746,7 +4760,7 @@
         9,
         4
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4754,7 +4768,7 @@
         9,
         2
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4762,7 +4776,7 @@
         9,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4770,7 +4784,7 @@
         9,
         4
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4778,7 +4792,7 @@
         9,
         2
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4786,7 +4800,7 @@
         9,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4794,7 +4808,7 @@
         9,
         4
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4802,7 +4816,7 @@
         9,
         2
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4810,7 +4824,7 @@
         9,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4818,7 +4832,7 @@
         9,
         4
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4826,7 +4840,7 @@
         9,
         2
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4834,7 +4848,7 @@
         9,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4842,7 +4856,7 @@
         9,
         4
       ],
-      "state": 6
+      "state": 7
     }
   ]
 }

@@ -22,6 +22,12 @@
       "Name": "minecraft:mud_bricks"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:cauldron"
     },
     {
@@ -1257,7 +1263,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/witch_hut"
+      }
     },
     {
       "pos": [
@@ -2001,7 +2011,7 @@
         3,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -2841,7 +2851,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/witch_hut"
+      }
     },
     {
       "pos": [
@@ -4014,78 +4028,6 @@
     {
       "pos": [
         8,
-        4,
-        3
-      ],
-      "state": 4
-    },
-    {
-      "pos": [
-        9,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        10,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        11,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        12,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        13,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        14,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        15,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        16,
-        4,
-        1
-      ],
-      "state": 0
-    },
-    {
-      "pos": [
-        16,
         4,
         3
       ],
@@ -4093,6 +4035,78 @@
     },
     {
       "pos": [
+        9,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        10,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        11,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        12,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        13,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        14,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        15,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        16,
+        4,
+        1
+      ],
+      "state": 0
+    },
+    {
+      "pos": [
+        16,
+        4,
+        3
+      ],
+      "state": 6
+    },
+    {
+      "pos": [
         17,
         4,
         1
@@ -4145,7 +4159,7 @@
         4,
         12
       ],
-      "state": 6,
+      "state": 7,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/witch_hut"

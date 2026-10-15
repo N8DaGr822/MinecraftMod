@@ -1,5 +1,7 @@
 # Darkspawn brainstorming for ships mounts and base upgrades
 
+Current implementation status: see the [weekend source audit](weekend-playtest-audit.md). This original brainstorm retains proposals that have since shipped in source alongside ideas still unimplemented.
+
 **October 10, 2026 — brainstorming draft.** These ideas expand travel, battles, creature collecting, and everyday base life. They are proposals, not implemented features or a commitment to change the active development order.
 
 The strongest connection is a pirate dimension built around customizable ships, cannon combat, islands, and rare discoveries. Mount storage, sorting chests, base lighting, and accessories could support adventures in every dimension. Keep new creature populations concentrated in suitable habitats so the Overworld does not become crowded.

@@ -42,12 +42,15 @@ public final class Pirate {
 	public static void initialize() {
 		PirateIslandStructure.initialize();
 		Ships.initialize();
+		PirateDrinks.initialize();
         SeaMenu.initialize();SeaTerritory.initialize();SevenSeals.initialize();
 		LogboundCompass.initialize();
+		PartyNavigation.initialize();
 		HarborGuide.initialize();
 		IslandDiscoveries.initialize();
 		PirateActivities.initialize();
 		PirateDiplomacy.initialize();
+		FactionSkirmishes.initialize();
 		ServerPlayerEvents.COPY_FROM.register((old, next, alive) -> state(next).copyFrom(state(old)));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> entries.accept(GATE_ITEM));
 	}

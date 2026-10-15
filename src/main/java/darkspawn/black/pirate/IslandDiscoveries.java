@@ -29,14 +29,17 @@ import net.minecraft.world.phys.Vec3;
 
 public final class IslandDiscoveries {
 	public static final String ENCOUNTER_TAG="darkspawn_island_encounter";
-	public static final String[] NAMES={"Castaway Cove","Saltwatch Fort","The Pale Gull","Lastlight Beacon","Tideglass Shrine","Rootbound Camp"};
+	public static final String[] NAMES={"Castaway Cove","Saltwatch Fort","The Pale Gull","Lastlight Beacon","Tideglass Shrine","Rootbound Camp","Redwater Landing","Pearlwater Atoll","Cinderjaw Anchorage"};
 	private static final String[] CLUES={
 		"A castaway's trail leads to shelter and salvage. The sea gate's builders sailed here before you.",
 		"The watch abandoned its guns facing inland. Ammunition remains in the fort cache.",
 		"The captain's log describes a light answering from beneath the waves. Inspect the cargo cache for salvage.",
 		"The keeper fled after a signal answered from below. Climb to the lantern to investigate; tools remain downstairs.",
 		"Seven tides, seven bindings. These ruins guarded a prison, not a treasure vault. Examine the relic cache.",
-		"Corsair cargo lies in a crimson-marked camp. Rival scavengers guard repair timber and a lost manifest."};
+		"Corsair cargo lies in a crimson-marked camp. Rival scavengers guard repair timber and a lost manifest.",
+        "Corsairs and the Iron Fleet contest this landing. Watch, salvage or help one side. Attacking both forfeits the victor's gratitude; the shared cache never refills.",
+        "A quiet pearl-diver's lagoon shelters a finite pearl-diver salvage cache. No authored sentries guard this reef; ordinary sea life still follows world rules.",
+        "Smugglers left their drydock beneath black chimneys. Sun-scorched scavengers guard ammunition and a small rum shipment."};
 	public record Island(BlockPos center,int kind) { }
 	private record Entry(BlockPos center,int mask) {
 		private static final Codec<Entry> CODEC=RecordCodecBuilder.create(i->i.group(BlockPos.CODEC.fieldOf("center").forGetter(Entry::center),Codec.INT.fieldOf("mask").forGetter(Entry::mask)).apply(i,Entry::new));
@@ -84,6 +87,7 @@ public final class IslandDiscoveries {
 		if(island.center().equals(state.logboundNextIsland))state.logboundKind=island.kind();
 		if(island.kind()==3&&player.getY()>=76&&Math.abs(player.getX()-island.center().getX())<=5&&Math.abs(player.getZ()-island.center().getZ())<=6)complete(player,2);
 		spawn(player,island);
+		FactionSkirmishes.observe(player,island);
 		PirateDiplomacy.observe(player,island);
         SevenSeals.observe(player,island);PirateActivities.observe(player,island);PirateOfficers.observe(player,island);
 	}
@@ -106,6 +110,7 @@ public final class IslandDiscoveries {
 	}
 	public static int spawn(ServerPlayer player,Island island) {
 		var level=player.level();
+		if(island.kind()==6||island.kind()==7)return 0;
 		if(!player.isAlive()||player.isSpectator()||player.isCreative()||!level.dimension().equals(Pirate.LEVEL)||island.center().equals(LogboundCompass.FIRST_COVE_CENTER)
 			||level.getDifficulty()==net.minecraft.world.Difficulty.PEACEFUL||!level.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.SPAWN_MOBS))return 0;
 		var saved=level.getDataStorage().computeIfAbsent(Encounters.TYPE);int mask=saved.mask(island.center()),total=island.kind()==0?1:2;

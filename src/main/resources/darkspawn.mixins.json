@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
 		"BonfireMovementMixin",
+        "VoidArrowMixin",
 		"BonfireServerMixin",
 		"ExampleMixin",
 		"InventoryExpansionMixin",
@@ -35,7 +36,11 @@
 		"DietMixin",
 		"MealExhaustionMixin",
 		"MealPhysiologyMixin",
-		"EquipmentDefenseMixin"
+		"EquipmentDefenseMixin",
+		"AccessoryPlayerMixin",
+		"RegionalFishingMixin",
+		"AnimalUtilityMixin",
+		"ChickenUtilityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

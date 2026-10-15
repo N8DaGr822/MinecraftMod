@@ -1,5 +1,32 @@
 # Darkspawn development roadmap
 
+## Final source audit for weekend playtesting
+
+See the [October 15 playtest audit](weekend-playtest-audit.md) for implemented scope, asset checks and remaining brainstorm proposals. The deferred section below is a historical idea inventory, not a current missing-feature checklist.
+
+## October 15: next expansion increment
+
+Faction specializations/ammunition/shore support, culinary brewing, shared world awakenings, and a cooperative Nexus gauntlet with four legendary relics are now in source. See [rules, limits and playtest checklist](endgame-expansion-playtest.md). Historical proposal sections below are retained; the linked implementation record takes precedence for these features. No JAR packaged.
+
+## Accessories, compact hub, regional fish and animal utility (2026-10-15)
+
+All six utility accessories now have three native inventory slots, saved equipment, duplicate-effect prevention, potion-safe glasses controls and OneBlock possession isolation. The compact hub adds inventory search/details/comparisons/favorites, character/accessory information, owned companion records, nearby sorting storage access and Journal navigation. Six actual swimming fish species include buckets, fishing integration and meals. Adult pigs, chickens, goats and mooshrooms provide saved, cooldown-limited specialty ingredients. Fresh Testing Camps include all new supplies and guide pages. [Exact scope, recipes and live acceptance](field-utilities-playtest.md). No JAR/version change; live GUI, rendering, natural spawn frequency and multiplayer balancing remain acceptance work.
+
+
+## Completed expansion source for cooperative playtesting (2026-10-15)
+
+The requested stages now include captured-fort home ports, Clipper/Ironclad refits, docked crew roaming, forgiving morale/wages, native discovery maps, regional archaeology/cache loot, cosmetic awakened rematches, saved regional boons and server configuration. These extend the existing promotions, party navigation, nine islands, skirmishes, compass and drinks. Fresh Testing Camps supply the new items, two brushable samples and updated instructions. [Controls, boundaries and five-player acceptance](server-playtest.md). Unfiltered fullCheck passed 94 unit and 276 server tests plus artwork validation. No new JAR or version change; live rendering, balance and compatibility with unspecified other mods remain unverified.
+
+
+## Faction skirmishes and new islands (2026-10-15)
+
+Stage 2 adds Redwater Landing, Pearlwater Atoll and Cinderjaw Anchorage, bringing fresh-terrain variety to nine island types. Redwater hosts bounded, one-time Corsair–Iron Fleet shore battles with neutral-player protection, side-specific assistance rewards and cleanup. Compass/Journal save support and fresh Testing Camp guides include the new islands. [Rules and remaining stages](expansion-stages.md). Live exploration frequency, visuals, multiplayer and battle balance remain playtest checks; no JAR or version change.
+
+
+## Staged expansion and testing supplies (2026-10-15)
+
+The user selected staged pirate/exploration expansion. [Stage 1 rules and remaining stages](expansion-stages.md) cover faction promotions, consensual shared navigation, the boss Landmark Compass, tavern beer/rum buffs, and refreshed Testing Camp supplies. Later stages retain seated sailing, allow docked crew roaming, and prohibit permanent crew loss from morale/wages. No JAR or version change. Refer to that document for current verification and live acceptance.
+
 ## Ship identity, first binding and three officers (2026-10-14)
 
 Implemented owner-controlled ship names, cosmetic flags, earned 36/54-slot cargo upgrades, the optional First Binding clue/contract, and personal commissions for Mara the navigator, Bram the quartermaster and Nell the shanty singer. Nell now uses four user-supplied shanties, converted to positional streamed Ogg audio with play/stop controls. [Rules and acceptance checks](shattered-seas/ship-identity-seals-and-officers.md). Common/client compilation, 47 targeted server GameTests and three Journal unit tests passed. No JAR or version change; live UI, flags, audio and multiplayer acceptance remains.
@@ -929,7 +956,7 @@ For each milestone: inspect the closest existing implementation, agree material 
 
 
 
-## Deferred expansion backlog
+## Historical expansion brainstorm (current status above)
 
 
 

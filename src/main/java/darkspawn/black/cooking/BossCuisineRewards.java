@@ -15,6 +15,12 @@ public final class BossCuisineRewards {
 		for (UUID id : participants) {
 			var player = level.getServer().getPlayerList().getPlayer(id);
 			if (player == null || !player.isAlive() || player.isSpectator() || player.level() != level || boss.distanceToSqr(player) > range * range) continue;
+            if(boss.entityTags().contains(darkspawn.black.boss.AwakenedRematches.TAG)) {
+                for(var stack:java.util.List.of(darkspawn.black.boss.AwakenedRematches.trophy(kind),darkspawn.black.boss.AwakenedRematches.cosmetic(kind))) {
+                    var reward=new ItemEntity(level,player.getX(),player.getY()+.5,player.getZ(),stack);reward.setTarget(id);level.addFreshEntity(reward);
+                }
+                continue;
+            }
 			for (var item : java.util.List.of(Cuisine.INGREDIENTS.get(kind), Cuisine.TROPHIES.get(kind))) {
 				ItemEntity reward = new ItemEntity(level, player.getX(), player.getY() + 0.5, player.getZ(), new ItemStack(item));
 				reward.setTarget(id);

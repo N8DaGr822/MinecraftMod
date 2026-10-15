@@ -30,7 +30,7 @@ public final class InventorySorter {
 			return;
 		}
 
-		boolean changed = sortMainInventory(player.getInventory());
+		boolean changed = sortSlots(player.getInventory(), java.util.Arrays.stream(InventoryExpansion.sortableSlots(player.getInventory())).filter(slot -> !Accessories.state(player).favorite(slot)).toArray());
 		player.inventoryMenu.broadcastChanges();
 		player.sendOverlayMessage(Component.translatable(changed
 				? "message.darkspawn.inventory_sorted"

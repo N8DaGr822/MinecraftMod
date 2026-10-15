@@ -32,12 +32,12 @@ public abstract class ExpeditionArmorMixin {
 	// Headlamp Ownership: Consult equipped gear without adding, refreshing, or removing potion/meal effects.
 	@Inject(method = "hasEffect", at = @At("RETURN"), cancellable = true)
 	private void darkspawn$headlampVisible(Holder<MobEffect> effect, CallbackInfoReturnable<Boolean> callback) {
-		if (effect.equals(MobEffects.NIGHT_VISION) && ExpeditionArmor.hasHeadlamp((LivingEntity) (Object) this)) callback.setReturnValue(true);
+		if (effect.equals(MobEffects.NIGHT_VISION) && (ExpeditionArmor.hasHeadlamp((LivingEntity) (Object) this) || (Object)this instanceof net.minecraft.world.entity.player.Player p && darkspawn.black.inventory.Accessories.vision(p))) callback.setReturnValue(true);
 	}
 
 	@Inject(method = "getEffect", at = @At("RETURN"), cancellable = true)
 	private void darkspawn$headlampVision(Holder<MobEffect> effect, CallbackInfoReturnable<MobEffectInstance> callback) {
-		if (effect.equals(MobEffects.NIGHT_VISION) && ExpeditionArmor.hasHeadlamp((LivingEntity) (Object) this)) {
+		if (effect.equals(MobEffects.NIGHT_VISION) && (ExpeditionArmor.hasHeadlamp((LivingEntity) (Object) this) || (Object)this instanceof net.minecraft.world.entity.player.Player p && darkspawn.black.inventory.Accessories.vision(p))) {
 			callback.setReturnValue(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 0, false, false, false));
 		}
 	}

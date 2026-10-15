@@ -336,7 +336,9 @@ class InventorySorterTest {
 	void inventoryMenuKeepsVanillaSlotIdsAndGatesExtraRows() {
 		Inventory inventory = new Inventory(null, new EntityEquipment());
 		InventoryMenu menu = new InventoryMenu(inventory, true, null);
-		assertEquals(74, menu.slots.size());
+		assertEquals(77, menu.slots.size());
+        assertFalse(menu.getSlot(darkspawn.black.inventory.Accessories.FIRST_MENU_SLOT).mayPlace(new ItemStack(Items.STONE)));
+        assertTrue(menu.getSlot(darkspawn.black.inventory.Accessories.FIRST_MENU_SLOT).mayPlace(new ItemStack(darkspawn.black.inventory.Accessories.ITEMS.getFirst())));
 		assertNotSame(inventory, menu.getSlot(InventoryExpansion.TRASH_MENU_SLOT).container, "Trash is staged separately from saved inventory profiles.");
 		assertEquals(39, menu.getSlot(5).getContainerSlot());
 		assertEquals(0, menu.getSlot(36).getContainerSlot());

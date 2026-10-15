@@ -67,7 +67,8 @@ public final class RegionalEcosystems {
 			var placement = kind.movement == RegionalKind.Move.WATER ? SpawnPlacementTypes.IN_WATER
 					: kind.movement == RegionalKind.Move.AIR ? SpawnPlacementTypes.NO_RESTRICTIONS : SpawnPlacementTypes.ON_GROUND;
 			SpawnPlacements.register(type, placement, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-					(entityType, level, reason, pos, random) -> canSpawn(kind, level, pos));
+					(entityType, level, reason, pos, random) -> canSpawn(kind, level, pos)
+                        && (reason!=net.minecraft.world.entity.EntitySpawnReason.NATURAL||!WorldAwakening.diminished(level.getLevel(),kind)));
 			var selector = kind.region == BossProfile.CAVE_CRAWLER
 					? BiomeSelectors.foundInOverworld().and(BiomeSelectors.includeByKey(Biomes.DEEP_DARK).negate())
 					: BiomeSelectors.tag(kind.region.biomes());

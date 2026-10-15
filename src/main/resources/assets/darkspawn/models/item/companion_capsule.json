@@ -1,9 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "shell": "minecraft:block/iron_block",
-    "band": "minecraft:block/amethyst_block",
-    "eye": "minecraft:block/sea_lantern"
+    "shell": "darkspawn:item/materials/iron",
+    "band": "darkspawn:item/materials/purple",
+    "eye": "darkspawn:item/materials/glow"
   },
   "elements": [
     {

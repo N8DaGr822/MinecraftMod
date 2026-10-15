@@ -58,9 +58,10 @@ public final class RegionalAtmosphere {
 				if (!player.isAlive() || player.isSpectator() || Math.floorMod(player.tickCount + player.getId(), 200) != 0) continue;
 				var kind = region(player);
 				if (kind == null) continue;
+                RegionalEvents.observe(player,kind);
 				var level = player.level();
 				level.sendParticles(player, particle(kind), false, false, player.getX(), player.getY()+1.4, player.getZ(), 7, 3, 1, 3, .015);
-				if (Math.floorMod(player.tickCount + player.getId(), 1200) != 0) continue;
+				if (Math.floorMod(player.tickCount + player.getId(), darkspawn.black.ServerTuning.ambientTicks) != 0) continue;
 				var sound = darkspawn.black.audio.DarkspawnSounds.get("ambient." + kind.id());
 				player.connection.send(new ClientboundSoundPacket(Holder.direct(sound), SoundSource.AMBIENT,
 					player.getX(), player.getY(), player.getZ(), .18F, .75F, player.getRandom().nextLong()));

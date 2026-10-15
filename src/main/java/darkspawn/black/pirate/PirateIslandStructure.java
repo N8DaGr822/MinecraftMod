@@ -26,7 +26,7 @@ public final class PirateIslandStructure extends Structure {
 		if (Math.abs((long)x) < 128 && Math.abs((long)z) < 128) return Optional.empty();
 		if (Math.abs((long)x - 192) < 80 && Math.abs((long)z) < 80) return Optional.empty();
 		var origin = new BlockPos(x - 24, 40, z - 24);
-		var template = Darkspawn.id("pirate/island_" + context.random().nextInt(6));
+		var template = Darkspawn.id("pirate/island_" + context.random().nextInt(IslandDiscoveries.NAMES.length));
 		return Optional.of(new GenerationStub(origin, pieces -> pieces.addPiece(
 			new BossLandmarkStructure.LandmarkPiece(context.structureTemplateManager(), template, origin, Rotation.NONE))));
 	}

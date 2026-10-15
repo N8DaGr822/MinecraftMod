@@ -34,9 +34,12 @@ public class Darkspawn implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		darkspawn.black.audio.DarkspawnSounds.initialize();
+		ServerTuning.initialize();
+        darkspawn.black.audio.DarkspawnSounds.initialize();
 		InventoryUpgradeItem.register();
 		InventoryExpansion.initialize();
+        darkspawn.black.inventory.Accessories.initialize();
+        darkspawn.black.inventory.InventoryHub.initialize();
 		darkspawn.black.equipment.ExpeditionArmor.initialize();
 		darkspawn.black.equipment.LegendaryArmor.initialize();
 		darkspawn.black.equipment.ArmorStyles.initialize();
@@ -45,7 +48,10 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.storage.Storage.initialize();
 		darkspawn.black.boss.BossEffects.initialize();
 		BossItems.register();
+        darkspawn.black.boss.AwakenedRematches.initialize();
 		BossEntities.register();
+        darkspawn.black.endgame.LegendaryRelics.initialize();
+        darkspawn.black.endgame.Nexus.initialize();
 		darkspawn.black.mount.Mounts.initialize();
 		darkspawn.black.bonfire.Bonfires.initialize();
 		darkspawn.black.starter.DragonStarterChest.initialize();
@@ -55,10 +61,16 @@ public class Darkspawn implements ModInitializer {
 		Cooking.initialize();
 		darkspawn.black.cooking.Agriculture.initialize();
 		darkspawn.black.cooking.Cuisine.initialize();
+        darkspawn.black.cooking.RegionalFishing.initialize();
+        darkspawn.black.cooking.AnimalUtility.initialize();
+        darkspawn.black.cooking.CulinaryBrewing.initialize();
 		darkspawn.black.cooking.Culinary.initialize();
 		darkspawn.black.cooking.VillageKitchen.initialize();
 		darkspawn.black.boss.EquipmentPowers.initialize();
 		ForestEcosystem.initialize();
+        darkspawn.black.ecosystem.WorldAwakening.initialize();
+        darkspawn.black.ecosystem.HeartwoodGrove.initialize();
+        darkspawn.black.ecosystem.WorldVictoryCondition.initialize();
 		darkspawn.black.oneblock.OneBlock.initialize();
 		// Recovery Inventory: Restore OneBlock profiles before delivering companion tokens on join.
 		darkspawn.black.mount.MountCompanions.initialize();
@@ -70,6 +82,8 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.ecosystem.RegionalEcosystems.initialize();
 		darkspawn.black.ecosystem.RegionalAtmosphere.initialize();
 		darkspawn.black.worldgen.BossLandmarkStructure.initialize();
+		darkspawn.black.worldgen.LandmarkCompass.initialize();
+        darkspawn.black.worldgen.DiscoveryCharts.initialize();
 		darkspawn.black.journal.Journal.initialize();
 		PayloadTypeRegistry.serverboundPlay().register(SortInventoryPayload.TYPE, SortInventoryPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(SortInventoryPayload.TYPE,

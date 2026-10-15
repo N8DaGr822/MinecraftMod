@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [" P ", "ACA", " E "],
+  "key": {
+    "P": "minecraft:paper",
+    "A": "minecraft:amethyst_shard",
+    "C": "minecraft:compass",
+    "E": "minecraft:emerald"
+  },
+  "result": {"id": "darkspawn:landmark_compass", "count": 1}
+}

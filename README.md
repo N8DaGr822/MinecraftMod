@@ -1,6 +1,8 @@
 # Darkspawn
 
-Current increment: [ship names, flags, earned cargo upgrades, the first Seven Seals clue, and Mara/Bram/Nell recruitment](docs/shattered-seas/ship-identity-seals-and-officers.md). Nell now sings four user-supplied recordings through streamed ship-following audio.
+Current source increment: [pirate factions, nine islands, home ports, ship refits and crew care; discovery maps, archaeology, awakened rematches and expanded Testing Camp](docs/server-playtest.md). Full automated verification passed; five-player live acceptance remains. These changes require a newly requested play build; the existing release version alone does not identify its contents.
+
+Also implemented in source: [six accessories, compact inventory hub, six swimming fish species and animal utility](docs/field-utilities-playtest.md), with fresh Testing Camp supplies.
 
 Fabric mod for Minecraft **26.3**, with inventory upgrades, 16 post-dragon biome bosses, the Endborn, equipment empowerment, and permanent boss-heart progression.
 
@@ -18,7 +20,13 @@ New research bunkers isolate the portal behind observation glass and a two-door 
 
 ## Pirate Seas
 
-The [Logbound Compass prototype](docs/shattered-seas/logbound-compass.md) now guides a personal voyage to Castaway Cove, recalibrates after nine minutes on each discovered island, and charts new destinations without repeating visited coordinates. Six island types now populate fresh terrain. Talk to [Old Salt Briggs](docs/shattered-seas/harbor-and-contracts.md) at the harbor for a free calibrated compass and optional cove, wreck, shrine and beacon contracts. Island visits now reveal Journal clues and small persistent enemy encounters, with naval salvage rewards. Use the compass for destination, distance, guided discovery count and study progress.
+Request **Promotion** through the harbor or your faction contact; see the Journal for standing and achievement requirements. To share navigation, sneak-use your Logbound Compass on another player, who accepts by doing the same to you within sixty seconds. Parties hold six players and share guidance only. Leave/disband by sneak-using in air away from shore-service locations. Buy **beer** (1 emerald, Haste I for 2 minutes) or **rum** (2 emeralds, Resistance I for 1 minute) through Harbor services; both are also supplied by a fresh Testing Camp.
+
+**New islands and shore battles:** Redwater Landing hosts a one-time Corsair–Iron Fleet skirmish; Pearlwater Atoll is a quiet lagoon without authored sentries; Cinderjaw Anchorage holds guarded rum and ammunition. Neutral observers can watch Redwater safely, while helping only the winner earns +10 standing and +3 renown. Attacks retain their normal faction penalties. Four fighters per landing, four active battles across the sea, and a five-minute limit keep encounters bounded. Travel into ungenerated terrain to find the new islands. Fresh Testing Camp guides include the checks.
+
+The craftable **Landmark Compass** finds the sixteen boss landmark families. Sneak-use to select a site, then use in the appropriate dimension. Searches are bounded and can miss distant sites; normal boss rituals and progression still apply. [Full stage rules and verification](docs/expansion-stages.md).
+
+The [Logbound Compass prototype](docs/shattered-seas/logbound-compass.md) now guides a personal voyage to Castaway Cove, recalibrates after nine minutes on each discovered island, and charts new destinations without repeating visited coordinates. Nine island types now populate fresh terrain. Talk to [Old Salt Briggs](docs/shattered-seas/harbor-and-contracts.md) at the harbor for a free calibrated compass and optional cove, wreck, shrine and beacon contracts. Island visits now reveal Journal clues and small persistent enemy encounters, with naval salvage rewards. Use the compass for destination, distance, guided discovery count and study progress.
 
 Future direction: [The Shattered Seas design and implementation roadmap](docs/shattered-seas/project-overview.md), including factions, optional lore and the Logbound Compass. The current source also includes [three faction activities and saved standings](docs/shattered-seas/factions.md), earned crew offers, and [three ship sizes with independent captain progression](docs/shattered-seas/player-progression.md). [Faction membership, local diplomacy and loyal Piglin/Illager/undead recruits](docs/shattered-seas/factions.md#membership-and-local-diplomacy) are now implemented; [Repeatable voyages, Garrick's rescue and faction patrols](docs/shattered-seas/repeat-voyages-and-garrick.md) are also implemented; later narrative systems remain planned.
 

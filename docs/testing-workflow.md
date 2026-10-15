@@ -24,8 +24,13 @@ This explicitly packages the mod without unit tests or a headless test server. K
 | All mount server regressions | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:*mount*' --max-workers=1` |
 | Mount source/texture parity | `node tools/assets/verify-mounts.cjs` and `node tools/assets/griffin-model.cjs --check`, followed by visual review |
 | Cooking logic | `.\gradlew.bat test --tests 'darkspawn.black.cooking.*' --max-workers=1` |
+| Registered item/block visual definitions and names | `.\gradlew.bat test --tests 'darkspawn.black.ResourceCoverageTest' --max-workers=1` |
+| Custom item models, bow/shield poses and compass frames | `python tools/assets/verify-distinct-items.py`, then inspect `build/distinct-items-preview.png`; author with `distinct-item-models.py` after older feature generators |
+| Broad asset references, PNG readability and sound subtitles | `python tools/assets/verify-resource-links.py` (requires Pillow and the compiled native asset cache); use the feature-specific validators for geometry/animation rules |
 | OneBlock logic | `.\gradlew.bat test --tests 'darkspawn.black.oneblock.*' --max-workers=1` |
 | One specific unit test | `.\gradlew.bat test --tests 'darkspawn.black.equipment.TemperatureTest' --max-workers=1` |
+| Accessories, inventory hub, fish and animal server behavior | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:field_utilities_game_test*' --max-workers=1` plus inventory/OneBlock checks for save or slot changes |
+| Field utility icons, fish skins and recipe references | `python tools/assets/verify-field-utilities.py`; regenerate with `python tools/assets/field-utilities.py` and inspect `build/field-utilities-preview.png` |
 | Pirate templates, loot references and shanty integrity | `python tools/assets/verify-pirate-assets.py`, then `python tools/assets/preview-pirate.py` and `python tools/assets/preview-naval.py` (previews require Pillow); inspect the offline previews |
 
 For server behavior, select a registered GameTest ID with the Fabric filter:
@@ -45,3 +50,10 @@ Use IDs from the GameTest output, not Java class names. Check the output's selec
 This runs all unit tests, all server GameTests and the cuisine asset validator without packaging a JAR. `--rerun-tasks` ensures a previous targeted test run cannot stand in for full verification. Do not pass test filters or exclusions. The task rejects `-PgameTestFilter`; unit and server tests run sequentially. Address failures before pushing, and report any remaining manual playtesting gaps. CI runs `fullCheck` on every push and pull request without producing release artifacts.
 
 `build` and `playBuild` both package JARs: do not run either unless packaging was requested. There is no installed Git hook: run the pre-push command explicitly. Other art-specific validators remain available under `tools/assets` for their corresponding changes.
+
+### Endgame expansion checks
+
+- World awakening, companions, legendary relics and cooperative Nexus: `./gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:endgame_game_test*' --max-workers=1`.
+- Native culinary brewing: `./gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:expansion_brewing_game_test*' --max-workers=1`.
+- Ship classes and ammunition: existing `darkspawn-gametest:ships_game_test*` group.
+- Data/native visual references: `python tools/assets/verify-endgame-expansion.py`. This is separate from the cuisine artwork validator; it checks reused native models rather than newly authored textures.

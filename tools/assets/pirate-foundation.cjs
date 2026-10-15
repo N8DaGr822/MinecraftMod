@@ -4,7 +4,8 @@ const path = require('node:path');
 const zlib = require('node:zlib');
 const root = path.resolve(__dirname, '../..');
 const res = path.join(root, 'src/main/resources');
-function json(file, value) { const target = path.join(res,file); fs.mkdirSync(path.dirname(target),{recursive:true}); fs.writeFileSync(target,JSON.stringify(value,null,2)+'\n'); }
+const expansionOnly = process.argv.includes('--expansion-only');
+function json(file, value) { if(expansionOnly && !/chests\/pirate_(redwater|pearlwater|cinderjaw)\.json$/.test(file))return; const target = path.join(res,file); fs.mkdirSync(path.dirname(target),{recursive:true}); fs.writeFileSync(target,JSON.stringify(value,null,2)+'\n'); }
 function integer(n) { const b=Buffer.alloc(4);b.writeInt32BE(n);return b; }
 function string(s) { const b=Buffer.from(s),n=Buffer.alloc(2);n.writeUInt16BE(b.length);return Buffer.concat([n,b]); }
 function tag(v) {
@@ -36,8 +37,12 @@ loot('wreck',[entry('iron_ingot',{type:'minecraft:uniform',min:3,max:6}),entry('
 loot('beacon',[entry('copper_ingot',8),entry('coal',8),entry('spyglass'),entry('paper',4)]);
 loot('shrine',[entry('prismarine_shard',8),entry('prismarine_crystals',4),entry('gold_ingot',3)]);
 loot('mangrove',[entry('mangrove_propagule',3),entry('slime_ball',6),entry('iron_ingot',3),entry('bread',6),entry('oak_planks',32)]);
+loot('redwater',[entry('iron_ingot',4),entry('darkspawn:solid_shot',12),entry('darkspawn:pirate_beer',2),entry('bread',6)]);
+loot('pearlwater',[entry('prismarine_crystals',5),entry('nautilus_shell',1),entry('sea_pickle',4),entry('emerald',2)]);
+loot('cinderjaw',[entry('gold_ingot',3),entry('darkspawn:solid_shot',16),entry('darkspawn:pirate_rum',2),entry('coal',12)]);
 const previews=[];
-for(const variant of ['harbor',0,1,2,3,4,5]) {
+for(const variant of ['harbor',0,1,2,3,4,5,6,7,8]) {
+  if(expansionOnly && (typeof variant !== 'number' || variant < 6))continue;
   const harbor=variant==='harbor',blocks=new Map();
   function put(x,y,z,name,props,nbt){blocks.set(`${x},${y},${z}`,{pos:[x,y,z],state:{Name:name.includes(':')?name:name.includes(':')?name:'minecraft:'+name,...(props?{Properties:props}:{})},...(nbt?{nbt}:{})});}
   function fill(x1,y1,z1,x2,y2,z2,name){for(let x=x1;x<=x2;x++)for(let y=y1;y<=y2;y++)for(let z=z1;z<=z2;z++)put(x,y,z,name);}
@@ -140,7 +145,7 @@ for(const variant of ['harbor',0,1,2,3,4,5]) {
       sign(24,25,32,['TIDEGLASS SHRINE','DROWNED VIGIL','Four sea shards','Offer at cache']);
       fill(32,25,18,32,31,18,'dark_prismarine');fill(29,30,18,31,31,18,'black_wool');put(30,31,18,'cyan_wool');
       put(32,32,18,'soul_lantern',{hanging:'false',waterlogged:'false'});
-    } else {
+    } else if(variant===5) {
       // Mangrove salvage camp with roots, a raised hut and an accessible supply cache.
       for(const x of [11,36]){fill(x,24,20,x+2,26,22,'mangrove_roots');fill(x+1,27,21,x+1,32,21,'mangrove_log');fill(x-2,32,18,x+4,33,24,'mangrove_leaves');}
       fill(18,24,19,29,24,29,'mangrove_planks');
@@ -149,6 +154,31 @@ for(const variant of ['harbor',0,1,2,3,4,5]) {
       chest(25,25,20,'mangrove');put(21,25,20,'crafting_table');
       sign(24,25,32,['ROOTBOUND CAMP','CORSAIR OUTPOST','Scavengers within','Manifest in cache']);
       fill(30,25,20,30,34,20,'crimson_stem');fill(27,32,20,29,34,20,'red_wool');put(28,33,20,'yellow_wool');put(30,35,20,'gold_block');
+    } else if(variant===6) {
+      // Redwater: opposing camps leave the central battlefield and southern dock open.
+      fill(15,24,19,33,24,29,'coarse_dirt');
+      for(const x of [13,35]) {
+        fill(x,25,18,x,27,29,'stone_bricks');
+        fill(x,28,18,x,34,18,'spruce_log');
+        fill(x-1,32,19,x+1,34,19,x===13?'red_wool':'blue_wool');
+      }
+      fill(20,24,14,28,24,17,'spruce_planks');chest(24,25,15,'redwater');
+      sign(24,25,33,['REDWATER LANDING','Corsairs vs Fleet','Watch or help','Attacks cost trust']);
+    } else if(variant===7) {
+      // Pearlwater: shallow lagoon and a bridge to an open pearl-diver's shelter.
+      fill(18,22,18,29,22,29,'sand');fill(18,23,18,29,24,29,'air');fill(18,23,18,29,23,29,'water');
+      fill(23,24,18,25,24,32,'birch_planks');fill(19,24,13,29,24,18,'birch_planks');
+      for(const x of [19,29])for(const z of [13,18])fill(x,25,z,x,28,z,'stripped_birch_log');
+      fill(18,29,12,30,29,19,'white_wool');chest(24,25,14,'pearlwater');
+      for(const x of [20,27])put(x,23,24,'sea_lantern');
+      sign(24,25,34,['PEARLWATER ATOLL','Pearl divers rest','Cache across bridge','Mind the lagoon']);
+    } else if(variant===8) {
+      // Cinderjaw: basalt stacks frame an open drydock and a finite smuggler cache.
+      fill(17,24,18,30,24,30,'blackstone');
+      for(const x of [12,35])for(const z of [18,27]){fill(x,24,z,x+2,33+(z%3),z+2,'basalt');fill(x,34+(z%3),z,x+2,34+(z%3),z+2,'blackstone');}
+      for(const x of [19,28])fill(x,25,19,x,27,29,'dark_oak_planks');
+      fill(20,25,19,27,26,19,'dark_oak_planks');chest(24,25,20,'cinderjaw');
+      sign(24,25,32,['CINDERJAW ANCHORAGE','Smuggler drydock','Scavengers ashore','Rum and shot within']);
     }
   }
   const palette=[],indices=new Map(),entries=[];
@@ -159,4 +189,4 @@ for(const variant of ['harbor',0,1,2,3,4,5]) {
   previews.push({name,...template});
 }
 fs.mkdirSync(path.join(root,'build'),{recursive:true});fs.writeFileSync(path.join(root,'build/pirate-preview.json'),JSON.stringify(previews));
-console.log('Pirate Seas: generated harbor, six island discoveries, sea gate and dimension data.');
+console.log(expansionOnly ? 'Pirate Seas: generated three expansion islands and their loot only.' : 'Pirate Seas: generated harbor, nine island discoveries, sea gate and dimension data.');

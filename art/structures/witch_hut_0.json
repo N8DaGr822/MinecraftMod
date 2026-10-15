@@ -22,6 +22,12 @@
       "Name": "minecraft:mud_bricks"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:cauldron"
     },
     {
@@ -1257,7 +1263,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/witch_hut"
+      }
     },
     {
       "pos": [
@@ -2001,7 +2011,7 @@
         3,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -2841,7 +2851,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/witch_hut"
+      }
     },
     {
       "pos": [
@@ -3961,7 +3975,7 @@
         4,
         12
       ],
-      "state": 4,
+      "state": 5,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/witch_hut"
@@ -4029,7 +4043,7 @@
         4,
         3
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4101,7 +4115,7 @@
         4,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [

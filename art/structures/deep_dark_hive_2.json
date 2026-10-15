@@ -22,6 +22,12 @@
       "Name": "minecraft:sculk"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:air"
     },
     {
@@ -1270,7 +1276,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/deep_dark_hive"
+      }
     },
     {
       "pos": [
@@ -2854,7 +2864,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/deep_dark_hive"
+      }
     },
     {
       "pos": [
@@ -4006,7 +4020,7 @@
         4,
         12
       ],
-      "state": 3,
+      "state": 4,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/deep_dark_hive"
@@ -4082,7 +4096,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4090,7 +4104,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4098,7 +4112,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4106,7 +4120,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4114,7 +4128,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4122,7 +4136,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4130,7 +4144,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4138,7 +4152,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4146,7 +4160,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4154,7 +4168,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -4162,7 +4176,7 @@
         4,
         2
       ],
-      "state": 4
+      "state": 5
     },
     {
       "pos": [
@@ -5098,7 +5112,7 @@
         11,
         4
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -5106,7 +5120,7 @@
         11,
         19
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -5114,7 +5128,7 @@
         11,
         4
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -5122,7 +5136,7 @@
         11,
         19
       ],
-      "state": 5
+      "state": 6
     }
   ]
 }

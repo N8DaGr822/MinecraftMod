@@ -1,7 +1,6 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/chest",
-    "model": { "type": "minecraft:chest", "texture": "minecraft:normal" }
+    "type": "minecraft:model",
+    "model": "darkspawn:item/dragon_starter_chest"
   }
 }

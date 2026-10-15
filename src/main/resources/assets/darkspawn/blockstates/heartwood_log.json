@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "darkspawn:block/heartwood_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "darkspawn:block/heartwood_log"
+    },
+    "axis=z": {
+      "model": "darkspawn:block/heartwood_log_horizontal",
+      "x": 90
+    }
+  }
+}

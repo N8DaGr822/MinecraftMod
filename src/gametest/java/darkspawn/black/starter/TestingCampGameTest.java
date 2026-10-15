@@ -67,6 +67,7 @@ public final class TestingCampGameTest {
 					if (!stack.isEmpty()) { actual++; helper.assertTrue(stack.getCount() <= stack.getMaxStackSize(), "Legal supply stacks"); }
 				}
 			}
+			helper.assertTrue(helper.getLevel().getBlockEntity(center.offset(-5,1,4)) instanceof net.minecraft.world.level.block.entity.BrushableBlockEntity,"Camp provides real archaeology sample deposits");
 			helper.assertTrue(actual == expected, "All supply stacks fit without loss");
 			helper.assertTrue(TestingCamp.place(helper.getLevel(), center, null, new ItemStack(TestingCamp.ITEM)) != null, "Repeat placement refuses occupied camp");
 		} finally { clear(helper, center); }
@@ -96,6 +97,25 @@ public final class TestingCampGameTest {
 	@GameTest
 	public void pantryCoversLoadedCookingRecipesAndAllStyles(GameTestHelper helper) {
 		var supplies = TestingCamp.supplies(helper.getLevel());
+		var all = supplies.stream().flatMap(s -> s.items().stream()).toList();
+		var guide = all.stream().filter(stack -> stack.is(Items.WRITTEN_BOOK)).findFirst().orElseThrow()
+			.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
+		helper.assertTrue(guide.pages().stream().anyMatch(page -> page.raw().getString().contains("FACTION SKIRMISHES"))
+			&& guide.pages().stream().anyMatch(page -> page.raw().getString().contains("Cinderjaw")), "Camp guide covers new islands and skirmish testing");
+		for (var item : java.util.List.of(darkspawn.black.worldgen.DiscoveryCharts.ITEM, darkspawn.black.boss.AwakenedRematches.SEAL, Items.BRUSH, darkspawn.black.pirate.Pirate.GATE_ITEM, darkspawn.black.pirate.LogboundCompass.ITEM,
+			darkspawn.black.pirate.Ships.SHIPYARD_ITEM, darkspawn.black.pirate.Ships.HELM_ITEM, darkspawn.black.pirate.Ships.CANNON_ITEM,
+			darkspawn.black.pirate.Ships.SHOT, darkspawn.black.pirate.Ships.FIRE_SHOT, darkspawn.black.pirate.PirateDrinks.BEER,
+			darkspawn.black.pirate.PirateDrinks.RUM, darkspawn.black.worldgen.LandmarkCompass.ITEM,
+			darkspawn.black.forsaken.ForsakenContent.BLADE, darkspawn.black.forsaken.ForsakenContent.SCANNER,
+			darkspawn.black.forsaken.ForsakenContent.BEACON_ITEM, darkspawn.black.forsaken.ForsakenContent.CORE,
+			darkspawn.black.mount.MountCompanions.CAPSULE, darkspawn.black.mount.MountCompanions.VET_KIT))
+			helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Expansion testing item supplied: " + item);
+		for (var item : darkspawn.black.boss.BossItems.HEARTS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every current heart supplied");
+		for (var item : darkspawn.black.boss.BossItems.SUMMONS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every regional summon supplied");
+		for (var item : darkspawn.black.forsaken.ForsakenContent.ARMOR.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Complete Quarantine armor supplied");
+		var positions = TestingCamp.barrelPositions(BlockPos.ZERO);
+		helper.assertTrue(positions.size() == 72 && positions.stream().distinct().count() == 72, "Expanded perimeter positions are unique");
+		helper.assertTrue(supplies.stream().mapToInt(s -> (s.items().size() + 26) / 27).sum() <= positions.size(), "All expansion supplies fit");
 		var weapons = supplies.stream().filter(s -> s.name().equals("10 Combat tools")).findFirst().orElseThrow().items();
 		for (var item : java.util.List.of(Items.DIAMOND_AXE, Items.DIAMOND_SPEAR, Items.TRIDENT, Items.MACE, Items.CROSSBOW))
 			helper.assertTrue(weapons.stream().anyMatch(stack -> stack.is(item)), "Style-specific weapons are supplied");

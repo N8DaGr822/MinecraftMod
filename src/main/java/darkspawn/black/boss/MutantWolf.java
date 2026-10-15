@@ -420,6 +420,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
 		darkspawn.black.cooking.BossCuisineRewards.grant(this, level, participants, BossKind.MUTANT_WOLF, 160);
+        if(entityTags().contains(AwakenedRematches.TAG))return;
 		if (!participants.isEmpty()) { spawnAtLocation(level, new ItemStack(BossItems.ALPHA_FANG)); }
 		for (UUID id : participants) {
 			ServerPlayer player = level.getServer().getPlayerList().getPlayer(id);

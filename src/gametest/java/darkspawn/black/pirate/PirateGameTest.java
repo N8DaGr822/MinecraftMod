@@ -7,6 +7,8 @@ import io.netty.channel.embedded.EmbeddedChannel;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -29,6 +31,246 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class PirateGameTest {
+    @GameTest public void homePortsRequireOwnershipSaveAndLosePrivilegesOnCapture(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var other=player(helper,helper.absolutePos(new BlockPos(2,0,0)));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var island=islandFixture(helper,sea,1);seaTravel(p,sea,island.center());seaTravel(other,sea,island.center());
+            var ledger=SeaLedger.get(sea);ledger.fort(new SeaLedger.Fort(island.center(),p.getUUID(),"Captain",0,0));
+            helper.assertTrue(SeaServices.execute(other,20)==SeaServices.Reply.OWNER,"Visitors cannot claim the owner's port");
+            helper.assertTrue(SeaServices.execute(p,20)==SeaServices.Reply.DONE&&SeaServices.execute(p,20)==SeaServices.Reply.RECORDED,"Port designation is idempotent");
+            p.getInventory().clearContent();p.getInventory().setItem(0,new ItemStack(Items.IRON_INGOT,48));p.getInventory().setItem(1,new ItemStack(Items.OAK_PLANKS,64));p.getInventory().setItem(2,new ItemStack(Items.OAK_PLANKS,32));
+            helper.assertTrue(SeaServices.execute(p,21)==SeaServices.Reply.COST&&p.getInventory().countItem(Items.IRON_INGOT)==48,"Incomplete payment leaves all resources untouched");p.getInventory().setItem(3,new ItemStack(Items.EMERALD,20));
+            helper.assertTrue(SeaServices.execute(p,21)==SeaServices.Reply.DONE&&ledger.homePort(p.getUUID()).level()==1,"Drydock upgrade succeeds");
+            helper.assertTrue(SeaServices.execute(p,21)==SeaServices.Reply.DONE&&HomePorts.services(p)&&!HomePorts.services(other),"Tavern service access belongs to owner");
+            helper.assertTrue(SeaServices.execute(p,18)==SeaServices.Reply.DONE&&p.getInventory().countItem(PirateDrinks.BEER)==1,"Home tavern sells normal drink stock");
+            var restored=SeaLedger.CODEC.parse(JsonOps.INSTANCE,SeaLedger.CODEC.encodeStart(JsonOps.INSTANCE,ledger).getOrThrow()).getOrThrow();helper.assertTrue(restored.homePort(p.getUUID()).level()==2,"Port and upgrades survive save");
+            ledger.fort(new SeaLedger.Fort(island.center(),other.getUUID(),"New captain",0,0));helper.assertTrue(ledger.homePort(p.getUUID())==null&&!HomePorts.services(p),"Capture revokes old owner services");
+            ledger.fort(new SeaLedger.Fort(island.center(),p.getUUID(),"Captain",0,0));helper.assertTrue(ledger.homePort(p.getUUID())==null,"Recapture cannot resurrect lost upgrades");
+        } finally {remove(p);remove(other);}helper.succeed();
+    }
+    @GameTest public void discoveryChartsRequireLocatedCompassAndKeepNativeTarget(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        try {
+            var compass=new ItemStack(darkspawn.black.worldgen.LandmarkCompass.ITEM);
+            helper.assertTrue(darkspawn.black.worldgen.DiscoveryCharts.chart(p,compass).isEmpty(),"Blank compass cannot invent a map destination");
+            var target=new BlockPos(240,65,320);compass.set(DataComponents.LODESTONE_TRACKER,new net.minecraft.world.item.component.LodestoneTracker(java.util.Optional.of(GlobalPos.of(p.level().dimension(),target)),false));
+            var chart=darkspawn.black.worldgen.DiscoveryCharts.chart(p,compass);helper.assertTrue(chart.is(Items.FILLED_MAP)&&chart.get(DataComponents.MAP_ID)!=null&&chart.get(DataComponents.MAP_DECORATIONS)!=null,"Chart is a native copyable map with target decoration");
+            helper.assertTrue(net.minecraft.world.item.MapItem.getSavedData(chart,p.level())!=null&&compass.get(DataComponents.LODESTONE_TRACKER).target().orElseThrow().pos().equals(target),"Map has world-saved terrain data and leaves compass intact");
+        } finally {remove(p);}helper.succeed();
+    }
+    @GameTest public void awakenedRematchesGateProgressScaleAndPersist(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var boss=new darkspawn.black.boss.MutantWolf(darkspawn.black.boss.BossEntities.MUTANT_WOLF,p.level());
+        try {
+            p.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND,new ItemStack(darkspawn.black.boss.AwakenedRematches.SEAL,2));var kind=darkspawn.black.boss.BossKind.MUTANT_WOLF;
+            helper.assertTrue(!darkspawn.black.boss.AwakenedRematches.prepare(p,boss,kind)&&p.getOffhandItem().getCount()==2,"Uncompleted family rejects seal without consuming it");
+            darkspawn.black.health.BossHearts.progress(p).consume(kind);float normal=boss.getMaxHealth();
+            helper.assertTrue(darkspawn.black.boss.AwakenedRematches.prepare(p,boss,kind)&&Math.abs(boss.getMaxHealth()-normal*1.5)<.1,"Awakened rematch scales health after progression");
+            darkspawn.black.boss.AwakenedRematches.consume(p,boss);helper.assertTrue(p.getOffhandItem().getCount()==1,"Successful awakening consumes one seal");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());boss.saveWithoutId(saved);
+            var copy=new darkspawn.black.boss.MutantWolf(darkspawn.black.boss.BossEntities.MUTANT_WOLF,p.level());copy.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            helper.assertTrue(copy.entityTags().contains(darkspawn.black.boss.AwakenedRematches.TAG)&&Math.abs(copy.getMaxHealth()-boss.getMaxHealth())<.1,"Awakened tag and attribute modifiers persist");copy.discard();
+            boss.setPos(p.position());darkspawn.black.cooking.BossCuisineRewards.grant(boss,p.level(),java.util.Set.of(p.getUUID()),kind,192);
+            var rewards=p.level().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,p.getBoundingBox().inflate(3),e->e.getItem().has(DataComponents.ENCHANTMENT_GLINT_OVERRIDE));
+            helper.assertTrue(rewards.size()==2&&rewards.stream().noneMatch(e->e.getItem().is(darkspawn.black.boss.BossItems.HEARTS.get(kind))),"Awakened victory grants two cosmetics, no heart");rewards.forEach(net.minecraft.world.entity.Entity::discard);
+            helper.assertTrue(darkspawn.black.boss.AwakenedRematches.cosmetic(kind).is(Items.LEATHER_HELMET)&&darkspawn.black.boss.AwakenedRematches.trophy(kind).is(darkspawn.black.cooking.Cuisine.TROPHIES.get(kind)),"Rematch rewards are cosmetic equipment and trophy");
+        } finally {boss.discard();remove(p);}helper.succeed();
+    }
+
+    private static java.util.List<net.minecraft.world.entity.Mob> skirmishUnits(net.minecraft.server.level.ServerLevel sea, BlockPos center) {
+        return sea.getEntitiesOfClass(net.minecraft.world.entity.Mob.class,new net.minecraft.world.phys.AABB(center).inflate(48),FactionSkirmishes::combatant);
+    }
+    @GameTest(maxTicks = 280) public void redwaterNativeCombatAndDepartureCleanup(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var difficulty=sea.getDifficulty();
+        sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);var island=islandFixture(helper,sea,6);seaTravel(p,sea,island.center().offset(0,0,16));
+        p.setGameMode(GameType.CREATIVE);
+        var units=new java.util.ArrayList<net.minecraft.world.entity.Mob>();
+        // Fixture Ticking: Allow entity sections to load before spawning actors into forced chunks.
+        for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)sea.setChunkForced((island.center().getX()>>4)+x,(island.center().getZ()>>4)+z,true);
+        helper.runAfterDelay(10,()->{
+            try {p.setGameMode(GameType.SURVIVAL);helper.assertTrue(FactionSkirmishes.observe(p,island),"Native battle starts");units.addAll(skirmishUnits(sea,island.center()));}
+            catch(Throwable failure){for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)sea.setChunkForced((island.center().getX()>>4)+x,(island.center().getZ()>>4)+z,false);remove(p);FactionSkirmishes.tick(sea);sea.getServer().setDifficulty(difficulty,true);throw failure;}
+        });
+        helper.runAfterDelay(240,()->{
+            try {
+                helper.assertTrue(units.stream().anyMatch(m->m.getHealth()<32),"Native AI actually exchanges damage between factions: "+units.stream().map(m->m.tickCount+":"+m.position()+":"+m.getTarget()).toList());
+                helper.assertTrue(p.getHealth()==20,"Neutral observer remains unharmed");
+                p.teleportTo(island.center().getX()+100,65,island.center().getZ());FactionSkirmishes.tick(sea);
+                helper.assertTrue(units.stream().allMatch(net.minecraft.world.entity.Entity::isRemoved)&&!FactionSkirmishes.observe(p,island),"Departure cleans up all actors");helper.succeed();
+            } finally {for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)sea.setChunkForced((island.center().getX()>>4)+x,(island.center().getZ()>>4)+z,false);remove(p);FactionSkirmishes.tick(sea);sea.getServer().setDifficulty(difficulty,true);}
+        });
+    }
+    @GameTest public void redwaterRewardsOneSideOnceAndSparesBystanders(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var difficulty=sea.getDifficulty();
+        try {
+            sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);var island=islandFixture(helper,sea,6);seaTravel(p,sea,island.center().offset(0,0,16));
+            helper.assertTrue(FactionSkirmishes.observe(p,island),"Redwater starts a bounded battle");var units=skirmishUnits(sea,island.center());
+            helper.assertTrue(units.size()==4&&!FactionSkirmishes.observe(p,island),"Four actors, no duplicate starts");
+            for(var unit:units) {
+                helper.assertTrue(PirateDiplomacy.disallows(unit,p),"Neutral bystanders are spared");
+                for(var other:units)helper.assertTrue(PirateDiplomacy.disallows(unit,other)==(PirateDiplomacy.faction(unit)==PirateDiplomacy.faction(other)),"Only opposite faction combatants are valid targets");
+            }
+            int before=Pirate.state(p).renown;
+            for(var unit:units)if(PirateDiplomacy.faction(unit)==PirateProgression.Faction.FLEET)unit.hurtServer(sea,sea.damageSources().playerAttack(p),1000);
+            FactionSkirmishes.tick(sea);
+            helper.assertTrue(Pirate.state(p).factionStanding[0]==10&&Pirate.state(p).renown==before+3,"Helping only the winning side pays standing and renown");
+            FactionSkirmishes.tick(sea);helper.assertTrue(Pirate.state(p).renown==before+3&&skirmishUnits(sea,island.center()).isEmpty()&&!FactionSkirmishes.observe(p,island),"Resolved battle cleans up and never pays or spawns again");
+            var saved=sea.getDataStorage().computeIfAbsent(IslandDiscoveries.Encounters.TYPE);
+            helper.assertTrue((saved.mask(island.center())&FactionSkirmishes.SPENT)!=0,"Battle start has a durable spent receipt");
+        } finally {remove(p);FactionSkirmishes.tick(sea);sea.getServer().setDifficulty(difficulty,true);}helper.succeed();
+    }
+    @GameTest public void redwaterAbandonmentAndStaleActorsCannotReward(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var difficulty=sea.getDifficulty();
+        try {
+            sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);var island=islandFixture(helper,sea,6);seaTravel(p,sea,island.center().offset(0,0,16));
+            p.setGameMode(GameType.CREATIVE);helper.assertTrue(!FactionSkirmishes.observe(p,island),"Creative visitors do not start battles");p.setGameMode(GameType.SURVIVAL);
+            helper.assertTrue(FactionSkirmishes.observe(p,island),"Survival visitor starts battle");var units=skirmishUnits(sea,island.center());units.getFirst().discard();FactionSkirmishes.tick(sea);
+            helper.assertTrue(skirmishUnits(sea,island.center()).isEmpty()&&Pirate.state(p).renown==0&&!FactionSkirmishes.observe(p,island),"Missing actor aborts without reward or respawn");
+            var stale=net.minecraft.world.entity.EntityTypes.PILLAGER.create(sea,net.minecraft.world.entity.EntitySpawnReason.EVENT);stale.addTag(FactionSkirmishes.TAG);stale.setPos(Vec3.atBottomCenterOf(island.center()));sea.addFreshEntity(stale);
+            helper.assertTrue(stale.isRemoved(),"Reloaded orphan actors are discarded");
+        } finally {remove(p);FactionSkirmishes.tick(sea);sea.getServer().setDifficulty(difficulty,true);}helper.succeed();
+    }
+    @GameTest public void redwaterCapsBattlesAndRejectsDoubleSidedRewards(GameTestHelper helper) {
+        var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var difficulty=sea.getDifficulty();var players=new java.util.ArrayList<ServerPlayer>();
+        try {
+            sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);var base=islandFixture(helper,sea,6).center();var islands=new java.util.ArrayList<IslandDiscoveries.Island>();
+            for(int i=0;i<5;i++) {
+                var center=base.offset(i*256,0,0);var island=new IslandDiscoveries.Island(center,6);islands.add(island);
+                for(int x:new int[]{-8,8})for(int z:new int[]{-3,3}){var pos=center.offset(x,0,z);sea.setBlockAndUpdate(pos.below(),Blocks.STONE.defaultBlockState());sea.setBlockAndUpdate(pos,Blocks.AIR.defaultBlockState());sea.setBlockAndUpdate(pos.above(),Blocks.AIR.defaultBlockState());}
+                var p=player(helper,helper.absolutePos(BlockPos.ZERO));players.add(p);seaTravel(p,sea,center.offset(0,0,16));
+                boolean started=FactionSkirmishes.observe(p,island);if(i==0)helper.assertTrue(started,"First requested battle starts");if(i==4)helper.assertTrue(!started,"Fifth simultaneous shore battle is refused, including other running fixtures");
+            }
+            var p=players.getFirst();var units=skirmishUnits(sea,base);
+            for(var mob:units)mob.hurtServer(sea,sea.damageSources().playerAttack(p),1);
+            for(var mob:units)if(PirateDiplomacy.faction(mob)==PirateProgression.Faction.FLEET)mob.hurtServer(sea,mob.damageSources().genericKill(),1000);
+            FactionSkirmishes.tick(sea);helper.assertTrue(Pirate.state(p).renown==0&&Pirate.state(p).factionStanding[0]<0,"Attacking both factions forfeits gratitude and preserves aggression penalties");
+            helper.assertTrue(FactionSkirmishes.observe(players.get(4),islands.get(4)),"Resolving one battle releases a global slot");
+            var saved=sea.getDataStorage().computeIfAbsent(IslandDiscoveries.Encounters.TYPE);var restored=IslandDiscoveries.Encounters.CODEC.parse(JsonOps.INSTANCE,IslandDiscoveries.Encounters.CODEC.encodeStart(JsonOps.INSTANCE,saved).getOrThrow()).getOrThrow();
+            helper.assertTrue((restored.mask(base)&FactionSkirmishes.SPENT)!=0,"Spent receipt survives SavedData serialization");
+        } finally {players.forEach(PirateGameTest::remove);FactionSkirmishes.tick(sea);sea.getServer().setDifficulty(difficulty,true);}helper.succeed();
+    }
+    @GameTest public void expansionDiscoveriesAndNavigationSurviveReload(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var state=Pirate.state(p);p.setGameMode(GameType.CREATIVE);
+            for(int kind=6;kind<=8;kind++) {var island=islandFixture(helper,sea,kind);seaTravel(p,sea,island.center().offset(0,0,16));IslandDiscoveries.observe(p);helper.assertTrue((state.pirateClues&(1<<kind))!=0,"New island records its own discovery");}
+            state.logboundKind=8;var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,sea.registryAccess());state.write(output);var restored=new PiratePlayerState();restored.read(TagValueInput.create(ProblemReporter.DISCARDING,sea.registryAccess(),output.buildResult()));var copied=new PiratePlayerState();copied.copyFrom(restored);
+            helper.assertTrue((copied.pirateClues&448)==448&&copied.logboundKind==8,"All new clue bits and navigation kind survive save and death copying");
+            helper.assertTrue(IslandDiscoveries.spawn(p,islandFixture(helper,sea,7))==0,"Pearlwater has no authored sentries");
+        } finally {remove(p);}helper.succeed();
+    }
+
+    @GameTest public void promotionsPersistAndRejectUnearnedOrRemoteRequests(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);PirateHarbor.prepare(sea);seaTravel(p,sea,new BlockPos(2,65,4));
+            var s=Pirate.state(p);var faction=PirateProgression.Faction.CORSAIRS;s.factionMembership=faction.id;s.factionStanding[0]=100;
+            helper.assertTrue(!FactionPromotions.promote(p),"Standing alone cannot buy a promotion");
+            s.factionContracts[0]=2;s.logboundVisited.add(LogboundCompass.FIRST_COVE_CENTER);
+            helper.assertTrue(FactionPromotions.promote(p)&&s.factionRanks[0]==1,"Earned first rank is awarded once");
+            helper.assertTrue(!FactionPromotions.promote(p)&&s.factionRanks[0]==1,"Repeated requests need the next achievements");
+            var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());s.write(output);
+            var loaded=new PiratePlayerState();loaded.read(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),output.buildResult()));
+            var copy=new PiratePlayerState();copy.copyFrom(loaded);loaded.factionRanks[0]=5;
+            helper.assertTrue(copy.factionRanks[0]==1,"Rank persists and death-copy array is independent");
+            s.harborContract=2;for(int i=0;i<4;i++)s.logboundVisited.add(new BlockPos(500+i,65,0));
+            p.teleportTo(800,65,800);helper.assertTrue(!FactionPromotions.promote(p)&&s.factionRanks[0]==1,"Remote promotion is rejected");
+        } finally {remove(p);}helper.succeed();
+    }
+    @GameTest public void navigationRequiresConsentAndKeepsPersonalProgress(GameTestHelper helper) {
+        var leader=player(helper,helper.absolutePos(BlockPos.ZERO));var member=player(helper,helper.absolutePos(new BlockPos(2,0,0)));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);PirateHarbor.prepare(sea);
+            seaTravel(leader,sea,new BlockPos(0,65,4));seaTravel(member,sea,new BlockPos(2,65,4));
+            var party=PartyNavigation.get(sea);
+            helper.assertTrue(!party.accept(member,leader),"Uninvited follower cannot join");
+            helper.assertTrue(party.invite(leader,member)&&party.leader(member.getUUID())==null,"Invitation alone grants no membership");
+            helper.assertTrue(party.accept(member,leader)&&PartyNavigation.guide(member)==leader,"Recipient explicitly accepts");
+            helper.assertTrue(!party.invite(member,leader),"Following chains and cycles are rejected");
+            var own=Pirate.state(member);own.logboundDestination=LogboundCompass.NEXT_ISLAND;own.logboundNextIsland=new BlockPos(4000,65,4000);own.logboundSecondsRemaining=123;
+            Pirate.state(leader).logboundDestination=LogboundCompass.FIRST_COVE;
+            member.getInventory().setItem(0,new ItemStack(LogboundCompass.ITEM));
+            LogboundCompass.ITEM.inventoryTick(member.getMainHandItem(),sea,member,net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+            helper.assertTrue(member.getMainHandItem().get(DataComponents.LODESTONE_TRACKER).target().orElseThrow().pos().equals(LogboundCompass.FIRST_COVE_CENTER),"Follower needle points at leader's route");
+            member.teleportTo(192.5,65,.5);LogboundCompass.tickNavigation(member);
+            helper.assertTrue(own.logboundVisited.contains(LogboundCompass.FIRST_COVE_CENTER)&&own.logboundNextIsland.equals(new BlockPos(4000,65,4000))&&own.logboundSecondsRemaining==123&&own.harborContract==0,"Physical visit earns discovery without route or reward transfer");
+            var restored=PartyNavigation.CODEC.parse(JsonOps.INSTANCE,PartyNavigation.CODEC.encodeStart(JsonOps.INSTANCE,party).getOrThrow()).getOrThrow();
+            helper.assertTrue(leader.getUUID().equals(restored.leader(member.getUUID())),"Membership persists across restart");
+            seaTravel(leader,helper.getLevel(),helper.absolutePos(BlockPos.ZERO));
+            helper.assertTrue(PartyNavigation.guide(member)==null,"Absent guide falls back to personal route");
+            helper.assertTrue(party.leave(leader.getUUID())&&party.leader(member.getUUID())==null,"Leader disbands members in another dimension");
+        } finally {PartyNavigation.get(helper.getLevel()).leave(leader.getUUID());remove(leader);remove(member);}helper.succeed();
+    }
+    @GameTest public void tavernDrinksChargeAndReturnContainersWithTemporaryBuffs(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);PirateHarbor.prepare(sea);seaTravel(p,sea,new BlockPos(2,65,4));p.getInventory().clearContent();
+            helper.assertTrue(SeaServices.execute(p,18)==SeaServices.Reply.COST,"Beer requires payment");
+            p.getInventory().setItem(0,new ItemStack(Items.EMERALD,8));
+            var menu=new SeaMenu(1,p.getInventory(),p.blockPosition());for(int i=0;i<18;i++)menu.clickMenuButton(p,1);
+            helper.assertTrue(menu.clickMenuButton(p,2)&&menu.status(10)==0&&p.getInventory().countItem(PirateDrinks.BEER)==1,"Beer purchase does not trigger ending confirmation");
+            helper.assertTrue(SeaServices.execute(p,19)==SeaServices.Reply.DONE&&p.getInventory().countItem(Items.EMERALD)==5,"Rum charges two emeralds");
+            var bowl=new ItemStack(PirateDrinks.BEER).finishUsingItem(sea,p);
+            var bottle=new ItemStack(PirateDrinks.RUM).finishUsingItem(sea,p);
+            helper.assertTrue(bowl.is(Items.BOWL)&&bottle.is(Items.GLASS_BOTTLE),"Survival drinking returns the correct containers");
+            helper.assertTrue(p.getEffect(net.minecraft.world.effect.MobEffects.HASTE).getDuration()==2400&&p.getEffect(net.minecraft.world.effect.MobEffects.RESISTANCE).getDuration()==1200,"Beer and rum provide distinct timed buffs");
+            new ItemStack(PirateDrinks.RUM).finishUsingItem(sea,p);
+            helper.assertTrue(p.getEffect(net.minecraft.world.effect.MobEffects.RESISTANCE).getAmplifier()==0,"Repeated rum does not stack strength");
+            for(int i=0;i<36;i++)p.getInventory().setItem(i,new ItemStack(Items.STONE,64));p.getInventory().setItem(0,new ItemStack(Items.EMERALD,5));
+            helper.assertTrue(SeaServices.execute(p,19)==SeaServices.Reply.SPACE&&p.getInventory().countItem(Items.EMERALD)==5,"Full inventory preserves payment");
+            p.teleportTo(500,65,500);helper.assertTrue(SeaServices.execute(p,18)==SeaServices.Reply.HARBOR,"Tavern purchases require harbor presence");
+        } finally {remove(p);}helper.succeed();
+    }
+    @GameTest public void landmarkCompassPreservesChartsOnWrongDimension(GameTestHelper helper) {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        try {
+            var item=darkspawn.black.worldgen.LandmarkCompass.ITEM;var stack=new ItemStack(item);
+            var target=net.minecraft.core.GlobalPos.of(Level.OVERWORLD,new BlockPos(100,70,100));
+            stack.set(DataComponents.LODESTONE_TRACKER,new net.minecraft.world.item.component.LodestoneTracker(java.util.Optional.of(target),false));
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);PirateHarbor.prepare(sea);seaTravel(p,sea,new BlockPos(2,65,4));
+            helper.assertTrue(!darkspawn.black.worldgen.LandmarkCompass.search(p,stack)&&stack.get(DataComponents.LODESTONE_TRACKER).target().orElseThrow().equals(target),"Wrong-dimension search preserves existing chart");
+        } finally {remove(p);}helper.succeed();
+    }
+    @GameTest public void landmarkCompassFindsNativeStartAndThrottlesCopies(GameTestHelper helper) throws ReflectiveOperationException {
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        net.minecraft.world.level.chunk.ChunkAccess fixture=null;
+        net.minecraft.world.level.levelgen.structure.Structure structure=null;
+        net.minecraft.world.level.levelgen.structure.StructureStart previous=null;
+        var options=helper.getLevel().getServer().getWorldGenSettings().options();
+        var structures=net.minecraft.world.level.levelgen.WorldOptions.class.getDeclaredField("generateStructures");structures.setAccessible(true);boolean previousGeneration=options.generateStructures();
+        java.util.Map<net.minecraft.world.level.levelgen.structure.Structure,java.util.List<net.minecraft.world.level.levelgen.structure.placement.StructurePlacement>> placements=null;
+        java.util.List<net.minecraft.world.level.levelgen.structure.placement.StructurePlacement> previousPlacements=null;
+        try {
+            var nether=helper.getLevel().getServer().getLevel(Level.NETHER);
+            var holder=nether.registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(ResourceKey.create(Registries.STRUCTURE,Darkspawn.id("soul_reliquary")));
+            structure=holder.value();var generation=nether.getChunkSource().getGeneratorState();
+            // GameTest worlds omit native placements: install only this saved-start fixture and restore it below.
+            structures.setBoolean(options,true);generation.ensureStructuresGenerated();
+            var field=net.minecraft.world.level.chunk.ChunkGeneratorStructureState.class.getDeclaredField("placementsForStructure");field.setAccessible(true);
+            @SuppressWarnings("unchecked") var map=(java.util.Map<net.minecraft.world.level.levelgen.structure.Structure,java.util.List<net.minecraft.world.level.levelgen.structure.placement.StructurePlacement>>)field.get(generation);
+            placements=map;previousPlacements=placements.get(structure);
+            var placement=(net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement)nether.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getOrThrow(ResourceKey.create(Registries.STRUCTURE_SET,Darkspawn.id("soul_reliquary"))).value().placement();
+            placements.put(structure,java.util.List.of(placement));
+            var chunk=placement.getPotentialStructureChunk(generation.getLevelSeed(),0,0);
+            var origin=new BlockPos(chunk.getMiddleBlockX()-12,40,chunk.getMiddleBlockZ()-12);
+            fixture=nether.getChunk(chunk.x(),chunk.z(),net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS);
+            previous=fixture.getAllStarts().get(structure);
+            var piece=new darkspawn.black.worldgen.BossLandmarkStructure.LandmarkPiece(nether.getStructureTemplateManager(),Darkspawn.id("landmarks/soul_reliquary_0"),origin,Rotation.NONE);
+            var start=new net.minecraft.world.level.levelgen.structure.StructureStart(structure,chunk,0,new net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer(java.util.List.of(piece)));
+            fixture.setStartForStructure(structure,start);
+            seaTravel(p,nether,new BlockPos(chunk.getMiddleBlockX(),65,chunk.getMiddleBlockZ()));
+            var stack=new ItemStack(darkspawn.black.worldgen.LandmarkCompass.ITEM);
+            for(int i=0;i<16&&!darkspawn.black.worldgen.LandmarkCompass.selected(stack).site().equals("soul_reliquary");i++)darkspawn.black.worldgen.LandmarkCompass.cycle(stack);
+            helper.assertTrue(darkspawn.black.worldgen.LandmarkCompass.search(p,stack),"Search finds a valid native start at its actual candidate chunk");
+            helper.assertTrue(stack.get(DataComponents.LODESTONE_TRACKER).target().orElseThrow().equals(net.minecraft.core.GlobalPos.of(Level.NETHER,start.getBoundingBox().getCenter())),"Compass keeps native dimension and vertical target");
+            helper.assertTrue(!darkspawn.black.worldgen.LandmarkCompass.search(p,stack.copy()),"Copying an item cannot bypass the per-player search cooldown");
+            helper.assertTrue(start.getReferences()==0,"Search does not consume another player's exploration reference");
+        } finally {
+            if(fixture!=null&&structure!=null)fixture.setStartForStructure(structure,previous==null?net.minecraft.world.level.levelgen.structure.StructureStart.INVALID_START:previous);
+            if(placements!=null&&structure!=null){if(previousPlacements==null)placements.remove(structure);else placements.put(structure,previousPlacements);}
+            structures.setBoolean(options,previousGeneration);remove(p);
+        }
+        helper.succeed();
+    }
 	private static ServerPlayer player(GameTestHelper helper, BlockPos pos) {
 		var level = helper.getLevel();
 		var cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "pirate-test"), false);
@@ -156,7 +398,7 @@ public final class PirateGameTest {
 	}
 	@GameTest public void templatesAndNativeIslandStartsAreValid(GameTestHelper helper) {
 		var level = helper.getLevel().getServer().getLevel(Pirate.LEVEL); var access = level.registryAccess();
-		for (String name : new String[] {"harbor", "island_0", "island_1", "island_2", "island_3", "island_4", "island_5"}) {
+		for (String name : new String[] {"harbor", "island_0", "island_1", "island_2", "island_3", "island_4", "island_5", "island_6", "island_7", "island_8"}) {
 			var template = level.getStructureTemplateManager().getOrCreate(Darkspawn.id("pirate/" + name));
 			helper.assertTrue(template.getSize().equals(new net.minecraft.core.Vec3i(49,40,49)), "Bounded island footprint");
 			var chests = template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.CHEST);

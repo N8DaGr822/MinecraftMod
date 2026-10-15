@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[2]
 templates = json.loads((ROOT / 'build/pirate-preview.json').read_text(encoding='utf-8'))
-image = Image.new('RGB', (1080, 2310), '#132a36')
+image = Image.new('RGB', (1080, 2870), '#132a36')
 draw = ImageDraw.Draw(image)
 draw.text((26, 16), 'PIRATE SEAS | authored structure layouts | north is up', fill='#f3dfb0')
 passable = {'air', 'oak_sign', 'lantern', 'torch', 'ladder'}
@@ -32,7 +32,7 @@ for index, template in enumerate(templates):
     def walkable(x,y,z):
         return at(x,y,z) in passable and at(x,y+1,z) in passable and at(x,y-1,z) not in passable | {'water','campfire'}
     start = (24,25,24) if index == 0 else (24,25,47)
-    target = [(15,25,19),(25,25,21),(23,25,20),(27,25,21),(24,25,21),(24,25,19),(25,25,21)][index]
+    target = [(15,25,19),(25,25,21),(23,25,20),(27,25,21),(24,25,21),(24,25,19),(25,25,21),(24,25,16),(24,25,15),(24,25,21)][index]
     queue, visited = deque([start]), {start}
     assert walkable(*start), f"Blocked arrival at {template['name']}"
     while queue:
@@ -47,7 +47,7 @@ for index, template in enumerate(templates):
         assert (24,25,21) in visited and (24,25,48) in visited, 'Harbor return and dock must connect'
         assert all(pos in visited for pos in [(21,25,10),(39,25,26),(20,25,25),(26,25,26)]), 'Tavern, market, Briggs and board approaches must connect'
     ox,oz = 26+(index%2)*530, 52+(index//2)*560
-    draw.text((ox,oz), ['HARBOR | lighthouse, supplies, return','CASTAWAY COVE | first discovery','SALTWATCH FORT | ruined watch','THE PALE GULL | beached wreck','LASTLIGHT BEACON | abandoned signal','TIDEGLASS SHRINE | tidal ruins','ROOTBOUND CAMP | mangrove salvage'][index], fill='#f3dfb0')
+    draw.text((ox,oz), ['HARBOR | lighthouse, supplies, return','CASTAWAY COVE | first discovery','SALTWATCH FORT | ruined watch','THE PALE GULL | beached wreck','LASTLIGHT BEACON | abandoned signal','TIDEGLASS SHRINE | tidal ruins','ROOTBOUND CAMP | mangrove salvage','REDWATER LANDING | opposing shore camps','PEARLWATER ATOLL | lagoon and pearl shelter','CINDERJAW ANCHORAGE | basalt drydock'][index], fill='#f3dfb0')
     for x in range(49):
         for z in range(49):
             surface = next((at(x,y,z) for y in range(39,22,-1) if at(x,y,z) != 'air'), 'water')
@@ -57,5 +57,5 @@ for index, template in enumerate(templates):
 output = ROOT / 'art/pirate/layout-preview.png'
 output.parent.mkdir(parents=True,exist_ok=True)
 image.save(output)
-print('Validated 7 template bounds, finite caches, arrival/return, dock-to-cache and new harbor service walking routes.')
+print('Validated 10 template bounds, finite caches, arrival/return, dock-to-cache and new harbor service walking routes.')
 print(output)

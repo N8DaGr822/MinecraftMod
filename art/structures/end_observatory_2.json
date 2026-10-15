@@ -22,6 +22,12 @@
       "Name": "minecraft:end_stone_bricks"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:obsidian"
     },
     {
@@ -1274,7 +1280,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/end_observatory"
+      }
     },
     {
       "pos": [
@@ -2018,7 +2028,7 @@
         3,
         12
       ],
-      "state": 2
+      "state": 3
     },
     {
       "pos": [
@@ -2858,7 +2868,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/end_observatory"
+      }
     },
     {
       "pos": [
@@ -3986,7 +4000,7 @@
         4,
         12
       ],
-      "state": 4,
+      "state": 5,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/end_observatory"
@@ -3998,7 +4012,7 @@
         4,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4022,7 +4036,7 @@
         4,
         19
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4030,20 +4044,20 @@
         4,
         19
       ],
+      "state": 7
+    },
+    {
+      "pos": [
+        21,
+        4,
+        2
+      ],
       "state": 6
     },
     {
       "pos": [
         21,
         4,
-        2
-      ],
-      "state": 5
-    },
-    {
-      "pos": [
-        21,
-        4,
         7
       ],
       "state": 0
@@ -4062,7 +4076,7 @@
         5,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4086,7 +4100,7 @@
         5,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4110,7 +4124,7 @@
         6,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4134,7 +4148,7 @@
         6,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4158,7 +4172,7 @@
         7,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4198,7 +4212,7 @@
         7,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4214,7 +4228,7 @@
         8,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4238,7 +4252,7 @@
         8,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4246,7 +4260,7 @@
         9,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4286,7 +4300,7 @@
         9,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4294,7 +4308,7 @@
         10,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4302,7 +4316,7 @@
         10,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4310,7 +4324,7 @@
         10,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4318,7 +4332,7 @@
         10,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4326,7 +4340,7 @@
         10,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4334,7 +4348,7 @@
         11,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4342,7 +4356,7 @@
         11,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4350,7 +4364,7 @@
         11,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4358,7 +4372,7 @@
         11,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4366,7 +4380,7 @@
         11,
         2
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -4398,7 +4412,7 @@
         12,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4406,7 +4420,7 @@
         12,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [
@@ -4414,7 +4428,7 @@
         12,
         2
       ],
-      "state": 7
+      "state": 8
     },
     {
       "pos": [

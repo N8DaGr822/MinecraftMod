@@ -12,11 +12,11 @@ import net.minecraft.world.item.ItemStack;
 
 public final class ShipMenu extends AbstractContainerMenu {
     public static final int WIDTH=312, HEIGHT=232, CARGO_X=8, CARGO_Y=50, INVENTORY_Y=142;
-	public static final int BUILD=0,LAUNCH=1,DOCK=2,UPGRADE=3,MATE=4,WORKER=5,GUNNER=6,LOOKOUT=7,FIRE_ORDER=8,TARGET=9,FLAG=10,CARGO_UPGRADE=11,CARGO_PAGE=12,RESUPPLY=13,NAVIGATOR=14,QUARTERMASTER=15,SINGER=16,SHANTY=17;
+	public static final int BUILD=0,LAUNCH=1,DOCK=2,UPGRADE=3,MATE=4,WORKER=5,GUNNER=6,LOOKOUT=7,FIRE_ORDER=8,TARGET=9,FLAG=10,CARGO_UPGRADE=11,CARGO_PAGE=12,RESUPPLY=13,NAVIGATOR=14,QUARTERMASTER=15,SINGER=16,SHANTY=17,STANDARD=18,CLIPPER=19,IRONCLAD=20,WAGES=21,PROVISIONS=22,ROAM=23,RAIDER=24,BATTLESHIP=25,GHOSTSHIP=26,AMMUNITION=27,EXPEDITION=28;
 	private final Player viewer;
 	private final BlockPos station;
 	private final PirateShip ship;
-	private final SimpleContainerData data=new SimpleContainerData(22);
+	private final SimpleContainerData data=new SimpleContainerData(27);
 	public ShipMenu(int id,Inventory inventory) { this(id,inventory,null,null); }
 	public ShipMenu(int id,Inventory inventory,BlockPos station,PirateShip ship) {
 		super(Ships.MENU,id);this.viewer=inventory.player;this.station=station;this.ship=ship;
@@ -36,6 +36,8 @@ public final class ShipMenu extends AbstractContainerMenu {
             for(int role=0;role<4;role++)data.set(11+role,PirateProgression.crewCost(Pirate.state(server),role));
         }
         if(ship==null)return;
+        data.set(25,ship.ammunition());data.set(26,ship.crewExpedition()?1:0);
+        data.set(24,ship.crewRoaming()?1:0);data.set(22,ship.shipClass());data.set(23,ship.morale());
 		data.set(15,ship.cargoSlots());data.set(17,ship.flag());data.set(18,ship.crew(PirateShip.NAVIGATOR));data.set(19,ship.crew(PirateShip.QUARTERMASTER));data.set(20,ship.crew(PirateShip.SINGER));data.set(21,ship.shantyPlaying()?1:0);
 		data.set(0,1);data.set(1,ship.docked()?1:0);data.set(2,ship.tier());data.set(3,Math.round(ship.hull()));
 		for(int i=0;i<4;i++)data.set(4+i,ship.crew(i));data.set(8,ship.holdFire()?1:0);
@@ -60,14 +62,20 @@ public final class ShipMenu extends AbstractContainerMenu {
 		else if(action==LAUNCH)error=ship.launch(captain);
 		else if(action==DOCK)error=ship.dock(captain);
 		else if(action==UPGRADE)error=ship.upgrade(captain);
-		else if(action>=MATE&&action<=LOOKOUT){if(!ship.recruit(captain,action-MATE))error="Recruit docked at harbor: this role costs "+PirateProgression.crewCost(Pirate.state(captain),action-MATE)+" emeralds. Crew limits apply.";}
+		else if(action>=MATE&&action<=LOOKOUT){if(!ship.recruit(captain,action-MATE))error="Recruit docked at harbor or your home drydock: this role costs "+PirateProgression.crewCost(Pirate.state(captain),action-MATE)+" emeralds. Crew limits apply.";}
 		else if(action==FIRE_ORDER)ship.toggleFire();
 		else if(action==TARGET)ship.selectTarget(captain);
         else if(action==FLAG){if(!ship.cycleFlag(captain))error="Dock your ship to change flags.";}
-        else if(action==CARGO_UPGRADE){if(!ship.upgradeCargo(captain))error="At harbor: Captain + 16 iron/4 emeralds for 36 slots; Veteran + 32 iron/8 emeralds for 54.";}
+        else if(action==CARGO_UPGRADE){if(!ship.upgradeCargo(captain))error="Harbor/home drydock: Captain + 16 iron/4 emeralds for 36 slots; Veteran + 32 iron/8 emeralds for 54.";}
         else if(action==CARGO_PAGE){data.set(16,ship.cargoSlots()>27?1-data.get(16):0);}
         else if(action==RESUPPLY){if(!ship.resupply(captain))error="Dock with Bram aboard and room for your planks or ammunition.";}
-        else if(action>=NAVIGATOR&&action<=SINGER){if(!ship.recruitOfficer(captain,action-NAVIGATOR))error="Complete and claim this officer's harbor commission, then hire docked at harbor.";}
+        else if(action>=NAVIGATOR&&action<=SINGER){if(!ship.recruitOfficer(captain,action-NAVIGATOR))error="Complete and claim this officer's harbor commission, then hire docked at harbor or your home drydock.";}
+        else if(action>=STANDARD&&action<=IRONCLAD){if(!ship.refitClass(captain,action-STANDARD))error="Refit a Captain's expanded ship at harbor or home drydock: Standard 16 iron; Clipper 16 iron + 8 emeralds; Ironclad 48 iron + 8 emeralds.";}
+        else if(action>=RAIDER&&action<=GHOSTSHIP){if(!ship.refitClass(captain,action-RAIDER+3))error="Faction refit: matching membership, rank 3, 60 standing, expanded ship, 64 iron + 16 emeralds at harbor/home drydock.";}
+        else if(action==AMMUNITION){if(!ship.cycleAmmunition(captain))return false;}
+        else if(action==EXPEDITION){if(!ship.toggleExpedition(captain))error="Dock to lead or recall your crew. All assigned sailors must be loaded within 48 blocks for recall.";}
+        else if(action==ROAM){if(!ship.toggleCrewRoaming(captain))error="Dock to change shore leave. Recall needs all roaming sailors loaded within 48 blocks.";}
+        else if(action==WAGES||action==PROVISIONS){if(!ship.supportCrew(captain,action==WAGES))error="Dock with crew. Wages: 1 emerald per crew per 20 minutes; provisions: 1 bread per two crew per 10 minutes. No repeat charges while covered.";}
         else if(action==SHANTY){if(!ship.toggleShanty(captain))error="Recruit Nell before starting a shanty.";}
 		else return false;
 		Ships.message(player,error==null?"Ship orders updated.":error);refresh(player);broadcastChanges();return error==null;

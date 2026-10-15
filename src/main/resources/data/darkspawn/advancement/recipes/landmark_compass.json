@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_compass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:compass"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_compass"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkspawn:landmark_compass"
+    ]
+  }
+}

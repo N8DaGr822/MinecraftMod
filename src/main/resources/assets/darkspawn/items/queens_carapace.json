@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:using_item",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "darkspawn:item/queens_carapace"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "darkspawn:item/queens_carapace_blocking"
+    }
+  }
+}

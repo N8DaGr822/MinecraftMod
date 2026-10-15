@@ -25,6 +25,12 @@
       "Name": "minecraft:waxed_cut_copper"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:copper_block"
     },
     {
@@ -1270,7 +1276,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 3,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/storm_altar"
+      }
     },
     {
       "pos": [
@@ -2014,7 +2024,7 @@
         3,
         12
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -2854,7 +2864,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 3,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/storm_altar"
+      }
     },
     {
       "pos": [
@@ -3982,7 +3996,7 @@
         4,
         12
       ],
-      "state": 5,
+      "state": 6,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/storm_altar"
@@ -4250,7 +4264,7 @@
         13,
         3
       ],
-      "state": 6
+      "state": 7
     },
     {
       "pos": [
@@ -4258,7 +4272,7 @@
         13,
         3
       ],
-      "state": 6
+      "state": 7
     }
   ]
 }

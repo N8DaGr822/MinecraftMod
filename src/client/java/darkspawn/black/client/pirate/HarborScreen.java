@@ -15,8 +15,8 @@ public final class HarborScreen extends AbstractContainerScreen<HarborMenu> {
     public HarborScreen(HarborMenu menu,Inventory inventory,Component title){super(menu,inventory,title,312,232);inventoryLabelY=-1000;}
     @Override protected void init(){
         super.init();
-        String[] labels={"Where am I?","Factions","Sailing help","Compass","Accept","Claim reward","Abandon","Previous","Next","Join faction","Leave faction","Amends","Harbor services"};
-        String[] hints={"About Breaker's Rest","Standing and membership","Ship construction and navigation","First free; replacement costs an ordinary compass","Accept selected activity","Claim the completed objective","Abandon unfinished work; rescued Garrick can instead be freed","Previous contract","Next contract","Requires 25 standing; one faction at a time","Costs 25 standing with your current faction","8 gold for 5 standing, capped at 25","Trade, repairs, rumors, officer rescue and your sea legend"};
+        String[] labels={"Where am I?","Factions","Sailing help","Compass","Accept","Claim reward","Abandon","Previous","Next","Join faction","Leave faction","Amends","Harbor services","Promotion"};
+        String[] hints={"About Breaker's Rest","Standing and membership","Ship construction and navigation","First free; replacement costs an ordinary compass","Accept selected activity","Claim the completed objective","Abandon unfinished work; rescued Garrick can instead be freed","Previous contract","Next contract","Requires 25 standing; one faction at a time","Costs 25 standing with your current faction","8 gold for 5 standing, capped at 25","Trade, repairs, rumors, officer rescue and your sea legend","Request your next rank; requirements appear in chat and the Journal"};
         for(int i=0;i<labels.length;i++){
             final int action=i;
             var b=addRenderableWidget(UiTheme.button(Component.literal(labels[i]),clicked->{textPage=0;minecraft.gameMode.handleInventoryButtonClick(menu.containerId,action);})
@@ -30,7 +30,7 @@ public final class HarborScreen extends AbstractContainerScreen<HarborMenu> {
         int selected=menu.status(4);
         return switch(menu.status(0)){
             case 0 -> menu.status(10)!=0?"Outpost contact: use Previous/Next to choose this faction's introduction or repeat voyage. Join at Trusted or make amends. Ships and hired crew stay yours. Harbor services require returning to Breaker's Rest.":"Welcome to Breaker's Rest. The return gate takes you home. Take a compass and choose your own voyage. Harbor services offer supplies, repairs, rumors and officer rescue.";
-            case 1 -> "Standing: Corsairs "+menu.status(5)+", Iron Fleet "+menu.status(6)+", Drowned "+menu.status(7)+". Membership: "+(menu.status(9)==0?"Independent":PirateProgression.Faction.values()[Math.clamp(menu.status(9)-1,0,2)].title)+". Select a faction contract to join or make amends.";
+            case 1 -> "Standing: Corsairs "+menu.status(5)+", Iron Fleet "+menu.status(6)+", Drowned "+menu.status(7)+". Membership: "+(menu.status(9)==0?"Independent":PirateProgression.Faction.values()[Math.clamp(menu.status(9)-1,0,2)].title+" / "+FactionPromotions.title(PirateProgression.Faction.values()[Math.clamp(menu.status(9)-1,0,2)],menu.status(14)))+". Select a faction contract to join or make amends. Promotion requires standing and achievements; see the Journal or request your next rank.";
             case 2 -> "The southern shipyard builds a starter platform for 105 oak planks and one helm. Sail seated; dock to edit. Ordinary boats work too. Castaway Cove lies east. Ship menus have Sail, Crew and Refit tabs.";
             case 3 -> "Your compass is ready. Your saved route is preserved. Spend nine minutes on each marked island to chart the next; study pauses away from the island.";
             case 4 -> HarborGuide.CONTRACT_DETAILS[selected]+(selected<7?" Optional; one-time reward.":"");

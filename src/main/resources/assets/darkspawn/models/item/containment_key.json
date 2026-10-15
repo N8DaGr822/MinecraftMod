@@ -1,9 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "minecraft:block/copper_block",
-    "metal": "minecraft:block/copper_block",
-    "light": "minecraft:block/sea_lantern"
+    "particle": "darkspawn:item/materials/gold",
+    "metal": "darkspawn:item/materials/gold",
+    "light": "darkspawn:item/materials/glow"
   },
   "elements": [
     {

@@ -98,7 +98,7 @@ public final class Temperature {
 	}
 
 	public static float protectedClimate(ServerPlayer player, float climate) {
-		int cold = 0, heat = 0, warmth = 0, cooling = 0, mountain = 0, diver = 0;
+		int cold = 0, heat = darkspawn.black.inventory.Accessories.equipped(player,5) ? 25 : 0, warmth = 0, cooling = 0, mountain = 0, diver = 0;
 		var warmEnchant = player.registryAccess().getOrThrow(WARMTH);
 		var coolEnchant = player.registryAccess().getOrThrow(COOLING);
 		for (ArmorType slot : SLOTS) {

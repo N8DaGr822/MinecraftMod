@@ -13,7 +13,7 @@ public final class HarborMenu extends AbstractContainerMenu {
 	private final Entity guide;
 	private final BlockPos board;
 	private final Player viewer;
-	private final SimpleContainerData data=new SimpleContainerData(14);
+	private final SimpleContainerData data=new SimpleContainerData(15);
 	public HarborMenu(int id,Inventory inventory) {this(id,inventory,null,null);}
 	public HarborMenu(int id,Inventory inventory,Entity guide,BlockPos board) {
 		super(HarborGuide.MENU,id);this.guide=guide;this.board=board;viewer=inventory.player;addDataSlots(data);if(guide!=null&&PirateDiplomacy.contact(guide)){data.set(4,4+PirateDiplomacy.faction(guide).ordinal());data.set(0,4);}refresh();
@@ -25,6 +25,7 @@ public final class HarborMenu extends AbstractContainerMenu {
         data.set(8,PirateProgression.captainTier(state));data.set(3,guide!=null&&guide.entityTags().contains(HarborGuide.BRIGGS_TAG)?1:0);
         data.set(10,guide!=null&&PirateDiplomacy.contact(guide)?1:0);
         var member=PirateDiplomacy.faction(state.factionMembership);data.set(9,member==null?0:member.ordinal()+1);
+        data.set(14,member==null?0:state.factionRanks[member.ordinal()]);
         int selected=data.get(4);data.set(11,0);data.set(12,state.garrickRescue);
         if(selected>=7&&selected<10){int index=selected-7;data.set(1,state.repeatContracts[index]==0?0:1);data.set(2,state.repeatContracts[index]==2?1:0);data.set(11,(int)Math.min(600,(PirateActivities.cooldown(player,index)+19)/20));}
         else if(selected==10){data.set(1,state.garrickRescue>=4?2:state.garrickRescue==0?0:1);data.set(2,state.garrickRescue==3?1:0);}
@@ -59,6 +60,7 @@ public final class HarborMenu extends AbstractContainerMenu {
             data.set(0,reason==HarborFeedback.NONE?9:8);data.set(13,reason.ordinal());
         }
 		else if(action==12){SeaMenu.open(server);return true;}
+        else if(action==13){FactionPromotions.promote(server);data.set(0,1);}
         else return false;
         if(data.get(0)==8&&data.get(13)==0)data.set(13,HarborFeedback.RETRY.ordinal());
 		refresh();broadcastChanges();return true;

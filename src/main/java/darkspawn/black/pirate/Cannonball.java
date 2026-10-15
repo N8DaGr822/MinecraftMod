@@ -18,7 +18,7 @@ public final class Cannonball extends ThrowableItemProjectile {
 	@Override public void tick() { super.tick();if(!level().isClientSide()&&tickCount>100)discard(); }
 	@Override protected void onHitEntity(EntityHitResult hit) {
 		super.onHitEntity(hit);
-		if(getOwner() instanceof PirateShip attacker && hit.getEntity() instanceof PirateShip victim)victim.cannonDamage(attacker,getItem().is(Ships.FIRE_SHOT));
+		if(getOwner() instanceof PirateShip attacker && hit.getEntity() instanceof PirateShip victim)victim.cannonDamage(attacker,getItem().getItem());
 	}
 	@Override protected void onHit(HitResult hit) {
 		super.onHit(hit);

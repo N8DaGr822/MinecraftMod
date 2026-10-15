@@ -45,7 +45,7 @@ def template(path):
 
 
 previews = []
-for name in ['harbor', *[f'island_{i}' for i in range(6)]]:
+for name in ['harbor', *[f'island_{i}' for i in range(9)]]:
     data = template(RES / f'data/darkspawn/structure/pirate/{name}.nbt')
     assert data['size'] == [49, 40, 49], name
     positions = [tuple(block['pos']) for block in data['blocks']]
@@ -61,6 +61,18 @@ for name in ['harbor', *[f'island_{i}' for i in range(6)]]:
 assets = RES / 'assets/darkspawn'
 sounds = json.loads((assets / 'sounds.json').read_text())
 language = json.loads((assets / 'lang/en_us.json').read_text())
+for name in ['pirate_beer', 'pirate_rum']:
+    assert f'item.darkspawn.{name}' in language, name
+    item = json.loads((assets / f'items/{name}.json').read_text())
+    assert item['model'] == {'type': 'minecraft:model', 'model': f'darkspawn:item/{name}'}, name
+    model = json.loads((assets / f'models/item/{name}.json').read_text())
+    assert model['elements'], name
+    for element in model['elements']:
+        assert all(0 <= low < high <= 16 for low, high in zip(element['from'], element['to'])), name
+        for face in element['faces'].values():
+            assert face['texture'][1:] in model['textures'], name
+            assert all(0 <= value <= 16 for value in face['uv']), name
+assert json.loads((assets / 'items/landmark_compass.json').read_text()) == json.loads((assets / 'items/logbound_compass.json').read_text())
 for recording in json.loads((ROOT / 'tools/audio/shanties.json').read_text()):
     event = sounds[recording['id']]
     assert event['subtitle'] in language, recording['id']
@@ -73,4 +85,4 @@ for recording in json.loads((ROOT / 'tools/audio/shanties.json').read_text()):
 
 (ROOT / 'build').mkdir(exist_ok=True)
 (ROOT / 'build/pirate-preview.json').write_text(json.dumps(previews), encoding='utf-8')
-print('Validated 7 shipped NBT templates, loot references and 4 streamed shanty hashes/subtitles.')
+print('Validated 10 shipped NBT templates, loot references, 4 streamed shanty hashes/subtitles, 2 drink models and landmark compass needle parity.')

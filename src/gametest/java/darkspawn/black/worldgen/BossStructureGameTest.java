@@ -31,6 +31,22 @@ import net.minecraft.world.phys.Vec3;
 public final class BossStructureGameTest {
 	private static final List<String> SITES = List.of("druid_shrine", "hunter_camp");
 	private static final List<String> ALL_SITES = java.util.stream.Stream.concat(SITES.stream(), BossLandmarkStructure.REGIONAL_SITES.keySet().stream().sorted()).toList();
+    @GameTest public void regionalArchaeologyDepositsBrushOnceIntoRealLoot(GameTestHelper helper) {
+        var level=helper.getLevel();var player=helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);var origin=helper.absolutePos(new BlockPos(0,55,0));
+        for(String site:BossLandmarkStructure.REGIONAL_SITES.keySet()) {
+            var piece=new BossLandmarkStructure.LandmarkPiece(level.getStructureTemplateManager(),Darkspawn.id("landmarks/"+site+"_0"),origin,Rotation.NONE);
+            var deposits=piece.template().filterBlocks(origin,piece.placeSettings(),Blocks.SUSPICIOUS_GRAVEL);
+            helper.assertTrue(deposits.size()==2,"Every regional template has two archaeology deposits");
+            var at=deposits.getFirst().pos();level.setBlockAndUpdate(at.below(),Blocks.STONE.defaultBlockState());level.setBlockAndUpdate(at,Blocks.SUSPICIOUS_GRAVEL.defaultBlockState());
+            var brushable=(net.minecraft.world.level.block.entity.BrushableBlockEntity)level.getBlockEntity(at);brushable.setLootTable(ResourceKey.create(Registries.LOOT_TABLE,Darkspawn.id("archaeology/"+site)),37);
+            var brush=new net.minecraft.world.item.ItemStack(Items.BRUSH);brushable.brush(0,level,player,net.minecraft.core.Direction.UP,brush);
+            helper.assertTrue(!brushable.getItem().isEmpty(),"Native archaeology table produces a real find: "+site);
+            for(int n=1;n<=12;n++)brushable.brush(n*10L,level,player,net.minecraft.core.Direction.UP,brush);
+            helper.assertTrue(level.getBlockState(at).is(Blocks.GRAVEL),"Completed brushing consumes the suspicious deposit");
+            level.setBlockAndUpdate(at,Blocks.AIR.defaultBlockState());level.setBlockAndUpdate(at.below(),Blocks.AIR.defaultBlockState());origin=origin.offset(32,0,0);
+        }
+        helper.succeed();
+    }
 	@GameTest public void everyTemplateRotationKeepsChestAndRitualClearanceAndSavedIdentity(GameTestHelper helper) {
 		var level=helper.getLevel(); var manager=level.getStructureTemplateManager();
 		var context=StructurePieceSerializationContext.fromLevel(level);

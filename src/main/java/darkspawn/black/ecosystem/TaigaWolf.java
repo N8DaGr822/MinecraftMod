@@ -97,6 +97,25 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	private boolean calledReinforcements;
 	private boolean reinforcement;
 	private UUID packOwner;
+    private UUID companionOwner;
+    private boolean companionResting;
+    public UUID companionOwner(){return companionOwner;}
+    public boolean tame(net.minecraft.server.level.ServerPlayer player) {
+        if(kind!=Kind.DIRE||reinforcement||companionOwner!=null||!player.isAlive()||player.isSpectator()||player.level()!=level()||distanceToSqr(player)>36||!player.hasLineOfSight(this)
+            ||!WorldAwakening.get(player.level()).defeated(darkspawn.black.boss.BossKind.MUTANT_WOLF)||!player.getMainHandItem().is(Items.COOKED_BEEF)||player.getMainHandItem().getCount()<4)return false;
+        player.getMainHandItem().consume(4,player);companionOwner=player.getUUID();setPersistenceRequired();setTarget(null);getNavigation().stop();return true;
+    }
+    @Override public void setTarget(LivingEntity target){super.setTarget(companionOwner==null?target:null);}
+    @Override public void checkDespawn(){if(companionOwner==null)super.checkDespawn();}
+    @Override public net.minecraft.world.InteractionResult mobInteract(Player player,net.minecraft.world.InteractionHand hand){
+        if(companionOwner!=null&&companionOwner.equals(player.getUUID())){
+            if(!level().isClientSide()&&player.getItemInHand(hand).isEmpty()){companionResting=!companionResting;getNavigation().stop();player.sendSystemMessage(net.minecraft.network.chat.Component.literal(companionResting?"Dire wolf: resting.":"Dire wolf: following."));}
+            return net.minecraft.world.InteractionResult.SUCCESS;
+        }
+        if(hand==net.minecraft.world.InteractionHand.MAIN_HAND&&player instanceof net.minecraft.server.level.ServerPlayer server&&tame(server))return net.minecraft.world.InteractionResult.SUCCESS;
+        return super.mobInteract(player,hand);
+    }
+
 	private long expiresAt;
 	private int missingOwnerTicks;
 
@@ -152,6 +171,12 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
+        if(companionOwner!=null){
+            setTarget(null);var owner=level.getServer().getPlayerList().getPlayer(companionOwner);
+            if(!companionResting&&owner!=null&&owner.level()==level&&owner.isAlive()&&distanceToSqr(owner)>9&&distanceToSqr(owner)<=48*48)getNavigation().moveTo(owner,1.1);
+            else getNavigation().stop();
+            return;
+        }
 		if (reinforcement) {
 			// Called Pack: Helpers are bounded, saved, and never become a second source of drops or reinforcements.
 			if (packOwner == null || level.getGameTime() >= expiresAt) { discard(); return; }
@@ -312,6 +337,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	@Override
 	protected void addAdditionalSaveData(ValueOutput output) {
 		super.addAdditionalSaveData(output);
+        if(companionOwner!=null)output.store("CompanionOwner",net.minecraft.core.UUIDUtil.CODEC,companionOwner);output.putBoolean("CompanionResting",companionResting);
 		output.putBoolean("darkspawn_called_pack", calledReinforcements);
 		output.putBoolean("darkspawn_reinforcement", reinforcement);
 		if (packOwner != null) { output.putString("darkspawn_pack_owner", packOwner.toString()); }
@@ -323,6 +349,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+        companionOwner=input.read("CompanionOwner",net.minecraft.core.UUIDUtil.CODEC).orElse(null);companionResting=input.getBooleanOr("CompanionResting",false);
 		calledReinforcements = input.getBooleanOr("darkspawn_called_pack", false);
 		reinforcement = input.getBooleanOr("darkspawn_reinforcement", false);
 		try { packOwner = UUID.fromString(input.getStringOr("darkspawn_pack_owner", "")); }

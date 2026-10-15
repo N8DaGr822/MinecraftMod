@@ -22,6 +22,12 @@
       "Name": "minecraft:dark_oak_planks"
     },
     {
+      "Name": "minecraft:suspicious_gravel",
+      "Properties": {
+        "dusted": "0"
+      }
+    },
+    {
       "Name": "minecraft:water"
     },
     {
@@ -1284,7 +1290,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/expedition_wreck"
+      }
     },
     {
       "pos": [
@@ -2868,7 +2878,11 @@
         3,
         18
       ],
-      "state": 1
+      "state": 2,
+      "nbt": {
+        "id": "minecraft:brushable_block",
+        "LootTable": "darkspawn:archaeology/expedition_wreck"
+      }
     },
     {
       "pos": [
@@ -4124,7 +4138,7 @@
         4,
         5
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -4644,7 +4658,7 @@
         4,
         12
       ],
-      "state": 4,
+      "state": 5,
       "nbt": {
         "id": "minecraft:chest",
         "LootTable": "darkspawn:chests/expedition_wreck"
@@ -4824,7 +4838,7 @@
         5,
         5
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -5544,7 +5558,7 @@
         6,
         5
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -6216,7 +6230,7 @@
         7,
         5
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -6240,7 +6254,7 @@
         8,
         5
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -6264,7 +6278,7 @@
         9,
         5
       ],
-      "state": 3
+      "state": 4
     },
     {
       "pos": [
@@ -6272,7 +6286,7 @@
         10,
         5
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -6280,7 +6294,7 @@
         10,
         5
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -6288,7 +6302,7 @@
         10,
         5
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -6296,7 +6310,7 @@
         10,
         5
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -6304,7 +6318,7 @@
         10,
         5
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -6312,7 +6326,7 @@
         10,
         5
       ],
-      "state": 5
+      "state": 6
     },
     {
       "pos": [
@@ -6320,7 +6334,7 @@
         11,
         5
       ],
-      "state": 3
+      "state": 4
     }
   ]
 }

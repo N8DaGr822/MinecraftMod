@@ -30,7 +30,7 @@ import net.minecraft.world.phys.AABB;
 public final class Ships {
 	public static final Block SHIPYARD = block("shipyard"), HELM = block("ship_helm"), CANNON = block("naval_cannon");
 	public static final Item SHIPYARD_ITEM = blockItem("shipyard", SHIPYARD), HELM_ITEM = blockItem("ship_helm", HELM), CANNON_ITEM = blockItem("naval_cannon", CANNON);
-	public static final Item SHOT = item("solid_shot"), FIRE_SHOT = item("incendiary_shot");
+	public static final Item SHOT = item("solid_shot"), FIRE_SHOT = item("incendiary_shot"), CHAIN_SHOT = item("chain_shot"), PIERCING_SHOT = item("piercing_shot");
 	public static final EntityType<PirateShip> SHIP = Registry.register(BuiltInRegistries.ENTITY_TYPE, Darkspawn.id("pirate_ship"),
 		EntityType.Builder.<PirateShip>of(PirateShip::new, MobCategory.MISC).sized(7,7).clientTrackingRange(16).updateInterval(1).noLootTable()
 			.build(ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id("pirate_ship"))));
@@ -46,7 +46,7 @@ public final class Ships {
 	private static Item blockItem(String name, Block block) { return Registry.register(BuiltInRegistries.ITEM,Darkspawn.id(name),new BlockItem(block,new Item.Properties().setId(ResourceKey.create(Registries.ITEM,Darkspawn.id(name))).useBlockDescriptionPrefix())); }
 	private static Item item(String name) { return Registry.register(BuiltInRegistries.ITEM,Darkspawn.id(name),new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM,Darkspawn.id(name))))); }
 	public static void initialize() {
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> { entries.accept(SHIPYARD_ITEM); entries.accept(HELM_ITEM); entries.accept(CANNON_ITEM); entries.accept(SHOT); entries.accept(FIRE_SHOT); });
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> { entries.accept(SHIPYARD_ITEM); entries.accept(HELM_ITEM); entries.accept(CANNON_ITEM); entries.accept(SHOT); entries.accept(FIRE_SHOT); entries.accept(CHAIN_SHOT); entries.accept(PIERCING_SHOT); });
 		PayloadTypeRegistry.serverboundPlay().register(ShipControlsPayload.TYPE,ShipControlsPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(ShipIdentityPayload.TYPE,ShipIdentityPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(ShipIdentityPayload.TYPE,(payload,context)->{
@@ -56,7 +56,14 @@ public final class Ships {
 			if (context.player().getVehicle() instanceof PirateShip ship && ship.getId() == payload.entityId()) ship.controls(context.player(),payload.buttons());
 		});
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
-			if (server.getTickCount() % 1200 != 0) return;
+			if(server.getTickCount()%20==0) {
+                var sea=server.getLevel(Pirate.LEVEL);
+                if(sea!=null)for(var entity:sea.getAllEntities())if(entity instanceof net.minecraft.world.entity.Mob mob&&PirateShip.loyalCrew(mob)&&!mob.isPassenger()) {
+                    var tag=mob.entityTags().stream().filter(t->t.startsWith(PirateShip.CREW_SHIP)).findFirst();
+                    if(tag.isPresent())try {var ship=sea.getEntity(java.util.UUID.fromString(tag.get().substring(PirateShip.CREW_SHIP.length())));if(!(ship instanceof PirateShip vessel)||!vessel.docked()) {mob.getNavigation().stop();mob.setNoAi(true);}}catch(IllegalArgumentException invalid){mob.setNoAi(true);}
+                }
+            }
+            if (server.getTickCount() % 1200 != 0) return;
 			var level = server.getLevel(Pirate.LEVEL); if (level == null) return;
             spawnPatrols(level);
 		});
@@ -66,10 +73,10 @@ public final class Ships {
             int count=0;for(var entity:level.getAllEntities())if(entity instanceof PirateShip vessel&&vessel.enemy()&&vessel.isAlive())count++;
             int attempts=0;
             for (var player : level.players()) {
-                if(count>=8||attempts>=2)break;
+                if(count>=darkspawn.black.ServerTuning.patrolCap||attempts>=darkspawn.black.ServerTuning.patrolAttempts)break;
                 if (!player.isAlive()||player.isSpectator()||player.isCreative()||!(player.getVehicle() instanceof PirateShip ship) || !ship.ownedBy(player)||ship.docked() || ship.enemy() || ship.protectedHarbor()) continue;
                 if (!level.getEntitiesOfClass(PirateShip.class,ship.getBoundingBox().inflate(192),e->e.enemy()&&e.isAlive()).isEmpty()) continue;
-                // Loaded Patrol Budget: At most two attempts per minute and eight loaded NPC vessels.
+                // Loaded Patrol Budget: Configured attempts and loaded-vessel caps avoid forcing chunks.
                 attempts++;var pos=ship.blockPosition().offset(96,0,64);
                 int choice=level.getRandom().nextInt(4);
                 var state=Pirate.state(player);int special=state.ghostVoyage?1:state.infamy>=30&&choice==0?2:level.getRandom().nextInt(8)==0?1:0;

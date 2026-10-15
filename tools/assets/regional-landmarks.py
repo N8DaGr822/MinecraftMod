@@ -160,6 +160,9 @@ def template(site, variant):
     for (x,y,z),(state,_) in list(blocks.items()):
         if y==4 and state['Name'] not in ('minecraft:air','minecraft:water') and (x,3,z) not in blocks:
             fill((x,0,z),(x,3,z),wall)
+    # Archaeology: Two supported, flush-floor deposits preserve the ritual and walking clearances.
+    for x in (8,16):
+        put(x,3,18,'suspicious_gravel',{'dusted':'0'},{'id':'minecraft:brushable_block','LootTable':'darkspawn:archaeology/'+site})
     palette=[]; lookup={}; entries=[]
     for pos,(state,nbt) in sorted(blocks.items(),key=lambda e:(e[0][1],e[0][0],e[0][2])):
         key=json.dumps(state,sort_keys=True)
@@ -189,6 +192,15 @@ def generate():
         book={'type':'minecraft:item','name':'minecraft:written_book','modifier':{'type':'minecraft:set_components','components':{'minecraft:written_book_content':{'title':site.replace('_',' ').title(),'author':'An expedition survivor','pages':[{'text':p} for p in pages],'resolved':True}}}}
         items=[{'type':'minecraft:item','name':'minecraft:'+item,'modifier':{'type':'minecraft:set_count','count':{'type':'minecraft:uniform','min':1,'max':3}}} for item in supplies]
         write(RES/f'loot_table/chests/{site}.json',{'type':'minecraft:chest','pools':[{'rolls':1,'entries':[book]},{'rolls':{'type':'minecraft:uniform','min':3,'max':5},'entries':items}],'random_sequence':'darkspawn:chests/'+site})
+        sherds=['angler','archer','arms_up','blade','brewer','burn','danger','explorer','friend','heart','howl','miner','mourner','plenty']
+        finds=[{'type':'minecraft:item','name':'minecraft:'+sherds[index]+'_pottery_sherd','weight':4},
+               {'type':'minecraft:item','name':'minecraft:amethyst_shard','weight':3},
+               {'type':'minecraft:item','name':'minecraft:echo_shard','weight':1},
+               {'type':'minecraft:item','name':'darkspawn:blank_discovery_chart','weight':2},
+               {'type':'minecraft:item','name':'minecraft:'+supplies[0],'weight':3}]
+        write(RES/f'loot_table/archaeology/{site}.json',{'type':'minecraft:archaeology','pools':[{'rolls':1,'entries':finds}]})
+        cache=RES/f'loot_table/chests/{site}.json'
+        cache_data=json.loads(cache.read_text());cache_data['pools'].append({'rolls':1,'entries':finds});write(cache,cache_data)
         for variant in range(3): template(site,variant)
         print(site)
     write(RES/'tags/worldgen/structure/boss_landmarks.json',{'replace':False,'values':['darkspawn:druid_shrine','darkspawn:hunter_camp']+['darkspawn:'+s for s in SITES]})

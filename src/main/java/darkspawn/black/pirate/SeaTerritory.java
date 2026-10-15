@@ -23,6 +23,7 @@ public final class SeaTerritory {
     private SeaTerritory() { }
     private static IslandDiscoveries.Island here(ServerPlayer p){var island=IslandDiscoveries.at(p.level(),p.blockPosition());return island!=null&&island.kind()==1?island:null;}
     public static boolean ownsHere(ServerPlayer p){var island=here(p);var fort=island==null?null:SeaLedger.get(p.level()).fort(island.center());return fort!=null&&fort.owner().equals(p.getUUID());}
+    public static boolean contested(ServerPlayer player){var island=here(player);return island!=null&&SIEGES.getOrDefault(player.level(),Map.of()).containsKey(island.center());}
     public static int progress(ServerPlayer p){var island=here(p);var siege=island==null?null:SIEGES.getOrDefault(p.level(),Map.of()).get(island.center());return siege==null?0:siege.held;}
     public static SeaServices.Reply order(ServerPlayer p,int action){
         if(action<11||action>13||!p.isAlive()||p.isSpectator()||!p.level().dimension().equals(Pirate.LEVEL))return SeaServices.Reply.FORT;

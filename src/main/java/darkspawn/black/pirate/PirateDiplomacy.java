@@ -66,6 +66,7 @@ public final class PirateDiplomacy {
         var personal=attacker.entityTags().stream().filter(tag->tag.startsWith(SeaTerritory.TARGET)).findFirst();if(personal.isPresent())return !(target instanceof ServerPlayer)||!personal.get().equals(SeaTerritory.TARGET+target.getUUID());
         var faction=faction(attacker);if(faction==null||!attacker.level().dimension().equals(Pirate.LEVEL))return false;
         if(harbor(attacker)||harbor(target)||contact(target)||PirateShip.loyalCrew(target))return true;
+        if(FactionSkirmishes.combatant(attacker))return !FactionSkirmishes.canAttack(attacker,target);
         return !(target instanceof ServerPlayer player)||PirateProgression.standing(Pirate.state(player),faction)>=0;
     }
     public static void initialize() {
