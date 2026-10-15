@@ -16,7 +16,7 @@ public final class PirateOfficers {
             if(action==4&&state.firstSealClue&&state.sealContract==0){state.sealContract=1;return true;}
             if(action==6&&(state.sealContract==1||state.sealContract==2)){state.sealContract=0;return true;}
             if(action!=5||state.sealContract!=2||player.getInventory().getFreeSlot()<0)return false;
-            state.sealContract=3;player.getInventory().add(new ItemStack(Items.EMERALD,8));return true;
+            state.sealContract=3;SevenSeals.discover(player,0);player.getInventory().add(new ItemStack(Items.EMERALD,8));return true;
         }
         int index=selected-12;
         if(action==4&&state.officerContracts[index]==0){state.officerContracts[index]=1;return true;}
@@ -24,7 +24,7 @@ public final class PirateOfficers {
         if(action!=5||state.officerContracts[index]!=2)return false;
         if(index==1&&(!Ships.pay(player,Items.IRON_INGOT,8,false)||!Ships.pay(player,Items.OAK_PLANKS,16,false)))return false;
         if(index==1){Ships.pay(player,Items.IRON_INGOT,8,true);Ships.pay(player,Items.OAK_PLANKS,16,true);}
-        state.officerContracts[index]=3;Ships.message(player,NAMES[index]+" is ready to join. Use Refit / Crew aboard your docked harbor ship.");return true;
+        state.officerContracts[index]=3;SeaLegends.renown(player,5);Ships.message(player,NAMES[index]+" is ready to join. Use the Crew tab aboard your docked harbor ship.");return true;
     }
     static boolean inspect(ServerPlayer player,IslandDiscoveries.Island island,BlockPos chest) {
         var state=Pirate.state(player);boolean changed=false;
@@ -46,7 +46,8 @@ public final class PirateOfficers {
         if(state.officerContracts[0]==1){state.officerContracts[0]=2;Ships.message(player,"Mara's beacon bearings recorded. Return to Briggs or the board.");}
     }
     public static String sealJournal(PiratePlayerState state) {
+        if(state.sealContract==3)return SevenSeals.journal(state);
         if(!state.firstSealClue)return "An undiscovered symbol waits in the island ruins. Explore Pirate Seas; no faction oath is required.";
-        return "Tideglass rubbing: seven rings surround a closed eye. One ring bears a lantern. These are bindings, not keys to a treasure vault.\n\nOptional: accept The First Binding at Briggs or the harbor board, then climb Lastlight Beacon. The signal is recorded only after accepting. Return for eight emeralds, once.\n\n"+(state.sealContract>=2?"The beacon answered in seven pulses. Beneath the drawn eye, an older hand wrote: Keep the remaining lights asleep. This is a first clue, not a broken seal or a finished Seven Seals questline.":"The lantern mark points toward a beacon. The other six bindings remain unexplained.");
+        return "Tideglass rubbing: seven rings surround a closed eye. One ring bears a lantern. These are bindings, not keys to a treasure vault.\n\nOptional: accept The First Binding at Briggs or the harbor board, then climb Lastlight Beacon. The signal is recorded only after accepting. Return for eight emeralds, once.\n\n"+(state.sealContract>=2?"The beacon answered in seven pulses. Beneath the drawn eye, an older hand wrote: Keep the remaining lights asleep. Return to Briggs to record the Lantern seal and begin tracing the remaining six bindings.":"The lantern mark points toward a beacon. The other six bindings remain unexplained.");
     }
 }

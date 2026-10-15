@@ -1,6 +1,6 @@
 # Optional quests and lore
 
-Status: future design. Named characters, plot details and endings remain proposals from the [source brief](design-brief.md).
+Status: mixed implementation and future design. Briggs, personal contracts, Garrick's rescue, Mara/Bram/Nell commissions and The First Binding clue are implemented; see [repeat voyages and Garrick](repeat-voyages-and-garrick.md) and [officers and the first binding](ship-identity-seals-and-officers.md). All seven seals and the Pirate King, Liberator and Eternal Guardian endings are now implemented with personal outcomes; see [current rules](../pirate-expansion.md). Other larger questlines and legendary leaders below remain proposals from the [source brief](design-brief.md).
 
 ## Activities and consequences
 

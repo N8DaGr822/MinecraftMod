@@ -1,6 +1,9 @@
 # Pirate Seas: first playable dimension
 
+Current expansion rules: [harbor services, recovery, fort warfare and Seven Seals](pirate-expansion.md).
 Future expansion is documented in [The Shattered Seas plan](shattered-seas/project-overview.md). This page describes the current dimension implementation.
+
+For the latest feature inventory, polish fixes and outstanding playtests, see the [pirate polish review](pirate-polish-review.md). Verification counts below describe the original travel increment.
 
 Scope approved October 14: dimension exploration and travel first; craftable pre-dragon access. This increment adds the ocean, harbor, island discoveries, finite loot and return travel. The subsequent [naval increment](naval-gameplay.md) adds ships, cannons, four crew roles and progression.
 

@@ -42,6 +42,7 @@ public final class Pirate {
 	public static void initialize() {
 		PirateIslandStructure.initialize();
 		Ships.initialize();
+        SeaMenu.initialize();SeaTerritory.initialize();SevenSeals.initialize();
 		LogboundCompass.initialize();
 		HarborGuide.initialize();
 		IslandDiscoveries.initialize();

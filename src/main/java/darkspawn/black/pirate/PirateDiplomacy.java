@@ -63,6 +63,7 @@ public final class PirateDiplomacy {
     }
     public static boolean disallows(Mob attacker,LivingEntity target) {
         if(contact(attacker)||PirateShip.loyalCrew(attacker))return true;
+        var personal=attacker.entityTags().stream().filter(tag->tag.startsWith(SeaTerritory.TARGET)).findFirst();if(personal.isPresent())return !(target instanceof ServerPlayer)||!personal.get().equals(SeaTerritory.TARGET+target.getUUID());
         var faction=faction(attacker);if(faction==null||!attacker.level().dimension().equals(Pirate.LEVEL))return false;
         if(harbor(attacker)||harbor(target)||contact(target)||PirateShip.loyalCrew(target))return true;
         return !(target instanceof ServerPlayer player)||PirateProgression.standing(Pirate.state(player),faction)>=0;
@@ -97,7 +98,7 @@ public final class PirateDiplomacy {
     public static void penalizeAttack(ServerPlayer player,PirateProgression.Faction faction,String target) {
         long now=player.level().getGameTime();var times=INCIDENTS.computeIfAbsent(player,key->new long[]{Long.MIN_VALUE,Long.MIN_VALUE,Long.MIN_VALUE});
         if(times[faction.ordinal()]!=Long.MIN_VALUE&&now-times[faction.ordinal()]<20)return;
-        times[faction.ordinal()]=now;PirateProgression.addStanding(Pirate.state(player),faction,-10);
+        times[faction.ordinal()]=now;SeaLegends.infamy(player,2);PirateProgression.addStanding(Pirate.state(player),faction,-10);
         Ships.message(player,faction.title+": -10 standing for attacking its "+target+".");
     }
     public static void updateGuard(Mob mob) {

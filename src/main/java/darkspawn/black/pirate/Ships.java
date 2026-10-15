@@ -72,7 +72,8 @@ public final class Ships {
                 // Loaded Patrol Budget: At most two attempts per minute and eight loaded NPC vessels.
                 attempts++;var pos=ship.blockPosition().offset(96,0,64);
                 int choice=level.getRandom().nextInt(4);
-                if(PirateShip.spawnPatrol(level,pos,choice==0?null:PirateProgression.Faction.values()[choice-1])!=null)count++;
+                var state=Pirate.state(player);int special=state.ghostVoyage?1:state.infamy>=30&&choice==0?2:level.getRandom().nextInt(8)==0?1:0;
+                if((special==0?PirateShip.spawnPatrol(level,pos,choice==0?null:PirateProgression.Faction.values()[choice-1]):PirateShip.spawnSpecial(level,pos,special))!=null)count++;
             }
     }
 

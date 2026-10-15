@@ -26,6 +26,7 @@ This explicitly packages the mod without unit tests or a headless test server. K
 | Cooking logic | `.\gradlew.bat test --tests 'darkspawn.black.cooking.*' --max-workers=1` |
 | OneBlock logic | `.\gradlew.bat test --tests 'darkspawn.black.oneblock.*' --max-workers=1` |
 | One specific unit test | `.\gradlew.bat test --tests 'darkspawn.black.equipment.TemperatureTest' --max-workers=1` |
+| Pirate templates, loot references and shanty integrity | `python tools/assets/verify-pirate-assets.py`, then `python tools/assets/preview-pirate.py` and `python tools/assets/preview-naval.py` (previews require Pillow); inspect the offline previews |
 
 For server behavior, select a registered GameTest ID with the Fabric filter:
 

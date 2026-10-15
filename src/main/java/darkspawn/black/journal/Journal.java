@@ -87,9 +87,10 @@ public final class Journal {
             if (entry.id().equals("guide/starting")) body += "\n\nDiscoveries: " + progress.saved().size() + " | Hearts: " + hearts.savedBosses().size() + "/15 | Distinct meals: " + Culinary.progress(player).meals().size() + " | Forsaken research: " + (researched ? "learned" : "not learned");
             result.add(new JournalSnapshotPayload.Entry(entry.id(),entry.section(),known ? entry.title() : "Undiscovered " + (entry.section().equals("landmarks") ? "landmark" : entry.section().equals("forsaken") ? "entry" : entry.section().equals("bosses") ? "boss" : entry.section().equals("mounts") ? "mount" : "creature"),body.strip(),known));
         }
+        result.add(new JournalSnapshotPayload.Entry("pirate/sea_legend","overview","Your Sea Legend",darkspawn.black.pirate.SeaLegends.journal(darkspawn.black.pirate.Pirate.state(player)),true));
         result.add(new JournalSnapshotPayload.Entry("pirate/progression","overview","Factions and Captaincy",darkspawn.black.pirate.PirateProgression.journal(darkspawn.black.pirate.Pirate.state(player)),true));
         var pirateState=darkspawn.black.pirate.Pirate.state(player);
-        result.add(new JournalSnapshotPayload.Entry("pirate/first_seal","landmarks",pirateState.firstSealClue?"Seven Seals: The First Binding":"An undiscovered binding",darkspawn.black.pirate.PirateOfficers.sealJournal(pirateState),pirateState.firstSealClue));
+        result.add(new JournalSnapshotPayload.Entry("pirate/first_seal","landmarks",pirateState.firstSealClue?(pirateState.sealContract==3?"Seven Seals: "+Integer.bitCount(pirateState.seals)+"/7":"Seven Seals: The First Binding"):"An undiscovered binding",darkspawn.black.pirate.PirateOfficers.sealJournal(pirateState),pirateState.firstSealClue));
         // Pirate Field Notes: Keep island clues readable after the arrival message disappears.
         int clues = darkspawn.black.pirate.Pirate.state(player).pirateClues;
         for (int kind = 0; kind < darkspawn.black.pirate.IslandDiscoveries.NAMES.length; kind++) {

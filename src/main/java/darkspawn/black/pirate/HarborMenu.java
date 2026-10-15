@@ -13,7 +13,7 @@ public final class HarborMenu extends AbstractContainerMenu {
 	private final Entity guide;
 	private final BlockPos board;
 	private final Player viewer;
-	private final SimpleContainerData data=new SimpleContainerData(13);
+	private final SimpleContainerData data=new SimpleContainerData(14);
 	public HarborMenu(int id,Inventory inventory) {this(id,inventory,null,null);}
 	public HarborMenu(int id,Inventory inventory,Entity guide,BlockPos board) {
 		super(HarborGuide.MENU,id);this.guide=guide;this.board=board;viewer=inventory.player;addDataSlots(data);if(guide!=null&&PirateDiplomacy.contact(guide)){data.set(4,4+PirateDiplomacy.faction(guide).ordinal());data.set(0,4);}refresh();
@@ -40,16 +40,27 @@ public final class HarborMenu extends AbstractContainerMenu {
 			: board!=null&&player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(board))<=36&&player.level().getBlockState(board).is(HarborGuide.BOARD);
 	}
 	@Override public boolean clickMenuButton(Player player,int action) {
-		if(!(player instanceof ServerPlayer server)||!stillValid(player)||!getCarried().isEmpty())return false;
+		if(!(player instanceof ServerPlayer server)||!stillValid(player))return false;
+        data.set(13,0);if(!getCarried().isEmpty()){data.set(0,8);data.set(13,HarborFeedback.CURSOR.ordinal());broadcastChanges();return false;}
 		if(action>=0&&action<=2)data.set(0,action);
-		else if(action==3) {if(data.get(3)==0)return false;data.set(0,HarborGuide.compass(server)?3:7);}
-		else if(action>=4&&action<=6) {data.set(0,(data.get(4)==0?HarborGuide.contract(server,action):data.get(4)<4?HarborGuide.islandContract(server,data.get(4)-1,action):data.get(4)<7?PirateProgression.contract(server,data.get(4)-4,action):data.get(4)<10?PirateActivities.contract(server,data.get(4)-7,action):data.get(4)==10?PirateActivities.rescueOrder(server,action):PirateOfficers.contract(server,data.get(4),action))?4:8);}
+		else if(action==3) {if(data.get(3)==0)return false;boolean issued=HarborGuide.compass(server);data.set(0,issued?3:8);if(!issued){var reason=HarborFeedback.COMPASS_COST;for(int i=0;i<server.getInventory().getContainerSize();i++)if(server.getInventory().getItem(i).is(LogboundCompass.ITEM))reason=HarborFeedback.COMPASS_OWNED;if(reason!=HarborFeedback.COMPASS_OWNED&&server.getInventory().getFreeSlot()<0)reason=HarborFeedback.SPACE;data.set(13,reason.ordinal());}}
+		else if(action>=4&&action<=6) {var reason=HarborFeedback.contract(server,data.get(4),action);if(reason!=HarborFeedback.NONE){data.set(0,8);data.set(13,reason.ordinal());broadcastChanges();return false;}data.set(0,(data.get(4)==0?HarborGuide.contract(server,action):data.get(4)<4?HarborGuide.islandContract(server,data.get(4)-1,action):data.get(4)<7?PirateProgression.contract(server,data.get(4)-4,action):data.get(4)<10?PirateActivities.contract(server,data.get(4)-7,action):data.get(4)==10?PirateActivities.rescueOrder(server,action):PirateOfficers.contract(server,data.get(4),action))?4:8);}
 		else if(action==7||action==8){if(data.get(10)!=0)data.set(4,(data.get(4)<7?7:4)+PirateDiplomacy.faction(guide).ordinal());else data.set(4,Math.floorMod(data.get(4)+(action==7?-1:1),HarborGuide.CONTRACT_NAMES.length));data.set(0,4);}
         else if(action>=9&&action<=11) {
             var selected=data.get(4)>=4&&data.get(4)<10?PirateProgression.Faction.values()[(data.get(4)-4)%3]:action==10?PirateDiplomacy.faction(Pirate.state(server).factionMembership):null;
-            data.set(0,PirateDiplomacy.membership(server,selected,action)?9:10);
+            var state=Pirate.state(server);HarborFeedback reason=HarborFeedback.NONE;
+            if(action==10&&state.factionMembership.isEmpty())reason=HarborFeedback.NO_MEMBERSHIP;
+            else if(selected==null)reason=HarborFeedback.FACTION;
+            else if(action==9&&!state.factionMembership.isEmpty())reason=HarborFeedback.MEMBERSHIP;
+            else if(action==9&&PirateProgression.standing(state,selected)<25)reason=HarborFeedback.TRUST;
+            else if(action==11&&PirateProgression.standing(state,selected)>=25)reason=HarborFeedback.TRUSTED;
+            else if(action==11&&!Ships.pay(server,net.minecraft.world.item.Items.GOLD_INGOT,8,false))reason=HarborFeedback.GOLD;
+            if(reason==HarborFeedback.NONE&&!PirateDiplomacy.membership(server,selected,action))reason=HarborFeedback.LOCATION;
+            data.set(0,reason==HarborFeedback.NONE?9:8);data.set(13,reason.ordinal());
         }
-		else return false;
+		else if(action==12){SeaMenu.open(server);return true;}
+        else return false;
+        if(data.get(0)==8&&data.get(13)==0)data.set(13,HarborFeedback.RETRY.ordinal());
 		refresh();broadcastChanges();return true;
 	}
 	@Override public ItemStack quickMoveStack(Player player,int index) {return ItemStack.EMPTY;}

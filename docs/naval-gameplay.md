@@ -1,5 +1,8 @@
 # Ships, cannons and crew
 
+Current expansion rules: [harbor services, recovery, fort warfare and Seven Seals](pirate-expansion.md).
+Latest source audit, fixes and remaining acceptance: [pirate polish review](pirate-polish-review.md).
+
 
 
 First naval implementation, October 14. The user selected progressively larger editable platforms, seated sailing with ordinary walking/editing when docked, player-ship combat, and four initial crew roles.
@@ -15,15 +18,9 @@ The harbor gains a **Shipyard** at **0, 65, 24** when next visited. Existing pla
 
 
 | Platform | Unlock | Construction cost | Build above deck | Block cap | Cannons |
-
 | --- | --- | --- | --- | --- | --- |
-
 | Small, 7 × 15 | Available immediately | 105 oak planks + one Ship Helm | 6 blocks | 512 including platform | 4 |
-
 | Large, 11 x 23 | Five NPC victories OR four guided discoveries + two claimed contracts | Expand a docked small ship with 148 oak planks | 8 blocks | 1,024 including platform | 8 |
-
-
-
 | Expanded, 15 × 31 | Twelve NPC victories OR eight guided discoveries + four claimed contracts | Expand the 11×23 ship with 212 oak planks | 10 blocks | 1,536 including platform | 12 |
 
 
@@ -79,15 +76,10 @@ Recruit while docked within the harbor's 96-block protected radius. Open the shi
 
 
 | Role | Price | Limit | Job |
-
 | --- | --- | --- | --- |
-
 | First mate | 12 emeralds | 1 | Coordinates automatic broadsides against your selected target when ordered; assists aiming within the broadside arc. Defaults to hold fire. |
-
 | Shipworker | 12 emeralds | 1 | Every four seconds, consumes one stocked oak plank to restore five hull points and reduce an active fire. |
-
 | Cannoneer | 8 emeralds | One per allowed cannon | Each gunner operates one gun per broadside. Without gunners the captain can operate one gun. |
-
 | Lookout / crow's nest | 12 emeralds | 1 | Extends ship contact selection from 80 to 192 blocks and reports ship/island contacts and distance in the HUD. |
 
 

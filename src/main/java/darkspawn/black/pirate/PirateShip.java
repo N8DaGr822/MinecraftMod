@@ -110,12 +110,14 @@ public final class PirateShip extends Entity {
     }
 
 	private UUID owner;
+    private int encounterKind; public int encounterKind(){return encounterKind;} public boolean burning(){return burning>0;}
     private PirateProgression.Faction patrolFaction;
     private UUID provokedBy;
     private long provokedUntil, patrolExpiresAt;
     public PirateProgression.Faction patrolFaction(){return patrolFaction;}
     public boolean hostileTo(PirateShip vessel) {
         if(!enemy()||vessel.enemy()||protectedHarbor()||vessel.protectedHarbor())return false;
+        if(encounterKind==2){if(!(level() instanceof ServerLevel server)||vessel.owner==null)return false;var captain=server.getServer().getPlayerList().getPlayer(vessel.owner);return captain!=null&&captain.level()==level()&&(Pirate.state(captain).infamy>=30||(vessel.owner.equals(provokedBy)&&level().getGameTime()<provokedUntil));}
         if(patrolFaction==null)return true;
         if(!(level() instanceof ServerLevel server)||vessel.owner==null)return false;
         var captain=server.getServer().getPlayerList().getPlayer(vessel.owner);
@@ -361,24 +363,30 @@ public final class PirateShip extends Entity {
 		if(enemy()&&patrolExpiresAt>0&&server.getGameTime()>=patrolExpiresAt)return false;
 		if(!enemy()&&!attacker.enemy()&&(!server.isPvpAllowed()||java.util.Objects.equals(owner,attacker.owner)))return false;
 		if(attacker.enemy()&&(enemy()||!attacker.hostileTo(this)))return false;
-        if(enemy()&&patrolFaction!=null&&attacker.owner!=null) {
+        if(enemy()&&(patrolFaction!=null||encounterKind==2)&&attacker.owner!=null) {
             var captain=server.getServer().getPlayerList().getPlayer(attacker.owner);
             if(captain!=null&&captain.level()==level()) {
                 provokedBy=attacker.owner;provokedUntil=level().getGameTime()+1200;
-                PirateDiplomacy.penalizeAttack(captain,patrolFaction,"naval patrol");
+                if(patrolFaction!=null)PirateDiplomacy.penalizeAttack(captain,patrolFaction,"naval patrol");
             }
         }
         lastAttacker=attacker.getUUID();
 		entityData.set(HULL,hull()-(fire?8:20));if(fire)burning=Math.max(burning,120);
 		if(hull()<=0)sink(attacker);return true;
 	}
-	private void sink(PirateShip attacker) {
+	public boolean harborRepair(ServerPlayer captain) {
+        if(!refitAllowed(captain)||hull()>=maxHull()&&burning==0||!Ships.pay(captain,Items.OAK_PLANKS,10,false)||!Ships.pay(captain,Items.EMERALD,2,false))return false;
+        Ships.pay(captain,Items.OAK_PLANKS,10,true);Ships.pay(captain,Items.EMERALD,2,true);entityData.set(HULL,Math.min(maxHull(),hull()+50));burning=0;return true;
+    }
+    private void sink(PirateShip attacker) {
 		if(!(level() instanceof ServerLevel server)||sinking)return;sinking=true;
+        if(owner!=null){int lost=0;for(int i=0;i<3;i++)if(crew(NAVIGATOR+i)>0)lost|=1<<i;if(getPassengers().stream().anyMatch(e->assignedCrew(e)&&e.entityTags().contains(PirateActivities.GARRICK)))lost|=8;SeaLedger.get(server).lose(owner,lost);}
 		// One-Way Wreck: Remove the vessel once, drop cargo once; player-ship kills never award progression.
 		if(enemy()&&attacker.owner!=null && server.getServer().getPlayerList().getPlayer(attacker.owner) instanceof ServerPlayer captain) {
-			PirateActivities.navalVictory(captain,this);Pirate.state(captain).navalVictories++;Ships.message(captain,"Naval victories: "+Pirate.state(captain).navalVictories+" | Captain tier: "+PirateProgression.captainTier(Pirate.state(captain)));
+			SeaLegends.victory(captain,this);PirateActivities.navalVictory(captain,this);Pirate.state(captain).navalVictories++;Ships.message(captain,"Naval victories: "+Pirate.state(captain).navalVictories+" | Captain tier: "+PirateProgression.captainTier(Pirate.state(captain)));
 		}
-		for(int i=0;i<cargo.getContainerSize();i++){if(!cargo.getItem(i).isEmpty())spawnAtLocation(server,cargo.getItem(i).copy());cargo.setItem(i,ItemStack.EMPTY);}
+		if(!enemy()&&attacker!=this&&attacker.owner!=null&&!attacker.owner.equals(owner)&&server.getServer().getPlayerList().getPlayer(attacker.owner) instanceof ServerPlayer pirate)SeaLegends.infamy(pirate,15);
+        for(int i=0;i<cargo.getContainerSize();i++){if(!cargo.getItem(i).isEmpty())spawnAtLocation(server,cargo.getItem(i).copy());cargo.setItem(i,ItemStack.EMPTY);}
 		if(docked())for(int x=-width()/2;x<=width()/2;x++)for(int z=-length()/2;z<=length()/2;z++)for(int y=0;y<=height();y++){
 			var pos=world(new BlockPos(x,y,z),getYRot(),blockPosition());if(permitted(level().getBlockState(pos)))level().setBlock(pos,Blocks.AIR.defaultBlockState(),2);
 		}
@@ -395,12 +403,13 @@ public final class PirateShip extends Entity {
         }
 		for(var sailor:getPassengers())if(assignedCrew(sailor)&&!sailor.entityTags().contains(CREW_TAG)){sailor.addTag(CREW_TAG);sailor.addTag(CREW_OWNER+owner);}
         shantyTick(server);
+        if(encounterKind==1&&tickCount%10==0)server.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME,getX(),getY()+2,getZ(),4,2,1,4,.01);
         if(reload>0)reload--;
 		if(burning>0){burning--;if(tickCount%20==0){entityData.set(HULL,hull()-2);server.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,getX(),getY()+1,getZ(),8,2,.5,3,.01);if(hull()<=0){sink(lastAttacker!=null && server.getEntity(lastAttacker) instanceof PirateShip attacker?attacker:this);return;}}}
 		if(crew(WORKER)>0&&hull()<maxHull()&&tickCount%80==0&&consume(Items.OAK_PLANKS)){entityData.set(HULL,Math.min(maxHull(),hull()+5));burning=Math.max(0,burning-40);}
 		if(docked())return;
 		if(enemy()){enemyTick(server);if(isRemoved())return;}
-		else if(lastInput==Long.MIN_VALUE||server.getGameTime()-lastInput>10)controls=0;
+		else if(getControllingPassenger()==null||lastInput==Long.MIN_VALUE||server.getGameTime()-lastInput>10)controls=0;
 		float yaw=getYRot()+(((controls&RIGHT)!=0?1:0)-((controls&LEFT)!=0?1:0))*(tier()==0?1.4F:tier()==1?.9F:.65F);
 		double throttle=((controls&FORWARD)!=0?1:0)-((controls&BACK)!=0?.45:0);
 		var desired=rotate(0,0,throttle*(tier()==0?.27:tier()==1?.2:.16),yaw);var motion=getDeltaMovement().scale(.86).add(desired.scale(.14));
@@ -439,6 +448,11 @@ public final class PirateShip extends Entity {
         if(!level.dimension().equals(Pirate.LEVEL)||level.getDifficulty()==net.minecraft.world.Difficulty.PEACEFUL||!level.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.SPAWN_MOBS)||(long)pos.getX()*pos.getX()+(long)pos.getZ()*pos.getZ()<128*128||!clearWater(level,pos,0,0,null))return null;
         return createEnemy(level,pos,faction);
     }
+    public static PirateShip spawnSpecial(ServerLevel level,BlockPos pos,int kind) {
+        if(kind<1||kind>2)return null;var ship=spawnPatrol(level,pos,null);if(ship==null)return null;ship.encounterKind=kind;
+        ship.setCustomName(Component.literal(kind==1?"The Pale Reckoning":"Iron Writ Bounty Hunters"));
+        ship.syncBuild(ship.blocks.stream().map(b->b.state().is(BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.withDefaultNamespace("white_wool")))?new ShipBlock(b.pos(),BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.withDefaultNamespace(kind==1?"light_blue_wool":"black_wool")).defaultBlockState()):b).toList());return ship;
+    }
     private static PirateShip createEnemy(ServerLevel level,BlockPos pos,PirateProgression.Faction faction) {
 		var ship=new PirateShip(Ships.SHIP,level);ship.entityData.set(ENEMY,true);ship.entityData.set(DOCKED,false);ship.holdFire=false;ship.setPos(pos.getX()+.5,pos.getY(),pos.getZ()+.5);
 		ship.patrolFaction=faction;ship.entityData.set(FLAG,faction==null?0:faction.ordinal()+1);ship.patrolExpiresAt=level.getGameTime()+12000;
@@ -451,7 +465,7 @@ public final class PirateShip extends Entity {
 		ship.syncBuild(build);ship.cargo.setItem(0,new ItemStack(Ships.SHOT,64));ship.cargo.setItem(1,new ItemStack(Items.EMERALD,4));ship.cargo.setItem(2,new ItemStack(Items.IRON_INGOT,6));if(!level.addFreshEntity(ship)){ship.discard();return null;}return ship;
 	}
 	@Override protected void addAdditionalSaveData(ValueOutput out) {
-		out.putInt("CargoTier",cargoTier);out.putInt("Flag",flag());out.putBoolean("ShantyPlaying",shantyPlaying);
+		out.putInt("EncounterKind",encounterKind);out.putInt("CargoTier",cargoTier);out.putInt("Flag",flag());out.putBoolean("ShantyPlaying",shantyPlaying);
         out.putString("PatrolFaction",patrolFaction==null?"":patrolFaction.id);out.putLong("PatrolExpiresAt",patrolExpiresAt);out.putInt("PatrolIdle",idle);
         if(provokedBy!=null)out.store("ProvokedBy",UUIDUtil.CODEC,provokedBy);out.putLong("ProvokedUntil",provokedUntil);
         if(lastAttacker!=null)out.store("LastAttacker",UUIDUtil.CODEC,lastAttacker);
@@ -459,7 +473,7 @@ public final class PirateShip extends Entity {
 		out.store("Build",ShipBlock.CODEC.listOf(),blocks);out.store("Cargo",ItemContainerContents.CODEC,ItemContainerContents.fromItems(cargo.getItems()));
 	}
 	@Override protected void readAdditionalSaveData(ValueInput in) {
-		cargoTier=Math.clamp(in.getIntOr("CargoTier",0),0,2);entityData.set(FLAG,Math.clamp(in.getIntOr("Flag",0),0,3));shantyPlaying=in.getBooleanOr("ShantyPlaying",false);
+		encounterKind=Math.clamp(in.getIntOr("EncounterKind",0),0,2);cargoTier=Math.clamp(in.getIntOr("CargoTier",0),0,2);entityData.set(FLAG,Math.clamp(in.getIntOr("Flag",0),0,3));shantyPlaying=in.getBooleanOr("ShantyPlaying",false);
         patrolFaction=PirateDiplomacy.faction(in.getStringOr("PatrolFaction",""));patrolExpiresAt=Math.max(0,in.getLongOr("PatrolExpiresAt",0));idle=Math.clamp(in.getIntOr("PatrolIdle",0),0,2401);
         provokedBy=in.read("ProvokedBy",UUIDUtil.CODEC).orElse(null);provokedUntil=Math.max(0,in.getLongOr("ProvokedUntil",0));
         lastAttacker=in.read("LastAttacker",UUIDUtil.CODEC).orElse(null);owner=in.read("Owner",UUIDUtil.CODEC).orElse(null);entityData.set(TIER,Math.clamp(in.getIntOr("Tier",0),0,2));entityData.set(DOCKED,in.getBooleanOr("Docked",true));entityData.set(ENEMY,in.getBooleanOr("Enemy",false));entityData.set(HULL,Math.clamp(in.getFloatOr("Hull",200),0,maxHull()));

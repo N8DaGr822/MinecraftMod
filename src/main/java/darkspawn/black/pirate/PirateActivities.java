@@ -30,7 +30,7 @@ public final class PirateActivities {
         if(action!=5||state.repeatContracts[index]!=2||player.getInventory().getFreeSlot()<0)return false;
         // Repeat Reward: Consume completion before paying; cooldown survives restart and death.
         state.repeatContracts[index]=0;state.repeatAvailableAt[index]=player.level().getServer().overworld().getGameTime()+REPEAT_COOLDOWN;
-        PirateProgression.addStanding(state,PirateProgression.Faction.values()[index],10);
+        SeaLegends.renown(player,2);PirateProgression.addStanding(state,PirateProgression.Faction.values()[index],10);
         player.getInventory().add(new ItemStack(Items.EMERALD,6));
         Ships.message(player,"Voyage rewarded: +10 standing, 6 emeralds. Next commission in ten minutes.");return true;
     }
@@ -55,7 +55,7 @@ public final class PirateActivities {
         return false;
     }
     public static void navalVictory(ServerPlayer captain,PirateShip defeated) {
-        if(captain.isAlive()&&!captain.isSpectator()&&captain.level()==defeated.level()&&defeated.enemy()&&defeated.patrolFaction()==null)complete(captain,1);
+        if(captain.isAlive()&&!captain.isSpectator()&&captain.level()==defeated.level()&&defeated.enemy()&&defeated.patrolFaction()==null&&defeated.encounterKind()==0)complete(captain,1);
     }
     public static boolean rescueOrder(ServerPlayer player,int action) {
         if(!HarborGuide.inHarbor(player))return false;

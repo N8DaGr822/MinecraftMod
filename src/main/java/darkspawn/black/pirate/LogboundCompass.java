@@ -47,7 +47,8 @@ public final class LogboundCompass extends Item {
 			if (!level.dimension().equals(Pirate.LEVEL)) {
 				player.sendOverlayMessage(Component.translatable("message.darkspawn.logbound_wrong_dimension"));
 			} else {
-				var state = Pirate.state(serverPlayer);
+				if(player.isShiftKeyDown()&&SeaMenu.available(serverPlayer)){SeaMenu.open(serverPlayer);return InteractionResult.SUCCESS;}
+                var state = Pirate.state(serverPlayer);
 				if (state.logboundDestination.isEmpty()) state.logboundDestination = FIRST_COVE;
 				observeArrival(serverPlayer);
 				if (destination(state) != null && state.logboundArrived && state.logboundSecondsRemaining == 0) advanceRoute(serverPlayer);

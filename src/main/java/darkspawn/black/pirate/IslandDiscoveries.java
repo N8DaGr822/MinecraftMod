@@ -80,17 +80,18 @@ public final class IslandDiscoveries {
 		if(!player.isAlive()||player.isSpectator())return;
 		var island=at(player.level(),player.blockPosition());if(island==null)return;
 		var state=Pirate.state(player);int bit=1<<island.kind();
-		if((state.pirateClues&bit)==0){state.pirateClues|=bit;player.sendSystemMessage(Component.literal(NAMES[island.kind()]+": "+CLUES[island.kind()]));}
+		if((state.pirateClues&bit)==0){state.pirateClues|=bit;SeaLegends.renown(player,3);player.sendSystemMessage(Component.literal(NAMES[island.kind()]+": "+CLUES[island.kind()]));}
 		if(island.center().equals(state.logboundNextIsland))state.logboundKind=island.kind();
 		if(island.kind()==3&&player.getY()>=76&&Math.abs(player.getX()-island.center().getX())<=5&&Math.abs(player.getZ()-island.center().getZ())<=6)complete(player,2);
 		spawn(player,island);
 		PirateDiplomacy.observe(player,island);
-        PirateActivities.observe(player,island);PirateOfficers.observe(player,island);
+        SevenSeals.observe(player,island);PirateActivities.observe(player,island);PirateOfficers.observe(player,island);
 	}
 	public static boolean inspect(ServerPlayer player,BlockPos pos) {
 		if(!player.isAlive()||player.isSpectator()||player.distanceToSqr(Vec3.atCenterOf(pos))>36||!player.level().getBlockState(pos).is(Blocks.CHEST))return false;
 		var island=at(player.level(),pos);if(island==null)return false;
-		boolean factionObjective=PirateProgression.inspect(player,island,pos);
+		SevenSeals.inspect(player,island,pos);
+        boolean factionObjective=PirateProgression.inspect(player,island,pos);
         // One Offering Per Click: Do not spend shards twice when both shrine commissions are active.
         if(!factionObjective)factionObjective=PirateActivities.inspect(player,island,pos);
 		factionObjective=PirateOfficers.inspect(player,island,pos)||factionObjective;

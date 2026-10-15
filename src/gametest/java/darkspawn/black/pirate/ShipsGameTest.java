@@ -58,6 +58,31 @@ public final class ShipsGameTest {
 		}
 		for(var passenger:java.util.List.copyOf(ship.getPassengers())){passenger.stopRiding();if(!(passenger instanceof net.minecraft.world.entity.player.Player))passenger.discard();}ship.discard();
 	}
+    @GameTest public void cargoPredictionUsesSyncedCapacityWithoutShipReference(GameTestHelper helper) {
+        var pos=location(helper);var captain=player(helper,pos.above());
+        captain.level().setBlockAndUpdate(pos.above(),Ships.SHIPYARD.defaultBlockState());
+        try {
+            // Mirror the client menu's null ship, while a valid station permits exercising transfer logic here.
+            var menu=new ShipMenu(1,captain.getInventory(),pos.above(),null);
+            menu.setData(0,1);menu.setData(15,36);menu.setData(16,1);
+            var cargo=new ItemStack(Items.GOLD_INGOT,7);cargo.set(DataComponents.CUSTOM_NAME,Component.literal("Voyage cargo"));
+            captain.getInventory().setItem(0,cargo);
+            int source=-1;for(int i=54;i<menu.slots.size();i++)if(menu.slots.get(i).getContainerSlot()==0)source=i;
+            helper.assertTrue(source>=0&&!menu.quickMoveStack(captain,source).isEmpty(),"Shift-click works with synced capacity and no ship reference");
+            helper.assertTrue(menu.slots.get(27).getItem().getCount()==7&&menu.slots.get(27).getItem().get(DataComponents.CUSTOM_NAME).getString().equals("Voyage cargo")&&captain.getInventory().getItem(0).isEmpty(),"Predicted transfer preserves count and components");
+            helper.assertTrue(!menu.slots.get(0).isActive()&&!menu.slots.get(36).isActive(),"Hidden and locked slots remain inaccessible");
+        } finally {captain.level().setBlockAndUpdate(pos.above(),Blocks.AIR.defaultBlockState());remove(captain);}helper.succeed();
+    }
+    @GameTest public void dismountImmediatelyClearsQueuedCannonInput(GameTestHelper helper) {
+        var pos=location(helper);var captain=player(helper,pos.above());var ship=build(helper,captain,pos);
+        try {
+            captain.level().setBlockAndUpdate(pos.offset(-3,1,-3),Ships.CANNON.defaultBlockState());
+            ship.cargo.setItem(0,new ItemStack(Ships.SHOT,3));
+            helper.assertTrue(ship.launch(captain)==null&&ship.controls(captain,PirateShip.FORWARD|PirateShip.FIRE_LEFT),"Captain queues movement and cannon input");
+            captain.stopRiding();ship.commonTick();ship.tick();
+            helper.assertTrue(ship.cargo.getItem(0).getCount()==3&&ship.getDeltaMovement().horizontalDistanceSqr()==0,"Dismount cancels queued firing and thrust immediately");
+        } finally {clear(ship);remove(captain);}helper.succeed();
+    }
 	@GameTest public void constructionAndRejectedLaunchAreAtomic(GameTestHelper helper){
 		var pos=location(helper);var captain=player(helper,pos.above());PirateShip ship=null;
 		try{
@@ -331,4 +356,25 @@ public final class ShipsGameTest {
         } finally {clear(ship);remove(captain);}helper.succeed();
     }
 
+
+    @GameTest public void sinkingRecordsNamedRecoveryAndGhostVictory(GameTestHelper helper){
+        var pos=new BlockPos(40,64,40);var captain=player(helper,pos.above());var ship=build(helper,captain,pos);PirateShip ghost=null;
+        try {
+            var state=Pirate.state(captain);state.officerContracts=new int[]{3,3,3};state.garrickRescue=3;state.sealContract=3;state.seals=1;state.repeatContracts[1]=1;state.ghostVoyage=true;
+            for(int i=0;i<3;i++)helper.assertTrue(ship.recruitOfficer(captain,i),"Named crew boards before voyage");helper.assertTrue(ship.recruitGarrick(captain),"Garrick boards before voyage");
+            var menu=new ShipMenu(1,captain.getInventory(),null,ship);for(var slot:menu.slots)helper.assertTrue(slot.x>=0&&slot.y>=0&&slot.x+16<=ShipMenu.WIDTH&&slot.y+16<=ShipMenu.HEIGHT,"Every inventory slot stays inside compact screen bounds");
+            helper.assertTrue(ship.launch(captain)==null,"Vessel launches");var at=location(helper);for(int x=-3;x<=3;x++)for(int z=-3;z<=3;z++)captain.level().getChunk((at.getX()>>4)+x,(at.getZ()>>4)+z);ship.setPos(at.getX(),64,at.getZ());captain.teleportTo(at.getX(),65,at.getZ());
+            ghost=PirateShip.spawnSpecial(captain.level(),at.offset(30,0,0),1);helper.assertTrue(ghost!=null&&ghost.encounterKind()==1,"Ghost ship spawns using bounded native patrol placement");
+            var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,captain.registryAccess());ghost.saveWithoutId(output);var restored=new PirateShip(Ships.SHIP,captain.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,captain.registryAccess(),output.buildResult()));helper.assertTrue(restored.encounterKind()==1,"Ghost type survives save");restored.discard();
+            for(int n=0;n<20&&!ghost.isRemoved();n++)ghost.cannonDamage(ship,false);
+            helper.assertTrue(ghost.isRemoved()&&(state.seals&32)!=0&&!state.ghostVoyage&&state.repeatContracts[1]==1,"Ghost win records Courage without satisfying outlaw hunt");
+            var enemy=PirateShip.spawnSpecial(captain.level(),at.offset(-30,0,0),2);helper.assertTrue(enemy!=null&&!enemy.hostileTo(ship),"Hunters leave low-infamy captains alone");
+            state.infamy=30;helper.assertTrue(enemy.hostileTo(ship),"Hunters pursue infamous captains");state.infamy=0;
+            helper.assertTrue(enemy.cannonDamage(ship,false)&&enemy.hostileTo(ship),"Hunters retaliate when a low-infamy captain attacks them");
+            for(int n=0;n<20&&!ship.isRemoved();n++)ship.cannonDamage(enemy,false);enemy.discard();
+            helper.assertTrue(ship.isRemoved()&&SeaLedger.get(captain.level()).lost(captain.getUUID())==15,"Sinking creates rescue claims for all four named officers");
+            captain.stopRiding();captain.teleportTo(2,65,4);captain.getInventory().clearContent();captain.getInventory().setItem(0,new ItemStack(Items.EMERALD,8));
+            helper.assertTrue(SeaServices.execute(captain,7)==SeaServices.Reply.DONE&&state.officerContracts[0]==3,"Sunk officer can be paid for and rehired without repeating commission");
+        }finally{if(ghost!=null)clear(ghost);clear(ship);remove(captain);}helper.succeed();
+    }
 }

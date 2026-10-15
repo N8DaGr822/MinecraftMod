@@ -79,7 +79,7 @@ public final class HarborGuide {
 		if(action==6 && state.harborContract==1) {state.harborContract=0;state.harborSurveyed=false;return true;}
 		if(action!=5 || state.harborContract!=1 || !state.harborSurveyed || player.getInventory().getFreeSlot()<0) return false;
 		// Contract Reward: Server-owned completion prevents repeated menu packets paying twice.
-		state.harborContract=2;player.getInventory().add(new ItemStack(Items.EMERALD,4));return true;
+		state.harborContract=2;SeaLegends.renown(player,5);player.getInventory().add(new ItemStack(Items.EMERALD,4));return true;
 	}
 	public static final String[] CONTRACT_NAMES={"Cove survey","Wreck salvage","Shrine exploration","Beacon investigation","Corsair cargo","Fleet dispatches","Drowned offering","Cargo recovery","Outlaw patrol hunt","Shrine expedition","Garrick rescue","The First Binding","Beacon bearings","Supply ledger","Lost songbook"};
 	public static final String[] CONTRACT_DETAILS={
@@ -104,6 +104,6 @@ public final class HarborGuide {
 		if(action==4&&state.islandContracts[index]==0){state.islandContracts[index]=1;state.islandObjectives&=~bit;return true;}
 		if(action==6&&state.islandContracts[index]==1){state.islandContracts[index]=0;state.islandObjectives&=~bit;return true;}
 		if(action!=5||state.islandContracts[index]!=1||(state.islandObjectives&bit)==0||player.getInventory().getFreeSlot()<0)return false;
-		state.islandContracts[index]=2;player.getInventory().add(new ItemStack(Items.EMERALD,index==1?8:6));return true;
+		state.islandContracts[index]=2;SeaLegends.renown(player,5);player.getInventory().add(new ItemStack(Items.EMERALD,index==1?8:6));return true;
 	}
 }

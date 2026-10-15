@@ -34,7 +34,8 @@ for index, name in enumerate(['shipyard','ship_helm','naval_cannon','solid_shot'
     for _, points, color in sorted(faces, reverse=True):
         draw.polygon(points, fill=color, outline=tuple(int(v*.65) for v in color))
     draw.text((cx,326),name.replace('_',' ').title(),font=small,anchor='mt',fill='#e9dec2')
-draw.text((24,392),'Small: 7 x 15 / 4 guns     ->     5 NPC victories     ->     Large: 11 x 23 / 8 guns',font=font,fill='#7bd0c1')
+draw.text((24,392),'Platforms: 7 x 15 / 4 guns   |   11 x 23 / 8 guns   |   15 x 31 / 12 guns',font=font,fill='#7bd0c1')
+draw.text((24,424),'Expand through naval victories OR guided discoveries + claimed contracts.',font=small,fill='#a3bbb9')
 output = ROOT / 'art/pirate/naval-components.png'
 output.parent.mkdir(parents=True,exist_ok=True)
 image.save(output)

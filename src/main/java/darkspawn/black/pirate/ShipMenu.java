@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 public final class ShipMenu extends AbstractContainerMenu {
+    public static final int WIDTH=312, HEIGHT=232, CARGO_X=8, CARGO_Y=50, INVENTORY_Y=142;
 	public static final int BUILD=0,LAUNCH=1,DOCK=2,UPGRADE=3,MATE=4,WORKER=5,GUNNER=6,LOOKOUT=7,FIRE_ORDER=8,TARGET=9,FLAG=10,CARGO_UPGRADE=11,CARGO_PAGE=12,RESUPPLY=13,NAVIGATOR=14,QUARTERMASTER=15,SINGER=16,SHANTY=17;
 	private final Player viewer;
 	private final BlockPos station;
@@ -20,12 +21,12 @@ public final class ShipMenu extends AbstractContainerMenu {
 	public ShipMenu(int id,Inventory inventory,BlockPos station,PirateShip ship) {
 		super(Ships.MENU,id);this.viewer=inventory.player;this.station=station;this.ship=ship;
 		var cargo=ship==null?new SimpleContainer(54):ship.cargo;
-		for(int row=0;row<6;row++)for(int col=0;col<9;col++)addSlot(new Slot(cargo,row*9+col,43+18*col,120+18*(row%3)){
+		for(int row=0;row<6;row++)for(int col=0;col<9;col++)addSlot(new Slot(cargo,row*9+col,CARGO_X+18*col,CARGO_Y+18*(row%3)){
 			@Override public boolean isActive(){return getContainerSlot()<data.get(15)&&getContainerSlot()/27==data.get(16);}
             @Override public boolean mayPlace(ItemStack stack){return isActive()&&hasShip()&&(ShipMenu.this.ship==null||ShipMenu.this.ship.ownedBy(inventory.player));}
 			@Override public boolean mayPickup(Player player){return mayPlace(getItem())&&stillValid(player);}
 		});
-		addStandardInventorySlots(inventory,43,194);addDataSlots(data);refresh(inventory.player);
+		addStandardInventorySlots(inventory,CARGO_X,INVENTORY_Y);addDataSlots(data);refresh(inventory.player);
 	}
 	public boolean hasShip(){return data.get(0)!=0;}
 	public int status(int index){return data.get(index);}
@@ -72,7 +73,8 @@ public final class ShipMenu extends AbstractContainerMenu {
 		Ships.message(player,error==null?"Ship orders updated.":error);refresh(player);broadcastChanges();return error==null;
 	}
     public boolean rename(ServerPlayer player,String name) {
-        if(!stillValid(player)||!getCarried().isEmpty()||ship==null||!ship.rename(player,name))return false;
+        if(!stillValid(player)||!getCarried().isEmpty()||ship==null)return false;
+        if(!ship.rename(player,name)){Ships.message(player,"Dock your ship to rename it; use up to 32 characters without formatting codes.");return false;}
         Ships.message(player,name.isBlank()?"Ship name cleared.":"Ship named "+name.strip()+".");return true;
     }
     @Override public boolean canTakeItemForPickAll(ItemStack stack,Slot slot){return slot.isActive()&&super.canTakeItemForPickAll(stack,slot);}
@@ -80,7 +82,8 @@ public final class ShipMenu extends AbstractContainerMenu {
 	@Override public ItemStack quickMoveStack(Player player,int index){
 		if(!stillValid(player)||!hasShip()||index<0||index>=slots.size())return ItemStack.EMPTY;
 		var slot=slots.get(index);if(!slot.isActive()||!slot.hasItem()||!slot.mayPickup(player))return ItemStack.EMPTY;
-		var stack=slot.getItem();var copy=stack.copy();if(index<54){if(!moveItemStackTo(stack,54,slots.size(),true))return ItemStack.EMPTY;}else if(!moveItemStackTo(stack,data.get(16)*27,Math.min(ship.cargoSlots(),(data.get(16)+1)*27),false))return ItemStack.EMPTY;
+		// Client menus have synchronized capacity but no server-side ship reference.
+		var stack=slot.getItem();var copy=stack.copy();if(index<54){if(!moveItemStackTo(stack,54,slots.size(),true))return ItemStack.EMPTY;}else if(!moveItemStackTo(stack,data.get(16)*27,Math.min(data.get(15),(data.get(16)+1)*27),false))return ItemStack.EMPTY;
 		if(stack.isEmpty())slot.setByPlayer(ItemStack.EMPTY);else slot.setChanged();slot.onTake(player,stack);return copy;
 	}
 }

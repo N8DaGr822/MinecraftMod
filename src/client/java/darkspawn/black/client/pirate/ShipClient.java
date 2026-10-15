@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 public final class ShipClient {
 	private ShipClient(){}
 	public static void initialize(){
-        ShantyPlayback.initialize();
+        ShantyPlayback.initialize();MenuScreens.register(SeaMenu.TYPE,SeaScreen::new);
 		EntityRenderers.register(Ships.SHIP,ShipRenderer::new);EntityRenderers.register(Ships.BALL,ThrownItemRenderer::new);MenuScreens.register(Ships.MENU,ShipScreen::new);MenuScreens.register(HarborGuide.MENU,HarborScreen::new);
 		var category=KeyMapping.Category.register(Darkspawn.id("ships"));
 		var port=KeyMappingHelper.registerKeyMapping(new KeyMapping("key.darkspawn.ship_port",InputConstants.Type.KEYBOARD,InputConstants.KEY_Z,category));

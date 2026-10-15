@@ -2,20 +2,15 @@
 
 
 
-Status: captain milestones, three platform tiers and earned crew offers implemented; other features below remain future design. See the [brief](design-brief.md) for complete examples.
+Status: captain milestones, three platform tiers, earned crew offers, renown/infamy, paid officer recovery and fort services are implemented. See [current expansion rules](../pirate-expansion.md); other examples below remain future design. See the [brief](design-brief.md) for complete examples.
 
 
 
 | Progression | Meaning | Example sources and uses |
-
 | --- | --- | --- |
-
 | Renown | Overall fame, not morality | Islands, adventures, contracts, captains and treasure; NPC recognition and opportunities |
-
 | Faction standing | Relationship with each faction | Choices and contracts; hostility, trade, recruitment and promotion eligibility |
-
 | Infamy | Criminal notoriety | Raids, cargo theft, patrol attacks and bounties; hunters and intimidating opportunities |
-
 | Captaincy | Ability and accomplishments as a commander | Vessel ownership, officers, equipment, crew and hideout development |
 
 
@@ -52,7 +47,7 @@ Preserve the user's initial first mate, shipworker (repair), cannoneer and crow'
 
 
 
-Recruitment may use payments, gold, standing, rescue quests or cursed artifacts. Mixed Piglin, former Illager and intelligent undead crews should be possible after earning trust. Crew loyalty is a proposed lightweight mechanic influenced by personal quests, victories, rewards and betrayal, without excessive upkeep.
+Paid ordinary crew, standing-based Piglin/Pillager/Husk offers, Garrick's rescue and officer commissions are implemented. Hired crew have persistent captain ownership; resignation does not transfer or dismiss them. Cursed-artifact recruitment and a dynamic morale/loyalty system influenced by quests, victories, rewards or betrayal remain proposals.
 
 
 
@@ -73,13 +68,9 @@ Named crews, custom flags, home ports, docks, quarters, storage, treasure vaults
 
 
 | Earned tier | Either achievement path | Platform / build height / block cap / guns | Expansion cost |
-
 | --- | --- | --- | --- |
-
 | Sailor | Available immediately | 7×15 / 6 / 512 / 4 | Build: 105 oak planks + helm |
-
 | Captain | 5 NPC naval victories **or** 4 distinct guided discoveries and 2 claimed contracts | 11×23 / 8 / 1,024 / 8 | 148 oak planks |
-
 | Veteran Captain | 12 NPC naval victories **or** 8 distinct guided discoveries and 4 claimed contracts | 15×31 / 10 / 1,536 / 12 | 212 additional oak planks |
 
 

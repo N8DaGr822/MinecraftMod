@@ -7,6 +7,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 public final class PiratePlayerState {
 	public GlobalPos entrance;
 	public int navalVictories;
+    public int renown,infamy,seals,ending; public boolean ghostVoyage;
+    public java.util.List<net.minecraft.core.BlockPos> conqueredForts=new java.util.ArrayList<>();
 	public String logboundDestination = "";
 	public boolean logboundArrived;
 	public boolean logboundCompassIssued;
@@ -37,6 +39,8 @@ public final class PiratePlayerState {
 	public long logboundSearchAfter = Long.MIN_VALUE;
 	public long lastTravel = Long.MIN_VALUE;
 	public void read(ValueInput input) {
+        renown=Math.clamp(input.getIntOr("darkspawn_renown",0),0,1000);infamy=Math.clamp(input.getIntOr("darkspawn_infamy",0),0,100);seals=input.getIntOr("darkspawn_seals",0)&127;ending=Math.clamp(input.getIntOr("darkspawn_ending",0),0,3);ghostVoyage=input.getBooleanOr("darkspawn_ghost_voyage",false);
+        conqueredForts=new java.util.ArrayList<>(input.read("darkspawn_conquered_forts",net.minecraft.core.BlockPos.CODEC.listOf()).orElse(java.util.List.of()));
 		for(var faction:PirateProgression.Faction.values()) {
             int index=faction.ordinal();
             factionStanding[index]=Math.clamp(input.getIntOr("darkspawn_standing_"+faction.id,faction.initial),-100,100);
@@ -45,7 +49,7 @@ public final class PiratePlayerState {
             repeatAvailableAt[index]=Math.max(0,input.getLongOr("darkspawn_repeat_after_"+faction.id,0));
         }
         firstSealClue=input.getBooleanOr("darkspawn_first_seal",false);
-        sealContract=Math.clamp(input.getIntOr("darkspawn_seal_contract",0),0,3);
+        sealContract=Math.clamp(input.getIntOr("darkspawn_seal_contract",0),0,3);if(sealContract==3)seals|=1;
         for(int i=0;i<3;i++)officerContracts[i]=Math.clamp(input.getIntOr("darkspawn_officer_"+i,0),0,4);
         garrickRescue=Math.clamp(input.getIntOr("darkspawn_garrick_rescue",0),0,5);
         garrickCaptive=input.read("darkspawn_garrick_captive",net.minecraft.core.UUIDUtil.CODEC).orElse(null);
@@ -79,6 +83,7 @@ public final class PiratePlayerState {
 		logboundSearchAfter = Long.MIN_VALUE;
 	}
 	public void write(ValueOutput output) {
+        output.putInt("darkspawn_renown",renown);output.putInt("darkspawn_infamy",infamy);output.putInt("darkspawn_seals",seals);output.putInt("darkspawn_ending",ending);output.putBoolean("darkspawn_ghost_voyage",ghostVoyage);output.store("darkspawn_conquered_forts",net.minecraft.core.BlockPos.CODEC.listOf(),conqueredForts);
 		output.putInt("darkspawn_pirate_version", 1);
         for(var faction:PirateProgression.Faction.values()) {
             output.putInt("darkspawn_standing_"+faction.id,factionStanding[faction.ordinal()]);
@@ -111,6 +116,7 @@ public final class PiratePlayerState {
 		if (entrance != null) output.store("darkspawn_pirate_entrance", GlobalPos.CODEC, entrance);
 	}
 	public void copyFrom(PiratePlayerState old) {
+        renown=old.renown;infamy=old.infamy;seals=old.seals;ending=old.ending;ghostVoyage=old.ghostVoyage;conqueredForts=new java.util.ArrayList<>(old.conqueredForts);
 		// Expedition Death: Return links survive; vanilla owns active inventory and respawn.
 		firstSealClue=old.firstSealClue;sealContract=old.sealContract;officerContracts=old.officerContracts.clone();
         repeatContracts=old.repeatContracts.clone();repeatAvailableAt=old.repeatAvailableAt.clone();garrickRescue=old.garrickRescue;garrickCaptive=old.garrickCaptive;garrickPrison=old.garrickPrison;

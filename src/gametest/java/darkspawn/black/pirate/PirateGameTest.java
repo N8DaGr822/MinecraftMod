@@ -696,4 +696,80 @@ public final class PirateGameTest {
         } finally {remove(player);remove(other);}helper.succeed();
     }
 
+
+    private static void seaTravel(ServerPlayer p,net.minecraft.server.level.ServerLevel sea,BlockPos at){p.teleport(new net.minecraft.world.level.portal.TeleportTransition(sea,Vec3.atBottomCenterOf(at),Vec3.ZERO,0,0,net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING));ready(p);}
+    @GameTest public void seaServicesChargeOnceAndPreserveRecoveryReceipts(GameTestHelper helper){
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);PirateHarbor.prepare(sea);seaTravel(p,sea,new BlockPos(2,65,4));var state=Pirate.state(p);p.getInventory().clearContent();
+            helper.assertTrue(SeaServices.execute(p,0)==SeaServices.Reply.COST,"Missing currency gives precise failure");
+            p.getInventory().setItem(0,new ItemStack(Items.EMERALD,32));
+            helper.assertTrue(SeaServices.execute(p,0)==SeaServices.Reply.DONE&&p.getInventory().countItem(Items.EMERALD)==31&&p.getInventory().countItem(Items.COOKED_COD)==8,"Tavern transaction conserves exact payment and supply");
+            state.renown=50;helper.assertTrue(SeaServices.execute(p,1)==SeaServices.Reply.DONE&&p.getInventory().countItem(Items.EMERALD)==30,"Renown discount applies on server");
+            var ledger=SeaLedger.get(sea);ledger.lose(p.getUUID(),15);state.officerContracts=new int[]{4,4,4};state.garrickRescue=5;
+            helper.assertTrue(SeaServices.execute(p,7)==SeaServices.Reply.DONE&&state.officerContracts[0]==3&&ledger.lost(p.getUUID())==14&&p.getInventory().countItem(Items.EMERALD)==22,"Paid officer recovery restores recruitment without resetting completed commission");
+            helper.assertTrue(SeaServices.execute(p,7)==SeaServices.Reply.NO_RESCUE&&p.getInventory().countItem(Items.EMERALD)==22,"Repeated recovery cannot charge or duplicate");
+            helper.assertTrue(SeaServices.execute(p,10)==SeaServices.Reply.DONE&&state.garrickRescue==3&&ledger.lost(p.getUUID())==6,"Garrick recovery preserves his completed rescue choice");
+            var encoded=SeaLedger.CODEC.encodeStart(JsonOps.INSTANCE,ledger).getOrThrow();var restored=SeaLedger.CODEC.parse(JsonOps.INSTANCE,encoded).getOrThrow();helper.assertTrue(restored.lost(p.getUUID())==6,"World rescue claims survive serialization without requiring online players");
+            for(int i=0;i<36;i++)p.getInventory().setItem(i,new ItemStack(Items.STONE,64));p.getInventory().setItem(0,new ItemStack(Items.EMERALD,16));
+            helper.assertTrue(SeaServices.execute(p,0)==SeaServices.Reply.SPACE&&p.getInventory().countItem(Items.EMERALD)==16,"Full inventory never consumes payment");
+            helper.assertTrue(SeaServices.execute(p,5)==SeaServices.Reply.DONE&&SeaServices.execute(p,5)==SeaServices.Reply.GHOST_ACTIVE,"Ghost voyage is idempotent");
+            var menu=new HarborMenu(1,p.getInventory(),null,HarborGuide.BOARD_POS);menu.clickMenuButton(p,5);helper.assertTrue(menu.status(13)==HarborFeedback.ACCEPT.ordinal(),"Contract failure identifies unaccepted work");
+            menu.clickMenuButton(p,9);helper.assertTrue(menu.status(13)==HarborFeedback.FACTION.ordinal(),"Diplomacy failure identifies missing faction selection");
+            p.teleportTo(300,65,0);helper.assertTrue(SeaServices.execute(p,7)==SeaServices.Reply.HARBOR,"Remote services rejected");
+        } finally {remove(p);}helper.succeed();
+    }
+    @GameTest public void sevenSealsRequireDiscoveriesAndKeepPersonalEndings(GameTestHelper helper){
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var other=player(helper,helper.absolutePos(new BlockPos(2,0,0)));
+        try {
+            var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var shrine=islandFixture(helper,sea,4);seaTravel(p,sea,shrine.center());seaTravel(other,sea,shrine.center());var state=Pirate.state(p);
+            helper.assertTrue(SevenSeals.order(p,14)==SeaServices.Reply.FIRST&&!SevenSeals.discover(p,1),"First binding gates later discoveries");state.sealContract=3;SevenSeals.discover(p,0);
+            for(int kind:new int[]{1,2,5}){var island=islandFixture(helper,sea,kind);var cache=island.center().offset(kind==1?-1:kind==2?3:1,0,kind==1?-5:-4);p.teleportTo(cache.getX(),65,cache.getZ()+1);IslandDiscoveries.inspect(p,cache);}
+            helper.assertTrue(state.seals==15,"Three native caches unlock three distinct seals");p.teleportTo(shrine.center().getX(),65,shrine.center().getZ());p.getInventory().setItem(0,new ItemStack(Items.PRISMARINE_SHARD,16));
+            helper.assertTrue(SevenSeals.order(p,14)==SeaServices.Reply.DONE&&SevenSeals.order(p,14)==SeaServices.Reply.RECORDED&&p.getInventory().countItem(Items.PRISMARINE_SHARD)==8,"Fifth offering charges once");
+            helper.assertTrue(SevenSeals.order(p,15)==SeaServices.Reply.SEALS,"Incomplete ending rejected");SevenSeals.discover(p,5);var beacon=islandFixture(helper,sea,3);p.teleportTo(beacon.center().getX(),78,beacon.center().getZ());SevenSeals.observe(p,beacon);helper.assertTrue(state.seals==127,"Final beacon requires first six seals");
+            p.teleportTo(shrine.center().getX(),65,shrine.center().getZ());
+            for(int slot=0;slot<35;slot++)p.getInventory().setItem(slot,new ItemStack(Items.STONE,64));p.getInventory().setItem(35,ItemStack.EMPTY);
+            helper.assertTrue(SevenSeals.order(p,15)==SeaServices.Reply.ENDING_SPACE&&state.ending==0,"One free slot cannot consume a two-slot ending reward");p.getInventory().clearContent();
+            helper.assertTrue(SevenSeals.order(p,15)==SeaServices.Reply.DONE&&state.ending==1&&state.infamy==40,"King grants personal ending and infamy");int gold=p.getInventory().countItem(Items.EMERALD);
+            helper.assertTrue(SevenSeals.order(p,17)==SeaServices.Reply.ENDED&&p.getInventory().countItem(Items.EMERALD)==gold,"Ending cannot be switched or rewarded twice");
+            var second=Pirate.state(other);second.sealContract=3;second.seals=127;helper.assertTrue(SevenSeals.order(other,17)==SeaServices.Reply.DONE&&second.ending==3&&state.ending==1,"Shared shrine allows independent final choices");
+            var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());p.saveWithoutId(output);var restored=new PiratePlayerState();restored.read(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),output.buildResult()));var copy=new PiratePlayerState();copy.copyFrom(restored);helper.assertTrue(copy.seals==127&&copy.ending==1&&copy.infamy==40,"All discoveries and final choice survive save and death copy");
+        }finally{remove(p);remove(other);}helper.succeed();
+    }
+    @GameTest public void fortCapturePermitsOfflineTakeoverAndBoundsRewards(GameTestHelper helper){
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var difficulty=sea.getDifficulty();
+        try {
+            sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);var fort=islandFixture(helper,sea,1);seaTravel(p,sea,fort.center());var ledger=SeaLedger.get(sea);var offline=UUID.randomUUID();ledger.fort(new SeaLedger.Fort(fort.center(),offline,"Offline captain",0,0));
+            var marker=fort.center().offset(0,-1,0);var block=sea.getBlockState(marker);
+            helper.assertTrue(SeaTerritory.order(p,11)==SeaServices.Reply.CAPTURE,"Offline ownership permits a takeover challenge");
+            SeaTerritory.tick(sea);helper.assertTrue(SeaTerritory.progress(p)==0,"Living garrison prevents capture");
+            var rival=player(helper,helper.absolutePos(new BlockPos(3,0,0)));
+            try {seaTravel(rival,sea,fort.center().east(3));
+                for(var mob:sea.getEntitiesOfClass(net.minecraft.world.entity.Mob.class,new net.minecraft.world.phys.AABB(fort.center()).inflate(30),m->m.entityTags().contains(SeaTerritory.DEFENDER))){helper.assertTrue(PirateDiplomacy.disallows(mob,rival)&&!PirateDiplomacy.disallows(mob,p),"Garrison attacks its claimant, not bystanders");mob.discard();}
+                SeaTerritory.tick(sea);helper.assertTrue(SeaTerritory.progress(p)==0,"Rival captain contests a cleared fort");
+            }finally{remove(rival);}
+            for(int i=0;i<60;i++)SeaTerritory.tick(sea);
+            helper.assertTrue(ledger.fort(fort.center()).owner().equals(p.getUUID())&&Pirate.state(p).infamy==10&&sea.getBlockState(marker).equals(block),"Takeover updates owner and infamy without replacing builds");
+            helper.assertTrue(SeaTerritory.order(p,13)==SeaServices.Reply.SUPPLY_WAIT,"Capture starts supply cooldown");p.getInventory().setItem(0,new ItemStack(Items.IRON_INGOT,16));p.getInventory().setItem(1,new ItemStack(Items.OAK_PLANKS,48));
+            helper.assertTrue(SeaTerritory.order(p,12)==SeaServices.Reply.DONE&&SeaTerritory.order(p,12)==SeaServices.Reply.DONE&&SeaTerritory.order(p,12)==SeaServices.Reply.MAX_DEFENSE,"Fortifications cost supplies and stop at two");
+            var saved=ledger.fort(fort.center());ledger.fort(new SeaLedger.Fort(saved.center(),saved.owner(),saved.name(),saved.defenses(),0));
+            helper.assertTrue(SeaTerritory.order(p,13)==SeaServices.Reply.DONE&&SeaTerritory.order(p,13)==SeaServices.Reply.SUPPLY_WAIT&&p.getInventory().countItem(Items.EMERALD)==4,"Fort payout is once per cooldown");
+            var restored=SeaLedger.CODEC.parse(JsonOps.INSTANCE,SeaLedger.CODEC.encodeStart(JsonOps.INSTANCE,ledger).getOrThrow()).getOrThrow();helper.assertTrue(restored.fort(fort.center()).equals(ledger.fort(fort.center())),"Territory ownership and timers persist");
+        }finally{remove(p);SeaTerritory.tick(sea);sea.getServer().setDifficulty(difficulty,true);}helper.succeed();
+    }
+
+    @GameTest public void liberatorBattleRequiresPersonalVictoryAndCleansUp(GameTestHelper helper){
+        var p=player(helper,helper.absolutePos(BlockPos.ZERO));var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var difficulty=sea.getDifficulty();
+        try {
+            sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);var shrine=islandFixture(helper,sea,4);seaTravel(p,sea,shrine.center());var state=Pirate.state(p);state.sealContract=3;state.seals=127;
+            helper.assertTrue(SevenSeals.order(p,16)==SeaServices.Reply.BATTLE&&state.ending==0,"Liberation summons a personal adversary before granting rewards");
+            helper.assertTrue(SevenSeals.order(p,16)==SeaServices.Reply.BATTLE_ACTIVE,"Repeated summon cannot create extra bosses");var ledger=SeaLedger.get(sea);var receipt=ledger.battle(p.getUUID());var mob=(net.minecraft.world.entity.Mob)sea.getEntity(receipt.entity());helper.assertTrue(mob!=null&&mob.getHealth()==120,"Bound Admiral spawns with intended health");
+            var encoded=SeaLedger.CODEC.encodeStart(JsonOps.INSTANCE,ledger).getOrThrow();helper.assertTrue(SeaLedger.CODEC.parse(JsonOps.INSTANCE,encoded).getOrThrow().battle(p.getUUID()).equals(receipt),"Battle receipt survives restart");
+            mob.hurtServer(sea,mob.damageSources().genericKill(),1000);helper.assertTrue(ledger.battle(p.getUUID()).defeated(),"Defeat records victory for its captain");
+            helper.assertTrue(SevenSeals.order(p,16)==SeaServices.Reply.DONE&&state.ending==2&&p.getInventory().countItem(Items.TRIDENT)==1,"Liberation pays once after real entity defeat");
+            helper.assertTrue(SevenSeals.order(p,16)==SeaServices.Reply.ENDED&&p.getInventory().countItem(Items.TRIDENT)==1,"Repeated liberation cannot duplicate trophy");
+            mob.discard();
+        }finally{remove(p);SevenSeals.tick();sea.getServer().setDifficulty(difficulty,true);}helper.succeed();
+    }
 }
