@@ -1,14 +1,22 @@
 # OneBlock Ascension future implementation plan
 
-Saved October 14, 2026 for later development. This is a deferred proposal, not an implementation milestone or a change to the active pirate work. The [complete supplied brief](source-brief.txt) is preserved verbatim. Its embedded instruction to implement M0 and M1 applies only when this work is activated; the current request is documentation only.
+Saved October 14, 2026 for later development. This is a deferred proposal, not an implementation milestone or a change to the active pirate work. The [complete supplied brief](source-brief.txt) is preserved verbatim. The user selected Fabric within the existing Darkspawn project on October 14, 2026. The embedded instruction to implement M0 and M1 applies when implementation is requested; the current follow-up reviews and updates the saved plan.
 
 ## Scope and repository fit
 
 Build a server-authoritative multiplayer OneBlock mode with one regenerating resource block and independent progression per team island. Teams support up to six players, team permissions and visitors who may travel but cannot edit another team's claim or use its generator. Survival, RPG encounters and bounded automation share persistent progression.
 
-The brief proposes NeoForge first, Fabric second, a preferred Minecraft 1.21.1 / Java 21 baseline, and pure-Java domain, shared common application and thin platform modules. This repository currently targets Minecraft 26.3 with Fabric and already contains a OneBlock implementation under `src/main/java/darkspawn/black/oneblock`. These are different starting points: decide whether Ascension belongs in a separate project or is an explicitly approved migration before changing this build. Preserve existing worlds, code and earned progression. The proposed versions are not verified dependency selections.
+**Confirmed platform: Fabric, within the existing Darkspawn project.** Retain the repository's Minecraft 26.3 / Java 25 toolchain and current loader rather than creating a NeoForge-first project or downgrading to the original brief's preferred 1.21.1 / Java 21 baseline. Reuse and extend the existing OneBlock implementation under `src/main/java/darkspawn/black/oneblock`. The original brief remains verbatim design history; this confirmed platform decision supersedes its loader order and preferred baseline.
 
-The referenced `OneBlock_Ascension_Spec_v0.2.md` was not found in the repository. The supplied reproduced requirements are retained here; do not invent missing specification content. Before implementation, inspect the current repository again, verify compatible Minecraft/Java/loader/Gradle and any Architectury or optional-mod versions against official documentation and available artifacts, and record actual pinned choices in a scoped decisions document. Do not claim Fabric support before its adapter is implemented and tested.
+Preserve existing worlds, the shared island, inventory profiles and earned progression. Before introducing team islands or changing island geometry, define explicit versioned migration or coexistence behavior. The current shared-island save must not be silently reinterpreted as a newly spaced team grid. Keep domain logic independently testable using existing project conventions; additional loader adapters or a multi-module reorganization are not prerequisites.
+
+The referenced `OneBlock_Ascension_Spec_v0.2.md` was not found in the repository. The supplied reproduced requirements are retained here; do not invent missing specification content. Before implementation, inspect the current repository again, verify compatible Minecraft/Java/loader/Gradle and any Architectury or optional-mod versions against official documentation and available artifacts, and record actual pinned choices in a scoped decisions document. Verify changes against the existing Fabric runtime; do not claim additional loader support.
+
+## Existing Fabric baseline to preserve
+
+The current mode has one shared 3x3 starter island, a protected regenerating source, free inventory-menu travel and separate saved possession profiles. Character upgrades remain shared. Its six phases currently require 300, 600, 800, 1,000 and 1,200 breaks before an endless End phase; advancement is manual after each threshold. These are verified in `OneBlockProgress.java` and the current README, and supersede older historical counts in `oneblock-dimension-notes.txt`.
+
+Ascension proposes team-specific islands, claims and a new three-phase MVP with objective/encounter gates. That changes both world geometry and progression ownership. M0 must explicitly map the existing shared island and its progress into the new design, or keep it as a legacy mode alongside new team islands. Do not reset or silently convert existing saves. First implement foundation milestones M0/M1; bridges, generator replacement and new progression content follow in M2-M5.
 
 ## Required island and bridge geometry
 
@@ -48,14 +56,14 @@ Preserve the proposed domain models: TeamState, IslandState, GeneratorState, Pha
 
 | Milestone | Deliverable |
 | --- | --- |
-| M0 | Reproducible pinned toolchain, NeoForge entry point, testable domain module, build/test and exact dev-server commands |
+| M0 | Confirm existing Fabric toolchain and entry points, testable domain logic, build/test/dev-server commands, and save migration/coexistence decision |
 | M1 | Void dimension, durable grid allocation, starter islands, team creation/join/rejoin, owner/member identity, home/spawn flow and basic ownership protection |
 | M2 | Bridge geometry, placement/removal rules, ownership ledger, visitor travel, resumable archival cleanup and supported grief protection |
 | M3 | Guarded generator breaks, weighted resources, idempotent regeneration, bounded work and restart repair |
 | M4 | Three MVP JSON phases, counters, submission objectives, guaranteed resources, ledger rewards and atomic validated reload |
 | M5 | Cave Guardian lifecycle, collector and bounded auto-miner using the same generator service |
 | M6 | Persistence/network hardening, compatibility tests, backup/restore checks and profiling with 25 active islands |
-| M7 | Fabric adapter with the same tested observable rules |
+| M7 | Final Fabric integration, end-to-end acceptance and release readiness; other loaders are outside the confirmed scope |
 
 The first authorized implementation pass should complete **M0 and M1 only**, report verified behavior and remaining limits, then stop with a concrete M2 plan. Do not label later milestones implemented. Follow the repository build/release policy when implementation begins; this saved brief does not authorize packaging, version changes or a loader migration now.
 
@@ -69,4 +77,4 @@ The first authorized implementation pass should complete **M0 and M1 only**, rep
 - Later phases cannot bypass objectives/encounters, duplicate rewards, deadlock after thresholds or replace valid content on failed reload.
 - Run milestone-appropriate compilation and pure-Java tests, then available server/runtime checks. Record exact commands and actual results; explicitly identify unverified runtime behavior.
 
-The next step when scheduled is a repository and platform decision, followed by M0. Existing OneBlock gameplay remains unchanged until that work is explicitly selected.
+The platform decision is settled: Fabric in Darkspawn. The next implementation step is M0/M1, beginning with the existing code/save audit and explicit treatment of the current shared island. Existing gameplay remains unchanged during this plan review.
