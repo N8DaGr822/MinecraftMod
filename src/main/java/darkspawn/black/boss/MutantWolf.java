@@ -69,13 +69,13 @@ public final class MutantWolf extends Monster implements GeoEntity {
 
 	public static final int AWAKENING_TICKS = 60;
 	public static final int DEFEAT_TICKS = 60;
-	public static final DataTicket<Integer> ANIMATION_PHASE = DataTickets.create("darkspawn_wolf_phase", Integer.class);
-	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTickets.create("darkspawn_wolf_windup", Integer.class);
-	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTickets.create("darkspawn_wolf_recovery", Integer.class);
-	public static final DataTicket<Integer> ANIMATION_ATTACK = DataTickets.create("darkspawn_wolf_attack", Integer.class);
-	public static final DataTicket<Boolean> ANIMATION_LEAPING = DataTickets.create("darkspawn_wolf_leaping", Boolean.class);
-	public static final DataTicket<Integer> ANIMATION_AWAKENING = DataTickets.create("darkspawn_wolf_awakening", Integer.class);
-	public static final DataTicket<Float> ANIMATION_LIFECYCLE_TIME = DataTickets.create("darkspawn_wolf_lifecycle_time", Float.class);
+	public static final DataTicket<Integer> ANIMATION_PHASE = DataTicket.create("darkspawn_wolf_phase", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTicket.create("darkspawn_wolf_windup", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTicket.create("darkspawn_wolf_recovery", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_ATTACK = DataTicket.create("darkspawn_wolf_attack", Integer.class);
+	public static final DataTicket<Boolean> ANIMATION_LEAPING = DataTicket.create("darkspawn_wolf_leaping", Boolean.class);
+	public static final DataTicket<Integer> ANIMATION_AWAKENING = DataTicket.create("darkspawn_wolf_awakening", Integer.class);
+	public static final DataTicket<Float> ANIMATION_LIFECYCLE_TIME = DataTicket.create("darkspawn_wolf_lifecycle_time", Float.class);
 	private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.mutant_wolf.idle");
 	private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.mutant_wolf.walk");
 	private static final RawAnimation WRATH_IDLE = RawAnimation.begin().thenLoop("animation.mutant_wolf.wrath_idle");

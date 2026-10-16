@@ -10,12 +10,12 @@ import com.geckolib.constant.dataticket.DataTicket;
 import net.minecraft.world.entity.Mob;
 
 public final class CreatureAnimations {
-	public static final DataTicket<Integer> WARNING = DataTickets.create("darkspawn_creature_warning", Integer.class);
-	public static final DataTicket<Boolean> ACTIVE = DataTickets.create("darkspawn_creature_active", Boolean.class);
-	public static final DataTicket<Boolean> HIDING = DataTickets.create("darkspawn_creature_hiding", Boolean.class);
-	public static final DataTicket<Integer> ROLE = DataTickets.create("darkspawn_creature_role", Integer.class);
-	public static final DataTicket<Float> DEATH_TIME = DataTickets.create("darkspawn_creature_death", Float.class);
-	public static final DataTicket<Float> SHIELD_ANGLE = DataTickets.create("darkspawn_creature_shield", Float.class);
+	public static final DataTicket<Integer> WARNING = DataTicket.create("darkspawn_creature_warning", Integer.class);
+	public static final DataTicket<Boolean> ACTIVE = DataTicket.create("darkspawn_creature_active", Boolean.class);
+	public static final DataTicket<Boolean> HIDING = DataTicket.create("darkspawn_creature_hiding", Boolean.class);
+	public static final DataTicket<Integer> ROLE = DataTicket.create("darkspawn_creature_role", Integer.class);
+	public static final DataTicket<Float> DEATH_TIME = DataTicket.create("darkspawn_creature_death", Float.class);
+	public static final DataTicket<Float> SHIELD_ANGLE = DataTicket.create("darkspawn_creature_shield", Float.class);
 	private CreatureAnimations() { }
 
 	public static <T extends Mob & AnimatedCreature> void register(String id, AnimatableManager.ControllerRegistrar controllers) {

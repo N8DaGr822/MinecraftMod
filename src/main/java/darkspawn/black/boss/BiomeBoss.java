@@ -71,11 +71,11 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	@Override public int getAmbientSoundInterval() { return 220; }
 	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
 
-	public static final DataTicket<Integer> ANIMATION_PHASE = DataTickets.create("darkspawn_biome_phase", Integer.class);
-	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTickets.create("darkspawn_biome_windup", Integer.class);
-	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTickets.create("darkspawn_biome_recovery", Integer.class);
-	public static final DataTicket<Integer> ANIMATION_ATTACK = DataTickets.create("darkspawn_biome_attack", Integer.class);
-	public static final DataTicket<Boolean> ANIMATION_CHARGING = DataTickets.create("darkspawn_biome_charging", Boolean.class);
+	public static final DataTicket<Integer> ANIMATION_PHASE = DataTicket.create("darkspawn_biome_phase", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTicket.create("darkspawn_biome_windup", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_RECOVERY = DataTicket.create("darkspawn_biome_recovery", Integer.class);
+	public static final DataTicket<Integer> ANIMATION_ATTACK = DataTicket.create("darkspawn_biome_attack", Integer.class);
+	public static final DataTicket<Boolean> ANIMATION_CHARGING = DataTicket.create("darkspawn_biome_charging", Boolean.class);
 	private static final RawAnimation ZOMBIE_IDLE = RawAnimation.begin().thenLoop("animation.mutant_zombie.idle");
 	private static final RawAnimation ZOMBIE_WALK = RawAnimation.begin().thenLoop("animation.mutant_zombie.walk");
 	private static final RawAnimation ZOMBIE_WRATH = RawAnimation.begin().thenLoop("animation.mutant_zombie.wrath_idle");
