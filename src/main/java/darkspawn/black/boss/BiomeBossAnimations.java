@@ -11,9 +11,9 @@ import java.util.Locale;
 
 /** Presentation only: the existing server timers continue to own every attack and damage window. */
 public final class BiomeBossAnimations {
-	public static final DataTicket<Float> DEATH_TIME = DataTickets.create("darkspawn_biome_death_time", Float.class);
-	public static final DataTicket<Integer> AWAKENING = DataTickets.create("darkspawn_biome_awakening", Integer.class);
-	public static final DataTicket<Float> AGE = DataTickets.create("darkspawn_biome_age", Float.class);
+	public static final DataTicket<Float> DEATH_TIME = DataTicket.create("darkspawn_biome_death_time", Float.class);
+	public static final DataTicket<Integer> AWAKENING = DataTicket.create("darkspawn_biome_awakening", Integer.class);
+	public static final DataTicket<Float> AGE = DataTicket.create("darkspawn_biome_age", Float.class);
 	private BiomeBossAnimations() { }
 
 	public static void register(BossProfile profile, AnimatableManager.ControllerRegistrar controllers) {
