@@ -5,6 +5,7 @@ const zlib = require('node:zlib');
 const root = path.resolve(__dirname, '../..');
 const res = path.join(root, 'src/main/resources');
 const expansionOnly = process.argv.includes('--expansion-only');
+const terrainOnly = process.argv.includes('--terrain-only');
 function json(file, value) { if(expansionOnly && !/chests\/pirate_(redwater|pearlwater|cinderjaw)\.json$/.test(file))return; const target = path.join(res,file); fs.mkdirSync(path.dirname(target),{recursive:true}); fs.writeFileSync(target,JSON.stringify(value,null,2)+'\n'); }
 function integer(n) { const b=Buffer.alloc(4);b.writeInt32BE(n);return b; }
 function string(s) { const b=Buffer.from(s),n=Buffer.alloc(2);n.writeUInt16BE(b.length);return Buffer.concat([n,b]); }
@@ -13,6 +14,72 @@ function tag(v) {
   if(typeof v==='string')return [8,string(v)];
   if(Array.isArray(v)){const a=v.map(tag);return [9,Buffer.concat([Buffer.from([a[0]?.[0]||10]),integer(a.length),...a.map(e=>e[1])])];}
   return [10,Buffer.concat([...Object.entries(v).map(([k,v])=>{const [t,b]=tag(v);return Buffer.concat([Buffer.from([t]),string(k),b]);}),Buffer.from([0])])];
+}
+if (process.argv.includes('--biomes-only')) {
+  require('./pirate-biome-islands.cjs')({fs,path,zlib,res,tag});
+  process.exit(0);
+}
+if (terrainOnly) {
+  // Island Hinterland: Keep the original 49-block quest core and its saved objective coordinates intact.
+  for (let variant=0;variant<9;variant++) {
+    const palette=[],indices=new Map(),blocks=[];
+    function put(x,y,z,name) {
+      const state={Name:'minecraft:'+name,...(name.endsWith('_leaves')?{Properties:{persistent:'true',distance:'1',waterlogged:'false'}}:{})};
+      const key=JSON.stringify(state);if(!indices.has(key)){indices.set(key,palette.length);palette.push(state);}
+      blocks.push({pos:[x,y,z],state:indices.get(key)});
+    }
+    for(let x=0;x<113;x++)for(let z=0;z<113;z++) {
+      const dx=x-56,dz=z-56,r=Math.hypot(dx,dz),angle=Math.atan2(dz,dx);
+      const edge=49+Math.sin(angle*3+variant)*4+Math.cos(angle*5-variant)*2;
+      const mineBank=dx>=25&&dx<=45&&Math.abs(dz)<=5;
+      if(r>edge&&!mineBank)continue;
+      // Preserve quest buildings and a southern sailing approach; blend the old beach into the hinterland.
+      if(r<=16 || dz>=17&&Math.abs(dx)<=6)continue;
+      const core=Math.abs(dx)<=24&&Math.abs(dz)<=24;
+      const shore=Math.max(0,Math.min(1,(edge-r)/9));
+      const hill=Math.max(0,Math.sin(dx*.105+variant)*Math.cos(dz*.09-variant))*12;
+      let top=Math.floor(18+shore*(9+hill));
+      if(mineBank)top=Math.max(top,26);
+      if(core)top=24;
+      // Approach: A level east-west shelf connects the old shore to the new interior.
+      if(Math.abs(dz)<=3&&Math.abs(dx)<edge-6)top=24;
+      for(let y=0;y<=top;y++) {
+        let material=y===top?(top<=24?'sand':variant===8?'gravel':'grass_block'):y>=top-3?(top<=24?'sandstone':'dirt'):'stone';
+        // Native Deposits: Clustered veins, finite and mineable with normal tool/drop rules.
+        const vein=Math.abs(Math.imul(Math.floor(x/3)+variant*71,7349)^Math.imul(Math.floor(y/3),193)^Math.imul(Math.floor(z/3),9151))%113;
+        if(y<top-4) {
+          if(vein<5)material='coal_ore';else if(vein<9)material='iron_ore';else if(vein<12)material='copper_ore';
+          else if(y<12&&vein===12)material='gold_ore';else if(y<10&&vein===13)material='redstone_ore';
+          else if(y<10&&vein===14)material='lapis_ore';
+          else if(vein>100)material=variant===8?'tuff':'andesite';
+        }
+        // Dry cave galleries stay above the seabed and inside a sealed rock shell.
+        const gallery=Math.abs(r-(34+Math.sin(angle*3+variant)*2))<2.5 && !(dz>15&&Math.abs(dx)<11);
+        if(gallery&&y>=11&&y<=14&&y<top-3)material='air';
+        if(dx>=32&&dx<=42&&Math.abs(dz)<=3&&y>=11&&y<=14&&y<top-3)material='air';
+        // Walkable mine entrance: Three-wide staircase from the east shelf into the gallery.
+        if(dx>=27&&dx<=41&&Math.abs(dz)<=1) {
+          const floor=Math.max(8,24-(dx-27));
+          if(y>floor&&y<=Math.max(floor+3,top))material='air';
+          if(y===floor)material='stone';
+        }
+        put(x,y,z,material);
+      }
+      if(!core&&top>25&&Math.abs(dz)>5&&((x*17+z*31+variant*13)%97===0)) {
+        for(let y=1;y<=4;y++)put(x,top+y,z,variant===8?'basalt':'jungle_log');
+        if(variant!==8)for(let ox=-2;ox<=2;ox++)for(let oz=-2;oz<=2;oz++)if(Math.abs(ox)+Math.abs(oz)<=3)put(x+ox,top+5,z+oz,'jungle_leaves');
+      }
+    }
+    for(let x=73;x<=83;x++)for(let z=54;z<=58;z++)put(x,24,z,'oak_planks');
+    // Rare Resource Budget: One four-block deep deposit on selected variants, not diamond-rich foundations.
+    if(variant!==1&&variant!==6)for(let x=0;x<2;x++)for(let z=0;z<2;z++)put(89+variant%3+x,3,52+variant%4+z,'diamond_ore');
+    // Foliage can overlap adjacent columns; retain the last authored state per position.
+    const unique=new Map(blocks.map(block=>[block.pos.join(','),block]));
+    const template={DataVersion:5000,size:[113,56,113],palette,blocks:[...unique.values()],entities:[]};
+    fs.writeFileSync(path.join(res,`data/darkspawn/structure/pirate/terrain_${variant}.nbt`),zlib.gzipSync(Buffer.concat([Buffer.from([10,0,0]),tag(template)[1]])));
+  }
+  console.log('Generated nine island hinterlands; existing landmarks and world settings preserved.');
+  process.exit(0);
 }
 json('data/darkspawn/dimension/pirate_seas.json',{type:'minecraft:overworld',generator:{type:'minecraft:flat',settings:{biome:'darkspawn:pirate_seas',features:false,lakes:false,structure_overrides:['darkspawn:pirate_islands'],layers:[{block:'minecraft:bedrock',height:1},{block:'minecraft:stone',height:99},{block:'minecraft:sand',height:4},{block:'minecraft:water',height:24}]}}});
 json('data/darkspawn/worldgen/biome/pirate_seas.json',{attributes:{'minecraft:visual/sky_color':'#77b9eb'},carvers:[],downfall:0.7,effects:{water_color:'#278eaa'},features:Array.from({length:11},()=>[]),has_precipitation:true,temperature:0.9,spawners:{water_creature:[{type:'minecraft:squid',weight:4,minCount:1,maxCount:3},{type:'minecraft:dolphin',weight:1,minCount:1,maxCount:2}],water_ambient:[{type:'minecraft:tropical_fish',weight:10,minCount:3,maxCount:6}],monster:[{type:'minecraft:drowned',weight:5,minCount:1,maxCount:2}]},spawn_costs:{}});

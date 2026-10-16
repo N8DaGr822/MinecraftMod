@@ -24,10 +24,14 @@ public final class PirateIslandStructure extends Structure {
 		int x = context.chunkPos().getMinBlockX(), z = context.chunkPos().getMinBlockZ();
 		// Harbor Reserve: Keep all random island footprints outside the shared arrival island.
 		if (Math.abs((long)x) < 128 && Math.abs((long)z) < 128) return Optional.empty();
-		if (Math.abs((long)x - 192) < 80 && Math.abs((long)z) < 80) return Optional.empty();
+		if (Math.abs((long)x - 192) < 128 && Math.abs((long)z) < 128) return Optional.empty();
 		var origin = new BlockPos(x - 24, 40, z - 24);
-		var template = Darkspawn.id("pirate/island_" + context.random().nextInt(IslandDiscoveries.NAMES.length));
-		return Optional.of(new GenerationStub(origin, pieces -> pieces.addPiece(
-			new BossLandmarkStructure.LandmarkPiece(context.structureTemplateManager(), template, origin, Rotation.NONE))));
+		int kind = context.random().nextInt(IslandDiscoveries.NAMES.length);
+		var template = Darkspawn.id("pirate/island_" + kind);
+		int radius = kind >= 9 ? 64 : 56;
+		return Optional.of(new GenerationStub(origin, pieces -> {
+			pieces.addPiece(new BossLandmarkStructure.LandmarkPiece(context.structureTemplateManager(), template, origin, Rotation.NONE));
+			pieces.addPiece(new BossLandmarkStructure.LandmarkPiece(context.structureTemplateManager(), Darkspawn.id("pirate/terrain_" + kind), new BlockPos(x - radius, 40, z - radius), Rotation.NONE));
+		}));
 	}
 }

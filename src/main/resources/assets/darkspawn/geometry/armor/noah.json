@@ -1,0 +1,546 @@
+{
+  "texture_width": 256,
+  "texture_height": 128,
+  "parts": [
+    {
+      "name": "head",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "sea_crown",
+          "slot": "helmet",
+          "from": [
+            -4.6,
+            -8.8,
+            -4.6
+          ],
+          "size": [
+            9.2,
+            2,
+            1
+          ],
+          "material": 2
+        },
+        {
+          "name": "sea_crown",
+          "slot": "helmet",
+          "from": [
+            -4.6,
+            -8.8,
+            3.6
+          ],
+          "size": [
+            9.2,
+            2,
+            1
+          ],
+          "material": 2
+        },
+        {
+          "name": "sea_crown",
+          "slot": "helmet",
+          "from": [
+            -4.6,
+            -8.8,
+            -3.6
+          ],
+          "size": [
+            1,
+            2,
+            7.2
+          ],
+          "material": 2
+        },
+        {
+          "name": "sea_crown",
+          "slot": "helmet",
+          "from": [
+            3.6,
+            -8.8,
+            -3.6
+          ],
+          "size": [
+            1,
+            2,
+            7.2
+          ],
+          "material": 2
+        },
+        {
+          "name": "crown_tine",
+          "slot": "helmet",
+          "from": [
+            -3.6,
+            -10.8,
+            -4.6
+          ],
+          "size": [
+            1.2,
+            2,
+            1.1
+          ],
+          "material": 2
+        },
+        {
+          "name": "crown_tine",
+          "slot": "helmet",
+          "from": [
+            -0.6,
+            -12.3,
+            -4.6
+          ],
+          "size": [
+            1.2,
+            3.5,
+            1.1
+          ],
+          "material": 2
+        },
+        {
+          "name": "crown_tine",
+          "slot": "helmet",
+          "from": [
+            2.4,
+            -10.8,
+            -4.6
+          ],
+          "size": [
+            1.2,
+            2,
+            1.1
+          ],
+          "material": 2
+        },
+        {
+          "name": "crown_gem",
+          "slot": "helmet",
+          "from": [
+            -0.8,
+            -8.7,
+            -4.9
+          ],
+          "size": [
+            1.6,
+            1.6,
+            0.6
+          ],
+          "material": 3
+        }
+      ]
+    },
+    {
+      "name": "body",
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "royal_cuirass",
+          "slot": "chestplate",
+          "from": [
+            -4.5,
+            -0.3,
+            -2.6
+          ],
+          "size": [
+            9,
+            12.6,
+            5.2
+          ],
+          "material": 0
+        },
+        {
+          "name": "breastplate",
+          "slot": "chestplate",
+          "from": [
+            -3.8,
+            1,
+            -3
+          ],
+          "size": [
+            7.6,
+            8,
+            0.7
+          ],
+          "material": 1
+        },
+        {
+          "name": "heart_of_the_sea",
+          "slot": "chestplate",
+          "from": [
+            -1,
+            3,
+            -3.5
+          ],
+          "size": [
+            2,
+            3,
+            0.6
+          ],
+          "material": 3
+        },
+        {
+          "name": "gold_inlay",
+          "slot": "chestplate",
+          "from": [
+            -4,
+            0,
+            -3
+          ],
+          "size": [
+            0.7,
+            11,
+            0.5
+          ],
+          "material": 2
+        },
+        {
+          "name": "gold_inlay",
+          "slot": "chestplate",
+          "from": [
+            3.3,
+            0,
+            -3
+          ],
+          "size": [
+            0.7,
+            11,
+            0.5
+          ],
+          "material": 2
+        },
+        {
+          "name": "heir_belt",
+          "slot": "leggings",
+          "from": [
+            -4.6,
+            10,
+            -2.7
+          ],
+          "size": [
+            9.2,
+            2.4,
+            5.4
+          ],
+          "material": 2
+        }
+      ]
+    },
+    {
+      "name": "right_arm",
+      "origin": [
+        -5,
+        2,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "wave_pauldron",
+          "slot": "chestplate",
+          "from": [
+            -2.8,
+            -2.8,
+            -2.8
+          ],
+          "size": [
+            5.6,
+            4.2,
+            5.6
+          ],
+          "material": 1
+        },
+        {
+          "name": "pauldron_trim",
+          "slot": "chestplate",
+          "from": [
+            -3,
+            -3.2,
+            -3
+          ],
+          "size": [
+            6,
+            0.7,
+            6
+          ],
+          "material": 2
+        },
+        {
+          "name": "bracer",
+          "slot": "chestplate",
+          "from": [
+            -2.4,
+            5,
+            -2.4
+          ],
+          "size": [
+            4.8,
+            4.7,
+            4.8
+          ],
+          "material": 0
+        },
+        {
+          "name": "bracer_rune",
+          "slot": "chestplate",
+          "from": [
+            -1,
+            6,
+            -2.7
+          ],
+          "size": [
+            2,
+            2.5,
+            0.5
+          ],
+          "material": 3
+        }
+      ]
+    },
+    {
+      "name": "left_arm",
+      "origin": [
+        5,
+        2,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "wave_pauldron",
+          "slot": "chestplate",
+          "from": [
+            -2.8,
+            -2.8,
+            -2.8
+          ],
+          "size": [
+            5.6,
+            4.2,
+            5.6
+          ],
+          "material": 1
+        },
+        {
+          "name": "pauldron_trim",
+          "slot": "chestplate",
+          "from": [
+            -3,
+            -3.2,
+            -3
+          ],
+          "size": [
+            6,
+            0.7,
+            6
+          ],
+          "material": 2
+        },
+        {
+          "name": "bracer",
+          "slot": "chestplate",
+          "from": [
+            -2.4,
+            5,
+            -2.4
+          ],
+          "size": [
+            4.8,
+            4.7,
+            4.8
+          ],
+          "material": 0
+        },
+        {
+          "name": "bracer_rune",
+          "slot": "chestplate",
+          "from": [
+            -1,
+            6,
+            -2.7
+          ],
+          "size": [
+            2,
+            2.5,
+            0.5
+          ],
+          "material": 3
+        }
+      ]
+    },
+    {
+      "name": "right_leg",
+      "origin": [
+        -1.9,
+        12,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "abyssal_greave",
+          "slot": "leggings",
+          "from": [
+            -2.25,
+            0,
+            -2.3
+          ],
+          "size": [
+            4.5,
+            8.4,
+            4.6
+          ],
+          "material": 1
+        },
+        {
+          "name": "greave_inlay",
+          "slot": "leggings",
+          "from": [
+            -0.4,
+            1,
+            -2.7
+          ],
+          "size": [
+            0.8,
+            6,
+            0.5
+          ],
+          "material": 2
+        },
+        {
+          "name": "wavewalker",
+          "slot": "boots",
+          "from": [
+            -2.4,
+            8,
+            -3
+          ],
+          "size": [
+            4.8,
+            4.3,
+            5.4
+          ],
+          "material": 0
+        },
+        {
+          "name": "royal_boot_cuff",
+          "slot": "boots",
+          "from": [
+            -2.6,
+            7.8,
+            -2.6
+          ],
+          "size": [
+            5.2,
+            1.1,
+            5.2
+          ],
+          "material": 2
+        },
+        {
+          "name": "tide_step",
+          "slot": "boots",
+          "from": [
+            -2.4,
+            11.5,
+            -3.1
+          ],
+          "size": [
+            4.8,
+            0.8,
+            5.5
+          ],
+          "material": 3
+        }
+      ]
+    },
+    {
+      "name": "left_leg",
+      "origin": [
+        1.9,
+        12,
+        0
+      ],
+      "cubes": [
+        {
+          "name": "abyssal_greave",
+          "slot": "leggings",
+          "from": [
+            -2.25,
+            0,
+            -2.3
+          ],
+          "size": [
+            4.5,
+            8.4,
+            4.6
+          ],
+          "material": 1
+        },
+        {
+          "name": "greave_inlay",
+          "slot": "leggings",
+          "from": [
+            -0.4,
+            1,
+            -2.7
+          ],
+          "size": [
+            0.8,
+            6,
+            0.5
+          ],
+          "material": 2
+        },
+        {
+          "name": "wavewalker",
+          "slot": "boots",
+          "from": [
+            -2.4,
+            8,
+            -3
+          ],
+          "size": [
+            4.8,
+            4.3,
+            5.4
+          ],
+          "material": 0
+        },
+        {
+          "name": "royal_boot_cuff",
+          "slot": "boots",
+          "from": [
+            -2.6,
+            7.8,
+            -2.6
+          ],
+          "size": [
+            5.2,
+            1.1,
+            5.2
+          ],
+          "material": 2
+        },
+        {
+          "name": "tide_step",
+          "slot": "boots",
+          "from": [
+            -2.4,
+            11.5,
+            -3.1
+          ],
+          "size": [
+            4.8,
+            0.8,
+            5.5
+          ],
+          "material": 3
+        }
+      ]
+    }
+  ]
+}

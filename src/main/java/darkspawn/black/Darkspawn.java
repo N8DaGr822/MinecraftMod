@@ -53,6 +53,7 @@ public class Darkspawn implements ModInitializer {
         darkspawn.black.endgame.LegendaryRelics.initialize();
         darkspawn.black.endgame.Nexus.initialize();
 		darkspawn.black.mount.Mounts.initialize();
+		darkspawn.black.legacy.NoahLegacy.initialize();
 		darkspawn.black.bonfire.Bonfires.initialize();
 		darkspawn.black.starter.DragonStarterChest.initialize();
 		darkspawn.black.boss.Endborn.initializeSpawning();

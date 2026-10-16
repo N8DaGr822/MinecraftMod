@@ -29,6 +29,99 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class ShipsGameTest {
+    @GameTest public void deckSupportReleasesOnJumpAndProtectsSneakingEdges(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.stopRiding();p.setPos(ship.local(0,1,4));p.setOnGround(true);p.baseTick();
+            p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(0,.42,0));var airborne=p.position();
+            ship.setPos(ship.position().add(.2,0,0));p.baseTick();
+            helper.assertTrue(p.position().distanceTo(airborne)<.001,"Jump releases carry instead of dragging airborne player");
+            p.setPos(ship.local(3.6,1,4));p.setOnGround(true);p.setShiftKeyDown(true);
+            for(int i=0;i<10;i++)p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(.2,-.08,0));
+            helper.assertTrue(p.getX()-ship.getX()<3.8&&Math.abs(p.getY()-ship.getY()-1)<.001,"Crouching still prevents walking off the outer edge");
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void rotatingDockPreservesWalkerAndRejectsSwimmer(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);ServerPlayer swimmer=null;
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.stopRiding();ship.setYRot(40);p.setPos(ship.local(0,1,4));
+            swimmer=player(helper,at.offset(2,0,0));
+            helper.assertTrue(ship.dock(p)!=null&&!ship.docked(),"Swimmer still prevents block restoration");remove(swimmer);swimmer=null;
+            helper.assertTrue(ship.dock(p)==null,"Deck walker can dock through heading snap");
+            helper.assertTrue(p.position().distanceTo(ship.local(0,1,4))<.001,"Walker retains local deck position after rotation");
+        } finally {clear(ship);if(swimmer!=null)remove(swimmer);remove(p);}helper.succeed();
+    }
+    @GameTest public void largeDeckMenuRemainsValidAndClosesAfterLeaving(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            Pirate.state(p).navalVictories=5;p.getInventory().clearContent();for(int i=0;i<3;i++)p.getInventory().setItem(i,new ItemStack(Items.OAK_PLANKS,64));
+            helper.assertTrue(ship.upgrade(p)==null&&ship.launch(p)==null,"Launch expanded vessel");ship.tick();p.stopRiding();p.setPos(ship.local(0,1,10));
+            var menu=new ShipMenu(1,p.getInventory(),null,ship);
+            helper.assertTrue(menu.stillValid(p),"Owned deck supports menus beyond eight blocks from center");
+            p.setPos(ship.local(0,1,15));helper.assertTrue(!menu.stillValid(p),"Leaving the deck closes distant menus");
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void sustainedDeckTransport(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.stopRiding();p.setPos(ship.local(0,1,4));p.setOnGround(true);p.baseTick();
+            var initial=p.position().subtract(ship.position());
+            for(int i=0;i<20;i++) {ship.setPos(ship.position().add(.2,0,0));p.baseTick();p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(0,-.08,0));}
+            double drift=p.position().subtract(ship.position()).subtract(initial).length();
+            helper.assertTrue(drift<.01,"Standing rider should retain local position over 20 steps; drift="+drift);
+            p.setShiftKeyDown(true);
+            for(int i=0;i<20;i++) {ship.setYRot(ship.getYRot()+1);p.baseTick();p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(0,-.08,0));}
+            helper.assertTrue(p.position().distanceTo(ship.local(0,1,4))<.01,"Crouching rider follows sustained turning without drifting");
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void crouchingCanWalkOnDeck(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.stopRiding();p.setPos(ship.local(0,1,4));p.setOnGround(true);p.setShiftKeyDown(true);
+            double before=p.getX();p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(.2,-.08,0));
+            helper.assertTrue(p.getX()-before>.15,"Crouching on the center of a solid moving deck should permit walking; moved="+(p.getX()-before));
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void walkingCaptainCanDock(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.stopRiding();p.setPos(ship.local(0,1,2));ship.setDeltaMovement(Vec3.ZERO);
+            String error=ship.dock(p);helper.assertTrue(error==null,"A captain on the stopped deck should not be classified as an obstructing swimmer: "+error);
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void lateBoardingChecksSeatClearance(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);ServerPlayer guest=null;
+        try {
+            p.level().setBlock(at.offset(2,2,-5),Blocks.OAK_PLANKS.defaultBlockState(),2);
+            helper.assertTrue(ship.launch(p)==null,"Unoccupied future seat is currently accepted at launch");
+            guest=player(helper,at.offset(3,1,-5));guest.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,ItemStack.EMPTY);
+            guest.setPose(net.minecraft.world.entity.Pose.SWIMMING);
+            ship.interact(guest,net.minecraft.world.InteractionHand.MAIN_HAND,Vec3.ZERO);
+            helper.assertTrue(guest.getVehicle()!=ship,"Swimming cannot bypass standing headroom at the reserved passenger seat");
+        } finally {clear(ship);if(guest!=null)remove(guest);remove(p);}helper.succeed();
+    }
+    @GameTest public void capturedLadderRemainsClimbable(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            p.level().setBlock(at.offset(1,1,4),Blocks.OAK_PLANKS.defaultBlockState(),2);
+            p.level().setBlock(at.offset(0,1,4),Blocks.LADDER.defaultBlockState().setValue(net.minecraft.world.level.block.LadderBlock.FACING,net.minecraft.core.Direction.WEST),2);
+            helper.assertTrue(ship.launch(p)==null,"Ladder is an allowed captured block");p.stopRiding();p.setPos(ship.local(0,1,4));
+            helper.assertTrue(p.onClimbable(),"Allowed ship ladder should retain climbing behavior while sailing");
+            ship.setYRot(90);ship.tick();p.setPos(ship.local(0,1,4));helper.assertTrue(p.onClimbable(),"Ladder lookup follows ship rotation");
+            p.setPos(ship.local(-2,1,4));helper.assertTrue(!p.onClimbable(),"Nearby empty deck is not climbable");
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void cannonMissesEmptySpaceAboveDeck(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);PirateShip attacker=null;Cannonball ball=null;
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");attacker=PirateShip.spawnEnemy(p.level(),at.offset(32,0,0));
+            float before=ship.hull();ball=new Cannonball(Ships.BALL,p.level());ball.setOwner(attacker);ball.setItem(new ItemStack(Ships.SHOT));
+            ball.setPos(ship.getX(),ship.getY()+5,ship.getZ()-20);ball.shoot(0,0,1,1F,0);p.level().addFreshEntity(ball);
+            for(int i=0;i<25&&!ball.isRemoved();i++)ball.tick();
+            helper.assertTrue(ship.hull()==before,"Shot through empty air above a bare deck should miss; hull="+ship.hull()+" before="+before);
+        } finally {if(ball!=null)ball.discard();clear(attacker);clear(ship);remove(p);}helper.succeed();
+    }
+
 	private static ServerPlayer player(GameTestHelper helper, BlockPos pos) {
 		var level = helper.getLevel().getServer().getLevel(Pirate.LEVEL);
 		for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)level.getChunk((pos.getX()>>4)+x,(pos.getZ()>>4)+z);
@@ -58,6 +151,27 @@ public final class ShipsGameTest {
 		}
 		for(var passenger:java.util.List.copyOf(ship.getPassengers())){passenger.stopRiding();if(!(passenger instanceof net.minecraft.world.entity.player.Player))passenger.discard();}ship.discard();
 	}
+    @GameTest public void movingDeckSupportsWalkingAndDockedBuildIsNotPickable(GameTestHelper helper) {
+        var pos=location(helper);var p=player(helper,pos.above());var ship=build(helper,p,pos);
+        try {
+            helper.assertTrue(!ship.isPickable(),"Docked entity cannot intercept platform block targeting");
+            helper.assertTrue(ship.launch(p)==null,"Launch for collision regression");
+            p.stopRiding();ship.tick();
+            for(float yaw:new float[]{0,45,90,180,270}) {
+                ship.setYRot(yaw);ship.tick();
+                var top=ship.local(2,1,4);p.setPos(top.add(0,1,0));
+                p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(0,-2,0));
+                helper.assertTrue(Math.abs(p.getY()-top.y)<.001,"Moving deck catches falling player at yaw "+yaw+" actual="+p.getY()+" expected="+top.y+" box="+ship.getBoundingBox());
+            }
+            ship.setYRot(0);ship.tick();p.setPos(ship.local(2,1,4));p.setOnGround(true);p.baseTick();
+            var before=p.position();ship.setPos(ship.position().add(.2,0,0));p.baseTick();
+            helper.assertTrue(Math.abs(p.getX()-before.x-.2)<.001,"Grounded player follows translating deck");
+            p.setPos(ship.local(20,2,0));p.setOnGround(false);p.move(net.minecraft.world.entity.MoverType.SELF,new Vec3(0,-1,0));
+            helper.assertTrue(Math.abs(p.getY()-ship.getY()-1)<.001,"Open water outside ship does not acquire a phantom floor");
+        } finally { clear(ship);remove(p); }
+        helper.succeed();
+    }
+
     @GameTest public void advancedRefitsAndCrewCarePreserveSavesAndPayment(GameTestHelper helper) {
         var pos=location(helper);var p=player(helper,pos.above());var ship=build(helper,p,pos);
         try {

@@ -31,6 +31,59 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class PirateGameTest {
+    @GameTest public void biomeIslandsStoreNativeBiomesAndLoadSettlements(GameTestHelper helper) {
+        var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);
+        var structure=sea.registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(ResourceKey.create(Registries.STRUCTURE,Darkspawn.id("pirate_island"))).value();
+        for(int kind=9;kind<15;kind++) {
+            var terrain=sea.getStructureTemplateManager().getOrCreate(Darkspawn.id("pirate/terrain_"+kind));
+            helper.assertTrue(terrain.getSize().equals(new net.minecraft.core.Vec3i(129,56,129)),"Large biome terrain has bounded native footprint");
+            helper.assertTrue(terrain.filterBlocks(BlockPos.ZERO,new StructurePlaceSettings(),Blocks.CHEST).size()==1,"One finite cache per settlement");
+            helper.assertTrue(terrain.filterBlocks(BlockPos.ZERO,new StructurePlaceSettings(),Blocks.BED.red()).size()>=4,"Settlement provides native beds");
+            var island=islandFixture(helper,sea,kind);var chunk=sea.getChunk(island.center());
+            var references=new java.util.HashMap<>(chunk.getAllReferences());
+            int qx=island.center().getX()>>2,qz=island.center().getZ()>>2;
+            var before=chunk.getNoiseBiome(qx,16,qz);
+            try {
+                chunk.addReferenceForStructure(structure,chunk.getPos().pack());
+                sea.getChunkSource().getGenerator().applyBiomeDecoration(sea,chunk,sea.structureManager());
+                helper.assertTrue(chunk.getNoiseBiome(qx,16,qz).is(PirateIslandBiomes.biome(kind)),"Chunk stores actual native biome, including weather and mob rules");
+                helper.assertTrue(chunk.getNoiseBiome(qx,-8,qz).is(PirateIslandBiomes.biome(kind)),"Island biome covers mining depths too");
+            } finally {chunk.fillBiomesFromNoise((x,y,z)->before);chunk.setAllReferences(references);}
+        }
+        helper.succeed();
+    }
+    @GameTest public void biomeSettlementsProtectVisitorsAndNeverRefillGarrisons(GameTestHelper helper) {
+        var sea=helper.getLevel().getServer().getLevel(Pirate.LEVEL);var p=player(helper,helper.absolutePos(BlockPos.ZERO));
+        var difficulty=sea.getDifficulty();var rule=net.minecraft.world.level.gamerules.GameRules.SPAWN_MOBS;boolean previous=sea.getGameRules().get(rule);
+        var actors=new java.util.ArrayList<net.minecraft.world.entity.Entity>();
+        try {
+            sea.getServer().setDifficulty(net.minecraft.world.Difficulty.NORMAL,true);sea.getGameRules().set(rule,true,sea.getServer());
+            for(int kind:new int[]{9,11,13}) {
+                var island=islandFixture(helper,sea,kind);
+                for(int[] offset:new int[][]{{0,10},{-7,10},{7,10},{-7,-10},{7,-10}}) {
+                    var pos=island.center().offset(offset[0],0,offset[1]);sea.setBlockAndUpdate(pos.below(),Blocks.STONE.defaultBlockState());
+                    sea.setBlockAndUpdate(pos,Blocks.AIR.defaultBlockState());sea.setBlockAndUpdate(pos.above(),Blocks.AIR.defaultBlockState());
+                }
+                seaTravel(p,sea,island.center());p.setGameMode(GameType.SURVIVAL);
+                helper.assertTrue(IslandSettlements.spawn(p,island)==(kind==9?1:4),"Expected bounded settlement population");
+                var mobs=sea.getEntitiesOfClass(net.minecraft.world.entity.Mob.class,new net.minecraft.world.phys.AABB(island.center()).inflate(24),m->m.entityTags().contains(IslandDiscoveries.ENCOUNTER_TAG));actors.addAll(mobs);
+                helper.assertTrue(IslandSettlements.spawn(p,island)==0,"Repeated visits cannot duplicate NPCs");
+                if(kind==9) {
+                    var warden=mobs.getFirst();helper.assertTrue(PirateDiplomacy.contact(warden)&&IslandSettlements.sheltered(p),"Native contact protects the settlement center");
+                    var attacker=net.minecraft.world.entity.EntityTypes.HUSK.create(sea,net.minecraft.world.entity.EntitySpawnReason.EVENT);
+                    helper.assertTrue(PirateDiplomacy.disallows(attacker,p)&&PirateDiplomacy.disallows(attacker,warden),"Warden prevents hostile mob attacks on visitors and the service NPC");attacker.discard();
+                    p.teleportTo(island.center().getX()+50,65,island.center().getZ());helper.assertTrue(!IslandSettlements.sheltered(p),"Resource wilderness remains dangerous");
+                } else {
+                    mobs.forEach(net.minecraft.world.entity.Entity::discard);
+                    helper.assertTrue(IslandSettlements.spawn(p,island)==0,"Defeated occupation never respawns");
+                    var saved=sea.getDataStorage().computeIfAbsent(IslandDiscoveries.Encounters.TYPE);
+                    var copy=IslandDiscoveries.Encounters.CODEC.parse(JsonOps.INSTANCE,IslandDiscoveries.Encounters.CODEC.encodeStart(JsonOps.INSTANCE,saved).getOrThrow()).getOrThrow();
+                    helper.assertTrue((copy.mask(island.center())&0xF0)==0xF0,"All four garrison slots persist through save/load");
+                }
+            }
+        } finally {actors.forEach(net.minecraft.world.entity.Entity::discard);remove(p);sea.getServer().setDifficulty(difficulty,true);sea.getGameRules().set(rule,previous,sea.getServer());}
+        helper.succeed();
+    }
     @GameTest public void homePortsRequireOwnershipSaveAndLosePrivilegesOnCapture(GameTestHelper helper) {
         var p=player(helper,helper.absolutePos(BlockPos.ZERO));var other=player(helper,helper.absolutePos(new BlockPos(2,0,0)));
         try {
@@ -398,6 +451,11 @@ public final class PirateGameTest {
 	}
 	@GameTest public void templatesAndNativeIslandStartsAreValid(GameTestHelper helper) {
 		var level = helper.getLevel().getServer().getLevel(Pirate.LEVEL); var access = level.registryAccess();
+		for(int kind=0;kind<9;kind++) {
+			var terrain=level.getStructureTemplateManager().getOrCreate(Darkspawn.id("pirate/terrain_"+kind));
+			helper.assertTrue(terrain.getSize().equals(new net.minecraft.core.Vec3i(113,56,113)),"Expanded hinterland loads as a bounded native template");
+			helper.assertTrue(!terrain.filterBlocks(BlockPos.ZERO,new StructurePlaceSettings(),Blocks.IRON_ORE).isEmpty(),"Hinterland contains real mineable ore");
+		}
 		for (String name : new String[] {"harbor", "island_0", "island_1", "island_2", "island_3", "island_4", "island_5", "island_6", "island_7", "island_8"}) {
 			var template = level.getStructureTemplateManager().getOrCreate(Darkspawn.id("pirate/" + name));
 			helper.assertTrue(template.getSize().equals(new net.minecraft.core.Vec3i(49,40,49)), "Bounded island footprint");
@@ -457,20 +515,23 @@ public final class PirateGameTest {
 			player.teleportTo(192.5,65,.5);
 			helper.assertTrue(!LogboundCompass.observeArrival(player), "Matching coordinates in another dimension do not count");
 			var sea = helper.getLevel().getServer().getLevel(Pirate.LEVEL);
-			player.teleport(new net.minecraft.world.level.portal.TeleportTransition(sea, new Vec3(167.5,65,.5), Vec3.ZERO,0,0,net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING));
+			player.teleport(new net.minecraft.world.level.portal.TeleportTransition(sea, new Vec3(135.5,65,.5), Vec3.ZERO,0,0,net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING));
 			helper.assertTrue(!LogboundCompass.observeArrival(player), "Outside the island's west edge does not count");
-			player.teleportTo(192.5,85,.5);
-			helper.assertTrue(!LogboundCompass.observeArrival(player), "Flying above the surface band does not count");
-			player.teleportTo(192.5,59,.5);
-			helper.assertTrue(!LogboundCompass.observeArrival(player), "Deep water beneath the band does not count");
-			player.teleportTo(192.5,65,25.5);
+			player.teleportTo(192.5,97,.5);
+			helper.assertTrue(!LogboundCompass.observeArrival(player), "Flying above the island envelope does not count");
+			player.teleportTo(192.5,39,.5);
+			helper.assertTrue(!LogboundCompass.observeArrival(player), "Mining below the island foundation does not count");
+			player.teleportTo(192.5,65,57.5);
 			helper.assertTrue(!LogboundCompass.observeArrival(player), "Outside the south edge does not count");
-			player.teleportTo(168.5,60,-23.5);
+			player.teleportTo(136.5,40,-55.5);
 			player.setGameMode(GameType.SPECTATOR);
 			helper.assertTrue(!LogboundCompass.observeArrival(player), "Spectators cannot earn discoveries");
 			player.setGameMode(GameType.SURVIVAL);
 			helper.assertTrue(LogboundCompass.observeArrival(player), "Entering the boundary records arrival");
 			helper.assertTrue(!LogboundCompass.observeArrival(player) && Pirate.state(player).logboundArrived, "Arrival is recorded once even without carrying a compass");
+			player.teleportTo(226.5,51,.5);int study=Pirate.state(player).logboundSecondsRemaining;
+			LogboundCompass.tickNavigation(player);
+			helper.assertTrue(Pirate.state(player).logboundSecondsRemaining==study-1,"Exploring a hinterland cave advances island study");
 			other.teleport(new net.minecraft.world.level.portal.TeleportTransition(sea,new Vec3(192.5,65,.5),Vec3.ZERO,0,0,net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING));
 			helper.assertTrue(!LogboundCompass.observeArrival(other) && !Pirate.state(other).logboundArrived, "An uncalibrated second player has independent discovery state");
 		} finally { remove(player); remove(other); }
@@ -507,7 +568,7 @@ public final class PirateGameTest {
 			player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,new ItemStack(LogboundCompass.ITEM));
 			for (int n=0;n<5;n++) LogboundCompass.ITEM.use(sea,player,net.minecraft.world.InteractionHand.MAIN_HAND);
 			helper.assertTrue(state.logboundSecondsRemaining == 539 && !LogboundCompass.advanceRoute(player), "Repeated use cannot accelerate calibration or unlock early");
-			player.teleportTo(220,65,0); LogboundCompass.tickNavigation(player);
+			player.teleportTo(250,65,0); LogboundCompass.tickNavigation(player);
 			helper.assertTrue(state.logboundSecondsRemaining == 539, "Leaving the boundary pauses study");
 			player.teleportTo(192.5,65,.5); player.setGameMode(GameType.SPECTATOR); LogboundCompass.tickNavigation(player);
 			helper.assertTrue(state.logboundSecondsRemaining == 539, "Spectators do not advance study");

@@ -43,7 +43,7 @@ public final class MountMenu extends AbstractContainerMenu {
         int entityId = player == null ? -1 : player.getId(); data.set(5, entityId & 65535); data.set(6, entityId >>> 16);
     }
     @Override public void broadcastChanges() { refresh(); super.broadcastChanges(); }
-    @Override public boolean stillValid(Player player) { return mount == null || mount.care.accessible(player) && !mount.isVehicle(); }
+    @Override public boolean stillValid(Player player) { return mount == null || !(mount instanceof Thalassar) && mount.care.accessible(player) && !mount.isVehicle(); }
     @Override public boolean clickMenuButton(Player player, int action) {
         if (!(player instanceof ServerPlayer server) || mount == null || !stillValid(player) || !getCarried().isEmpty()) return false;
         boolean ok = false;

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "title": {
+      "text": "The Storm Answers"
+    },
+    "description": {
+      "text": "Unleash a power of Noah’s Tempest."
+    },
+    "icon": {
+      "id": "darkspawn:noahs_tempest"
+    },
+    "frame": "task",
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:noah/crowned"
+}

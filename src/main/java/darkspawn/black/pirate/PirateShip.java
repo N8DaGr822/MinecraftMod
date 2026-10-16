@@ -305,6 +305,10 @@ public final class PirateShip extends Entity {
 			z=(Math.abs(Math.sin(a))*width()+Math.abs(Math.cos(a))*length())/2;
 		return new AABB(center.x-x,center.y,center.z-z,center.x+x,center.y+height()+1,center.z+z);
 	}
+	@Override protected AABB makeBoundingBox(Vec3 position) {
+		// Moving Hull Bounds: setPos must not reset a long ship to its entity type's seven-block box.
+		return entityData == null ? super.makeBoundingBox(position) : footprint(position,getYRot());
+	}
 	public static boolean clearWater(ServerLevel level,BlockPos center,int tier,float yaw,PirateShip ignore) {
 		int width=tier==0?7:tier==1?11:15,length=tier==0?15:tier==1?23:31,height=tier==0?6:tier==1?8:10;
 		double a=Math.toRadians(yaw); int rx=(int)Math.ceil((Math.abs(Math.cos(a))*width+Math.abs(Math.sin(a))*length)/2),rz=(int)Math.ceil((Math.abs(Math.sin(a))*width+Math.abs(Math.cos(a))*length)/2);
@@ -359,11 +363,20 @@ public final class PirateShip extends Entity {
 		if(!ownedBy(captain)||docked()||getDeltaMovement().horizontalDistanceSqr()>.0025||burning>0)return "Stop the ship and extinguish fires before docking.";
 		float yaw=Math.round(getYRot()/90)*90F;var anchor=blockPosition();
 		if(blocks.isEmpty()||blocks.size()>blockLimit()||blocks.stream().anyMatch(b->Math.abs(b.pos().getX())>width()/2||Math.abs(b.pos().getZ())>length()/2||b.pos().getY()<0||b.pos().getY()>height()||!permitted(b.state())))return "Saved ship layout is invalid; docking is disabled to protect the world.";
-		if(!level().getEntities(this,footprint(Vec3.atBottomCenterOf(anchor),yaw),e->e instanceof LivingEntity&&e.getVehicle()!=this).isEmpty())return "Move swimmers and creatures out of the docking area.";
+		// Dock Walkers: Preserve local positions through the heading snap, without exempting swimmers.
+		var walkers=level().getEntities(this,getBoundingBox().inflate(1),e->e instanceof LivingEntity&&ShipCollision.supporting(e)==this);
+		var destinations=new java.util.HashMap<Entity,Vec3>();var destination=Vec3.atBottomCenterOf(anchor);
+		for(var walker:walkers) {
+			var offset=walker.position().subtract(position());var at=destination.add(rotate(offset.x,offset.y,offset.z,yaw-getYRot()));
+			if(ShipCollision.intersects(this,walker.getBoundingBox().move(at.subtract(walker.position())),destination,yaw))return "Clear room around everyone on deck before docking.";
+			destinations.put(walker,at);
+		}
+		if(!level().getEntities(this,footprint(destination,yaw),e->e instanceof LivingEntity&&e.getVehicle()!=this&&!destinations.containsKey(e)).isEmpty())return "Move swimmers and creatures out of the docking area.";
 		if(!clearWater(captain.level(),anchor,tier(),yaw,this))return "Docking needs clear open water and room for the whole ship.";
 		var rotation=Rotation.values()[Math.floorMod(Math.round(yaw/90),4)];
 		for(var b:blocks)level().setBlock(world(b.pos(),yaw,anchor),b.state().rotate(rotation),2);
 		setYRot(yaw);setPos(anchor.getX()+.5,anchor.getY(),anchor.getZ()+.5);setDeltaMovement(Vec3.ZERO);entityData.set(DOCKED,true);
+		for(var entry:destinations.entrySet()){var at=entry.getValue();entry.getKey().teleportTo(at.x,at.y,at.z);}
 		var riders=List.copyOf(getPassengers());
 		for(int i=0;i<riders.size();i++)if(riders.get(i) instanceof Player p){var at=seatPosition(p,i);p.stopRiding();p.teleportTo(at.x,at.y,at.z);}
 		controls=0;return null;
@@ -419,20 +432,26 @@ public final class PirateShip extends Entity {
     }
 
 	@Override protected boolean canAddPassenger(Entity passenger) {
+		// Boarding Clearance: Check every possible earlier index because dismounting shifts passenger indices.
+		if(!docked())for(int i=0;i<=getPassengers().size();i++) {
+			var at=seatPosition(passenger,i);var box=passenger.getDimensions(net.minecraft.world.entity.Pose.STANDING).makeBoundingBox(at);
+			if(ShipCollision.intersects(this,box,position(),getYRot()))return false;
+		}
 		if(assignedCrew(passenger))return getPassengers().stream().filter(this::assignedCrew).count()<18;
 		return !docked() && passenger instanceof Player && getPassengers().stream().filter(e->e instanceof Player).count()<4;
 	}
 	@Override public LivingEntity getControllingPassenger() { return getPassengers().stream().filter(e->e instanceof Player p && ownedBy(p)).map(e->(LivingEntity)e).findFirst().orElse(null); }
 	@Override public boolean isClientAuthoritative() { return false; }
+	@Override protected net.minecraft.world.entity.InterpolationHandler createInterpolationHandler() { return net.minecraft.world.entity.LinearInterpolationHandler.create(this,3); }
 	@Override protected boolean isLocalClientAuthoritative() { return false; }
-	@Override public boolean isPickable() { return !isRemoved(); }
+	@Override public boolean isPickable() { return !isRemoved() && !docked(); }
 	@Override public boolean hurtServer(ServerLevel level,DamageSource source,float amount) { return false; }
 	@Override public InteractionResult interact(Player player,InteractionHand hand,Vec3 location) {
 		if(player instanceof ServerPlayer server && !player.isSpectator() && player.getItemInHand(hand).isEmpty()) {
 			if(ownedBy(player) && player.isShiftKeyDown())server.openMenu(new net.minecraft.world.SimpleMenuProvider((id,inv,p)->new ShipMenu(id,inv,null,this),Component.literal("Ship & Crew")));
 			else if(!enemy()&&!docked()&&getDeltaMovement().horizontalDistanceSqr()<.01)player.startRiding(this);
 		}
-		return InteractionResult.SUCCESS;
+		return player.getItemInHand(hand).isEmpty() ? InteractionResult.SUCCESS : InteractionResult.PASS;
 	}
 	private Vec3 seatPosition(Entity passenger,int seat) {
 		boolean captain=passenger instanceof Player p && ownedBy(p);
@@ -440,6 +459,10 @@ public final class PirateShip extends Entity {
 	}
 	@Override protected void positionRider(Entity passenger,MoveFunction move) {
 		var at=seatPosition(passenger,getPassengers().indexOf(passenger));move.accept(passenger,at.x,at.y,at.z);
+	}
+	@Override public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+		// Deck Dismount: Release the helm onto its cleared seat, not beside the ship in open water.
+		return seatPosition(passenger,Math.max(0,getPassengers().indexOf(passenger)));
 	}
 	public boolean controls(ServerPlayer sender,int buttons) {
 		if(docked()||getControllingPassenger()!=sender||buttons<0||(buttons&~511)!=0)return false;

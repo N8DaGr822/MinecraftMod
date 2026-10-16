@@ -23,14 +23,14 @@ public final class ArmorLoadoutControls {
 		});
 		ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
 			if (!(screen instanceof InventoryScreen) || !ClientPlayNetworking.canSend(ArmorLoadoutPayload.TYPE)) return;
-			// Inventory UI: Stack loadouts below Sort/Destroy to leave the character and crafting area clear.
+			// Inventory UI: Compact loadouts below Sort/Destroy, aligned to the same right margin.
 			for (int set = 0; set < 3; set++) {
 				final int target = set;
 				Button button = darkspawn.black.client.UiTheme.button(Component.empty(), pressed -> {
 					if (client.player == null) return;
 					var state = ArmorLoadouts.state(client.player);
 					ClientPlayNetworking.send(new ArmorLoadoutPayload(target, state.revision, client.player.inventoryMenu.getStateId()));
-				}).bounds(width - 68, 54 + set * 24, 62, 20).build();
+				}).bounds(width - 54, 54 + set * 18, 48, 16).build();
 				Runnable refresh = () -> {
 					if (client.player == null) { button.active = false; return; }
 					var state = ArmorLoadouts.state(client.player);

@@ -47,7 +47,7 @@ public final class ShipMenu extends AbstractContainerMenu {
 		if(!player.isAlive()||player.isSpectator())return false;
 		if(ship!=null && (!ship.isAlive()||ship.level()!=player.level()||!ship.ownedBy(player)))return false;
 		return station!=null ? player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(station))<=36 && (player.level().getBlockState(station).is(Ships.SHIPYARD)||player.level().getBlockState(station).is(Ships.HELM)||player.level().getBlockState(station).is(Ships.CANNON))
-			&& (ship==null||ship.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(station))<=48*48) : ship!=null&&(player.getVehicle()==ship||player.distanceToSqr(ship)<=64);
+			&& (ship==null||ship.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(station))<=48*48) : ship!=null&&(player.getVehicle()==ship||player.distanceToSqr(ship)<=64||ShipCollision.supporting(player)==ship);
 	}
 	@Override public void broadcastChanges(){refresh(viewer);super.broadcastChanges();}
 	@Override public boolean clickMenuButton(Player player,int action){

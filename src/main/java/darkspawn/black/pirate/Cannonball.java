@@ -14,7 +14,10 @@ public final class Cannonball extends ThrowableItemProjectile {
 	public Cannonball(EntityType<? extends Cannonball> type,Level level) { super(type,level); }
 	@Override protected Item getDefaultItem() { return Ships.SHOT; }
 	@Override protected double getDefaultGravity() { return .003; }
-	@Override protected boolean canHitEntity(Entity entity) { return entity instanceof PirateShip && entity!=getOwner() && super.canHitEntity(entity); }
+	@Override protected boolean canHitEntity(Entity entity) {
+		// Naval Targeting: Docked ships ignore building clicks but remain valid cannon targets.
+		return entity instanceof PirateShip && entity!=getOwner() && entity.isAlive();
+	}
 	@Override public void tick() { super.tick();if(!level().isClientSide()&&tickCount>100)discard(); }
 	@Override protected void onHitEntity(EntityHitResult hit) {
 		super.onHitEntity(hit);

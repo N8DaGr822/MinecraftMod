@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
 
 public final class IslandDiscoveries {
 	public static final String ENCOUNTER_TAG="darkspawn_island_encounter";
-	public static final String[] NAMES={"Castaway Cove","Saltwatch Fort","The Pale Gull","Lastlight Beacon","Tideglass Shrine","Rootbound Camp","Redwater Landing","Pearlwater Atoll","Cinderjaw Anchorage"};
+	public static final String[] NAMES={"Castaway Cove","Saltwatch Fort","The Pale Gull","Lastlight Beacon","Tideglass Shrine","Rootbound Camp","Redwater Landing","Pearlwater Atoll","Cinderjaw Anchorage","Meadowhaven","Verdant Sanctuary","Ashen Garrison","Starfall Sanctuary","Sunscar Town","Frosthaven"};
 	private static final String[] CLUES={
 		"A castaway's trail leads to shelter and salvage. The sea gate's builders sailed here before you.",
 		"The watch abandoned its guns facing inland. Ammunition remains in the fort cache.",
@@ -39,7 +39,13 @@ public final class IslandDiscoveries {
 		"Corsair cargo lies in a crimson-marked camp. Rival scavengers guard repair timber and a lost manifest.",
         "Corsairs and the Iron Fleet contest this landing. Watch, salvage or help one side. Attacking both forfeits the victor's gratitude; the shared cache never refills.",
         "A quiet pearl-diver's lagoon shelters a finite pearl-diver salvage cache. No authored sentries guard this reef; ordinary sea life still follows world rules.",
-        "Smugglers left their drydock beneath black chimneys. Sun-scorched scavengers guard ammunition and a small rum shipment."};
+        "Smugglers left their drydock beneath black chimneys. Sun-scorched scavengers guard ammunition and a small rum shipment.",
+        "A sheltered plains port offers farms, beds and a Fleet liaison. Its lit streets welcome visiting sailors.",
+        "A jungle sanctuary shelters a Tidebound emissary among mossy halls, cocoa groves and deep mineral seams.",
+        "An occupied Nether outpost guards quartz and gold beneath blackstone ramparts. Expect armed raiders.",
+        "An End sanctuary holds a ruined observatory, chorus gardens and a finite relic cache. Endermen roam the outer reaches.",
+        "Renegades occupy this desert town. Sandstone houses surround a guarded well and a finite supply cache.",
+        "A snowy refuge offers spruce timber, shelter and a Fleet liaison. Watch for hostile wildlife beyond its lights."};
 	public record Island(BlockPos center,int kind) { }
 	private record Entry(BlockPos center,int mask) {
 		private static final Codec<Entry> CODEC=RecordCodecBuilder.create(i->i.group(BlockPos.CODEC.fieldOf("center").forGetter(Entry::center),Codec.INT.fieldOf("mask").forGetter(Entry::mask)).apply(i,Entry::new));
@@ -68,11 +74,11 @@ public final class IslandDiscoveries {
 		return -1;
 	}
 	public static Island at(ServerLevel level,BlockPos pos) {
-		if(!level.dimension().equals(Pirate.LEVEL)||pos.getY()<60||pos.getY()>84)return null;
-		if(Math.abs((long)pos.getX()-192)<=24&&Math.abs((long)pos.getZ())<=24)return new Island(LogboundCompass.FIRST_COVE_CENTER,0);
+		if(!level.dimension().equals(Pirate.LEVEL)||pos.getY()<40||pos.getY()>96)return null;
+		if(Math.abs((long)pos.getX()-192)<=56&&Math.abs((long)pos.getZ())<=56)return new Island(LogboundCompass.FIRST_COVE_CENTER,0);
 		var structure=level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(ResourceKey.create(Registries.STRUCTURE,Darkspawn.id("pirate_island"))).value();
-		// Loaded Survey: Island bounds extend 24 blocks from their start; no discovery query requests chunks.
-		for(int x=(pos.getX()>>4)-2;x<=(pos.getX()>>4)+2;x++)for(int z=(pos.getZ()>>4)-2;z<=(pos.getZ()>>4)+2;z++) {
+		// Loaded Survey: Include the new hinterland and caves without requesting chunks.
+		for(int x=(pos.getX()>>4)-4;x<=(pos.getX()>>4)+4;x++)for(int z=(pos.getZ()>>4)-4;z<=(pos.getZ()>>4)+4;z++) {
 			var chunk=level.getChunkSource().getChunkNow(x,z);if(chunk==null)continue;
 			var start=chunk.getAllStarts().get(structure);
 			if(start!=null&&start.isValid()&&start.getBoundingBox().isInside(pos)) {int kind=kind(start);if(kind>=0)return new Island(new BlockPos(x*16,65,z*16),kind);}
@@ -110,6 +116,7 @@ public final class IslandDiscoveries {
 	}
 	public static int spawn(ServerPlayer player,Island island) {
 		var level=player.level();
+		if(island.kind()>=9)return IslandSettlements.spawn(player,island);
 		if(island.kind()==6||island.kind()==7)return 0;
 		if(!player.isAlive()||player.isSpectator()||player.isCreative()||!level.dimension().equals(Pirate.LEVEL)||island.center().equals(LogboundCompass.FIRST_COVE_CENTER)
 			||level.getDifficulty()==net.minecraft.world.Difficulty.PEACEFUL||!level.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.SPAWN_MOBS))return 0;

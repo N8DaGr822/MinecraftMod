@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorType;
 
 public final class ExpeditionArmorRenderer implements ArmorRenderer {
+	private static final Identifier NOAH = Darkspawn.id("textures/equipment/noah.png"), NOAH_PULSE = Darkspawn.id("textures/equipment/noah_pulse.png");
 	private final Map<EquipmentSlot, HumanoidModel<HumanoidRenderState>> models = new EnumMap<>(EquipmentSlot.class);
 	private final Map<EquipmentSlot, HumanoidModel<HumanoidRenderState>> trimModels = new EnumMap<>(EquipmentSlot.class);
 	private final net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer equipmentRenderer;
@@ -76,6 +77,7 @@ public final class ExpeditionArmorRenderer implements ArmorRenderer {
 	}
 
 	public static void initialize() {
+		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "noah"), darkspawn.black.legacy.NoahLegacy.ARMOR.values().toArray(net.minecraft.world.level.ItemLike[]::new));
 		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "quarantine"), darkspawn.black.forsaken.ForsakenContent.ARMOR.values().toArray(net.minecraft.world.level.ItemLike[]::new));
 		darkspawn.black.equipment.LegendaryArmor.SETS.forEach((name, pieces) -> ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, name), pieces.values().toArray(net.minecraft.world.level.ItemLike[]::new)));
 		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "mountaineering"), ExpeditionArmor.MOUNTAINEERING.values().toArray(net.minecraft.world.level.ItemLike[]::new));
@@ -88,8 +90,9 @@ public final class ExpeditionArmorRenderer implements ArmorRenderer {
 	@Override public void render(PoseStack pose, SubmitNodeCollector collector, ItemStack stack, HumanoidRenderState state,
 			EquipmentSlot slot, int light, HumanoidModel<HumanoidRenderState> vanillaModel) {
 		// Pose Ownership: Copy the wearer's native armor transforms at submission time, including crouching and riding.
+		var renderedTexture = texture.equals(NOAH) && ((int)state.ageInTicks / 12) % 2 == 1 ? NOAH_PULSE : texture;
 		ArmorRenderer.submitTransformCopyingModel(vanillaModel, state, models.get(slot), state, false, collector, pose,
-			stack.hasFoil() ? RenderTypes.armorCutoutNoCullGlint(texture) : RenderTypes.armorCutoutNoCull(texture),
+			stack.hasFoil() ? RenderTypes.armorCutoutNoCullGlint(renderedTexture) : RenderTypes.armorCutoutNoCull(renderedTexture),
 			light, OverlayTexture.NO_OVERLAY, state.outlineColor);
 		if (stack.has(net.minecraft.core.component.DataComponents.TRIM) && trimModels.containsKey(slot)) {
 			// Native Trims: Render vanilla pattern/material palettes over raised plates with native UV coordinates.

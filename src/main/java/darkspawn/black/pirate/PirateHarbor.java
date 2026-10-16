@@ -29,6 +29,7 @@ public final class PirateHarbor extends SavedData {
 		place(level, "harbor", new BlockPos(-24, 40, -24));
 		// Guaranteed Discovery: A visible first island avoids a seed-dependent empty first voyage.
 		place(level, "island_0", new BlockPos(168, 40, -24));
+		place(level, "terrain_0", new BlockPos(136, 40, -56));
 		data.initialized = true; data.setDirty(); addShipyard(level, data); addGuide(level, data);
 	}
 	private static void addGuide(ServerLevel level, PirateHarbor data) {

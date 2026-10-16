@@ -20,6 +20,24 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 public final class EndgameGameTest {
+    @GameTest public void polishNexusRejectsHazardousArrivalWithoutPayment(GameTestHelper h){
+        var p=player(h);var server=p.level().getServer();var storage=server.overworld().getDataStorage();var previous=WorldAwakening.get(p.level());var oldRun=Nexus.run(p.level());var level=server.getLevel(Nexus.LEVEL);
+        var data=WorldAwakening.TYPE.codec().parse(JsonOps.INSTANCE,new com.google.gson.JsonObject()).getOrThrow();storage.set(WorldAwakening.TYPE,data);
+        var saved=new com.google.gson.JsonObject();saved.addProperty("built",true);storage.set(Nexus.Run.TYPE,Nexus.Run.CODEC.parse(JsonOps.INSTANCE,saved).getOrThrow());
+        try{
+            for(var kind:BossKind.values())data.unlock(kind,1);BossHearts.progress(p).restore(Arrays.stream(BossKind.values()).map(BossKind::id).toList());
+            p.getInventory().setItem(0,new ItemStack(Nexus.KEY));p.getInventory().setItem(1,new ItemStack(Items.NETHER_STAR,2));
+            for(int x=-12;x<=12;x++)for(int z=22;z<=26;z++)for(int y=63;y<=66;y++)level.setBlock(new BlockPos(x,y,z),(y==63?Blocks.STONE:Blocks.AIR).defaultBlockState(),2);
+            var pad=new BlockPos(-10,64,24);level.setBlock(pad,Blocks.LAVA.defaultBlockState(),2);
+            h.assertTrue(!Nexus.start(p)&&p.level()!=level&&p.getInventory().countItem(Items.NETHER_STAR)==2&&Nexus.run(level).stage()==0,"Lava arrival must reject entry without payment or starting a run");
+            level.setBlock(pad,Blocks.AIR.defaultBlockState(),2);level.setBlock(pad.below(),Blocks.AIR.defaultBlockState(),2);
+            h.assertTrue(!Nexus.start(p)&&p.getInventory().countItem(Items.NETHER_STAR)==2,"Missing arrival floor also rejects entry without payment");
+        }finally{
+            var cleanup=new ArrayList<Entity>();level.getAllEntities().forEach(cleanup::add);for(var entity:cleanup)if(entity.entityTags().contains(Nexus.TAG))entity.discard();
+            remove(p);storage.set(WorldAwakening.TYPE,previous);storage.set(Nexus.Run.TYPE,oldRun);
+            for(int x=-12;x<=12;x++)for(int z=22;z<=26;z++)for(int y=63;y<=66;y++)level.setBlock(new BlockPos(x,y,z),(y==63?Blocks.DEEPSLATE_BRICKS:Blocks.AIR).defaultBlockState(),2);
+        }h.succeed();
+    }
 	private static ServerPlayer player(GameTestHelper helper) {
 		var level = helper.getLevel();
 		var cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "nexus-"+UUID.randomUUID().toString().substring(0,6)), false);
@@ -73,6 +91,7 @@ public final class EndgameGameTest {
         try{
             p.getInventory().setItem(0,new ItemStack(Items.COOKED_BEEF,8));h.assertTrue(!wolf.tame(p)&&p.getMainHandItem().getCount()==8,"Pre-victory taming does not consume food");
             data.unlock(BossKind.MUTANT_WOLF,1);h.assertTrue(wolf.tame(p)&&p.getMainHandItem().getCount()==4,"Shared victory unlocks exact four-beef payment");
+            h.assertTrue(!darkspawn.black.bonfire.BonfireWards.ordinaryHostile(wolf),"Tamed dire wolf is welcome inside bonfire wards");
             wolf.setTarget(p);h.assertTrue(wolf.getTarget()==null,"Companion cannot target its owner");
             var out=net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING,p.registryAccess());wolf.saveWithoutId(out);
             var copy=TaigaEcosystem.WOLVES.get(TaigaWolf.Kind.DIRE).create(p.level(),EntitySpawnReason.COMMAND);copy.load(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING,p.registryAccess(),out.buildResult()));

@@ -27,6 +27,7 @@ public final class Mounts {
     public static final EntityType<Crocodile> CROCODILE = register("crocodile", Crocodile::new, 1.5F, .9F, .7F);
     public static final EntityType<Seahorse> SEAHORSE = registerSeahorse();
     public static final EntityType<GiantMole> GIANT_MOLE = register("giant_mole", GiantMole::new, 1.5F, 1.2F, .95F);
+    public static final EntityType<Thalassar> THALASSAR = register("thalassar", Thalassar::new, 1.3F, 1.8F, 1.45F);
     private static EntityType<Seahorse> registerSeahorse() {
         var key = ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id("seahorse"));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, key,
@@ -67,6 +68,7 @@ public final class Mounts {
         FabricDefaultAttributeRegistry.register(CROCODILE, Crocodile.attributes());
         FabricDefaultAttributeRegistry.register(SEAHORSE, Seahorse.attributes());
         FabricDefaultAttributeRegistry.register(GIANT_MOLE, GiantMole.attributes());
+        FabricDefaultAttributeRegistry.register(THALASSAR, Thalassar.attributes());
 		PayloadTypeRegistry.serverboundPlay().register(GriffinControlsPayload.TYPE, GriffinControlsPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(GriffinControlsPayload.TYPE, (payload, context) -> {
 			if (context.player().getVehicle() instanceof PrototypeMount mount && mount.getId() == payload.entityId()) {

@@ -24,6 +24,16 @@ import net.minecraft.world.level.storage.*;
 import net.minecraft.world.phys.Vec3;
 
 public final class FieldUtilitiesGameTest {
+    @GameTest public void polishHubCannotOpenUniqueCompanionCare(GameTestHelper h){
+        var p=player(h);var m=darkspawn.black.mount.Mounts.THALASSAR.create(p.level(),EntitySpawnReason.COMMAND);
+        try{
+            m.bond(p);m.setPos(p.position());p.level().addFreshEntity(m);
+            InventoryHub.request(p,new HubRequestPayload(3,m.getId(),p.inventoryMenu.getStateId()));
+            h.assertTrue(p.containerMenu==p.inventoryMenu,"Hub must preserve Thalassar's conch-only management");
+            var menu=new darkspawn.black.mount.MountMenu(1,p.getInventory(),m);
+            h.assertTrue(!menu.stillValid(p)&&!menu.clickMenuButton(p,darkspawn.black.mount.MountMenu.FOLLOW),"Generic care menu rejects unique companions even if constructed directly");
+        }finally{p.closeContainer();m.discard();remove(p);}h.succeed();
+    }
 	private static ServerPlayer player(GameTestHelper helper) {
 		var level = helper.getLevel();
 		var cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "loadout-test"), false);

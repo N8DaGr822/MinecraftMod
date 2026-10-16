@@ -32,6 +32,8 @@ This explicitly packages the mod without unit tests or a headless test server. K
 | Accessories, inventory hub, fish and animal server behavior | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:field_utilities_game_test*' --max-workers=1` plus inventory/OneBlock checks for save or slot changes |
 | Field utility icons, fish skins and recipe references | `python tools/assets/verify-field-utilities.py`; regenerate with `python tools/assets/field-utilities.py` and inspect `build/field-utilities-preview.png` |
 | Pirate templates, loot references and shanty integrity | `python tools/assets/verify-pirate-assets.py`, then `python tools/assets/preview-pirate.py` and `python tools/assets/preview-naval.py` (previews require Pillow); inspect the offline previews |
+| Pirate hinterland terrain, mine access and resources | `python tools/assets/verify-pirate-terrain.py` checks bounds, ore budgets, dry cave walls and walkable mine access; inspect `build/pirate-terrain-preview.png`. Regenerate only terrain with `node tools/assets/pirate-foundation.cjs --terrain-only`. |
+| Pirate biome settlements | `python tools/assets/verify-pirate-biomes.py`; inspect `build/pirate-biomes-preview.png`. Regenerate only the six added types with `node tools/assets/pirate-foundation.cjs --biomes-only`. Server checks: `-PgameTestFilter=darkspawn-gametest:pirate_game_test_biome*`. |
 
 For server behavior, select a registered GameTest ID with the Fabric filter:
 
@@ -56,4 +58,6 @@ This runs all unit tests, all server GameTests and the cuisine asset validator w
 - World awakening, companions, legendary relics and cooperative Nexus: `./gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:endgame_game_test*' --max-workers=1`.
 - Native culinary brewing: `./gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:expansion_brewing_game_test*' --max-workers=1`.
 - Ship classes and ammunition: existing `darkspawn-gametest:ships_game_test*` group.
+- Noah's bonded gift, armor, Tempest and Thalassar: `./gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:noah_game_test*' --max-workers=1`; artwork references and source preview: `python tools/assets/verify-noah-legacy.py`. See `docs/legacy-of-noah.md` for live acceptance and gift instructions.
+- Ship movement reliability: the same ship group includes sustained translation/turning, crouch edge safety, jump release, walker docking and swimmer rejection, standing-height boarding clearance, rotated ladders and large-deck menu access. Server tests do not replace pilot/observer multiplayer checks for interpolation, reconnects and latency.
 - Data/native visual references: `python tools/assets/verify-endgame-expansion.py`. This is separate from the cuisine artwork validator; it checks reused native models rather than newly authored textures.

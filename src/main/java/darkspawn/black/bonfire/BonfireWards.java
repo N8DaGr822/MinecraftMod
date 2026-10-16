@@ -59,6 +59,9 @@ public final class BonfireWards {
 	}
 	public static boolean ordinaryHostile(Entity entity) {
 		return entity instanceof Mob && entity.getType().getCategory() == MobCategory.MONSTER
+			// Friendly Exceptions: Recruitment/taming keeps the original monster entity category.
+			&& !darkspawn.black.pirate.PirateShip.loyalCrew(entity) && !darkspawn.black.pirate.PirateDiplomacy.contact(entity)
+			&& !(entity instanceof darkspawn.black.ecosystem.TaigaWolf wolf && wolf.companionOwner() != null)
 			&& !(entity instanceof BiomeBoss || entity instanceof AncientTreeSpirit || entity instanceof MutantWolf
 				|| entity instanceof WitherBoss || entity instanceof EnderDragon);
 	}

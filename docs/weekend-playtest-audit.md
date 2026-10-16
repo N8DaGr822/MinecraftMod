@@ -1,5 +1,45 @@
 # Weekend playtest audit — October 15, 2026
 
+## Mod-wide polish follow-up — October 16, 2026
+
+This follow-up combines unfiltered automated verification with a targeted source review of cross-system behavior. It is not an exhaustive line-by-line audit or a live client playtest. The historical October 15 inventory below is superseded by the newer pirate and [Noah](legacy-of-noah.md) implementation guides where they differ.
+
+### Concrete issues fixed
+
+| Priority | Trigger and previous behavior | Surgical correction / behavioral difference |
+| --- | --- | --- |
+| High | Enter a previously built Nexus after lava is placed on an arrival pad or its supporting floor is removed. Collision-only validation accepted the entry and charged a Nether Star. | Validate the entire arrival footprint for clear air, safe solid support and world-border containment before charging or starting the run. Unsafe pads must be repaired; player construction is preserved. |
+| Medium | Bring recruited pirate crew or a tamed dire wolf into a bonfire ward. Their original monster category caused friendly entities to be blocked or expelled. | Exclude explicitly recruited crew, faction contacts and owned dire wolves from ward hostility. Wild equivalents remain warded; deliberate boss exceptions are unchanged. |
+| Medium | Open Thalassar through the Expedition Hub instead of direct interaction. The generic care menu exposed follow/breeding/transfer controls outside the conch lifecycle. | Keep him visible in the roster with conch instructions, disable Care, reject the server-side open request and invalidate a generic care menu constructed for him. Ordinary mount care and veterinary healing retain their existing behavior. |
+| Low | The mod's styleable-armor item tag lacked a translated label for recipe viewers. | Added the English `Styleable Armor` group label without changing tag membership or recipes. |
+
+The three new regression cases reproduced all three defects before the fixes and passed afterward (`build/mod-polish-reproduce.log`, `build/mod-polish-fixes.log`). The existing dire-wolf taming test also now checks ward classification.
+
+### Review coverage
+
+| Area | Source paths inspected / automated coverage |
+| --- | --- |
+| Inventory, accessories, loadouts and storage | Hub request authority, item conservation, favorites, switching interruption, storage routing and save components; full inventory/storage/accessory tests. |
+| Travel and progression | OneBlock profile isolation/travel, Forsaken entry/return/fabrication, Nexus group entry/rewards/recovery; full dimension and progression tests. |
+| Mounts, wildlife and base protection | Companion ownership, care/cargo, capture/recovery, friendly classifications and ward movement; full mount/ecosystem/bonfire tests. |
+| Combat and equipment | Boss-heart modifiers, empowered weapons, legendary relic effects and temperature sampling; full boss/equipment/temperature tests. |
+| Cooking, farming and fishing | Cooking result/remainder handling, food progression, animal harvesting/cooldowns; full cuisine/agriculture/fishing/brewing tests. |
+| Exploration and presentation | Journal discovery/request limits, bounded landmark searches, hub UI source, registry/resource references, model/animation contracts and authored city traversal. |
+| Pirate and Noah integrations | Included in the complete regression run; their dedicated recent reviews retain the detailed gameplay and visual acceptance lists. |
+
+Asset checks passed for 1,485 asset JSON files, 4,593 model/texture/sound links, 643 sound events/subtitles and 541 readable PNGs. Additional validators passed for 80 brewing recipes/16 potion variants, 42 regional templates/84 archaeology deposits, 41 field-utility resources/six fish skins, Forsaken content and city traversal, 76 custom item model states, 13 mount projects, and 99 creature animation projects/690 clips. These validate authored files and contracts, not their live appearance or combat balance.
+
+Baseline unfiltered `fullCheck --rerun-tasks --max-workers=1` passed 95 unit tests and all 316 server GameTests plus cuisine artwork (`build/mod-polish-full-check.log`). After the gameplay fixes, the same unfiltered check passed **95 unit tests, all 319 server GameTests and 142 cuisine model references** (`build/mod-polish-verified.log`). The final English item-tag label was added afterward and separately checked as valid JSON; it changes no gameplay. `git diff --check` passed. No JAR, version bump, commit or push is part of this review.
+
+### Remaining polish priorities
+
+1. **Live multiplayer acceptance:** save/restart and reconnect, death/recovery across dimensions, five-player ship boarding/standing, client observers and latency. Automated serialization and simulated-player tests cannot establish the entire live experience.
+2. **UI and artwork acceptance:** inspect normal and large GUI scales, inventory/loadout/hub layouts, book wrapping, held-item poses, armor fit and animated creature/rider alignment. Noah's thrown Tempest still uses the native projectile renderer; its dedicated guide records this gap.
+3. **Gameplay balance:** measure natural encounter frequency, resource/loot availability, temperature pacing, Nexus difficulty and travel costs with real survival progression. Passing behavior tests does not establish that these feel fair or enjoyable.
+4. **Feature expansion:** keep new boss move sets, authored Nexus dungeon content, deeper crew AI and other brainstorm items separate from bug fixes. Their absence is not evidence of a regression in the implemented systems.
+
+## Historical October 15 results
+
 This is a source audit, not a release manifest. No JAR was packaged. Historical brainstorms preserve ideas; they do not promise that every example is implemented. Use this status sheet and the linked feature guides when deciding what to test.
 
 Subsequent item-art update: the borrowed item artwork noted below has been replaced by [custom Darkspawn models and materials](distinct-item-art.md). The validation counts below record the earlier audit, before that asset pass.

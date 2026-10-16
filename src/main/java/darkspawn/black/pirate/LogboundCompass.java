@@ -84,7 +84,7 @@ public final class LogboundCompass extends Item {
 		var state = Pirate.state(player);
 		if (!player.isAlive() || player.isSpectator() || !player.level().dimension().equals(Pirate.LEVEL)
 			|| destination(state) == null || state.logboundArrived) return false;
-		if (!insideIsland(player.blockPosition(), destination(state))) return false;
+		if (!insideIsland(player.blockPosition(), destination(state), state.logboundKind)) return false;
 		state.logboundArrived = true;
 		if (FIRST_COVE.equals(state.logboundDestination)) state.logboundCoveDiscovered = true;
 		state.logboundSecondsRemaining = RECALIBRATION_SECONDS;
@@ -95,9 +95,10 @@ public final class LogboundCompass extends Item {
 	private static BlockPos destination(PiratePlayerState state) {
 		return FIRST_COVE.equals(state.logboundDestination) ? FIRST_COVE_CENTER : NEXT_ISLAND.equals(state.logboundDestination) ? state.logboundNextIsland : null;
 	}
-	private static boolean insideIsland(BlockPos pos, BlockPos center) {
-		// Cove Boundary: Match the authored island footprint, with a bounded surface arrival band; no chunk lookup.
-		return Math.abs((long) pos.getX() - center.getX()) <= 24 && Math.abs((long) pos.getZ() - center.getZ()) <= 24 && pos.getY() >= 60 && pos.getY() <= 84;
+	private static boolean insideIsland(BlockPos pos, BlockPos center, int kind) {
+		// Island Study: Mining the hinterland caves still counts as time exploring the destination.
+		int radius = !center.equals(FIRST_COVE_CENTER) && kind >= 9 ? 64 : 56;
+		return Math.abs((long) pos.getX() - center.getX()) <= radius && Math.abs((long) pos.getZ() - center.getZ()) <= radius && pos.getY() >= 40 && pos.getY() <= 96;
 	}
 	public static void tickNavigation(ServerPlayer player) {
 		HarborGuide.observeContract(player);
@@ -106,14 +107,14 @@ public final class LogboundCompass extends Item {
         if(guide!=null) {
             // Shared Charts: Only physical arrival earns a discovery; personal study pauses while following.
             var target=destination(Pirate.state(guide));var state=Pirate.state(player);
-            if(player.isAlive()&&!player.isSpectator()&&target!=null&&insideIsland(player.blockPosition(),target)&&!state.logboundVisited.contains(target))state.logboundVisited.add(target);
+            if(player.isAlive()&&!player.isSpectator()&&target!=null&&insideIsland(player.blockPosition(),target,Pirate.state(guide).logboundKind)&&!state.logboundVisited.contains(target))state.logboundVisited.add(target);
             return;
         }
 		if (observeArrival(player)) return;
 		var state = Pirate.state(player);
 		// Island Study: Only online, living, non-spectator time inside the current discovered island counts.
 		if (!player.isAlive() || player.isSpectator() || !player.level().dimension().equals(Pirate.LEVEL)
-			|| destination(state) == null || !state.logboundArrived || !insideIsland(player.blockPosition(), destination(state))) return;
+			|| destination(state) == null || !state.logboundArrived || !insideIsland(player.blockPosition(), destination(state), state.logboundKind)) return;
 		if (state.logboundSecondsRemaining > 0 && --state.logboundSecondsRemaining == 0) advanceRoute(player);
 	}
 	public static boolean advanceRoute(ServerPlayer player) {
@@ -167,7 +168,7 @@ public final class LogboundCompass extends Item {
 		if(target==null)return "No available chart. Your saved progress is preserved.";
 		String name=FIRST_COVE.equals(state.logboundDestination)?IslandDiscoveries.NAMES[0]:state.logboundKind>=0&&state.logboundKind<IslandDiscoveries.NAMES.length?IslandDiscoveries.NAMES[state.logboundKind]:"Charted island";
 		long distance=Math.round(Math.hypot(target.getX()+.5-player.getX(),target.getZ()+.5-player.getZ()));
-		String study=!state.logboundArrived?"Sailing":state.logboundSecondsRemaining==0?"Ready to chart":String.format(java.util.Locale.ROOT,"Study %d:%02d%s",state.logboundSecondsRemaining/60,state.logboundSecondsRemaining%60,insideIsland(navigator.blockPosition(),target)?"":" (paused)");
+		String study=!state.logboundArrived?"Sailing":state.logboundSecondsRemaining==0?"Ready to chart":String.format(java.util.Locale.ROOT,"Study %d:%02d%s",state.logboundSecondsRemaining/60,state.logboundSecondsRemaining%60,insideIsland(navigator.blockPosition(),target,state.logboundKind)?"":" (paused)");
 		return (guide==null?"":"Following "+guide.getName().getString()+" | ")+name+" | "+distance+" blocks | Discovered "+Pirate.state(player).logboundVisited.size()+" | "+study+(guide==null?"":" | Personal route paused");
 	}
 }

@@ -84,7 +84,16 @@ public final class Nexus {
         var group=new ArrayList<ServerPlayer>();group.add(captain);
         captain.level().players().stream().filter(p->p!=captain&&traveler(p)&&p.distanceToSqr(captain)<=12*12&&(p.getMainHandItem().is(KEY)||p.getOffhandItem().is(KEY))).limit(5).forEach(group::add);
         arena(level,run);
-        for(int i=0;i<group.size();i++)if(!level.noCollision(group.get(i),group.get(i).getBoundingBox().move(new Vec3(-10+i*4,64,24).subtract(group.get(i).position())))){message(captain,"Nexus arrival pads are obstructed. Clear them before entering.");return false;}
+        // Arrival Safety: Player-modified pads need dry air and safe support across the entire arrival footprint before charging.
+        for(int i=0;i<group.size();i++){
+            var player=group.get(i);var box=player.getBoundingBox().move(new Vec3(-10+i*4,64,24).subtract(player.position()));
+            boolean safe=level.getWorldBorder().isWithinBounds(box)&&level.noCollision(player,box);
+            for(var pos:BlockPos.betweenClosed(BlockPos.containing(box.minX,63,box.minZ),BlockPos.containing(box.maxX-.001,box.maxY-.001,box.maxZ-.001))){
+                var block=level.getBlockState(pos);
+                if(pos.getY()==63?(!block.isSolidRender()||block.is(Blocks.MAGMA_BLOCK)||block.is(Blocks.CACTUS)):!block.isAir())safe=false;
+            }
+            if(!safe){message(captain,"Nexus arrival pads need clear, dry space over safe solid floors. Repair them before entering.");return false;}
+        }
         darkspawn.black.pirate.Ships.pay(captain,Items.NETHER_STAR,1,true);
         run.targets.clear();run.claimed.clear();run.members.clear();group.forEach(p->run.members.add(p.getUUID()));run.stage=1;run.deadline=server.overworld().getGameTime()+24000;
         for(int i=0;i<group.size();i++){

@@ -44,6 +44,7 @@ public class DarkspawnClient implements ClientModInitializer {
 		JournalControls.initialize();
 		ExpeditionArmorRenderer.initialize();
 		ArmorStyleRenderer.initialize();
+		darkspawn.black.client.legacy.NoahClient.initialize();
 		darkspawn.black.client.mount.GriffinClient.initialize();
 		darkspawn.black.client.pirate.ShipClient.initialize();
 		darkspawn.black.client.boss.BossClient.initialize();

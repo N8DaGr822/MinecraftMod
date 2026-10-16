@@ -105,6 +105,7 @@ public final class MountCompanions {
             if (player.containerMenu instanceof MountMenu menu && menu.mount == mount) player.closeContainer();
     }
     public static boolean capture(ServerPlayer player, PrototypeMount mount, ItemStack capsule) {
+        if (mount instanceof Thalassar) return false; // Unique Bond: Only the conch may store this companion.
         if (!capsule.is(CAPSULE) || !token(capsule).isEmpty() || !mount.isOwnedBy(player) || !mount.care.accessible(player)
                 || !mount.care.available() || mount.isLeashed()) return false;
         closeMenus(mount);

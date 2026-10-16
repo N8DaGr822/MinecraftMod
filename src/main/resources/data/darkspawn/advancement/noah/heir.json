@@ -1,0 +1,26 @@
+{
+  "display": {
+    "title": {
+      "text": "Heir of Poseidon"
+    },
+    "description": {
+      "text": "Awaken Noah’s Dominion with armor, trident and steed."
+    },
+    "icon": {
+      "id": "darkspawn:noah_chestplate"
+    },
+    "frame": "task",
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ],
+  "parent": "darkspawn:noah/ride"
+}

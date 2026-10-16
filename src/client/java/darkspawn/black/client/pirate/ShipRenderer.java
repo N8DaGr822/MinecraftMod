@@ -27,7 +27,7 @@ public final class ShipRenderer extends EntityRenderer<PirateShip,ShipRenderer.S
 	}
 	@Override public State createRenderState(){return new State();}
 	@Override public void extractRenderState(PirateShip ship,State state,float partial){
-		super.extractRenderState(ship,state,partial);state.yaw=ship.getYRot();state.docked=ship.docked();state.length=ship.length();
+		super.extractRenderState(ship,state,partial);state.yaw=ship.getYRot(partial);state.docked=ship.docked();state.length=ship.length();
         if(state.flag!=ship.flag()){state.flag=ship.flag();var id=new String[]{"black_wool","red_wool","blue_wool","cyan_wool"}[state.flag];resolver.update(state.flagModel,net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.withDefaultNamespace(id)).defaultBlockState(),CONTEXT);resolver.update(state.postModel,net.minecraft.world.level.block.Blocks.OAK_FENCE.defaultBlockState(),CONTEXT);}
 		if(state.blocks!=ship.blocks()){
 			state.blocks=ship.blocks();state.models.clear();

@@ -16,6 +16,19 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 public final class BonfireGameTest {
+	@GameTest public void polishWardAllowsRecruitedCrewAndContacts(GameTestHelper helper) {
+		var crew=EntityTypes.PILLAGER.create(helper.getLevel(),net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+		try {
+			helper.assertTrue(BonfireWards.ordinaryHostile(crew),"Wild pillagers remain warded");
+			crew.addTag(darkspawn.black.pirate.PirateShip.CREW_TAG);
+			crew.addTag(darkspawn.black.pirate.PirateShip.CREW_OWNER+java.util.UUID.randomUUID());
+			helper.assertTrue(!BonfireWards.ordinaryHostile(crew),"Recruited crew can enter their captain's ward");
+			crew.removeTag(darkspawn.black.pirate.PirateShip.CREW_TAG);
+			crew.addTag(darkspawn.black.pirate.PirateDiplomacy.CONTACT_TAG);
+			crew.addTag(darkspawn.black.pirate.PirateDiplomacy.FACTION_TAG+darkspawn.black.pirate.PirateProgression.Faction.values()[0].id);
+			helper.assertTrue(!BonfireWards.ordinaryHostile(crew),"Friendly faction contacts are not expelled");
+		} finally {crew.discard();}helper.succeed();
+	}
 	private static BlockPos core(GameTestHelper helper) { return core(helper, 0); }
 	private static BlockPos core(GameTestHelper helper, int rise) {
 		// Keep the ward away from neighboring tests' living players and encounter mobs.

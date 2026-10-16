@@ -62,7 +62,7 @@ public final class PirateDiplomacy {
         return false;
     }
     public static boolean disallows(Mob attacker,LivingEntity target) {
-        if(contact(attacker)||PirateShip.loyalCrew(attacker))return true;
+        if(contact(attacker)||PirateShip.loyalCrew(attacker)||IslandSettlements.sheltered(target))return true;
         var personal=attacker.entityTags().stream().filter(tag->tag.startsWith(SeaTerritory.TARGET)).findFirst();if(personal.isPresent())return !(target instanceof ServerPlayer)||!personal.get().equals(SeaTerritory.TARGET+target.getUUID());
         var faction=faction(attacker);if(faction==null||!attacker.level().dimension().equals(Pirate.LEVEL))return false;
         if(harbor(attacker)||harbor(target)||contact(target)||PirateShip.loyalCrew(target))return true;
