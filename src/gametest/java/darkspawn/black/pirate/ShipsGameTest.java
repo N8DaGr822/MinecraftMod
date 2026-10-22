@@ -29,6 +29,172 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class ShipsGameTest {
+    private static PirateShip boardingPatrol(GameTestHelper h,ServerPlayer p,PirateShip attacker,BlockPos at) {
+        var patrol=PirateShip.spawnEnemy(p.level(),at.offset(15,0,0));
+        for(int i=0;i<8;i++)h.assertTrue(patrol.cannonDamage(attacker,Ships.SHOT),"Damage patrol with captain's ship");
+        h.assertTrue(patrol.boardableBy(p),"Forty-hull patrol is boardable by its attacking captain");return patrol;
+    }
+    private static java.util.List<BoardingDefender> sentries(PirateShip ship) {
+        return ship.level().getEntitiesOfClass(BoardingDefender.class,ship.getBoundingBox().inflate(10));
+    }
+    @GameTest public void boardingSoloRewardsOriginalCargoOnce(GameTestHelper h) {
+        var at=location(h);var p=player(h,at.above());var ship=build(h,p,at);var patrol=boardingPatrol(h,p,ship,at);
+        try {
+            var treasure=new ItemStack(Items.DIAMOND,7);treasure.set(DataComponents.CUSTOM_NAME,Component.literal("Patrol cargo"));
+            patrol.cargo.clearContent();patrol.cargo.setItem(0,treasure);int credit=Pirate.state(p).navalVictories;
+            h.assertTrue(Boarding.form(p)==1&&Boarding.start(p)==1,"Solo party starts");var defenders=sentries(patrol);
+            h.assertTrue(defenders.size()==3&&patrol.boardingSpent,"Exactly three finite solo sentries");
+            h.assertTrue(!patrol.cannonDamage(ship,Ships.SHOT)&&patrol.fire(true)==0,"Reserved patrol cannot fire or be sunk by stray cannonballs");
+            for(var defender:defenders)h.assertTrue(defender.hurtServer(p.level(),p.damageSources().playerAttack(p),1000),"Participant can defeat sentry");
+            var loot=p.level().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,patrol.getBoundingBox().inflate(12));
+            h.assertTrue(loot.size()==1&&loot.getFirst().getItem().getCount()==7&&ItemStack.isSameItemSameComponents(loot.getFirst().getItem(),treasure),"Only exact original cargo drops, with its name intact");
+            h.assertTrue(patrol.cargo.isEmpty()&&Pirate.state(p).navalVictories==credit+1,"One naval credit and empty hold");
+            patrol.releaseBoardingCargo(p);h.assertTrue(loot.size()==p.level().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,patrol.getBoundingBox().inflate(12)).size()&&Pirate.state(p).navalVictories==credit+1,"Repeated completion cannot duplicate reward");
+            h.assertTrue(Boarding.form(p)==0,"Spent wreck cannot start another encounter");loot.forEach(net.minecraft.world.entity.Entity::discard);
+        } finally {Boarding.leave(p);clear(patrol);Boarding.tick(p.level());clear(ship);remove(p);}h.succeed();
+    }
+    @GameTest public void boardingCooperativeOptInAndDamageIsolation(GameTestHelper h) {
+        var at=location(h);var p=player(h,at.above());var friend=player(h,at.above());var outsider=player(h,at.above());var ship=build(h,p,at);var patrol=boardingPatrol(h,p,ship,at);
+        try {
+            h.assertTrue(Boarding.form(outsider)==0,"Non-attacking captain cannot reserve patrol");
+            h.assertTrue(Boarding.form(p)==1&&Boarding.join(friend,p)==1,"Explicit cooperative join");
+            h.assertTrue(Boarding.start(friend)==0&&Boarding.start(p)==1,"Only leader starts");var defenders=sentries(patrol);
+            h.assertTrue(defenders.size()==4,"Cooperative encounter has four finite defenders");var defender=defenders.getFirst();
+            h.assertTrue(!defender.hurtServer(p.level(),outsider.damageSources().playerAttack(outsider),1000)&&!defender.hurtServer(p.level(),defender.damageSources().generic(),1000),"Outsiders and environment cannot kill sentries");
+            h.assertTrue(Boarding.canTarget(defender,p)&&Boarding.canTarget(defender,friend)&&!Boarding.canTarget(defender,outsider),"Sentries target opted-in players only");
+            float health=outsider.getHealth();outsider.hurtServer(p.level(),defender.damageSources().mobAttack(defender),5);
+            h.assertTrue(outsider.getHealth()==health,"Actual damage event protects nonparticipants");
+            h.assertTrue(Boarding.join(outsider,p)==0,"No joining an active fight");
+            Boarding.leave(friend);h.assertTrue(patrol.isRemoved()&&defenders.stream().allMatch(net.minecraft.world.entity.Entity::isRemoved),"Departure cancels party and discards defenders and cargo");
+        } finally {Boarding.leave(p);clear(patrol);clear(ship);remove(p);remove(friend);remove(outsider);}h.succeed();
+    }
+    @GameTest public void boardingReloadDiscardsAttemptAndOrphanDefenders(GameTestHelper h) {
+        var at=location(h);var p=player(h,at.above());var ship=build(h,p,at);var patrol=boardingPatrol(h,p,ship,at);PirateShip restored=null;
+        try {
+            h.assertTrue(Boarding.form(p)==1&&Boarding.start(p)==1,"Start attempt before save");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());patrol.saveWithoutId(saved);
+            restored=new PirateShip(Ships.SHIP,p.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            Boarding.leave(p);h.assertTrue(restored.boardingSpent,"Attempt survives save/load");restored.tick();h.assertTrue(restored.isRemoved(),"Reload without live party discards cargo without credit");
+            var orphan=new BoardingDefender(Ships.BOARDING_DEFENDER,p.level());orphan.setPos(patrol.local(0,1,3));p.level().addFreshEntity(orphan);
+            h.assertTrue(orphan.isRemoved(),"Orphan sentry is removed on entity load");
+        } finally {Boarding.leave(p);clear(restored);clear(patrol);clear(ship);remove(p);}h.succeed();
+    }
+    @GameTest public void boardingLobbyCancelAndDisconnectHaveNoRewards(GameTestHelper h) {
+        var at=location(h);var p=player(h,at.above());var friend=player(h,at.above());var ship=build(h,p,at);var patrol=boardingPatrol(h,p,ship,at);
+        try {
+            h.assertTrue(Boarding.form(p)==1&&Boarding.join(friend,p)==1,"Open lobby");Boarding.leave(friend);Boarding.leave(p);
+            h.assertTrue(!patrol.boardingSpent&&patrol.isAlive()&&!Boarding.reserved(patrol),"Unstarted lobby does not consume patrol");
+            h.assertTrue(Boarding.form(p)==1&&Boarding.join(friend,p)==1&&Boarding.start(p)==1,"Start a new lobby");
+            p.level().getServer().getPlayerList().remove(friend);Boarding.tick(p.level());
+            h.assertTrue(patrol.isRemoved()&&sentries(patrol).isEmpty()&&Pirate.state(p).navalVictories==0,"Disconnect cleans encounter without reward");
+        } finally {Boarding.leave(p);clear(patrol);clear(ship);remove(p);remove(friend);}h.succeed();
+    }
+    @GameTest public void boardingArrowsRespectParticipationAndCleanup(GameTestHelper h) {
+        var at=location(h);var p=player(h,at.above());var outsider=player(h,at.above());var ship=build(h,p,at);var patrol=boardingPatrol(h,p,ship,at);
+        try {
+            h.assertTrue(Boarding.form(p)==1&&Boarding.start(p)==1,"Start ranged combat fixture");var defender=sentries(patrol).getFirst();
+            defender.performRangedAttack(p,.8F);
+            var arrows=p.level().getEntitiesOfClass(net.minecraft.world.entity.projectile.arrow.AbstractArrow.class,patrol.getBoundingBox().inflate(15));
+            h.assertTrue(arrows.size()==1,"Native sentry bow creates a real arrow");var arrow=arrows.getFirst();
+            h.assertTrue(arrow.pickup==net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.DISALLOWED,"Sentry arrows cannot be farmed");
+            float health=outsider.getHealth();outsider.hurtServer(p.level(),p.damageSources().arrow(arrow,defender),5);
+            h.assertTrue(outsider.getHealth()==health,"Actual projectile damage cannot hurt outsiders");
+            health=p.getHealth();p.hurtServer(p.level(),p.damageSources().arrow(arrow,defender),5);
+            h.assertTrue(p.getHealth()<health,"Actual projectile damage reaches participants");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());arrow.saveWithoutId(saved);
+            Boarding.leave(p);h.assertTrue(arrow.isRemoved(),"Outstanding arrows are removed on cancellation");
+            var restored=new net.minecraft.world.entity.projectile.arrow.Arrow(net.minecraft.world.entity.EntityTypes.ARROW,p.level());
+            restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));p.level().addFreshEntity(restored);
+            h.assertTrue(restored.isRemoved(),"Reloaded orphan arrow is discarded even without its owner");
+        } finally {Boarding.leave(p);clear(patrol);clear(ship);remove(p);remove(outsider);}h.succeed();
+    }
+    @GameTest public void boardingPartyCapAndBlockedDeckDoNotSpendAttempt(GameTestHelper h) {
+        var at=location(h);var p=player(h,at.above());var friends=new java.util.ArrayList<ServerPlayer>();var ship=build(h,p,at);var patrol=boardingPatrol(h,p,ship,at);
+        var obstruction=BlockPos.containing(patrol.local(-1,1.05,4));
+        try {
+            for(int i=0;i<4;i++)friends.add(player(h,at.above()));h.assertTrue(Boarding.form(p)==1,"Open lobby");
+            for(int i=0;i<3;i++)h.assertTrue(Boarding.join(friends.get(i),p)==1,"Join within four-player cap");
+            h.assertTrue(Boarding.join(friends.get(3),p)==0,"Fifth player refused");
+            p.level().setBlock(obstruction,Blocks.STONE.defaultBlockState(),2);
+            h.assertTrue(Boarding.start(p)==0&&!patrol.boardingSpent&&sentries(patrol).isEmpty(),"Blocked entry rejects atomically without consuming attempt or spawning sentries");
+            p.level().setBlock(obstruction,Blocks.AIR.defaultBlockState(),2);
+            h.assertTrue(Boarding.start(p)==1,"Clear entry allows same party to start");friends.getFirst().setPos(patrol.position().add(60,1,0));Boarding.tick(p.level());
+            h.assertTrue(patrol.isRemoved(),"Out-of-bounds participant ends fight");
+        } finally {p.level().setBlock(obstruction,Blocks.AIR.defaultBlockState(),2);Boarding.leave(p);clear(patrol);clear(ship);remove(p);friends.forEach(ShipsGameTest::remove);}h.succeed();
+    }
+    @GameTest public void pilotStatusTracksAmmoFallbackReloadAndHarbor(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
+        try {
+            p.level().setBlock(at.offset(-3,1,-3),Ships.CANNON.defaultBlockState(),2);
+            helper.assertTrue(ship.launch(p)==null,"Launch gun fixture");
+            helper.assertTrue(ship.pilotStatus().combat().startsWith("No ammo"),"Empty hold does not claim ready");
+            ship.cargo.setItem(0,new ItemStack(Ships.SHOT,3));ship.cargo.setItem(1,new ItemStack(Ships.FIRE_SHOT,1));
+            helper.assertTrue(ship.pilotStatus().combat().equals("Ready | Auto: fire 1"),"Automatic mode reports fire-first selection");
+            helper.assertTrue(ship.fire(true)==1,"Fire the real broadside");
+            helper.assertTrue(ship.pilotStatus().combat().equals("Reload 3s | Auto: solid 3"),"Reload and fallback follow actual consumed ammunition");
+            ship.cycleAmmunition(p);ship.cycleAmmunition(p);
+            helper.assertTrue(ship.pilotStatus().combat().endsWith("Chain 0"),"Selected ammo does not imply unavailable fallback");
+            ship.setPos(.5,64,.5);helper.assertTrue(ship.pilotStatus().combat().startsWith("Harbor safe"),"Protected harbor overrides combat readiness");
+        } finally {clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void deckSupportReacquiresReloadedShipWithoutStaleCarry(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);PirateShip restored=null;
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.stopRiding();p.setPos(ship.local(0,1,4));p.setOnGround(true);p.baseTick();
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());ship.saveWithoutId(saved);
+            restored=new PirateShip(Ships.SHIP,p.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            ship.discard();helper.assertTrue(p.level().addFreshEntity(restored),"Recreate saved ship after original entity removal");
+            var before=p.position();p.baseTick();helper.assertTrue(p.position().equals(before),"Stale removed ship never carries the player");
+            restored.setPos(restored.position().add(.2,0,0));p.baseTick();
+            helper.assertTrue(Math.abs(p.getX()-before.x-.2)<.001,"Standing player reacquires replacement deck support");
+            helper.assertTrue(p.startRiding(restored),"Owner can board the restored ship");
+            helper.assertTrue(restored.controls(p,PirateShip.FORWARD),"Restored ship accepts fresh owner input");
+        } finally {clear(restored);clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void sailingClearsUnusedHeightButDockingRemainsStrict(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);var bridge=at.offset(0,5,3);
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");p.level().setBlock(bridge,Blocks.STONE.defaultBlockState(),2);
+            helper.assertTrue(ship.controls(p,PirateShip.FORWARD),"Captain requests sailing");var before=ship.position();ship.tick();
+            helper.assertTrue(ship.getZ()>before.z,"Bare vessel sails beneath unused build height");
+            ship.setDeltaMovement(Vec3.ZERO);
+            helper.assertTrue(ship.dock(p)!=null&&!ship.docked(),"Docking still reserves the full restoration volume");
+            helper.assertTrue(p.level().getBlockState(bridge).is(Blocks.STONE),"Bridge is preserved");
+            p.level().setBlock(at.offset(0,2,2),Blocks.STONE.defaultBlockState(),2);
+            helper.assertTrue(!ShipCollision.clearSailing(ship,ship.position(),0),"Low bridge cannot clip the captain even when it clears the hull");
+        } finally {p.level().setBlock(bridge,Blocks.AIR.defaultBlockState(),2);p.level().setBlock(at.offset(0,2,2),Blocks.AIR.defaultBlockState(),2);clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void sailingClearsEmptyRotatedCornersButRejectsHullObstacles(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);var corner=at.offset(7,0,7);var wall=at.offset(0,0,8);
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");ship.setYRot(45);
+            p.level().setBlock(corner,Blocks.STONE.defaultBlockState(),2);p.level().setBlock(corner.below(),Blocks.STONE.defaultBlockState(),2);
+            helper.assertTrue(ShipCollision.clearSailing(ship,ship.position(),45),"Empty diagonal corner may contain shore, including dry ground");
+            ship.setYRot(0);p.level().setBlock(wall,Blocks.STONE.defaultBlockState(),2);
+            helper.assertTrue(ship.controls(p,PirateShip.FORWARD),"Captain requests forward movement");var before=ship.position();ship.tick();
+            helper.assertTrue(ship.position().equals(before)&&ship.getDeltaMovement().equals(Vec3.ZERO),"Actual bow obstacle stops sailing");
+            p.level().setBlock(wall,Blocks.AIR.defaultBlockState(),2);p.level().setBlock(at.below(),Blocks.STONE.defaultBlockState(),2);
+            helper.assertTrue(!ShipCollision.clearSailing(ship,ship.position(),0),"Actual hull still requires water beneath it");
+        } finally {p.level().setBlock(corner,Blocks.AIR.defaultBlockState(),2);p.level().setBlock(corner.below(),Blocks.WATER.defaultBlockState(),2);p.level().setBlock(wall,Blocks.AIR.defaultBlockState(),2);p.level().setBlock(at.below(),Blocks.WATER.defaultBlockState(),2);clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void sailingRejectsCapturedMastCollision(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);var obstacle=at.offset(0,4,8);
+        try {
+            for(int y=1;y<=4;y++)p.level().setBlock(at.offset(0,y,7),Blocks.OAK_LOG.defaultBlockState(),2);
+            helper.assertTrue(ship.launch(p)==null,"Launch mast fixture");p.level().setBlock(obstacle,Blocks.STONE.defaultBlockState(),2);
+            helper.assertTrue(!ShipCollision.clearSailing(ship,ship.position().add(0,0,.1),0),"Captured mast cannot pass through overhead obstruction");
+        } finally {p.level().setBlock(obstacle,Blocks.AIR.defaultBlockState(),2);clear(ship);remove(p);}helper.succeed();
+    }
+    @GameTest public void sailingRejectsOtherShipsAndUnloadedDestinations(GameTestHelper helper) {
+        var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);PirateShip other=null;
+        try {
+            helper.assertTrue(ship.launch(p)==null,"Launch fixture");other=PirateShip.spawnEnemy(p.level(),at.offset(24,0,0));
+            helper.assertTrue(other!=null,"Other moving hull fixture");
+            helper.assertTrue(!ShipCollision.clearSailing(ship,other.position(),45),"Rotated vessel cannot overlap another captured hull");
+            helper.assertTrue(!ShipCollision.clearSailing(ship,ship.position().add(1000000,0,1000000),0),"Sailing cannot enter unloaded chunks");
+            helper.assertTrue(!ShipCollision.clearSailing(ship,new Vec3(31000000,64,0),0),"Sailing cannot cross the world border");
+        } finally {clear(other);clear(ship);remove(p);}helper.succeed();
+    }
     @GameTest public void deckSupportReleasesOnJumpAndProtectsSneakingEdges(GameTestHelper helper) {
         var at=location(helper);var p=player(helper,at.above());var ship=build(helper,p,at);
         try {
@@ -550,5 +716,103 @@ public final class ShipsGameTest {
             captain.stopRiding();captain.teleportTo(2,65,4);captain.getInventory().clearContent();captain.getInventory().setItem(0,new ItemStack(Items.EMERALD,8));
             helper.assertTrue(SeaServices.execute(captain,7)==SeaServices.Reply.DONE&&state.officerContracts[0]==3,"Sunk officer can be paid for and rehired without repeating commission");
         }finally{if(ghost!=null)clear(ghost);clear(ship);remove(captain);}helper.succeed();
+    }
+    private static BlockPos unloadingFixture(GameTestHelper h,ServerPlayer captain,PirateShip ship,BlockPos pos) {
+        var level=captain.level();
+        for(int x=-5;x<=5;x++)for(int z=-5;z<=5;z++)level.getChunk((pos.getX()>>4)+x,(pos.getZ()>>4)+z);
+        var ledger=SeaLedger.get(level);ledger.fort(new SeaLedger.Fort(pos,captain.getUUID(),"Unload port",0,0));ledger.homePort(new SeaLedger.HomePort(captain.getUUID(),pos,1));
+        captain.getInventory().setItem(0,new ItemStack(Items.EMERALD,32));h.assertTrue(ship.recruit(captain,PirateShip.WORKER),"Hire original shipworker");
+        for(int x=4;x<=6;x++)for(int z=-2;z<=2;z++){level.setBlock(pos.offset(x,0,z),Blocks.OAK_PLANKS.defaultBlockState(),2);for(int y=1;y<=3;y++)level.setBlock(pos.offset(x,y,z),Blocks.AIR.defaultBlockState(),2);}
+        var chest=pos.offset(5,1,0);level.setBlock(chest,Blocks.CHEST.defaultBlockState(),2);
+        h.assertTrue(ship.unloading.select(captain,chest),"Captain explicitly selects nearby single chest");
+        return chest;
+    }
+    private static String unloadingDebug(PirateShip ship) {
+        var worker=(net.minecraft.world.entity.Mob)ship.crewMembers().getFirst();int missing=0;var at=worker.blockPosition();
+        for(int x=at.getX()-64;x<=at.getX()+64;x+=16)for(int z=at.getZ()-64;z<=at.getZ()+64;z+=16)if(!ship.level().hasChunkAt(new BlockPos(x,at.getY(),z)))missing++;
+        String saved="";try{for(var name:new String[]{"deck","fetching"}){var field=DockedUnloading.class.getDeclaredField(name);field.setAccessible(true);saved+=" "+name+"="+field.get(ship.unloading);}}catch(ReflectiveOperationException e){throw new AssertionError(e);}
+        var path=worker.getNavigation().createPath(ship.unloading.target().west(),0,24);
+        return DockedUnloading.STATUS[ship.unloading.status()]+" worker="+worker.position()+" ship="+ship.position()+" target="+ship.unloading.target()+" ground="+worker.onGround()+" missingChunks="+missing+" range="+worker.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE)+" path="+(path==null?"null":path.canReach()+"/"+path.getTarget())+saved;
+    }
+    private static void unloadStep(PirateShip ship) {
+        ship.crewMembers().getFirst().setOnGround(true);ship.tickCount+=20;ship.unloading.tick();
+        var worker=(net.minecraft.world.entity.Mob)ship.crewMembers().getFirst();var path=worker.getNavigation().getPath();
+        // Arrival fixture: use the endpoint of a real reachable native path; motion has its own test below.
+        if(path!=null&&path.canReach())worker.setPos(Vec3.atBottomCenterOf(path.getTarget()));
+    }
+    private static void clearUnloading(PirateShip ship,BlockPos pos) {
+        for(var crew:ship.crewMembers())crew.discard();
+        for(int x=4;x<=6;x++)for(int z=-2;z<=2;z++)for(int y=0;y<=3;y++)ship.level().setBlock(pos.offset(x,y,z),Blocks.AIR.defaultBlockState(),2);
+        clear(ship);
+    }
+    @GameTest public void unloadingConservesComponentsAndStopsAtFullChest(GameTestHelper h) {
+        var pos=location(h);var p=player(h,pos.above());var ship=build(h,p,pos);
+        try {
+            var target=unloadingFixture(h,p,ship,pos);var chest=(net.minecraft.world.level.block.entity.ChestBlockEntity)p.level().getBlockEntity(target);
+            var cargo=new ItemStack(Items.DIAMOND,20);cargo.set(DataComponents.CUSTOM_NAME,Component.literal("Marked cargo"));ship.cargo.setItem(0,cargo);
+            for(int i=0;i<27;i++)chest.setItem(i,new ItemStack(Items.STONE,64));chest.setItem(0,cargo.copyWithCount(62));
+            h.assertTrue(ship.unloading.toggle(p),"Start job");
+            for(int i=0;i<12&&cargo.getCount()==20;i++)unloadStep(ship);
+            h.assertTrue(cargo.getCount()==18&&chest.getItem(0).getCount()==64&&ItemStack.isSameItemSameComponents(cargo,chest.getItem(0)),"Transfer only the two fitting items, with exact components: "+unloadingDebug(ship));
+            for(int i=0;i<12;i++)unloadStep(ship);
+            h.assertTrue(cargo.getCount()==18&&ship.unloading.status()==5,"Full chest pauses without consuming cargo");
+            chest.setItem(1,ItemStack.EMPTY);for(int i=0;i<10&&cargo.getCount()==18;i++)unloadStep(ship);
+            h.assertTrue(cargo.getCount()==10&&chest.getItem(1).getCount()==8,"Free space resumes a bounded eight-item delivery");
+            ship.unloading.pause();int count=cargo.getCount();unloadStep(ship);h.assertTrue(cargo.getCount()==count,"Explicit pause stops deliveries");
+        } finally {clearUnloading(ship,pos);remove(p);}h.succeed();
+    }
+    @GameTest public void unloadingOwnershipBlockedChestAndMissingWorkerAreSafe(GameTestHelper h) {
+        var pos=location(h);var p=player(h,pos.above());var other=player(h,pos.above());var ship=build(h,p,pos);
+        try {
+            var target=unloadingFixture(h,p,ship,pos);ship.cargo.setItem(0,new ItemStack(Items.DIAMOND,20));
+            h.assertTrue(!ship.unloading.select(other,target)&&!ship.unloading.toggle(other)&&!ship.unloading.mark(other),"Other players cannot redirect or start the job");
+            h.assertTrue(!ship.unloading.select(p,pos.offset(25,1,0))&&ship.unloading.target().equals(target),"Rejected target preserves the selected chest");
+            h.assertTrue(ship.unloading.toggle(p),"Start job");p.level().setBlock(target.above(),Blocks.STONE.defaultBlockState(),2);
+            unloadStep(ship);h.assertTrue(ship.unloading.status()==9&&ship.cargo.getItem(0).getCount()==20,"Blocked chest cannot receive cargo");
+            p.level().setBlock(target.above(),Blocks.AIR.defaultBlockState(),2);p.setPos(pos.getX()+100,pos.getY()+1,pos.getZ());
+            unloadStep(ship);h.assertTrue(ship.unloading.status()==7&&ship.cargo.getItem(0).getCount()==20,"Absent captain pauses job");
+            p.setPos(Vec3.atBottomCenterOf(pos.above()));ship.unloading.pause();ship.crewMembers().getFirst().discard();
+            h.assertTrue(!ship.unloading.toggle(p)&&ship.unloading.status()==8,"Missing worker is not respawned");
+        } finally {clearUnloading(ship,pos);remove(p);remove(other);}h.succeed();
+    }
+    @GameTest public void unloadingReloadRequiresResumeAndLaunchRecallsOriginalWorker(GameTestHelper h) {
+        var pos=location(h);var p=player(h,pos.above());var ship=build(h,p,pos);
+        try {
+            var target=unloadingFixture(h,p,ship,pos);ship.cargo.setItem(0,new ItemStack(Items.DIAMOND,20));var worker=ship.crewMembers().getFirst();var id=worker.getUUID();
+            h.assertTrue(ship.unloading.toggle(p),"Start job");unloadStep(ship);
+            h.assertTrue(!ship.toggleCrewRoaming(p)&&!ship.toggleExpedition(p),"Shore orders cannot override active unloading");
+            var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());ship.saveWithoutId(saved);
+            var restored=new PirateShip(Ships.SHIP,p.level());restored.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
+            h.assertTrue(target.equals(restored.unloading.target())&&!restored.unloading.active()&&restored.unloading.status()==1&&restored.cargo.getItem(0).getCount()==20,"Reload retains destination/cargo and pauses work");restored.discard();
+            var error=ship.launch(p);h.assertTrue(error==null&&!ship.unloading.active()&&worker.getVehicle()==ship&&worker.getUUID().equals(id),"Launch pauses and recalls original worker: "+error);
+        } finally {clearUnloading(ship,pos);remove(p);}h.succeed();
+    }
+    @GameTest(maxTicks=500) public void unloadingWorkerWalksNativeRouteToChest(GameTestHelper h) {
+        var pos=location(h);var p=player(h,pos.above());var ship=build(h,p,pos);var target=unloadingFixture(h,p,ship,pos);
+        ship.cargo.setItem(0,new ItemStack(Items.DIAMOND,8));h.assertTrue(ship.unloading.toggle(p),"Start real movement job");
+        for(int x=-5;x<=5;x++)for(int z=-5;z<=5;z++)p.level().setChunkForced((pos.getX()>>4)+x,(pos.getZ()>>4)+z,true);
+        h.runAfterDelay(440,()->{
+            try {
+                var chest=(net.minecraft.world.level.block.entity.ChestBlockEntity)p.level().getBlockEntity(target);
+                h.assertTrue(chest.countItem(Items.DIAMOND)==8&&ship.cargo.getItem(0).isEmpty(),"Native worker movement completes delivery: "+unloadingDebug(ship));
+                h.succeed();
+            } finally {for(int x=-5;x<=5;x++)for(int z=-5;z<=5;z++)p.level().setChunkForced((pos.getX()>>4)+x,(pos.getZ()>>4)+z,false);clearUnloading(ship,pos);remove(p);}
+        });
+    }
+    @GameTest public void unloadingBlockedRouteReplacementAndLockedSlotsPreserveCargo(GameTestHelper h) {
+        var pos=location(h);var p=player(h,pos.above());var ship=build(h,p,pos);
+        try {
+            var target=unloadingFixture(h,p,ship,pos);ship.cargo.setItem(0,new ItemStack(Items.DIAMOND,8));ship.cargo.setItem(53,new ItemStack(Items.EMERALD,7));
+            for(var direction:net.minecraft.core.Direction.Plane.HORIZONTAL)p.level().setBlock(target.relative(direction),Blocks.STONE.defaultBlockState(),2);
+            h.assertTrue(ship.unloading.toggle(p),"Start blocked-route order");for(int i=0;i<10;i++)unloadStep(ship);
+            h.assertTrue(ship.unloading.status()==6&&ship.cargo.getItem(0).getCount()==8,"No accessible chest approach means no remote transfer");
+            for(var direction:net.minecraft.core.Direction.Plane.HORIZONTAL)p.level().setBlock(target.relative(direction),Blocks.AIR.defaultBlockState(),2);
+            p.level().setBlock(target,Blocks.AIR.defaultBlockState(),2);p.level().setBlock(target,Blocks.CHEST.defaultBlockState(),2);unloadStep(ship);
+            h.assertTrue(ship.unloading.status()==9&&ship.cargo.getItem(0).getCount()==8,"Replacing destination does not silently rebind a running order");
+            h.assertTrue(ship.unloading.toggle(p)&&ship.unloading.toggle(p),"Explicit pause/resume rebinds replacement");
+            for(int i=0;i<15;i++)unloadStep(ship);
+            var chest=(net.minecraft.world.level.block.entity.ChestBlockEntity)p.level().getBlockEntity(target);
+            h.assertTrue(chest.countItem(Items.DIAMOND)==8&&ship.cargo.getItem(53).getCount()==7&&ship.unloading.status()==10,"Only unlocked cargo slots unload; inaccessible cargo is preserved");
+        } finally {clearUnloading(ship,pos);remove(p);}h.succeed();
     }
 }

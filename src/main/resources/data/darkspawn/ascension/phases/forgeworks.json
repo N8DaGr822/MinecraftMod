@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "id": "forgeworks",
+  "name": "Forgeworks",
+  "breaks": 700,
+  "cycle": 20,
+  "pool": [
+    {
+      "resource": 0,
+      "weight": 2
+    },
+    {
+      "resource": 1,
+      "weight": 2
+    },
+    {
+      "resource": 3,
+      "weight": 4
+    },
+    {
+      "resource": 4,
+      "weight": 3
+    },
+    {
+      "resource": 5,
+      "weight": 4
+    },
+    {
+      "resource": 6,
+      "weight": 4
+    },
+    {
+      "resource": 11,
+      "weight": 3
+    },
+    {
+      "resource": 12,
+      "weight": 1
+    },
+    {
+      "resource": 13,
+      "weight": 1
+    },
+    {
+      "resource": 14,
+      "weight": 1
+    }
+  ],
+  "guaranteed": [
+    {
+      "offset": 0,
+      "resource": 0
+    },
+    {
+      "offset": 1,
+      "resource": 1
+    },
+    {
+      "offset": 2,
+      "resource": 5
+    },
+    {
+      "offset": 3,
+      "resource": 6
+    },
+    {
+      "offset": 4,
+      "resource": 11
+    },
+    {
+      "offset": 5,
+      "resource": 4
+    }
+  ],
+  "objectives": [
+    {
+      "id": "hoppers",
+      "item": "minecraft:hopper",
+      "count": 4
+    },
+    {
+      "id": "pistons",
+      "item": "minecraft:piston",
+      "count": 4
+    },
+    {
+      "id": "rails",
+      "item": "minecraft:rail",
+      "count": 32
+    }
+  ],
+  "encounters": [],
+  "rewards": [
+    {
+      "id": "forgeworks_redstone",
+      "item": "minecraft:redstone",
+      "count": 32
+    },
+    {
+      "id": "forgeworks_diamonds",
+      "item": "minecraft:diamond",
+      "count": 4
+    },
+    {
+      "id": "forgeworks_copper",
+      "item": "minecraft:copper_ingot",
+      "count": 32
+    }
+  ]
+}

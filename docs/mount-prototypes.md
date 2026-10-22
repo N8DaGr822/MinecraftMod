@@ -56,7 +56,7 @@ Names, health, position, and airborne state survive saving. Movement input is cl
 
 ## Prototype boundaries
 
-These are movement, appearance, and natural-encounter prototypes. Food-based taming and exclusive riding ownership are implemented; saddles are intentionally unnecessary. Cargo, breeding, capsule storage, veterinary recovery, follow/stay commands and recipient-approved transfers are implemented for all fourteen species. Further species support abilities remain future work. The four combat abilities and Cerberus protection below are implemented. Cloud, carpet, airplanes, and mech are separate transport concepts.
+These are movement, appearance, and natural-encounter prototypes. Food-based taming and exclusive riding ownership are implemented; saddles are intentionally unnecessary. Cargo, breeding, capsule storage, veterinary recovery, follow/stay commands and recipient-approved transfers are implemented for all fourteen species. Further species support abilities remain future work. The four combat abilities and Cerberus protection below are implemented. Crafted [magic carpet](magic-carpet.md), [editable aircraft](aircraft-prototype.md) and [ground walker](mech-prototype-design.md) are implemented separately; see their guides for machine-specific limits and current acceptance. Cloud transport remains a proposal.
 
 ## Combat abilities
 

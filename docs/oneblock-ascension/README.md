@@ -1,6 +1,8 @@
-# OneBlock Ascension future implementation plan
+# OneBlock Ascension implementation plan
 
-Saved October 14, 2026 for later development. This is a deferred proposal, not an implementation milestone or a change to the active pirate work. The [complete supplied brief](source-brief.txt) is preserved verbatim. The user selected Fabric within the existing Darkspawn project on October 14, 2026. The embedded instruction to implement M0 and M1 applies when implementation is requested; the current follow-up reviews and updates the saved plan.
+**October 20 extension:** [Phases seven through twelve](chapter-three.md) extend chapter teams to Ascension Summit. [Guardian presentation](guardian-presentation.md) adds custom silhouettes and original music: nine Guardian variations with three intensities each. Painted skins and live visual/audio acceptance remain open. [Guidance and chapter two](chapter-two.md) extends chapter teams to six phases, adds the inventory UI, team transfer/removal and recovery, and relay/drive upgrades. The original milestones below are retained as design history; the linked guide records current rules and migration.
+
+Saved October 14, 2026; M0/M1 activated October 19, 2026. See [foundation decisions and player commands](decisions.md) for the separate-destination implementation and verification. [M2 bridges and native protection](bridges.md), [M3 generator state/reconciliation](generator.md), [M4 MVP phases](phases.md), and [M5 Guardian and automation](features.md) are now implemented. [M6 hardening](hardening.md) adds strict save loading, request guards and disk/workload fixtures; full-world crash/restore and live multiplayer acceptance remain open before M7. The [complete supplied brief](source-brief.txt) is preserved verbatim. The user selected Fabric within the existing Darkspawn project on October 14, 2026. The embedded instruction to implement M0 and M1 applies when implementation is requested; later user-authorized passes now extend the foundation through M5.
 
 ## Scope and repository fit
 
@@ -44,7 +46,7 @@ Use a versioned configuration schema. Reject hot changes to spacing or claim geo
 
 ## Progression and state guarantees
 
-The future content roadmap has 12 data-driven phases; the MVP implements Genesis at 250 breaks, Caverns at 500 and Verdant Wilds at 600. Completion requires the break threshold **and** required objectives **and** required encounters. Mining beyond the threshold must continue without deadlocking regeneration. Later MVP content includes a Cave Guardian event, a collection upgrade and a bounded auto-miner with output backpressure and no offline operation.
+The future content roadmap has 12 data-driven phases; the MVP implements Genesis at 250 breaks, Caverns at 500 and Verdant Wilds at 600. Completion requires the break threshold **and** required objectives **and** required encounters. Mining beyond the threshold must continue without deadlocking regeneration. M5 supplies a Cave Guardian event, a collection upgrade and a bounded auto-miner with output backpressure and no offline operation.
 
 Persist teams, islands, generators, progression, bridge ownership, upgrades, encounters and reward ledgers with durable identifiers and schema versions. Exactly one confirmed eligible generator break produces exactly one progress increment; canceled, unauthorized, stale and duplicate attempts produce zero. Generator states are READY, PENDING, REGENERATING, LOCKED and ERROR; regeneration is idempotent by `(islandId, generationIndex)`. Restart reconciliation must repair world/state disagreement without extra progress or rewards.
 
@@ -77,4 +79,4 @@ The first authorized implementation pass should complete **M0 and M1 only**, rep
 - Later phases cannot bypass objectives/encounters, duplicate rewards, deadlock after thresholds or replace valid content on failed reload.
 - Run milestone-appropriate compilation and pure-Java tests, then available server/runtime checks. Record exact commands and actual results; explicitly identify unverified runtime behavior.
 
-The platform decision is settled: Fabric in Darkspawn. The next implementation step is M0/M1, beginning with the existing code/save audit and explicit treatment of the current shared island. Existing gameplay remains unchanged during this plan review.
+The platform decision is settled: Fabric in Darkspawn. M0/M1 uses separate Ascension storage alongside legacy OneBlock. M2 adds player-built bridges, ownership, archival cleanup and scoped native protection; see bridges.md for rules and limits. M3 adds saved generator states, guarded native harvesting and bounded reconciliation; see generator.md for verification and persistence limits. M4 adds three JSON phases for new teams, submissions and reward ledgers while preserving existing teams; see phases.md for progression rules. M5 supplies the Guardian gate and dedicated-chest automation; see features.md. M6 now adds strict saved-data loading, request guards and disk/workload checks; see hardening.md for remaining acceptance.

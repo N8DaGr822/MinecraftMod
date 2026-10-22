@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "AMA",
+    "PPP"
+  ],
+  "key": {
+    "P": "minecraft:purple_carpet",
+    "A": "minecraft:amethyst_shard",
+    "M": "minecraft:phantom_membrane"
+  },
+  "result": {
+    "id": "darkspawn:magic_carpet",
+    "count": 1
+  }
+}

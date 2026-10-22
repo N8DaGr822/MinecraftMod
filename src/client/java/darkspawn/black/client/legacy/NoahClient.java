@@ -14,6 +14,7 @@ public final class NoahClient {
     private NoahClient() { }
     public static void initialize() {
         EntityRenderers.register(Mounts.THALASSAR,ThalassarRenderer::new);
+        EntityRenderers.register(net.minecraft.world.entity.EntityTypes.TRIDENT,TempestRenderer::new);
         var category=KeyMapping.Category.register(Darkspawn.id("noah"));
         var cast=KeyMappingHelper.registerKeyMapping(new KeyMapping("key.darkspawn.noah_cast",InputConstants.Type.KEYBOARD,InputConstants.KEY_K,category));
         var ultimate=KeyMappingHelper.registerKeyMapping(new KeyMapping("key.darkspawn.noah_ultimate",InputConstants.Type.KEYBOARD,InputConstants.KEY_B,category));

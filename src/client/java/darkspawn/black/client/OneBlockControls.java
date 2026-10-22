@@ -17,12 +17,20 @@ public final class OneBlockControls {
 	private static int phase, breaks, pending;
 	private OneBlockControls() { }
 	public static void initialize() {
+		ClientPlayNetworking.registerGlobalReceiver(darkspawn.black.oneblock.AscensionGuideSnapshot.TYPE,(payload,context)->{
+			if(context.client().gui.screen() instanceof AscensionScreen screen)screen.receive(payload);
+		});
 		ClientPlayNetworking.registerGlobalReceiver(OneBlockStatusPayload.TYPE, (payload, context) -> {
 			phase = Math.clamp(payload.phase(), 0, 5); breaks = payload.breaks(); pending = payload.pending();
 		});
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> { phase = 0; breaks = 0; pending = 0; });
 		ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
 			if (!(screen instanceof InventoryScreen) || !ClientPlayNetworking.canSend(OneBlockActionPayload.TYPE)) return;
+			if(ClientPlayNetworking.canSend(darkspawn.black.oneblock.AscensionGuideRequest.TYPE)){
+				var guide=UiTheme.button(Component.literal("Ascension"),b->client.gui.setScreen(new AscensionScreen(screen)))
+					.bounds(6,128,62,20).tooltip(Tooltip.create(Component.literal("Team islands, objectives, rewards and automation"))).build();
+				Screens.getWidgets(screen).add(guide);
+			}
 			// Inventory UI: The narrow left margin avoids covering slots, including the expanded inventory.
 			var travel = darkspawn.black.client.UiTheme.button(Component.empty(), button -> ClientPlayNetworking.send(new OneBlockActionPayload(0)))
 				.bounds(6, 6, 62, 20).build();
@@ -30,11 +38,11 @@ public final class OneBlockControls {
 				.bounds(6, 30, 62, 20).build();
 			Runnable refresh = () -> {
 				if (client.player == null) { travel.active = false; advance.active = false; return; }
-				boolean inside = OneBlock.island(client.player.level());
+				boolean inside = OneBlock.island(client.player.level()) || darkspawn.black.oneblock.Ascension.island(client.player.level());
 				travel.setMessage(Component.translatable(pending > 0 ? "button.darkspawn.oneblock_wait" : inside ? "button.darkspawn.oneblock_leave" : "button.darkspawn.oneblock_enter"));
 				travel.active = pending == 0 && client.player.isAlive() && client.player.onGround() && !client.player.isSpectator();
 				travel.setTooltip(Tooltip.create(Component.translatable("tooltip.darkspawn.oneblock_travel")));
-				advance.visible = inside;
+				advance.visible = OneBlock.island(client.player.level());
 				advance.active = inside && pending == 0 && phase < 5 && breaks >= OneBlockProgress.REQUIRED[phase];
 				advance.setTooltip(Tooltip.create(Component.translatable("tooltip.darkspawn.oneblock_phase", Component.translatable("oneblock.darkspawn." + OneBlockProgress.PHASES[phase]), breaks,
 					phase == 5 ? Component.translatable("oneblock.darkspawn.endless") : Component.literal(Integer.toString(OneBlockProgress.REQUIRED[phase])))));

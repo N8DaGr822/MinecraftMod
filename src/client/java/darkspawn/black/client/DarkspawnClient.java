@@ -40,7 +40,9 @@ public class DarkspawnClient implements ClientModInitializer {
             });
         }
 		TemperatureHud.initialize();
+		BonfireHud.initialize();
 		OneBlockControls.initialize();
+        net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.oneblock.AscensionGuardian.TYPE,AscensionGuardianRenderer::new);
 		JournalControls.initialize();
 		ExpeditionArmorRenderer.initialize();
 		ArmorStyleRenderer.initialize();
@@ -57,6 +59,7 @@ public class DarkspawnClient implements ClientModInitializer {
 						context -> CreatureAssets.MOBS.contains(kind.id) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, "mutant_wolf") : new darkspawn.black.client.ecosystem.TaigaWolfRenderer(context, kind)));
 		MenuScreens.register(Cooking.MENU, CookingScreen::new);
 		MenuScreens.register(darkspawn.black.storage.Storage.MENU, StorageScreen::new);
+		MenuScreens.register(darkspawn.black.inventory.ExplorerPackItem.MENU, ExplorerPackScreen::new);
 		MenuScreens.register(darkspawn.black.forsaken.Forsaken.MENU, QuarantineScreen::new);
 		darkspawn.black.forsaken.ForsakenContent.MOBS.forEach((kind, type) ->
 			net.minecraft.client.renderer.entity.EntityRenderers.register(type, context -> new CreatureGeoRenderer<>(context, type, kind.width / 3, kind.id)));

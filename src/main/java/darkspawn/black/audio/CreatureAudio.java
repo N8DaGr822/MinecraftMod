@@ -9,6 +9,7 @@ public final class CreatureAudio {
 	private CreatureAudio() {}
 	public static int warning(Mob mob) {
 		return switch (mob) {
+            case darkspawn.black.oneblock.AscensionGuardianEntity guardian -> guardian.warning();
 			case BiomeBoss b -> b.windup();
 			case AncientTreeSpirit b -> b.windup();
 			case MutantWolf b -> b.windup();
@@ -20,9 +21,10 @@ public final class CreatureAudio {
 		};
 	}
 	public static boolean startsWarning(int previous, int current) { return current > previous && current > 0; }
-	public static boolean boss(Mob mob) { return mob instanceof BiomeBoss || mob instanceof AncientTreeSpirit || mob instanceof MutantWolf; }
+	public static boolean boss(Mob mob) { return mob instanceof BiomeBoss || mob instanceof AncientTreeSpirit || mob instanceof MutantWolf || mob instanceof darkspawn.black.oneblock.AscensionGuardianEntity; }
 	public static int phase(Mob mob) {
 		return switch(mob) {
+            case darkspawn.black.oneblock.AscensionGuardianEntity guardian -> guardian.intensity();
 			case BiomeBoss b -> b.phase();
 			case AncientTreeSpirit b -> b.phase();
 			case MutantWolf b -> b.phase();

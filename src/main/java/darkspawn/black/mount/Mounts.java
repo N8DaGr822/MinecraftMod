@@ -13,6 +13,9 @@ import net.minecraft.world.entity.MobCategory;
 
 public final class Mounts {
 	private Mounts() { }
+    public static final EntityType<GroundWalker> GROUND_WALKER = register("ground_walker", GroundWalker::new, 1.8F, 2.5F, 2.4F);
+    public static final EntityType<Aircraft> AIRCRAFT = register("aircraft", Aircraft::new, 4.25F, 1F, 1.1F);
+    public static final EntityType<MagicCarpet> MAGIC_CARPET = register("magic_carpet", MagicCarpet::new, 1.7F, .25F, .3F);
 	public static final EntityType<Griffin> GRIFFIN = registerGriffin();
 	public static final EntityType<WoollyRhino> WOOLLY_RHINO = register("woolly_rhino", WoollyRhino::new, 1.7F, 1.8F, 1.5F);
     public static final EntityType<FlyingSquirrel> FLYING_SQUIRREL = register("flying_squirrel", FlyingSquirrel::new, 1.2F, 1F, .8F);
@@ -55,6 +58,12 @@ public final class Mounts {
 		SkyCatSpawning.initialize();
 		MountSpawning.initialize();
 		FabricDefaultAttributeRegistry.register(GRIFFIN, Griffin.attributes());
+        FabricDefaultAttributeRegistry.register(MAGIC_CARPET, MagicCarpet.attributes());
+        MagicCarpetItem.initialize();
+        FabricDefaultAttributeRegistry.register(AIRCRAFT, Aircraft.attributes());
+        AircraftCoreItem.initialize();
+        FabricDefaultAttributeRegistry.register(GROUND_WALKER, GroundWalker.attributes());
+        GroundWalkerItem.initialize();
         FabricDefaultAttributeRegistry.register(WOOLLY_RHINO, WoollyRhino.attributes());
         FabricDefaultAttributeRegistry.register(FLYING_SQUIRREL, FlyingSquirrel.attributes());
         FabricDefaultAttributeRegistry.register(POPTART_CAT, PoptartCat.attributes());

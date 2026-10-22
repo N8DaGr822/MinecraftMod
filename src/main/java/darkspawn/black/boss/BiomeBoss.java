@@ -107,6 +107,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	private Vec3 chargeStart = Vec3.ZERO;
 	private Vec3 chargeEnd = Vec3.ZERO;
 	private BossAttack attack = BossAttack.SLAM;
+	private final AwakenedPattern awakenedPattern = new AwakenedPattern();
 	private UUID selectedPlayer;
 	private int sequence;
 	private int cooldown = 100;
@@ -226,6 +227,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 		bossBar.setProgress(getHealth() / getMaxHealth());
 		var players = level.players().stream().filter(p -> eligible(p) && p.position().distanceToSqr(arena) <= 160 * 160).toList();
 		if (players.isEmpty()) {
+			awakenedPattern.reset();
 			getNavigation().stop();
 			entityData.set(WINDUP, 0);
 			chargeTicks = 0;
@@ -240,6 +242,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 		}
 		int nextPhase = BossPhase.advance(phase(), getHealth(), getMaxHealth());
 		if (nextPhase > phase()) {
+			awakenedPattern.reset();
 			for (int entered = phase() + 1; entered <= nextPhase; entered++) { enterPhase(level, entered); }
 			entityData.set(PHASE, nextPhase);
 			bossBar.setName(phaseName());
@@ -248,6 +251,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
 			if (profile == BossProfile.MUTANT_ZOMBIE || CreatureAssets.BOSSES.contains(profile.id())) { triggerAnim("action", "phase_change"); }
 		}
+		if (awakenedPattern.tick(level, this, profile.kind(), players)) { return; }
 		if (chargeTicks > 0) { tickCharge(level); return; }
 		if (recovery() > 0) {
 			getNavigation().stop();
@@ -270,6 +274,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 		ServerPlayer target = players.get(Math.floorMod(sequence, players.size()));
 		moveInArena(level, target);
 		if (--cooldown <= 0) {
+			if (awakenedPattern.begin(this, profile.kind(), target)) { return; }
 			var attacks = profile.attacks(phase(), variant());
 			attack = attacks.get(Math.floorMod(sequence, attacks.size()));
 			entityData.set(ATTACK, attack.ordinal());
@@ -736,6 +741,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+		awakenedPattern.reset();
 		entityData.set(PHASE, Math.clamp(input.getIntOr("phase", 1), 1, 3));
 		entityData.set(VARIANT, Math.clamp(input.getIntOr("variant", 0), 0, 2));
 		entityData.set(AWAKENING, Math.clamp(input.getIntOr("awakening", 0), 0, 100));

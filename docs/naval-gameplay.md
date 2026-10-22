@@ -1,5 +1,9 @@
 # Ships, cannons and crew
 
+The [docked-worker unloading job](docked-worker.md) adds the Job tab: mark a nearby single chest, then start, pause or recall the existing shipworker. All unlocked hold cargo is eligible; native repairs and Bram resupply retain their behavior. Jobs reload paused.
+
+[NPC patrol boarding](patrol-boarding.md) adds Sail > Board patrol and `/boarding` party commands. Disable an ordinary patrol to 25% hull, approach within 24 blocks, then start alone or with up to three opted-in friends. Finite sentries guard the patrol's existing shared cargo. Autonomous sailing and player-ship capture are outside this increment.
+
 Current expansion rules: [harbor services, recovery, fort warfare and Seven Seals](pirate-expansion.md).
 Latest source audit, fixes and remaining acceptance: [pirate polish review](pirate-polish-review.md).
 

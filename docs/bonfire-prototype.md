@@ -26,6 +26,8 @@ Stone brick  Stone brick  Stone brick
 
 All oxidation stages and waxed versions of the full copper block work. Cut copper does not.
 
+Look directly at the bonfire for a live HUD showing its level (1–4), OFF/ACTIVATING/ACTIVE state, coverage and next upgrade payment. At level 4 it shows maximum level. Inspection does not change the bonfire. Fresh testing camps include the three payments in a labeled barrel beside the core.
+
 With an empty hand:
 
 - **Right-click:** turn the bonfire on or off.

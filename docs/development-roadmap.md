@@ -1,12 +1,28 @@
 # Darkspawn development roadmap
 
+October 22 status reconciliation: use [the expansion plan](future-expansion-plan.md) and linked feature guides for current scope. Historical test counts below do not certify the current working tree. The [focused two-client session](two-client-acceptance.md) remains not run because no clients or native-app control were available.
+
+October 21: the approved [magic carpet](magic-carpet.md) and [editable aircraft](aircraft-prototype.md) are implemented in source. The separate [ground walker](mech-prototype-design.md) is now implemented in source; its current verification and live acceptance are tracked in that guide. See the [operations drill](server-operations-validation.md) for isolated recovery and timing results. Nexus still awaits user live-room acceptance.
+
+October 21: the approved four [regional encounters](regional-encounters.md) are implemented in source with focused server validation complete. The documented taiga grass/podzol spawn gap is also corrected; live acceptance remains.
+
+October 21: [Hunter, Butcher, Forager and Soulward](thematic-enchantments.md) are implemented in source with bounded ranks, native acquisition and camp trials. Live balance acceptance remains; Venom Guard, Shadow Sight and Deep Diver remain proposals.
+
+October 21: [fossil reconstruction and Kraken ocean clues](fossils-and-ocean-clues.md) are implemented in source, with a decorative display, readable finds, native recipes and renewable recovery sources. Normal summons and boss gates remain. Live acceptance is still required.
+
+The approved [NPC patrol boarding increment](patrol-boarding.md) is now implemented in source: disabled ordinary patrols, solo or up to four explicit participants, finite sentries, once-only shared cargo and interruption/reload cleanup. Live acceptance remains; autonomous sailing/docking remains future work.
+
+## October 20: Ascension second chapter and broader planning
+
+The current [Ascension chapter-two guide](oneblock-ascension/chapter-two.md) covers the inventory screen, team management/recovery, Forgeworks, Stormbound, Emberlands and automation upgrades. The approved [twelve-phase extension](oneblock-ascension/chapter-three.md) now reaches Ascension Summit in source; [custom Guardian silhouettes and original Ascension music](oneblock-ascension/guardian-presentation.md) are in source, while painted skins and live acceptance remain open. These guides supersede the three-phase-only implementation description below. The [broader expansion plan](future-expansion-plan.md) tracks remaining brainstorm ideas. Its first source increments are the [brewing Ingredient Pouch](ingredient-pouch.md), [all-arrow Quiver with bow feeding](quiver.md), [six-slot Explorer's Pack](explorer-pack.md), [one new warned sequence for each of the 16 awakened boss families](awakened-boss-patterns.md), [solo/cooperative Wolf Hunt](wolf-hunt.md), and [docked-worker cargo unloading](docked-worker.md); the remaining additions are still planned.
+
 ## Final source audit for weekend playtesting
 
-See the [October 15 playtest audit](weekend-playtest-audit.md) for implemented scope, asset checks and remaining brainstorm proposals. The deferred section below is a historical idea inventory, not a current missing-feature checklist.
+See the [current source status](weekend-playtest-audit.md) for implemented scope, checks and remaining live acceptance. The deferred section below is a historical idea inventory, not a current missing-feature checklist.
 
 ## October 15: next expansion increment
 
-Faction specializations/ammunition/shore support, culinary brewing, shared world awakenings, and a cooperative Nexus gauntlet with four legendary relics are now in source. See [rules, limits and playtest checklist](endgame-expansion-playtest.md). Historical proposal sections below are retained; the linked implementation record takes precedence for these features. No JAR packaged.
+Faction specializations/ammunition/shore support, culinary brewing, shared world awakenings, and a cooperative Nexus gauntlet with four legendary relics are now in source. The October 20 Nexus increment adds an entry hall, encounter courtyard, saved party preparation and visible objectives. See [rules, limits and playtest checklist](endgame-expansion-playtest.md). Historical proposal sections below are retained; the linked implementation record takes precedence for these features. No JAR packaged.
 
 ## Accessories, compact hub, regional fish and animal utility (2026-10-15)
 
@@ -36,10 +52,9 @@ Implemented owner-controlled ship names, cosmetic flags, earned 36/54-slot cargo
 Added three repeatable faction voyages with saved cooldowns, a personal Garrick rescue with free/recruit choices, and named faction-colored naval patrols that respect standing and harbor protection. Existing one-time rewards and captain milestones remain separate from repeat rewards. [Gameplay rules and acceptance checks](shattered-seas/repeat-voyages-and-garrick.md). Common/client compilation, 25 pirate tests, 15 distinct naval tests (including the corrected cap-test rerun) and three Journal unit tests pass. No JAR or version change; live multiplayer and pacing acceptance remains.
 
 
-## Deferred OneBlock Ascension proposal (2026-10-14)
+## OneBlock Ascension foundation through MVP phases (2026-10-19)
 
-Saved the [OneBlock Ascension plan](oneblock-ascension/README.md) and [verbatim source brief](oneblock-ascension/source-brief.txt) for later. It specifies six-player teams, 250-block island spacing, inclusive claims, protected player-built bridges, three MVP phases and milestones M0-M7. Its NeoForge-first architecture and preferred 1.21.1 / Java 21 baseline require a separate project or an approved migration decision against this Fabric repository. No gameplay, loader, dependency, save geometry or active pirate priority changes are authorized by this documentation request. When selected, begin with M0/M1 only.
-
+M0/M1 is implemented on the existing Fabric stack: separate Ascension destination and personal inventory, durable six-player teams, 250-block grid allocation, starter islands, independent legacy resource phases, home/visit/return commands and basic claim ownership. The old shared island and profiles retain their meaning. See [foundation decisions, checks and limits](oneblock-ascension/decisions.md) and the [milestone plan](oneblock-ascension/README.md). M2 adds [player-built bridge ownership, archival cleanup and scoped native protection](oneblock-ascension/bridges.md), including loaded-chunk-only cleanup and supported machines pausing without a team member present. M3 adds [saved generator states, guarded harvesting and bounded reconciliation](oneblock-ascension/generator.md). M4 adds [JSON MVP phases, submissions and team reward ledgers](oneblock-ascension/phases.md) for new teams while preserving existing six-phase teams. M5 adds the [Cave Guardian lifecycle, collector and bounded auto-miner](oneblock-ascension/features.md), using a dedicated adjacent chest and the shared generator transaction. M6 adds [strict save loading, duplicate request guards, disk restore fixtures and a 25-island maintenance microbenchmark](oneblock-ascension/hardening.md); full-world crash/restore and live-client acceptance remain open. No release artifact is created by this code pass.
 
 ## Pirate diplomacy and crew loyalty (2026-10-14)
 

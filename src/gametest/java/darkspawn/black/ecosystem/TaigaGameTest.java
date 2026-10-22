@@ -323,6 +323,11 @@ public final class TaigaGameTest {
 				helper.setBiome(region);
 				helper.assertTrue(TaigaEcosystem.canSpawn(TaigaWolf.Kind.DIRE, type, level, EntitySpawnReason.TRIAL_SPAWNER, pos, RandomSource.create(1)), "All existing taiga variants must support the ecosystem");
 			}
+            for (var soil : List.of(Blocks.GRASS_BLOCK, Blocks.PODZOL)) {
+                level.setBlockAndUpdate(pos.below(), soil.defaultBlockState());
+                helper.assertTrue(TaigaEcosystem.canSpawn(TaigaWolf.Kind.DIRE, type, level, EntitySpawnReason.TRIAL_SPAWNER, pos, RandomSource.create(1)),
+                    "Common exposed taiga soil permits unlocked wolves: " + soil);
+            }
 			level.getServer().setDifficulty(Difficulty.PEACEFUL, true);
 			helper.assertTrue(!TaigaEcosystem.canSpawn(TaigaWolf.Kind.DIRE, type, level, EntitySpawnReason.TRIAL_SPAWNER, pos, RandomSource.create(1)), "Peaceful must reject hostile wolves");
 			level.getServer().setDifficulty(difficulty, true);

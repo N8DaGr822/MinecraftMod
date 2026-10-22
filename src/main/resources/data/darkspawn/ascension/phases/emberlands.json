@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "id": "emberlands",
+  "name": "Emberlands",
+  "breaks": 900,
+  "cycle": 20,
+  "pool": [
+    {
+      "resource": 0,
+      "weight": 2
+    },
+    {
+      "resource": 1,
+      "weight": 2
+    },
+    {
+      "resource": 3,
+      "weight": 2
+    },
+    {
+      "resource": 4,
+      "weight": 3
+    },
+    {
+      "resource": 5,
+      "weight": 2
+    },
+    {
+      "resource": 13,
+      "weight": 3
+    },
+    {
+      "resource": 14,
+      "weight": 1
+    },
+    {
+      "resource": 15,
+      "weight": 6
+    },
+    {
+      "resource": 16,
+      "weight": 4
+    },
+    {
+      "resource": 17,
+      "weight": 3
+    },
+    {
+      "resource": 18,
+      "weight": 3
+    }
+  ],
+  "guaranteed": [
+    {
+      "offset": 0,
+      "resource": 0
+    },
+    {
+      "offset": 1,
+      "resource": 1
+    },
+    {
+      "offset": 2,
+      "resource": 4
+    },
+    {
+      "offset": 3,
+      "resource": 5
+    },
+    {
+      "offset": 4,
+      "resource": 15
+    },
+    {
+      "offset": 5,
+      "resource": 16
+    }
+  ],
+  "objectives": [
+    {
+      "id": "bricks",
+      "item": "minecraft:nether_bricks",
+      "count": 32
+    },
+    {
+      "id": "quartz",
+      "item": "minecraft:quartz_block",
+      "count": 16
+    },
+    {
+      "id": "buckets",
+      "item": "minecraft:bucket",
+      "count": 3
+    }
+  ],
+  "encounters": [
+    "ember_guardian"
+  ],
+  "rewards": [
+    {
+      "id": "emberlands_debris",
+      "item": "minecraft:ancient_debris",
+      "count": 4
+    },
+    {
+      "id": "emberlands_wart",
+      "item": "minecraft:nether_wart",
+      "count": 8
+    },
+    {
+      "id": "emberlands_rods",
+      "item": "minecraft:blaze_rod",
+      "count": 8
+    },
+    {
+      "id": "emberlands_pearls",
+      "item": "minecraft:ender_pearl",
+      "count": 8
+    }
+  ]
+}

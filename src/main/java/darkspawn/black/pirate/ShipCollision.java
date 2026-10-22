@@ -58,6 +58,38 @@ public final class ShipCollision {
         return false;
     }
 
+    public static boolean clearSailing(PirateShip ship, Vec3 position, float yaw) {
+        var level = ship.level();
+        if (ship.blocks().isEmpty()) return false;
+        var others = level.getEntitiesOfClass(PirateShip.class, new AABB(position, position).inflate(48), s -> s != ship && !s.isRemoved());
+        // Passenger Clearance: A low bridge must clear occupied seats as well as the build.
+        for (int i = 0; i < ship.getPassengers().size(); i++) {
+            var passenger = ship.getPassengers().get(i);
+            var offset = ship.seatPosition(passenger, i).subtract(ship.position());
+            var at = transform(position, yaw - ship.getYRot(), offset.x, offset.y, offset.z);
+            var box = passenger.getDimensions(net.minecraft.world.entity.Pose.STANDING).makeBoundingBox(at);
+            if (level.getBlockCollisions(null, box).iterator().hasNext()) return false;
+        }
+        // Sailing Clearance: Check captured geometry, not the empty rectangular docking volume.
+        for (var block : ship.blocks()) {
+            var cell = bounds(position, yaw, new AABB(block.pos()).move(-.5, 0, -.5)).deflate(1.0E-7);
+            for (var at : net.minecraft.core.BlockPos.betweenClosed(
+                    net.minecraft.core.BlockPos.containing(cell.minX, cell.minY, cell.minZ),
+                    net.minecraft.core.BlockPos.containing(cell.maxX, cell.maxY, cell.maxZ))) {
+                if (!level.getWorldBorder().isWithinBounds(at) || !level.hasChunkAt(at)) return false;
+                if (block.pos().getY() == 0 && !level.getFluidState(at.below()).is(net.minecraft.tags.FluidTags.WATER)) return false;
+            }
+            for (var box : block.state().getCollisionShape(level, ship.blockPosition()).toAabbs()) {
+                var world = bounds(position, yaw, box.move(block.pos().getX()-.5, block.pos().getY(), block.pos().getZ()-.5)).deflate(1.0E-7);
+                if (level.getBlockCollisions(null, world).iterator().hasNext()) return false;
+                for (var other : others) {
+                    if (other.getBoundingBox().intersects(world) && (other.docked() || intersects(other, world, other.position(), other.getYRot()))) return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static PirateShip supporting(Entity entity) {
         if (entity.isPassenger() || !entity.level().dimension().equals(Pirate.LEVEL)) return null;
         var feet = entity.getBoundingBox();

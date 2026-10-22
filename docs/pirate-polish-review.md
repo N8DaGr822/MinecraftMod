@@ -1,5 +1,25 @@
 # Pirate Seas polish review
 
+## Current status — October 22, 2026
+
+Dated reviews retain their original test evidence. Current scope includes walking decks, geometry-aware sailing clearance, pilot HUD, promotions, shared navigation, fifteen island types, home ports, refits, docked roaming/unloading, wages and NPC patrol boarding. See [live acceptance](two-client-acceptance.md). Autonomous sailing/docking, operational sails, persistent wreck salvage and general moving block entities remain future scope.
+
+## October 19 pilot feedback and lifecycle follow-through
+
+The captain now receives a dedicated HUD with authoritative hull/speed, shared cannon reload/readiness, selected ammunition and automatic fire-shot-to-solid-shot fallback. Crew feedback shows the per-volley cap, worker repair availability (including missing planks), and automatic-fire order/missing mate. Values refresh every five server ticks; dismounting, disconnecting, changing worlds/ships or a stale update hides the display. Text wraps at the available GUI width, below accessory coordinates and away from the action bar.
+
+The focused pilot-status regression passed for real ammo consumption, fallback, cooldown and harbor protection (`build/ship-hud-tests.log`). A separate native save/load replacement test passed for stale-support release, reacquisition, owner boarding and fresh input (`build/ship-reload-support-tests.log`). This establishes server behavior, not real reconnect or observer interpolation; the [current acceptance route](weekend-playtest-audit.md#tonights-focused-route) keeps those checks explicit.
+
+Final integrated verification: common/client compilation and all 40 ship GameTests passed (`build/ship-polish-oct19-tests.log`), including clearance, reload lifecycle, pilot status and the existing ship regressions. No JAR or version change was produced.
+
+## October 19 sailing clearance
+
+Sailing now checks the captured block collision shapes at the proposed position and heading instead of reserving the full rectangular docking volume. Empty diagonal corners and unused space above a short build no longer block travel. Actual hull/mast obstacles, occupied-seat headroom, other ship geometry, water beneath the platform, loaded chunks and world borders still constrain movement. Docking and initial construction retain their existing full-volume clearance checks.
+
+This reuses the existing conservative axis-aligned boxes around rotated blocks; very tight diagonal passages can still require extra clearance. No save format, propulsion values, release version or JAR changed. Live shoreline approaches and multiplayer visual agreement remain acceptance checks.
+
+Four new server regressions cover sailing under unused height while docking stays blocked, occupied-seat clearance, empty diagonal shore corners, actual bow and mast impacts, water support, other moving hulls, unloaded destinations and the world border. Common/client compilation and all 38 ship GameTests passed (`build/ship-clearance-tests.log`); `git diff --check` passed. This is targeted verification, not an unfiltered fullCheck or live gameplay sign-off.
+
 ## October 16 reliability fixes following the comparative audit
 
 Implemented the five reproduced failures and the related deck-menu/client-interpolation corrections. The historical audit below records the original failures; they are now permanent regression cases rather than temporary probes.
@@ -185,7 +205,7 @@ The requested harbor services, compact menus, paid officer recovery, renown/infa
 1. **Complete foundation playtesting before further expansion.** Run the two-player circuit below, especially ship conversion, cargo, saving and crew. Automated tests do not establish a comfortable sailing or multiplayer experience.
 2. **Presentation and pacing.** Ship, harbor and shore menus now fit a 312x232 panel with tabs or paginated text. Check actual rendering at the minimum 320x240 scaled viewport, HUD overlap, island repetition, nine-minute study times and encounter frequency.
 3. **Exceptional entity removal.** Sinking has paid named-officer rescue and ordinary rehiring. Garrick's pre-recruitment captive identity still has no automatic recovery if an administrator or another mod deletes the captive.
-4. **Optional expansion beyond this request.** Formal faction promotions, shared-party navigation, faction skirmishes, additional island templates, home-port management, advanced ship classes, roaming/boarding crew and morale/wages remain future scope. Territory control provides ownership and services; it does not implement block-protection permissions. Moving decks retain seated sailing.
+4. **Optional expansion beyond this request.** Promotions, shared navigation, skirmishes, fifteen island types, home ports, refits, roaming crew, wages, docked unloading and NPC patrol boarding are implemented. Autonomous sailing/docking and richer crew stories remain future scope. Territory control does not implement general block-protection permissions. Moving decks support standing players; live multiplayer acceptance remains open.
 
 ## Two-player acceptance circuit
 

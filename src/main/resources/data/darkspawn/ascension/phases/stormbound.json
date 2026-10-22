@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "id": "stormbound",
+  "name": "Stormbound",
+  "breaks": 800,
+  "cycle": 20,
+  "pool": [
+    {
+      "resource": 0,
+      "weight": 2
+    },
+    {
+      "resource": 1,
+      "weight": 2
+    },
+    {
+      "resource": 3,
+      "weight": 3
+    },
+    {
+      "resource": 4,
+      "weight": 2
+    },
+    {
+      "resource": 5,
+      "weight": 3
+    },
+    {
+      "resource": 6,
+      "weight": 4
+    },
+    {
+      "resource": 7,
+      "weight": 3
+    },
+    {
+      "resource": 11,
+      "weight": 3
+    },
+    {
+      "resource": 12,
+      "weight": 2
+    },
+    {
+      "resource": 13,
+      "weight": 2
+    },
+    {
+      "resource": 14,
+      "weight": 1
+    }
+  ],
+  "guaranteed": [
+    {
+      "offset": 0,
+      "resource": 0
+    },
+    {
+      "offset": 1,
+      "resource": 1
+    },
+    {
+      "offset": 2,
+      "resource": 6
+    },
+    {
+      "offset": 3,
+      "resource": 5
+    },
+    {
+      "offset": 4,
+      "resource": 7
+    },
+    {
+      "offset": 5,
+      "resource": 4
+    }
+  ],
+  "objectives": [
+    {
+      "id": "rods",
+      "item": "minecraft:lightning_rod",
+      "count": 4
+    },
+    {
+      "id": "glass",
+      "item": "minecraft:glass",
+      "count": 32
+    },
+    {
+      "id": "roof",
+      "item": "minecraft:stone_bricks",
+      "count": 64
+    }
+  ],
+  "encounters": [
+    "storm_guardian"
+  ],
+  "rewards": [
+    {
+      "id": "stormbound_redstone",
+      "item": "minecraft:redstone",
+      "count": 32
+    },
+    {
+      "id": "stormbound_diamonds",
+      "item": "minecraft:diamond",
+      "count": 6
+    },
+    {
+      "id": "stormbound_obsidian",
+      "item": "minecraft:obsidian",
+      "count": 8
+    }
+  ]
+}

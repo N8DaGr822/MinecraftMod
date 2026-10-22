@@ -186,6 +186,11 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12));
 	}
 
+    // Event Isolation: Native creature attacks cannot recruit or hurt bystanders.
+    public void markEncounter(String tag) { addTag(tag); xpReward = 0; setPersistenceRequired(); setCanPickUpLoot(false); }
+    @Override public void setTarget(LivingEntity target) { super.setTarget(!RegionalEncounters.combatant(this) || RegionalEncounters.canTarget(this, target) ? target : null); }
+    @Override public boolean canAttack(LivingEntity target) { return (!RegionalEncounters.combatant(this) || RegionalEncounters.canTarget(this, target)) && super.canAttack(target); }
+
 	@Override public boolean canBreatheUnderwater() { return kind != null && (kind.movement == RegionalKind.Move.WATER || kind == RegionalKind.BOGLING) || super.canBreatheUnderwater(); }
 	@Override public boolean checkSpawnObstruction(LevelReader level) { return kind.movement == RegionalKind.Move.WATER ? level.isUnobstructed(this) : super.checkSpawnObstruction(level); }
 	@Override public boolean onClimbable() { return entityData.get(CLIMBING); }
@@ -203,6 +208,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 
 	@Override protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
+        if (RegionalEncounters.combatant(this)) { RegionalEncounters.tickMob(this); if (kind == RegionalKind.SPORELING || isRemoved()) return; }
 		if (attackCooldown > 0) { attackCooldown--; }
 		if (blinkCooldown > 0) { blinkCooldown--; }
 		if (pulseCooldown > 0) { pulseCooldown--; }
@@ -272,7 +278,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 	}
 
 	private boolean validPrey(LivingEntity target) {
-		return target.isAlive() && !(target instanceof RegionalMob ally && ally.kind.region == kind.region)
+		return (!RegionalEncounters.combatant(this) || RegionalEncounters.canTarget(this, target)) && target.isAlive() && !(target instanceof RegionalMob ally && ally.kind.region == kind.region)
 				&& (!(target instanceof Player player) || !player.isCreative() && !player.isSpectator());
 	}
 	private boolean lookingAt(LivingEntity target) {
@@ -361,7 +367,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 		if (kind.behavior == RegionalKind.Behavior.MAGMA || kind.behavior == RegionalKind.Behavior.MYCELIUM) {
 			patchPosition = mark; patchTicks = 100;
 		}
-		if (kind.behavior == RegionalKind.Behavior.DARK_BURST) { discard(); }
+		if (kind.behavior == RegionalKind.Behavior.DARK_BURST && !RegionalEncounters.combatant(this)) { discard(); }
 		mark = null;
 	}
 	private void tickLeap(ServerLevel level) {
@@ -586,6 +592,8 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 	}
 
 	@Override public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (RegionalEncounters.combatant(this) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
+            && (!(source.getEntity() instanceof LivingEntity attacker) || !RegionalEncounters.canTarget(this, attacker))) return false;
 		if (kind == RegionalKind.TYRANT_SKULL) { return source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && super.hurtServer(level, source, amount); }
 		boolean projectile = source.is(DamageTypeTags.IS_PROJECTILE);
 		if (projectile && kind == RegionalKind.SHARDLING && blinkCooldown == 0 && blink(level)) { return false; }
@@ -605,7 +613,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 		}
 		boolean hit = super.hurtServer(level, source, amount);
 		if (hit && source.getEntity() instanceof LivingEntity attacker) {
-			if (kind.behavior == RegionalKind.Behavior.HIVE || kind.behavior == RegionalKind.Behavior.EGG) {
+			if (!RegionalEncounters.combatant(this) && (kind.behavior == RegionalKind.Behavior.HIVE || kind.behavior == RegionalKind.Behavior.EGG)) {
 				for (RegionalMob ally : level.getEntitiesOfClass(RegionalMob.class, getBoundingBox().inflate(12))) {
 					if (ally.kind.region == kind.region && ally.kind.temper != RegionalKind.Temper.PASSIVE && ally.hasLineOfSight(attacker)) { ally.setTarget(attacker); }
 				}
@@ -633,6 +641,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 		super.die(source);
 	}
 	@Override protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
+		if (RegionalEncounters.combatant(this)) return;
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
 		if (!carried.isEmpty()) { spawnAtLocation(level, carried); carried = ItemStack.EMPTY; }
 		if (!killedByPlayer || helper || kind == RegionalKind.TYRANT_SKULL || kind == RegionalKind.BABAS_FAMILIAR) { return; }
@@ -680,6 +689,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 	}
 	@Override protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+        if (RegionalEncounters.combatant(this)) xpReward = 0;
 		claimed = input.getBooleanOr("darkspawn_claimed", false); called = input.getBooleanOr("darkspawn_called", false);
 		reconstructed = input.getBooleanOr("darkspawn_reconstructed", false); helper = input.getBooleanOr("darkspawn_helper", false);
 		expiresAt = input.getLongOr("darkspawn_expires", 0); growthTicks = Math.clamp(input.getIntOr("darkspawn_growth", 0), 0, 1200);

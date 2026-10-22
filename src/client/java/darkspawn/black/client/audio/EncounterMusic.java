@@ -56,7 +56,8 @@ public final class EncounterMusic {
 				}
 			}
 		}
-		String next = boss == null ? null : "music." + BuiltInRegistries.ENTITY_TYPE.getKey(boss.getType()).getPath() + "." + Math.clamp(CreatureAudio.phase(boss), 1, 3);
+		String next = boss == null ? null : "music." + (boss instanceof darkspawn.black.oneblock.AscensionGuardianEntity guardian
+            ? darkspawn.black.oneblock.AscensionGuardianEntity.musicTheme(guardian.chapter()) : BuiltInRegistries.ENTITY_TYPE.getKey(boss.getType()).getPath()) + "." + Math.clamp(CreatureAudio.phase(boss), 1, 3);
 		boolean changed = !java.util.Objects.equals(next, key);
 		// A resource reload or muted start can discard a channel. Retry only when audible.
 		boolean missing = key != null && client.options.getSoundSourceVolume(SoundSource.MUSIC) > 0

@@ -15,11 +15,12 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public final class OneBlockCore extends Block {
-	public static final IntegerProperty RESOURCE = IntegerProperty.create("resource", 0, 19);
+	public static final IntegerProperty RESOURCE = IntegerProperty.create("resource", 0, 25);
 	public OneBlockCore(Properties properties) { super(properties); registerDefaultState(stateDefinition.any().setValue(RESOURCE, 0)); }
 	@Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) { builder.add(RESOURCE); }
 	@Override protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
-		return OneBlock.island(player.level()) && pos.equals(OneBlock.CORE_POS) ? resource(state).getDestroyProgress(player, level, pos) : 0;
+		return OneBlock.island(player.level()) && pos.equals(OneBlock.CORE_POS) || Ascension.island(player.level()) && Ascension.corePosition(pos)
+			? resource(state).getDestroyProgress(player, level, pos) : 0;
 	}
 	@Override protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
 		var resource = resource(state); var tool = params.getOptionalParameter(LootContextParams.TOOL);

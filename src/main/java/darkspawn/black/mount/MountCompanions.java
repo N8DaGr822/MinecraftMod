@@ -105,6 +105,7 @@ public final class MountCompanions {
             if (player.containerMenu instanceof MountMenu menu && menu.mount == mount) player.closeContainer();
     }
     public static boolean capture(ServerPlayer player, PrototypeMount mount, ItemStack capsule) {
+        if (mount instanceof GroundWalker && !mount.onGround()) return false;
         if (mount instanceof Thalassar) return false; // Unique Bond: Only the conch may store this companion.
         if (!capsule.is(CAPSULE) || !token(capsule).isEmpty() || !mount.isOwnedBy(player) || !mount.care.accessible(player)
                 || !mount.care.available() || mount.isLeashed()) return false;
@@ -121,7 +122,8 @@ public final class MountCompanions {
         mount.setHealth(Math.max(1, mount.getMaxHealth() / 4)); mount.clearFire(); mount.removeAllEffects();
         String id = store(mount, true);
         var owner = level.getServer().getPlayerList().getPlayer(mount.getOwnerReference().getUUID());
-        if (owner != null && OneBlock.island(owner.level()) == OneBlock.island(level)) giveToken(owner, id, mount.getName(), true);
+        if (owner != null && OneBlock.island(owner.level()) == OneBlock.island(level)
+                && darkspawn.black.oneblock.Ascension.island(owner.level()) == darkspawn.black.oneblock.Ascension.island(level)) giveToken(owner, id, mount.getName(), true);
         mount.discard();
     }
     private static void giveToken(ServerPlayer player, String id, Component name, boolean recovery) {
@@ -139,6 +141,7 @@ public final class MountCompanions {
         }
     }
     public static boolean safePlacement(ServerLevel level, PrototypeMount mount) {
+        if ((mount instanceof MagicCarpet || mount instanceof Aircraft || mount instanceof GroundWalker) && !MagicCarpet.allowedLevel(level)) return false;
         var bounds = mount.getBoundingBox(); var pos = mount.blockPosition();
         if (!level.hasChunkAt(pos) || !level.getWorldBorder().isWithinBounds(bounds) || bounds.minY < level.getMinY()
                 || bounds.maxY > level.getMaxY() || !level.noCollision(mount)) return false;

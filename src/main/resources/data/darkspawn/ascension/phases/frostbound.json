@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "id": "frostbound",
+  "name": "Frostbound",
+  "breaks": 1000,
+  "cycle": 24,
+  "pool": [
+    {
+      "resource": 0,
+      "weight": 2
+    },
+    {
+      "resource": 1,
+      "weight": 2
+    },
+    {
+      "resource": 4,
+      "weight": 2
+    },
+    {
+      "resource": 5,
+      "weight": 2
+    },
+    {
+      "resource": 6,
+      "weight": 2
+    },
+    {
+      "resource": 7,
+      "weight": 2
+    },
+    {
+      "resource": 11,
+      "weight": 2
+    },
+    {
+      "resource": 13,
+      "weight": 2
+    },
+    {
+      "resource": 14,
+      "weight": 2
+    },
+    {
+      "resource": 16,
+      "weight": 2
+    },
+    {
+      "resource": 20,
+      "weight": 4
+    }
+  ],
+  "guaranteed": [
+    {
+      "offset": 0,
+      "resource": 0
+    },
+    {
+      "offset": 1,
+      "resource": 1
+    },
+    {
+      "offset": 2,
+      "resource": 4
+    },
+    {
+      "offset": 3,
+      "resource": 5
+    },
+    {
+      "offset": 4,
+      "resource": 6
+    },
+    {
+      "offset": 5,
+      "resource": 7
+    },
+    {
+      "offset": 6,
+      "resource": 11
+    },
+    {
+      "offset": 7,
+      "resource": 13
+    },
+    {
+      "offset": 8,
+      "resource": 14
+    },
+    {
+      "offset": 9,
+      "resource": 16
+    },
+    {
+      "offset": 10,
+      "resource": 20
+    }
+  ],
+  "objectives": [
+    {
+      "id": "snow_block",
+      "item": "minecraft:snow_block",
+      "count": 64
+    },
+    {
+      "id": "glass",
+      "item": "minecraft:glass",
+      "count": 32
+    },
+    {
+      "id": "lantern",
+      "item": "minecraft:lantern",
+      "count": 8
+    }
+  ],
+  "encounters": [
+    "frostbound_guardian"
+  ],
+  "rewards": [
+    {
+      "id": "frostbound_packed_ice",
+      "item": "minecraft:packed_ice",
+      "count": 64
+    },
+    {
+      "id": "frostbound_snow_block",
+      "item": "minecraft:snow_block",
+      "count": 64
+    },
+    {
+      "id": "frostbound_coal",
+      "item": "minecraft:coal",
+      "count": 32
+    },
+    {
+      "id": "frostbound_diamond",
+      "item": "minecraft:diamond",
+      "count": 4
+    }
+  ]
+}

@@ -33,7 +33,8 @@ public final class MountCareScreen extends AbstractContainerScreen<MountMenu> {
         super.containerTick();
         buttons.forEach((id, button) -> { button.visible = id == MountMenu.ACCEPT ? !menu.owner() : menu.owner(); button.active = menu.getCarried().isEmpty(); });
         buttons.get(MountMenu.FOLLOW).active &= !menu.following(); buttons.get(MountMenu.STAY).active &= menu.following() || menu.breeding();
-        buttons.get(MountMenu.BREED).active &= !menu.baby() && !menu.following() && !menu.breeding() && !menu.pending();
+        buttons.get(MountMenu.BREED).visible = menu.breedable();
+        buttons.get(MountMenu.BREED).active &= menu.breedable() && !menu.baby() && !menu.following() && !menu.breeding() && !menu.pending();
         buttons.get(MountMenu.OFFER).active &= menu.selectedId() >= 0 && !menu.pending() && !menu.breeding();
         buttons.get(MountMenu.CANCEL).active &= menu.pending();
         buttons.get(MountMenu.ACCEPT).active &= menu.pending();

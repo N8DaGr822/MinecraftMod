@@ -17,6 +17,14 @@ public final class OneBlockProgress extends SavedData {
 		Codec.intRange(0, 19).fieldOf("resource").forGetter(value -> value.resource)
 	).apply(instance, OneBlockProgress::new));
 	public static final SavedDataType<OneBlockProgress> TYPE = new SavedDataType<>(Darkspawn.id("oneblock"), OneBlockProgress::new, CODEC, null);
+	// Ascension Chapters: Widen only team storage; the original shared island keeps its six-phase save contract.
+	public static final Codec<OneBlockProgress> ASCENSION_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		Codec.intRange(0, 11).fieldOf("phase").forGetter(value -> value.phase),
+		Codec.intRange(0, Integer.MAX_VALUE).fieldOf("breaks").forGetter(value -> value.breaks),
+		Codec.intRange(0, Integer.MAX_VALUE).fieldOf("total").forGetter(value -> value.total),
+		Codec.BOOL.fieldOf("initialized").forGetter(value -> value.initialized),
+		Codec.intRange(0, 25).fieldOf("resource").forGetter(value -> value.resource)
+	).apply(instance, OneBlockProgress::new));
 	public int phase, breaks, total, resource;
 	public boolean initialized;
 	public long lastBreakTick = Long.MIN_VALUE;

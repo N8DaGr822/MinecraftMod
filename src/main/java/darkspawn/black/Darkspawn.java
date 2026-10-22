@@ -34,9 +34,13 @@ public class Darkspawn implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		darkspawn.black.oneblock.AscensionProtection.initialize();
 		ServerTuning.initialize();
         darkspawn.black.audio.DarkspawnSounds.initialize();
 		InventoryUpgradeItem.register();
+		darkspawn.black.inventory.IngredientPouchItem.register();
+        darkspawn.black.inventory.QuiverItem.register();
+        darkspawn.black.inventory.ExplorerPackItem.register();
 		InventoryExpansion.initialize();
         darkspawn.black.inventory.Accessories.initialize();
         darkspawn.black.inventory.InventoryHub.initialize();
@@ -73,18 +77,23 @@ public class Darkspawn implements ModInitializer {
         darkspawn.black.ecosystem.HeartwoodGrove.initialize();
         darkspawn.black.ecosystem.WorldVictoryCondition.initialize();
 		darkspawn.black.oneblock.OneBlock.initialize();
+		darkspawn.black.oneblock.Ascension.initialize();
 		// Recovery Inventory: Restore OneBlock profiles before delivering companion tokens on join.
 		darkspawn.black.mount.MountCompanions.initialize();
 		darkspawn.black.forsaken.Forsaken.initialize();
 		darkspawn.black.pirate.Pirate.initialize();
 		darkspawn.black.starter.TestingCamp.initialize();
 		darkspawn.black.ecosystem.TaigaEcosystem.initialize();
+		darkspawn.black.ecosystem.WolfHunt.initialize();
+		darkspawn.black.ecosystem.RegionalEncounters.initialize();
 		darkspawn.black.ecosystem.EcosystemEffects.initialize();
 		darkspawn.black.ecosystem.RegionalEcosystems.initialize();
 		darkspawn.black.ecosystem.RegionalAtmosphere.initialize();
 		darkspawn.black.worldgen.BossLandmarkStructure.initialize();
 		darkspawn.black.worldgen.LandmarkCompass.initialize();
         darkspawn.black.worldgen.DiscoveryCharts.initialize();
+        darkspawn.black.worldgen.ExplorationFinds.initialize();
+        darkspawn.black.equipment.ThematicEnchantments.initialize();
 		darkspawn.black.journal.Journal.initialize();
 		PayloadTypeRegistry.serverboundPlay().register(SortInventoryPayload.TYPE, SortInventoryPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(SortInventoryPayload.TYPE,

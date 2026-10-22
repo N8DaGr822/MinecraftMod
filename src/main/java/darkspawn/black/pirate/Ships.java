@@ -38,6 +38,9 @@ public final class Ships {
 		EntityType.Builder.<Cannonball>of(Cannonball::new, MobCategory.MISC).sized(.35F,.35F).clientTrackingRange(12).updateInterval(1).noLootTable()
 			.build(ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id("cannonball"))));
 	public static final MenuType<ShipMenu> MENU = Registry.register(BuiltInRegistries.MENU, Darkspawn.id("ship"), new MenuType<>(ShipMenu::new, FeatureFlags.VANILLA_SET));
+    public static final EntityType<BoardingDefender> BOARDING_DEFENDER = Registry.register(BuiltInRegistries.ENTITY_TYPE, Darkspawn.id("boarding_defender"),
+        EntityType.Builder.<BoardingDefender>of(BoardingDefender::new, MobCategory.MONSTER).sized(.6F,1.99F).clientTrackingRange(8).noLootTable()
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id("boarding_defender"))));
 	private Ships() { }
 	private static Block block(String name) {
 		return Registry.register(BuiltInRegistries.BLOCK, Darkspawn.id(name), new ShipStationBlock(BlockBehaviour.Properties.of()
@@ -46,8 +49,11 @@ public final class Ships {
 	private static Item blockItem(String name, Block block) { return Registry.register(BuiltInRegistries.ITEM,Darkspawn.id(name),new BlockItem(block,new Item.Properties().setId(ResourceKey.create(Registries.ITEM,Darkspawn.id(name))).useBlockDescriptionPrefix())); }
 	private static Item item(String name) { return Registry.register(BuiltInRegistries.ITEM,Darkspawn.id(name),new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM,Darkspawn.id(name))))); }
 	public static void initialize() {
+        DockedUnloading.initialize();
+        Boarding.initialize();
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> { entries.accept(SHIPYARD_ITEM); entries.accept(HELM_ITEM); entries.accept(CANNON_ITEM); entries.accept(SHOT); entries.accept(FIRE_SHOT); entries.accept(CHAIN_SHOT); entries.accept(PIERCING_SHOT); });
 		PayloadTypeRegistry.serverboundPlay().register(ShipControlsPayload.TYPE,ShipControlsPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ShipStatusPayload.TYPE,ShipStatusPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(ShipIdentityPayload.TYPE,ShipIdentityPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(ShipIdentityPayload.TYPE,(payload,context)->{
             if(context.player().containerMenu instanceof ShipMenu menu&&menu.containerId==payload.menuId()&&menu.getStateId()==payload.revision())menu.rename(context.player(),payload.name());

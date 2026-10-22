@@ -15,7 +15,7 @@ public final class MountMenu extends AbstractContainerMenu {
     public static final int FOLLOW = 0, STAY = 1, BREED = 2, NEXT_PLAYER = 3, OFFER = 4, ACCEPT = 5, CANCEL = 6;
     final PrototypeMount mount;
     private final Player viewer;
-    private final SimpleContainerData data = new SimpleContainerData(7);
+    private final SimpleContainerData data = new SimpleContainerData(8);
     private UUID selected;
     public MountMenu(int id, Inventory inventory) { this(id, inventory, null); }
     public MountMenu(int id, Inventory inventory, PrototypeMount mount) {
@@ -30,6 +30,7 @@ public final class MountMenu extends AbstractContainerMenu {
     }
     public boolean owner() { return mount == null ? data.get(0) != 0 : mount.isOwnedBy(viewer); }
     public boolean following() { return data.get(1) != 0; }
+    public boolean breedable() { return data.get(7) == 0; }
     public boolean baby() { return data.get(2) != 0; }
     public boolean breeding() { return data.get(3) != 0; }
     public boolean pending() { return data.get(4) != 0; }
@@ -37,13 +38,13 @@ public final class MountMenu extends AbstractContainerMenu {
     private void refresh() {
         if (mount == null) return;
         data.set(0, mount.isOwnedBy(viewer) ? 1 : 0); data.set(1, mount.care.following ? 1 : 0);
-        data.set(2, mount.isBaby() ? 1 : 0); data.set(3, mount.care.breeding() ? 1 : 0);
+        data.set(7, mount instanceof MagicCarpet || mount instanceof Aircraft || mount instanceof GroundWalker ? 1 : 0); data.set(2, mount.isBaby() ? 1 : 0); data.set(3, mount.care.breeding() ? 1 : 0);
         data.set(4, mount.care.offerPending() ? 1 : 0);
         var player = selected == null ? null : mount.level().getPlayerByUUID(selected);
         int entityId = player == null ? -1 : player.getId(); data.set(5, entityId & 65535); data.set(6, entityId >>> 16);
     }
     @Override public void broadcastChanges() { refresh(); super.broadcastChanges(); }
-    @Override public boolean stillValid(Player player) { return mount == null || !(mount instanceof Thalassar) && mount.care.accessible(player) && !mount.isVehicle(); }
+    @Override public boolean stillValid(Player player) { return mount == null || !(mount instanceof Thalassar) && !(mount instanceof Aircraft) && !(mount instanceof GroundWalker) && mount.care.accessible(player) && !mount.isVehicle(); }
     @Override public boolean clickMenuButton(Player player, int action) {
         if (!(player instanceof ServerPlayer server) || mount == null || !stillValid(player) || !getCarried().isEmpty()) return false;
         boolean ok = false;

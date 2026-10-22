@@ -35,7 +35,7 @@ public final class MountCare {
             && (mount.isOwnedBy(player) || offeredTo(player));
     }
     public void setFollowing(boolean value) {
-        following = value; loveUntil = 0;
+        following = value && !(mount instanceof GroundWalker); loveUntil = 0;
         mount.getNavigation().stop();
         // Stay Command: Clear the movement controller's last waypoint as well as the path.
         mount.getMoveControl().setWantedPosition(mount.getX(), mount.getY(), mount.getZ(), 0);
@@ -87,7 +87,7 @@ public final class MountCare {
         return delta.normalize().scale(.65).yRot(mount.getYRot() * (float)(Math.PI / 180));
     }
     private boolean readyParent() {
-        return mount.isTamed() && !mount.isBaby() && !following && !mount.isVehicle() && !mount.isPassenger()
+        return !(mount instanceof MagicCarpet) && !(mount instanceof Aircraft) && !(mount instanceof GroundWalker) && mount.isTamed() && !mount.isBaby() && !following && !mount.isVehicle() && !mount.isPassenger()
             && !offerPending() && mount.isAlive() && mount.getHealth() >= mount.getMaxHealth()
             && mount.level().getGameTime() >= breedAfter;
     }

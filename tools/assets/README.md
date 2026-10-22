@@ -1,5 +1,7 @@
 # Creature asset tools
 
+`python tools/assets/preview-ground-walker.py` inspects the crafted mech’s actual Java cuboids, checks idle/walk horizontal bounds at every yaw and writes `build/ground-walker-preview.png`. It is a flat-color geometry check; native iron texture, camera and multiplayer appearance require live acceptance.
+
 Each completed creature has an editable `art/blockbench/<id>/<PascalCase>.bbmodel` project with an embedded PNG, plus matching geometry, animation JSON, and texture under `src/main/resources/assets/darkspawn/`. Open the project using Blockbench's GeckoLib plugin. Preserve bone names and animation names used by the controllers.
 
 - `node tools/assets/catalog.cjs` refreshes the full registered-creature inventory; catalog presence does not imply completed artwork.

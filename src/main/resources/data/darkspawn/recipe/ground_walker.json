@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "IPI",
+    "RBR",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "R": "minecraft:redstone",
+    "B": "minecraft:iron_block"
+  },
+  "result": {
+    "id": "darkspawn:ground_walker",
+    "count": 1
+  }
+}

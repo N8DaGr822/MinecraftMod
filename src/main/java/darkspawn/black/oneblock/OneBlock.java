@@ -38,7 +38,8 @@ public final class OneBlock {
 	public static final Block[] RESOURCES = { Blocks.DIRT, Blocks.OAK_LOG, Blocks.GRASS_BLOCK, Blocks.STONE,
 		Blocks.COAL_ORE, Blocks.IRON_ORE, Blocks.COPPER_ORE, Blocks.SAND, Blocks.GRAVEL, Blocks.CLAY, Blocks.MOSS_BLOCK,
 		Blocks.REDSTONE_ORE, Blocks.LAPIS_ORE, Blocks.GOLD_ORE, Blocks.DIAMOND_ORE, Blocks.NETHERRACK,
-		Blocks.NETHER_QUARTZ_ORE, Blocks.SOUL_SAND, Blocks.GLOWSTONE, Blocks.END_STONE };
+		Blocks.NETHER_QUARTZ_ORE, Blocks.SOUL_SAND, Blocks.GLOWSTONE, Blocks.END_STONE,
+		Blocks.SNOW_BLOCK, Blocks.PRISMARINE, Blocks.AMETHYST_CLUSTER, Blocks.PURPUR_BLOCK, Blocks.OBSIDIAN, Blocks.ANCIENT_DEBRIS };
 	private static final int[][] POOLS = { {0,0,0,1,1,1,2}, {3,3,3,4,4,5,6,8}, {0,2,7,7,8,9,10},
 		{3,4,5,5,11,12,13,14}, {15,15,15,16,17,18}, {19,19,14,13,12,16,18} };
 	public static final OneBlockCore CORE = Registry.register(BuiltInRegistries.BLOCK, Darkspawn.id("oneblock_core"),
@@ -91,30 +92,43 @@ public final class OneBlock {
 	}
 
 	public static void mined(ServerPlayer player) {
-		var level = player.level(); var data = progress(level);
+		mined(player, progress(player.level()), CORE_POS);
+	}
+	static void mined(ServerPlayer player, OneBlockProgress data, BlockPos core) {
+		var level = player.level();
 		if (data.lastBreakTick == level.getGameTime()) return;
 		data.lastBreakTick = level.getGameTime();
 		if (!player.preventsBlockDrops()) {
 			data.mined();
-			// Renewable Essentials: Every phase continues to supply dirt/wood and samples previous pools.
-			int phase = level.getRandom().nextInt(4) == 0 ? level.getRandom().nextInt(data.phase + 1) : data.phase;
-			data.resource = data.total % 10 == 0 ? 0 : data.total % 10 == 1 ? 1 : POOLS[phase][level.getRandom().nextInt(POOLS[phase].length)];
-			if (data.total % 100 == 0) supply(level, data.phase);
-			if (data.total % 50 == 0) creature(level, data.phase);
+			data.resource = nextResource(level, data);
+			milestoneRewards(level, data, core);
 		}
-		level.setBlockAndUpdate(CORE_POS, CORE.defaultBlockState().setValue(OneBlockCore.RESOURCE, data.resource));
+		level.setBlockAndUpdate(core, CORE.defaultBlockState().setValue(OneBlockCore.RESOURCE, data.resource));
+	}
+
+	static int nextResource(ServerLevel level, OneBlockProgress data) {
+		// Renewable Essentials: Every phase continues to supply dirt/wood and samples previous pools.
+		int phase = level.getRandom().nextInt(4) == 0 ? level.getRandom().nextInt(data.phase + 1) : data.phase;
+		return data.total % 10 == 0 ? 0 : data.total % 10 == 1 ? 1 : POOLS[phase][level.getRandom().nextInt(POOLS[phase].length)];
+	}
+	static void milestoneRewards(ServerLevel level, OneBlockProgress data, BlockPos core) {
+		if (data.total % 100 == 0) supply(level, data.phase, core);
+		if (data.total % 50 == 0) creature(level, data.phase, core);
 	}
 
 	private static BlockPos space(ServerLevel level) {
+		return space(level, CORE_POS);
+	}
+	static BlockPos space(ServerLevel level, BlockPos core) {
 		for (int radius = 1; radius <= 4; radius++) for (int x = -radius; x <= radius; x++) for (int z = -radius; z <= radius; z++) {
-			var pos = CORE_POS.offset(x, 1, z);
+			var pos = core.offset(x, 1, z);
 			if ((x != 0 || z != 0) && level.getBlockState(pos.below()).isSolidRender() && level.isEmptyBlock(pos) && level.isEmptyBlock(pos.above())
 				&& level.getEntities(null, new net.minecraft.world.phys.AABB(pos).expandTowards(0, 1, 0)).isEmpty()) return pos;
 		}
 		return null;
 	}
-	private static void supply(ServerLevel level, int phase) {
-		var pos = space(level); if (pos == null) return;
+	private static void supply(ServerLevel level, int phase, BlockPos core) {
+		var pos = space(level, core); if (pos == null) return;
 		level.setBlockAndUpdate(pos, Blocks.CHEST.defaultBlockState());
 		if (!(level.getBlockEntity(pos) instanceof ChestBlockEntity chest)) return;
 		chest.setItem(0, new ItemStack(Items.OAK_SAPLING, 2)); chest.setItem(1, new ItemStack(Items.WHEAT_SEEDS, 4)); chest.setItem(2, new ItemStack(Items.APPLE, 3));
@@ -126,9 +140,9 @@ public final class OneBlock {
 		if (phase >= 5) { chest.setItem(13, new ItemStack(Items.ENDER_PEARL, 2)); chest.setItem(14, new ItemStack(Items.OBSIDIAN, 4)); }
 		chest.setChanged();
 	}
-	private static void creature(ServerLevel level, int phase) {
-		if (level.getEntitiesOfClass(Mob.class, new net.minecraft.world.phys.AABB(CORE_POS).inflate(32)).size() >= 8) return;
-		var pos = space(level); if (pos == null) return;
+	static void creature(ServerLevel level, int phase, BlockPos core) {
+		if (level.getEntitiesOfClass(Mob.class, new net.minecraft.world.phys.AABB(core).inflate(32)).size() >= 8) return;
+		var pos = space(level, core); if (pos == null) return;
 		String[] passive = { "cow", "sheep", "chicken", "pig" };
 		String name = phase < 3 ? passive[level.getRandom().nextInt(passive.length)] : phase == 3 ? "zombie" : phase == 4 ? "zombified_piglin" : "enderman";
 		var type = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.withDefaultNamespace(name));
@@ -139,6 +153,9 @@ public final class OneBlock {
 	}
 
 	public static void request(ServerPlayer player, int action) {
+		// Network Requests: Ignore unknown actions and duplicate countdown requests before scanning safety conditions.
+		if (action < 0 || action > 1 || state(player).pendingTicks > 0) return;
+		if (Ascension.island(player.level())) { if (action == 0) Ascension.request(player, null); return; }
 		if (!safe(player)) { message(player, "unsafe"); return; }
 		if (action == 1 && island(player.level())) {
 			var data = progress(player.level());
@@ -147,10 +164,10 @@ public final class OneBlock {
 		}
 		if (action != 0 || state(player).pendingTicks > 0) return;
 		if (player.level().getServer().getLevel(LEVEL) == null) { message(player, "unavailable"); return; }
-		state(player).pendingTicks = TRAVEL_TICKS; state(player).departure = player.position();
+		state(player).pendingAscension = false; state(player).pendingTicks = TRAVEL_TICKS; state(player).departure = player.position();
 		message(player, "travelling"); sync(player);
 	}
-	private static boolean safe(ServerPlayer player) {
+	static boolean safe(ServerPlayer player) {
 		if (!player.isAlive() || player.isSpectator() || !player.onGround() || player.isPassenger() || player.isVehicle() || player.isSleeping()
 			|| player.isChangingDimension() || !player.connection.hasClientLoaded()
 			|| player.isFallFlying() || player.isUsingItem() || player.isOnFire() || player.isInWater() || state(player).hurtTicks > 0
@@ -167,7 +184,7 @@ public final class OneBlock {
 		var state = state(player); if (state.hurtTicks > 0) state.hurtTicks--;
 		if (state.pendingTicks == 0) return;
 		if (!safe(player) || state.departure == null || state.departure.distanceToSqr(player.position()) > .25) { cancel(player); return; }
-		if (--state.pendingTicks == 0) travel(player);
+		if (--state.pendingTicks == 0) { if (state.pendingAscension) Ascension.travel(player, state.pendingTeam); else travel(player); }
 	}
 	private static void cancel(ServerPlayer player) {
 		if (state(player).pendingTicks > 0) { state(player).pendingTicks = 0; message(player, "cancelled"); sync(player); }
@@ -180,15 +197,16 @@ public final class OneBlock {
 		return Vec3.atBottomCenterOf(CORE_POS.above());
 	}
 	public static boolean travel(ServerPlayer player) {
+		if (Ascension.island(player.level())) return false;
 		if (!safe(player)) return false;
 		var state = state(player); var server = player.level().getServer(); boolean entering = !island(player.level());
 		var destination = server.getLevel(entering ? LEVEL : state.returnLevel);
-		if (destination == null) { message(player, "unavailable"); return false; }
+		if (destination == null || Ascension.island(destination)) { message(player, "unavailable"); return false; }
 		Vec3 pos = entering ? arrival(destination) : state.returnPos;
 		if (!entering && (!destination.noCollision(player, player.getBoundingBox().move(pos.subtract(player.position())))
 			|| !destination.getBlockState(BlockPos.containing(pos).below()).isSolidRender() || !destination.getFluidState(BlockPos.containing(pos)).isEmpty())) {
 			var fallback = TeleportTransition.createDefault(player, TeleportTransition.DO_NOTHING);
-			if (island(fallback.newLevel())) { message(player, "return_blocked"); return false; }
+			if (island(fallback.newLevel()) || Ascension.island(fallback.newLevel())) { message(player, "return_blocked"); return false; }
 			destination = fallback.newLevel(); pos = fallback.position();
 		}
 		var origin = player.level(); var oldPos = player.position(); float yaw = player.getYRot(), pitch = player.getXRot();
@@ -214,5 +232,5 @@ public final class OneBlock {
 		var data = progress(level);
 		ServerPlayNetworking.send(player, new OneBlockStatusPayload(data.phase, data.breaks, state(player).pendingTicks));
 	}
-	public static void message(ServerPlayer player, String name) { player.sendOverlayMessage(Component.translatable("message.darkspawn.oneblock_" + name)); }
+	public static void message(ServerPlayer player, String name) { AscensionGuide.feedback(player,Component.translatable("message.darkspawn.oneblock_" + name).getString()); player.sendOverlayMessage(Component.translatable("message.darkspawn.oneblock_" + name)); }
 }

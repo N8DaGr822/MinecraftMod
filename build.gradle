@@ -63,10 +63,19 @@ test {
 }
 
 def gameTestFilter = providers.gradleProperty('gameTestFilter')
+def gameTestRunDir = providers.gradleProperty('gameTestRunDir')
+def operationsDrill = providers.gradleProperty('operationsDrill')
+// Loom supplies the process working directory from its run configuration at execution time.
+if (gameTestRunDir.isPresent()) loom.runs.named('gameTest') { runDir(gameTestRunDir.get()) }
 tasks.named('runGameTest') {
 	// Avoid competing Minecraft/JUnit processes on development machines.
 	mustRunAfter tasks.named('test')
 	jvmArgs '-XX:ActiveProcessorCount=2'
+	// Recovery drills use an isolated runtime world while retaining the normal incremental compilation output.
+	if (operationsDrill.isPresent()) {
+		if (!gameTestRunDir.isPresent() || !(operationsDrill.get() in ['seed', 'restore'])) throw new GradleException('operationsDrill requires an isolated gameTestRunDir and seed or restore.')
+		systemProperty 'darkspawn.operationsDrill', operationsDrill.get()
+	}
 	if (gameTestFilter.isPresent()) {
 		if (gameTestFilter.get().isBlank()) throw new GradleException('gameTestFilter must not be blank')
 		systemProperty 'fabric-api.gametest.filter', gameTestFilter.get()

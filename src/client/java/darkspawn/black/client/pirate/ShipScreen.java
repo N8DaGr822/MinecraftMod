@@ -33,14 +33,16 @@ public final class ShipScreen extends AbstractContainerScreen<ShipMenu> {
     }
     @Override protected void init() {
         super.init();orders.clear();tabs.clear();
-        String[] labels={"Sail","Crew","Fit","Care"};
-        for(int i=0;i<4;i++){final int selected=i;tabs.add(addRenderableWidget(UiTheme.button(Component.literal(labels[i]),b->{page=selected;update();}).bounds(leftPos+180+i*31,topPos+21,30,18).build()));}
+        String[] labels={"Sail","Crew","Fit","Care","Job"};
+        int tabX=180;int[] tabWidths={24,29,20,28,23};
+        for(int i=0;i<5;i++){final int selected=i;tabs.add(addRenderableWidget(UiTheme.button(Component.literal(labels[i]),b->{page=selected;update();}).bounds(leftPos+tabX,topPos+21,tabWidths[i]-1,18).build()));tabX+=tabWidths[i];}
         order(0,0,ShipMenu.BUILD,"Build ship","105 oak planks and one helm; clear loaded water 20 blocks south of the shipyard.");
         order(0,1,ShipMenu.LAUNCH,"Launch","Captures the permitted build and seats up to four players. Clear crew seat headroom.");
         order(0,2,ShipMenu.DOCK,"Dock","Stop and extinguish fires in open water. Restores blocks along the nearest cardinal direction.");
         order(0,3,ShipMenu.UPGRADE,"Expand platform","148 then 212 oak planks. Captain/Veteran milestones unlock larger platforms; see Journal.");
         order(0,4,ShipMenu.FIRE_ORDER,"Auto fire","First mate fires at your selected target. Default is hold fire.");
         order(0,5,ShipMenu.TARGET,"Next target","Cycle nearby vessels. Harbor protection and world PvP rules apply.");
+        order(0,6,ShipMenu.BOARDING,"Board patrol","Open a party for the nearest ordinary NPC patrol your ship disabled to 25% hull, within 24 blocks. Solo or up to four opted-in players. Chat explains join/start; starting moves everyone aboard.");
         String[] crew={"First mate","Shipworker","Cannoneer","Lookout","Mara: navigator","Bram: supplies","Nell: singer"};
         int[] actions={ShipMenu.MATE,ShipMenu.WORKER,ShipMenu.GUNNER,ShipMenu.LOOKOUT,ShipMenu.NAVIGATOR,ShipMenu.QUARTERMASTER,ShipMenu.SINGER};
         for(int i=0;i<actions.length;i++)order(1,i,actions[i],crew[i],i<4?"Hire docked at harbor or your home drydock. Earned discounts apply; role limits remain.":"Complete this officer's harbor commission, then hire here. Rescue sunk officers through harbor services.");
@@ -63,6 +65,9 @@ public final class ShipScreen extends AbstractContainerScreen<ShipMenu> {
         order(3,6,ShipMenu.AMMUNITION,"Ammunition","Cycle Auto (fire then solid), Incendiary, Chain (6 damage, 10 seconds slow), Piercing (28 damage). Selected ammunition must be in the hold.");
         order(3,7,ShipMenu.EXPEDITION,"Shore expedition","Lead crew within 40 blocks of your docked ship. Nearby mate grants Resistance, worker Haste, lookout night vision. Recall before sailing.");
         order(3,2,ShipMenu.ROAM,"Crew shore leave","Crew walk on clear docked deck space; recall before sailing. Names, cargo and crew identities are retained. Keep their chunks loaded for recall.");
+        order(4,0,ShipMenu.UNLOAD_MARK,"Mark chest","Closes this screen. Use an unlocked single chest within 30 seconds, within 16 blocks of the ship. Replaces the previous destination.");
+        order(4,1,ShipMenu.UNLOAD_TOGGLE,"Start unloading","Shipworker shuttles up to eight items per trip from unlocked hold slots into the marked chest. All cargo types, including supplies. Captain must remain nearby. Paused after reload.");
+        order(4,2,ShipMenu.UNLOAD_RECALL,"Pause and recall","Pause deliveries and recall the original crew. Sailors must be loaded within 48 blocks. Launch also pauses and recalls them.");
         cargoPage=addRenderableWidget(UiTheme.button(Component.literal("Hold page"),b->minecraft.gameMode.handleInventoryButtonClick(menu.containerId,ShipMenu.CARGO_PAGE)).bounds(leftPos+8,topPos+108,162,18).build());
         update();
     }
@@ -73,9 +78,11 @@ public final class ShipScreen extends AbstractContainerScreen<ShipMenu> {
             var b=order.button();int a=order.action();b.visible=page==order.page();
             b.active=switch(a){case ShipMenu.BUILD->!exists;case ShipMenu.DOCK->exists&&!docked;case ShipMenu.TARGET,ShipMenu.AMMUNITION->exists;case ShipMenu.FIRE_ORDER->exists&&menu.status(4)>0;case ShipMenu.SHANTY->exists&&menu.status(20)>0;default->exists&&docked;};
             if(a==ShipMenu.FIRE_ORDER)b.setMessage(Component.literal(menu.status(8)!=0?"Auto fire":"Hold fire"));
+            if(a==ShipMenu.BOARDING)b.active=exists;
             if(a==ShipMenu.AMMUNITION)b.setMessage(Component.literal(new String[]{"Ammo: Auto","Ammo: Fire","Ammo: Chain","Ammo: Piercing"}[Math.clamp(menu.status(25),0,3)]));
             if(a==ShipMenu.EXPEDITION)b.setMessage(Component.literal(menu.status(26)!=0?"End expedition":"Shore expedition"));
             if(a==ShipMenu.ROAM)b.setMessage(Component.literal(menu.status(24)!=0?"Recall crew":"Crew shore leave"));
+            if(a==ShipMenu.UNLOAD_TOGGLE)b.setMessage(Component.literal(menu.status(28)!=0?"Pause unloading":"Start unloading"));
             if(a==ShipMenu.SHANTY)b.setMessage(Component.literal(menu.status(21)!=0?"Stop shanty":"Play shanty"));
             if(a>=ShipMenu.MATE&&a<=ShipMenu.LOOKOUT)b.setTooltip(Tooltip.create(Component.literal(menu.status(11+a-ShipMenu.MATE)+" emeralds; hire docked at harbor or your home drydock. Current crew in this role: "+menu.status(4+a-ShipMenu.MATE))));
         }
@@ -86,6 +93,12 @@ public final class ShipScreen extends AbstractContainerScreen<ShipMenu> {
         super.extractBackground(g,mouseX,mouseY,partial);update();UiTheme.panel(g,leftPos,topPos,imageWidth,imageHeight);
         g.text(font,"Hull "+menu.status(3)+" | Morale "+menu.status(23),leftPos+8,topPos+24,UiTheme.INK,false);
         g.text(font,menu.hasShip()?(darkspawn.black.pirate.PirateShip.CLASS_NAMES[Math.clamp(menu.status(22),0,darkspawn.black.pirate.PirateShip.CLASS_NAMES.length-1)]+(menu.status(1)!=0?" | Docked":" | Sailing")):"Build at a shipyard",leftPos+8,topPos+36,UiTheme.INK,false);
+        if(page==4){
+            g.text(font,darkspawn.black.pirate.DockedUnloading.STATUS[Math.clamp(menu.status(27),0,darkspawn.black.pirate.DockedUnloading.STATUS.length-1)],leftPos+180,topPos+112,UiTheme.INK,false);
+            g.text(font,"1. Mark a chest",leftPos+180,topPos+133,UiTheme.INK,false);
+            g.text(font,"2. Start unloading",leftPos+180,topPos+146,UiTheme.INK,false);
+            g.text(font,"3. Keep route clear",leftPos+180,topPos+159,UiTheme.INK,false);
+        }
         for(var slot:menu.slots)if(slot.isActive())UiTheme.slot(g,leftPos+slot.x,topPos+slot.y,false);
     }
 }

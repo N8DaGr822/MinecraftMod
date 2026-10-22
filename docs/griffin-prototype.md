@@ -2,7 +2,7 @@
 
 First movement checkpoint from [vehicles, mounts, and base ideas](vehicles-mounts-and-base-ideas.md).
 
-Griffins naturally spawn on exposed jagged, frozen and stony peaks at Y128 or higher; see [mount habitats](mount-prototypes.md#natural-habitats). Feed three raw rabbits, two seconds apart, to tame a griffin. Only its owner can ride, and no saddle is required. Cargo, capsule storage and vet recovery are not implemented. It is available before the dragon and remains present in Peaceful. Completing taming makes a wild griffin persistent.
+Griffins naturally spawn on exposed jagged, frozen and stony peaks at Y128 or higher; see [mount habitats](mount-prototypes.md#natural-habitats). Feed three raw rabbits, two seconds apart, to tame a griffin. Only its owner can ride, and no saddle is required. Cargo, capsule storage and veterinary recovery are implemented through [companion care](mount-prototypes.md#prototype-boundaries). It is available before the dragon and remains present in Peaceful. Completing taming makes a wild griffin persistent.
 
 Use the current playable JAR indexed in `build/libs/README.md`; older checkpoints are archived under `build/libs/archive`. Replace the existing Darkspawn JAR in a test instance; keep the required Fabric API and GeckoLib dependencies. Both clients and the server need the updated mod. Source edits do not update an already packaged JAR.
 

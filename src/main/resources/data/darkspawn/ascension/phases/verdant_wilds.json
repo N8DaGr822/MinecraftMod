@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "id": "verdant_wilds",
+  "name": "Verdant Wilds",
+  "breaks": 600,
+  "cycle": 20,
+  "pool": [
+    {
+      "resource": 0,
+      "weight": 4
+    },
+    {
+      "resource": 1,
+      "weight": 3
+    },
+    {
+      "resource": 2,
+      "weight": 3
+    },
+    {
+      "resource": 3,
+      "weight": 2
+    },
+    {
+      "resource": 7,
+      "weight": 3
+    },
+    {
+      "resource": 8,
+      "weight": 1
+    },
+    {
+      "resource": 9,
+      "weight": 3
+    },
+    {
+      "resource": 10,
+      "weight": 3
+    },
+    {
+      "resource": 5,
+      "weight": 1
+    }
+  ],
+  "guaranteed": [
+    {
+      "offset": 0,
+      "resource": 0
+    },
+    {
+      "offset": 1,
+      "resource": 1
+    },
+    {
+      "offset": 2,
+      "resource": 3
+    },
+    {
+      "offset": 3,
+      "resource": 5
+    }
+  ],
+  "objectives": [
+    {
+      "id": "wheat",
+      "item": "minecraft:wheat",
+      "count": 32
+    },
+    {
+      "id": "carrots",
+      "item": "minecraft:carrot",
+      "count": 16
+    }
+  ],
+  "encounters": [],
+  "rewards": [
+    {
+      "id": "verdant_emeralds",
+      "item": "minecraft:emerald",
+      "count": 8
+    },
+    {
+      "id": "verdant_diamonds",
+      "item": "minecraft:diamond",
+      "count": 4
+    }
+  ]
+}

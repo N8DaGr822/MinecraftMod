@@ -21,6 +21,21 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 public final class NoahGameTest {
+    @GameTest public void tempestAppearanceSurvivesTrackingAndNativeReload(GameTestHelper helper) {
+        var p=player(helper);
+        var tempest=new net.minecraft.world.entity.projectile.arrow.ThrownTrident(p.level(),p,new ItemStack(NoahLegacy.TEMPEST));
+        var ordinary=new net.minecraft.world.entity.projectile.arrow.ThrownTrident(p.level(),p,new ItemStack(Items.TRIDENT));
+        try {
+            helper.assertTrue(((TempestProjectile)tempest).darkspawn$isTempest()&&!((TempestProjectile)ordinary).darkspawn$isTempest(),"Only Tempest advertises its custom appearance before tracking begins");
+            ordinary.getEntityData().assignValues(tempest.getEntityData().getNonDefaultValues());
+            helper.assertTrue(((TempestProjectile)ordinary).darkspawn$isTempest(),"Native entity data carries appearance independently of unsynchronized pickup item");
+            var out=net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING,p.registryAccess());tempest.saveWithoutId(out);
+            var loaded=new net.minecraft.world.entity.projectile.arrow.ThrownTrident(EntityTypes.TRIDENT,p.level());
+            loaded.load(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING,p.registryAccess(),out.buildResult()));
+            helper.assertTrue(((TempestProjectile)loaded).darkspawn$isTempest()&&loaded.getWeaponItem().is(NoahLegacy.TEMPEST),"Native save restores custom appearance and original pickup identity");loaded.discard();
+            ordinary.tick();helper.assertTrue(!((TempestProjectile)ordinary).darkspawn$isTempest(),"Server refresh removes stale appearance from an ordinary trident");
+        } finally {tempest.discard();ordinary.discard();cleanup(p);}helper.succeed();
+    }
     private static ServerPlayer player(GameTestHelper helper) {
         var level=helper.getLevel();var cookie=CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(),"noah-test"),false);
         var p=new ServerPlayer(level.getServer(),level,cookie.gameProfile(),cookie.clientInformation()) {

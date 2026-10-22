@@ -63,7 +63,8 @@ public final class TaigaEcosystem {
 				|| end == null || end.getDragonFight() == null || !end.getDragonFight().hasPreviouslyKilledDragon()
 				|| !level.getBiome(pos).is(MutantWolfSummonItem.TAIGAS)) { return false; }
 		var ground = level.getBlockState(pos.below());
-		boolean surface = ground.is(BlockTags.DIRT) || ground.is(Blocks.MOSS_BLOCK) || ground.is(Blocks.SNOW_BLOCK)
+		// Taiga Soil: Native dirt tags omit grass and podzol, the common exposed taiga floors.
+		boolean surface = ground.is(BlockTags.DIRT) || ground.is(Blocks.GRASS_BLOCK) || ground.is(Blocks.PODZOL) || ground.is(Blocks.MOSS_BLOCK) || ground.is(Blocks.SNOW_BLOCK)
 				|| ground.is(Blocks.SNOW) || kind == TaigaWolf.Kind.FROSTFANG && ground.is(Blocks.POWDER_SNOW);
 		return surface && pos.getY() >= level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ()) - 1
 				&& Monster.checkMonsterSpawnRules(type, level, reason, pos, random);

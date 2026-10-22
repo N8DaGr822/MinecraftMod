@@ -20,7 +20,7 @@ public final class AwakenedRematches {
     public static final String TAG="darkspawn_awakened_rematch";
     public static final Item SEAL=Registry.register(BuiltInRegistries.ITEM,Darkspawn.id("awakening_seal"),new Item(new Item.Properties()
         .setId(ResourceKey.create(Registries.ITEM,Darkspawn.id("awakening_seal"))).stacksTo(16)
-        .component(DataComponents.LORE,new ItemLore(java.util.List.of(Component.literal("Hold in offhand during a completed boss family's normal summon ritual."),Component.literal("Awakened: +50% health, +4 armor, +10% movement. Cosmetic victory rewards."))))));
+        .component(DataComponents.LORE,new ItemLore(java.util.List.of(Component.literal("Hold in offhand during a completed boss family's normal summon ritual."),Component.literal("Awakened: +50% health, +4 armor, +10% movement. Cosmetic victory rewards."),Component.literal("Every fourth attack: three warned strikes. Avoid marked circles and ring bands."))))));
     private AwakenedRematches() { }
     public static boolean requested(ServerPlayer player){return player.getOffhandItem().is(SEAL);}
     public static boolean eligible(ServerPlayer player,BossKind kind) {

@@ -19,6 +19,9 @@ public final class GriffinClient {
         EntityRenderers.register(Mounts.WOOLLY_RHINO, WoollyRhinoRenderer::new);
         EntityRenderers.register(Mounts.FLYING_SQUIRREL, FlyingSquirrelRenderer::new);
         EntityRenderers.register(Mounts.POPTART_CAT, PoptartCatRenderer::new);
+        EntityRenderers.register(Mounts.MAGIC_CARPET, MagicCarpetRenderer::new);
+        EntityRenderers.register(Mounts.AIRCRAFT, AircraftRenderer::new);
+        EntityRenderers.register(Mounts.GROUND_WALKER, GroundWalkerRenderer::new);
         EntityRenderers.register(Mounts.DRAGON_MOUNT, DragonMountRenderer::new);
         EntityRenderers.register(Mounts.WINGED_UNICORN, WingedUnicornRenderer::new);
         EntityRenderers.register(Mounts.RIDING_GOLEM, RidingGolemRenderer::new);

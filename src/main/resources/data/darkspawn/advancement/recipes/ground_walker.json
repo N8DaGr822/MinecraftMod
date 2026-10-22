@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iron_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_block"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_iron_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "darkspawn:ground_walker"
+    ]
+  }
+}

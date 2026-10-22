@@ -1,10 +1,12 @@
 # Darkspawn audio
 
-Original synthesized audio follows the selected direction: dark atmosphere with increasing boss-phase intensity. Six theme groups (nature, mutated, arcane, hive, Nether, and void) provide 18 thirty-second stereo scores. All 16 bosses select a theme at phases 1–3. Regional mono voices provide two variations each for idle, hurt, death, warning, phase, and distant ambience; individual creature events vary pitch with registered size. The complete pass contains 210 Ogg files, about 7.9 MB, with 639 registered events and 591 English subtitles.
+Original synthesized audio follows the selected direction: dark atmosphere with increasing boss-phase intensity. Six theme groups (nature, mutated, arcane, hive, Nether, and void) provide 18 thirty-second stereo scores. All 16 bosses select a theme at phases 1–3. Regional mono voices provide two variations each for idle, hurt, death, warning, phase, and distant ambience; individual creature events vary pitch with registered size. That original base pass contains 210 Ogg files, about 7.9 MB, with 639 registered events and 591 English subtitles. The later Ascension pass adds 27 original scores (about 1.95 MB); imported shanties remain separate.
 
 The hive uses breathy hisses, short chitin-like clicks, and a low resonant voice. Nature and stone use low creaks; frost, storm, and void use higher resonances; aquatic sounds pulse beneath the surface. Music uses low fifths, sparse minor motifs, filtered air, and restrained percussion. These are synthesized production assets and remain editable through the generator and normal resource-pack overrides.
 
 ## Runtime behavior
+
+Ascension's nine Guardians use 27 original 24-second stereo scores: a shared D-minor motif with nine arrangements and three intensities. The existing encounter controller selects intensity from health and ducks during warnings. Generate only this catalog with `python tools/audio/generate-ascension.py`; decode/peak/hash results are in `ascension-analysis.json`. The general generator preserves these independent events. The workshop lists all nine Guardian arrangements. See [Guardian presentation](../../docs/oneblock-ascension/guardian-presentation.md) for exact mappings and remaining live checks.
 
 - Idle, hurt, and death sounds use Minecraft's entity hooks for every registered living creature. Idle intervals are 11–12 seconds before Minecraft's normal scheduling variation, with quieter ordinary mobs.
 - Mob warning cues play once when a synchronized warning begins. Boss warning and phase sounds replace the earlier generic cues at their existing server transitions. Existing impact, footstep, and collapse effects can still use vanilla sounds.

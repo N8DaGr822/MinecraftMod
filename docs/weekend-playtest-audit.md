@@ -1,5 +1,40 @@
 # Weekend playtest audit — October 15, 2026
 
+## Current status — October 22, 2026
+
+Use the [current expansion plan](future-expansion-plan.md) and its feature guides for implementation status. Aircraft, magic carpet, all three utility bags, four thematic enchantments, fossil/ocean clues and all five regional encounters are implemented in source. The approved mech is tracked in [its guide](mech-prototype-design.md). The dated checks below are historical evidence, not certification of the current working tree.
+
+Live two-client acceptance remains **not run**. No Minecraft/Java processes were running during this review, and this agent session has no native application controls. See the [focused acceptance record](two-client-acceptance.md).
+
+October 22 current-snapshot verification: the approved ground walker is implemented, and unfiltered `fullCheck --rerun-tasks --max-workers=1` passed **133 unit tests, all 467 server GameTests and cuisine artwork validation**. The final run used a fresh disposable runtime (`-PgameTestRunDir=build/oct22-fullcheck-runtime`) after an earlier native test-runner stall; compilation retained its normal build directory. Test fixture corrections activate Nexus/Ascension actor chunks and isolate Shadow Incursion terrain. Evidence: `build/oct22-snapshot-fullcheck.log`; source/build-configuration SHA-256 manifest: `build/oct22-verified-snapshot.json`, fingerprint `291434043ab6401197b8fd0b09a2553888785ba6799d4c60688bf4f47b8b6e2e`. These local ignored evidence files are not distributed artifacts. No JAR or version bump was produced; live presentation, reconnect/restart and two-client acceptance are still outstanding.
+
+Final staging also passed the six backup-utility tests and the staged whitespace check. One tab-only blank line in `RegionalEncounter.java` was removed after the recorded fullCheck/source manifest; no executable code changed after verification.
+
+## October 19 rework status
+
+This table supersedes older missing-feature statements below. It describes source changes, not a newly packaged JAR.
+
+| Item | Current status | Remaining acceptance |
+| --- | --- | --- |
+| 1. Ship clearance | Sailing checks captured geometry and occupied seats; docking keeps strict restoration clearance. | Cardinal/diagonal shoreline approaches and bridges in the client. |
+| 2. Multiplayer reliability | New regression confirms standing-player support transfers from a removed ship to its native save/load replacement, followed by owner boarding and fresh controls. | Genuine reconnect/restart, pilot and observer agreement, latency and chunk tracking. A simulated replacement is not a network reconnect test. |
+| 3. Pilot feedback | Server-fed HUD shows hull, speed, reload/readiness, selected ammunition with automatic fallback, volley cap, repair availability and automatic-fire order. Text wraps at available GUI width; stale/disconnected/wrong-ship state is hidden. | Normal/large GUI scales and readability during combat. |
+| 4. Noah presentation | Tempest reuses its custom model in flight; a native synchronized flag distinguishes it for observers and after load. Ordinary tridents delegate to the native renderer. | Flight orientation, Loyalty return, foil, lighting and observer view; armor and rider alignment still need live review. |
+| 5. Balance | Current server defaults were inspected and retained: four skirmishes, eight patrols, two patrol attempts/minute, 60-second ambience and 20-minute regional events. | Measure survival pacing before changing rates, loot or combat numbers. |
+| 6. Documentation | README now identifies fifteen island types and links here; current source work is separated from historical results and future proposals. | Record tonight's observations against an exact build label. |
+
+October 19 verification: common/client compilation, all **40 ship GameTests** (`build/ship-polish-oct19-tests.log`) and all **13 Noah GameTests** (`build/tempest-presentation-tests.log`) passed. Noah asset validation, pirate terrain/resource/mine-access checks, six-biome-island validation and `git diff --check` passed. These are targeted checks, not a new fullCheck or live client sign-off. No JAR or version bump was produced.
+
+### Tonight's focused route
+
+Use matching client/server builds containing these source edits. This pass does not package that build.
+
+1. Sail a short ship under a bridge and beside a diagonal shoreline; confirm a real hull/mast obstruction still stops it. Try docking under the bridge: stricter docking rejection is expected.
+2. Put one observer ashore and one player standing aboard. Sail, turn, crouch, jump and dock; reconnect each role and restart the server with cargo aboard. Check deck drift, crew/cargo counts and ship identity before and after.
+3. Watch the HUD while firing the last fire shot in automatic mode, switching ammunition, entering harbor, opening menus and dismounting. Check both normal and large GUI scales.
+4. Throw Tempest in several directions, let Loyalty return it, and watch from a second client. Compare an ordinary trident. Check custom shape, glint, held/charging poses, armor fit and Thalassar rider position.
+5. Record exploration minutes per new island/patrol, ore and loot per island, boss/Nexus completion time and deaths, and temperature interruptions with biome/gear/wetness. Note player count and server tick performance. Use those observations for the next balance changes.
+
 ## Mod-wide polish follow-up — October 16, 2026
 
 This follow-up combines unfiltered automated verification with a targeted source review of cross-system behavior. It is not an exhaustive line-by-line audit or a live client playtest. The historical October 15 inventory below is superseded by the newer pirate and [Noah](legacy-of-noah.md) implementation guides where they differ.
@@ -34,7 +69,7 @@ Baseline unfiltered `fullCheck --rerun-tasks --max-workers=1` passed 95 unit tes
 ### Remaining polish priorities
 
 1. **Live multiplayer acceptance:** save/restart and reconnect, death/recovery across dimensions, five-player ship boarding/standing, client observers and latency. Automated serialization and simulated-player tests cannot establish the entire live experience.
-2. **UI and artwork acceptance:** inspect normal and large GUI scales, inventory/loadout/hub layouts, book wrapping, held-item poses, armor fit and animated creature/rider alignment. Noah's thrown Tempest still uses the native projectile renderer; its dedicated guide records this gap.
+2. **UI and artwork acceptance:** inspect normal and large GUI scales, inventory/loadout/hub layouts, book wrapping, held-item poses, armor fit and animated creature/rider alignment. Tempest now uses its custom in-flight model; orientation, return, lighting and observer view still need live review.
 3. **Gameplay balance:** measure natural encounter frequency, resource/loot availability, temperature pacing, Nexus difficulty and travel costs with real survival progression. Passing behavior tests does not establish that these feel fair or enjoyable.
 4. **Feature expansion:** keep new boss move sets, authored Nexus dungeon content, deeper crew AI and other brainstorm items separate from bug fixes. Their absence is not evidence of a regression in the implemented systems.
 
@@ -51,7 +86,7 @@ Pre-push verification: unfiltered `fullCheck --rerun-tasks --max-workers=1` pass
 | Area | Current implementation / acceptance guide |
 | --- | --- |
 | Pirate progression | Formal promotions, shared-party compass navigation, skirmishes, nine island types, beer/rum buffs, captured-fort home ports, saving. [Stage rules](expansion-stages.md) |
-| Ships and crew | Three sizes, separate Standard/Clipper/Ironclad/Corsair Raider/Fleet Battleship/Drowned Ghostship specializations; solid/fire/chain/piercing ammunition; docked roaming and shore support; forgiving wages/morale. Sailing remains seated. [Exact costs and limits](endgame-expansion-playtest.md) |
+| Ships and crew | Three sizes, separate Standard/Clipper/Ironclad/Corsair Raider/Fleet Battleship/Drowned Ghostship specializations; solid/fire/chain/piercing ammunition; docked roaming and shore support; forgiving wages/morale. Standing decks are implemented; pilot/observer agreement needs live acceptance. [Exact costs and limits](endgame-expansion-playtest.md) |
 | Size limits | 4/8/12 gun positions; ordinary crew and officers give maximum NPC counts of 10/14/18, with four player seats separate. Specialization does not add a fourth size tier. |
 | Exploration | Boss-landmark finder, discovery maps, regional caches and brushable archaeology, cosmetic awakened rematches, regional boons/audio and bounded server settings. [Server playtest](server-playtest.md) |
 | Accessories and hub | All six accessories, three slots, glasses toggle; compact Inventory/Character/Companions/Storage/Journal tabs, search, favorites, comparisons and nearby accessible sorting storage. [Field utilities](field-utilities-playtest.md) |
@@ -62,21 +97,21 @@ Pre-push verification: unfiltered `fullCheck --rerun-tasks --max-workers=1` pass
 
 ## Brainstorm ideas still absent or only partly represented
 
-These are remaining proposals or scope differences, not missing texture files. They are not implemented by this polish pass.
+This inventory distinguishes implemented portions from remaining proposals. Current linked feature guides take precedence over dated audit results.
 
 | Original idea | Remaining work / current boundary |
 | --- | --- |
-| Buildable airplanes; power armor/mechs; DBZ-style cloud; magic carpet | Not implemented. Fourteen creature mounts exist, including griffin, dragon, Poptart cat, unicorn and golem; these do not provide the proposed aircraft/mech systems. |
+| Buildable airplanes; power armor/mechs; DBZ-style cloud; magic carpet | Aircraft and magic carpet are implemented. See [mech status](mech-prototype-design.md) for the approved ground walker. Wearable power armor and a DBZ-style cloud remain proposals. |
 | Material-specific naval warfare | No complete wood/copper/iron/diamond plating simulation, solvent/dousing/TNT ammunition roster or individual component destruction system. Current classes and ammunition use shared hull combat. |
-| Full faction vessel roster and autonomous crews | Earned specializations reuse existing ship platforms. Walking on moving decks, autonomous route following/docking, combat boarding crews, crew loyalty stories and general base workers remain outside current scope. Shore companions provide support effects. |
-| Thematic enchantments | Hunter, Butcher, Forager, Soulward, Venom Guard, Shadow Sight and Deep Diver are not added. Existing Warmth/Cooling and equipment/accessory powers are separate features. |
-| Dedicated utility bags | Ingredient Pouch, Quiver and Explorer's Pack are not implemented as distinct items. Inventory upgrades and nearby storage do not constitute those proposed items. |
-| Full archaeology/fishing proposal | Current regional loot and six fish species do not include a complete fossil reconstruction/extinct-seed system or rare Kraken fishing-clue progression. |
+| Full faction vessel roster and autonomous crews | Specializations reuse editable platforms. Moving decks, docked unloading and optional NPC patrol boarding are implemented. Autonomous sailing/docking, richer crew stories and general base workers remain future scope. |
+| Thematic enchantments | Hunter, Butcher, Forager and Soulward are implemented. Venom Guard, Shadow Sight and Deep Diver remain proposals; live balance acceptance remains. |
+| Dedicated utility bags | Ingredient Pouch, all-arrow Quiver and six-slot Explorer’s Pack are implemented. Live controls, reconnect and multiplayer acceptance remain. |
+| Full archaeology/fishing proposal | Fossil reconstruction/display and the optional Kraken ocean-clue chain are implemented. Extinct-seed progression remains future scope; live pacing and visuals remain open. |
 | Expanded animal interactions | The selected pig/chicken/goat/mooshroom behaviors exist; a further rabbit/bee behavioral expansion is not included. |
 | Full regional transformation | Implemented unlocks are controlled harvests, cultivation, companionship, loot and spawn changes. No automatic biome rebuilding or new beneficial mushroom ecosystem. |
-| Awakened mechanics and cosmetic roster | Current rematches scale encounters and award cosmetics/trophies. A complete new move set for each boss, all proposed capes/banners/trims and distinct awakened models remain future work. |
-| Wildlife, elites and regional events | Existing regional creatures/heralds cover part of the original list. More species and fully staged Wolf Hunt, Fungal Bloom, Shadow Incursion, Soul Storm and End Rift encounters remain proposals; current regional events are personal timed boons. |
-| Full Nexus dungeon | Functional cooperative arena uses existing enemies and an enhanced Void Eye. A large authored dungeon and unique final-boss art/mechanics remain future scope. |
+| Awakened mechanics and cosmetic roster | [All 16 awakened families now have one new warned sequence](awakened-boss-patterns.md), alongside existing scaling and cosmetics/trophies. Complete new move sets, proposed capes/banners/trims and distinct awakened models remain future work. |
+| Wildlife, elites and regional events | Wolf Hunt, Fungal Bloom, Shadow Incursion, Soul Storm and End Rift are implemented as bounded optional encounters. Additional species and larger ecosystem transformations remain proposals. |
+| Full Nexus dungeon | Entry hall, encounter courtyard and cooperative arena loop are implemented. Live room/start/recovery acceptance is pending; unique final-boss art/mechanics and a larger dungeon remain future scope. |
 | Comprehensive tuning/modpack support | Current server settings cover naval budgets and regional timing/toggle. The complete proposed boss-health, damage, heart, cooking and structure-rarity settings are not exposed. Other installed mods have not been specified or compatibility-tested. |
 | Seasonal public-server design | Paid admission, seasons/resets, leaderboards, Hall of Fame and revised sanctuary/PvP rules remain the separate future server specification. |
 

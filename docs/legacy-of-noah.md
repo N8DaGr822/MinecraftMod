@@ -85,7 +85,9 @@ Polish verification: common/client compilation and **all 12 Noah GameTests passe
 
 Remaining presentation work, in priority order:
 
-1. **Thrown Tempest appearance:** the held item is custom, but the projectile still uses the vanilla trident renderer. A dedicated projectile presentation would preserve the royal appearance in flight.
+1. **Thrown Tempest appearance (implemented October 19):** the projectile now uses the existing custom item model, with native synchronized identity for observers and reconstruction after loading. Ordinary tridents retain native rendering, and throwing, damage, pickup and Loyalty remain native. Flight pose, foil and second-client appearance still require live acceptance.
 2. **Live visual acceptance:** check armor fit on both player body types, held/charging poses, mount rider placement and animation transitions, underwater readability, and book wrapping at normal GUI scales. The source preview cannot establish these.
 3. **Power feedback:** selection and cooldowns currently use action-bar messages. A compact selected-power/cooldown display is an optional UX addition; it would require server state synchronization.
 4. **Persistence acceptance:** exercise a genuine server restart, distant unloaded-chunk recall, cross-dimension recall and a second observing client. Saved-data serialization and duplicate prevention are tested, but these complete sessions are not yet verified.
+
+October 19 verification: common/client compilation and all 13 Noah GameTests passed (`build/tempest-presentation-tests.log`), including the new pre-tracking appearance, native entity-data synchronization and save/load regression. The existing throw/Loyalty return checks still pass. The Noah asset validator passed. Custom flight orientation, foil and observer rendering remain live acceptance; no JAR was packaged.

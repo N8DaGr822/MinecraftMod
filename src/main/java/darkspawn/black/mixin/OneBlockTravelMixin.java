@@ -15,7 +15,8 @@ public abstract class OneBlockTravelMixin {
 	@Inject(method = "teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;", at = @At("HEAD"), cancellable = true)
 	private void darkspawn$guardProfiles(TeleportTransition transition, CallbackInfoReturnable<ServerPlayer> ci) {
 		var player = (ServerPlayer) (Object) this;
-		if (OneBlock.island(player.level()) != OneBlock.island(transition.newLevel()) && !OneBlock.state(player).travelling) {
+		if ((OneBlock.island(player.level()) != OneBlock.island(transition.newLevel())
+			|| darkspawn.black.oneblock.Ascension.island(player.level()) != darkspawn.black.oneblock.Ascension.island(transition.newLevel())) && !OneBlock.state(player).travelling) {
 			OneBlock.message(player, "use_menu"); ci.setReturnValue(null);
 		}
 	}
@@ -23,10 +24,11 @@ public abstract class OneBlockTravelMixin {
 	private void darkspawn$islandRespawn(boolean consume, TeleportTransition.PostTeleportTransition after, CallbackInfoReturnable<TeleportTransition> ci) {
 		var player = (ServerPlayer) (Object) this;
 		if (OneBlock.island(player.level())) ci.setReturnValue(new TeleportTransition(player.level(), OneBlock.arrival(player.level()), Vec3.ZERO, 0, 0, after));
+		else if (darkspawn.black.oneblock.Ascension.island(player.level())) ci.setReturnValue(new TeleportTransition(player.level(), darkspawn.black.oneblock.Ascension.respawn(player), Vec3.ZERO, 0, 0, after));
 	}
 	@Inject(method = "setRespawnPosition", at = @At("HEAD"), cancellable = true)
 	private void darkspawn$preserveOutsideBed(ServerPlayer.RespawnConfig config, boolean showMessage, CallbackInfo ci) {
 		// Shared Respawn: Sleeping on the island must not replace the player's outside-world bed.
-		if (showMessage && OneBlock.island(((ServerPlayer) (Object) this).level())) ci.cancel();
+		if (showMessage && (OneBlock.island(((ServerPlayer) (Object) this).level()) || darkspawn.black.oneblock.Ascension.island(((ServerPlayer) (Object) this).level()))) ci.cancel();
 	}
 }

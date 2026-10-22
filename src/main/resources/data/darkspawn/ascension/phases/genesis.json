@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "id": "genesis",
+  "name": "Genesis",
+  "breaks": 250,
+  "cycle": 20,
+  "pool": [
+    {
+      "resource": 0,
+      "weight": 5
+    },
+    {
+      "resource": 1,
+      "weight": 5
+    },
+    {
+      "resource": 2,
+      "weight": 1
+    },
+    {
+      "resource": 3,
+      "weight": 3
+    }
+  ],
+  "guaranteed": [
+    {
+      "offset": 0,
+      "resource": 0
+    },
+    {
+      "offset": 1,
+      "resource": 1
+    },
+    {
+      "offset": 2,
+      "resource": 3
+    }
+  ],
+  "objectives": [
+    {
+      "id": "timber",
+      "item": "minecraft:oak_log",
+      "count": 16
+    },
+    {
+      "id": "stone",
+      "item": "minecraft:cobblestone",
+      "count": 32
+    }
+  ],
+  "encounters": [],
+  "rewards": [
+    {
+      "id": "genesis_water",
+      "item": "minecraft:water_bucket",
+      "count": 1
+    },
+    {
+      "id": "genesis_lava",
+      "item": "minecraft:lava_bucket",
+      "count": 1
+    },
+    {
+      "id": "genesis_saplings",
+      "item": "minecraft:oak_sapling",
+      "count": 2
+    },
+    {
+      "id": "genesis_seeds",
+      "item": "minecraft:wheat_seeds",
+      "count": 8
+    },
+    {
+      "id": "genesis_food",
+      "item": "minecraft:apple",
+      "count": 8
+    }
+  ]
+}

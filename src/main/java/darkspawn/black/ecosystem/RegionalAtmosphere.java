@@ -59,6 +59,11 @@ public final class RegionalAtmosphere {
 				var kind = region(player);
 				if (kind == null) continue;
                 RegionalEvents.observe(player,kind);
+				if (kind == BossKind.MUTANT_WOLF) WolfHunt.offer(player);
+				if (kind == BossKind.MYCELIAL_SOVEREIGN) RegionalEncounters.BLOOM.offer(player);
+				if (kind == BossKind.SHADOW_CREEPER_QUEEN) RegionalEncounters.SHADOW.offer(player);
+				if (kind == BossKind.SOULBOUND_COLOSSUS) RegionalEncounters.SOUL.offer(player);
+				if (kind == BossKind.VOID_EYE) RegionalEncounters.RIFT.offer(player);
 				var level = player.level();
 				level.sendParticles(player, particle(kind), false, false, player.getX(), player.getY()+1.4, player.getZ(), 7, 3, 1, 3, .015);
 				if (Math.floorMod(player.tickCount + player.getId(), darkspawn.black.ServerTuning.ambientTicks) != 0) continue;

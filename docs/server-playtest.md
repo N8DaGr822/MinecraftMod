@@ -23,8 +23,8 @@ The tested dependency pins are Minecraft **26.3**, Fabric Loader **0.19.5**, Fab
 | Crew roaming and care | Docked roaming, seated sailing, saved morale, prepaid wages/provisions |
 | Separate discovery maps | Native filled maps with a copied landmark target; shareable/copyable |
 | Archaeology and regional loot | Fourteen landmark families, 42 variants, two brushable deposits per site and broader caches |
-| Awakened rematches | Gated scaled bosses; glint trophies and colored leather laurels |
-| Regional events/audio | Personal habitat boons, particles and regional cues using existing audio |
+| Awakened rematches | Gated scaled bosses with 16 distinct warned sequences; glint trophies and colored leather laurels |
+| Regional events/audio | Personal habitat boons, particles and regional cues using existing audio; separate opt-in [Wolf Hunt](wolf-hunt.md) with solo and cooperative modes |
 | Server tuning | Bounded patrol/skirmish budgets and atmosphere/event intervals |
 | Testing Camp | New supplies, actual brushable samples and guide pages |
 | Save support | New port, ship/care/crew identity and regional cooldown data; older saves default safely |
@@ -60,11 +60,13 @@ Newly generated regional landmarks have two supported suspicious-gravel deposits
 
 Craft an **Awakening Seal** from an echo shard, diamond and amethyst shard. Keep it in the **offhand** during the boss's usual summon ritual, with the normal summon item/materials. You must already have that family's normal defeat advancement or have consumed its heart. Ordinary global progression, location, difficulty, clearance and encounter limits still apply. The seal is consumed only after successful spawn.
 
-Awakened bosses gain 50% more maximum health, four armor and 10% movement speed where applicable. Existing attack patterns remain. Valid participants receive a named glint family trophy and colored/glint leather **Awakened Victor's Laurel** with ordinary leather stats. Awakened kills do not drop another heart, essence or boss cooking ingredient. Trophy blocks retain existing family visuals when placed; the item name/glint and worn laurel provide the distinction. These are cosmetic rematches rather than another equipment tier.
+Awakened bosses gain 50% more maximum health, four armor and 10% movement speed where applicable. Their normal attacks remain, with every fourth attack opportunity replaced by a [family-specific three-strike sequence](awakened-boss-patterns.md). Watch the named action-bar countdown and marked circles/ring bands. Valid participants receive a named glint family trophy and colored/glint leather **Awakened Victor's Laurel** with ordinary leather stats. Awakened kills do not drop another heart, essence or boss cooking ingredient. Trophy blocks retain existing family visuals when placed; the item name/glint and worn laurel provide the distinction. These rematches retain cosmetic rewards rather than adding another equipment tier.
 
 ## Regional events and five-player configuration
 
 After the normal global dragon gate, eligible Survival habitat visits start a saved personal cooldown. Default: a boon becomes available after 20 minutes, then at most once per 20 minutes. Offline elapsed time can make one boon due but never stockpiles rewards. Forest/jungle/mushroom habitats give Regeneration I; mountain/cave/deep-dark/fossil habitats give Haste I; the Kraken habitat gives Dolphin's Grace I; other eligible habitats give Speed I. Boons last 30 seconds with local particles, chat and an existing regional audio cue. No terrain replacement or extra event mobs occur.
+
+Separate from those automatic boons, [Wolf Hunt](wolf-hunt.md) now offers an explicit solo or two-to-four-player encounter in surface taigas. Nothing spawns from its offer message: use `/wolfhunt solo`, or form/join a lobby and start it. Check its progress bar, 48-block boundary, party interruption cleanup and individual `/wolfhunt claim` rewards.
 
 The server creates `config/darkspawn-server.properties`; restart after edits. Defaults are a conservative starting point for five players, not a measured capacity guarantee.
 

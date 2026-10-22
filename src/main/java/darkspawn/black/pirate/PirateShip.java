@@ -51,6 +51,7 @@ public final class PirateShip extends Entity {
 	public static final int MATE=0, WORKER=1, GUNNER=2, LOOKOUT=3;
 	public static final int NAVIGATOR=4, QUARTERMASTER=5, SINGER=6;
     public final SimpleContainer cargo = new SimpleContainer(54);
+    public final DockedUnloading unloading = new DockedUnloading(this);
     private static final EntityDataAccessor<Integer> SHIP_CLASS=SynchedEntityData.defineId(PirateShip.class,EntityDataSerializers.INT);
     public static final String[] CLASS_NAMES={"Standard", "Clipper", "Ironclad", "Corsair Raider", "Fleet Battleship", "Drowned Ghostship"};
     public static final String CREW_SHIP="darkspawn_crew_ship_";
@@ -60,7 +61,7 @@ public final class PirateShip extends Entity {
     public boolean crewExpedition(){return crewExpedition;}
     public boolean cycleAmmunition(ServerPlayer captain){if(!ownedBy(captain))return false;ammunition=(ammunition+1)%4;return true;}
     public boolean toggleExpedition(ServerPlayer captain){
-        if(!refitAllowed(captain))return false;
+        if(!refitAllowed(captain)||unloading.active())return false;
         if(crewExpedition&&!recallCrew())return false;
         crewExpedition=!crewExpedition;crewRoaming=crewExpedition;return true;
     }
@@ -72,9 +73,23 @@ public final class PirateShip extends Entity {
         return List.copyOf(members);
     }
     public boolean toggleCrewRoaming(ServerPlayer captain) {
-        if(!refitAllowed(captain))return false;
+        if(!refitAllowed(captain)||unloading.active())return false;
         if(crewRoaming&&!recallCrew())return false;
         crewRoaming=!crewRoaming;crewExpedition=false;return true;
+    }
+    BlockPos unloadingDeck(Mob worker) {var spot=roamingSpot(worker);return spot==null?null:BlockPos.containing(spot);}
+    boolean deployUnloadingWorker(Mob worker) {
+        if(worker.getVehicle()==this){
+            var spot=roamingSpot(worker);if(spot==null)return false;
+            worker.addTag(CREW_SHIP+getUUID());roamingCrew.add(worker.getUUID());worker.stopRiding();worker.setPos(spot);
+            // Worker Deployment: roamingSpot verified solid support; navigation must see the grounded dismount.
+            worker.setOnGround(true);
+        }
+        return !worker.isPassenger()&&roamingCrew.contains(worker.getUUID());
+    }
+    public boolean recallUnloading(ServerPlayer captain) {
+        if(!refitAllowed(captain))return false;
+        unloading.pause();if(!recallCrew())return false;crewRoaming=false;crewExpedition=false;return true;
     }
     private boolean recallCrew() {
         if(!(level() instanceof ServerLevel server))return false;
@@ -330,6 +345,7 @@ public final class PirateShip extends Entity {
 	}
 	public String launch(ServerPlayer captain) {
 		if(!ownedBy(captain)||!docked()||captain.isPassenger()||!captain.inventoryMenu.getCarried().isEmpty()) return "Cannot launch now.";
+        unloading.pause();
         if(!recallCrew())return "Load and bring every roaming sailor within 48 blocks before launch.";
 		var captured=new ArrayList<ShipBlock>();int guns=0;
 		var origin=blockPosition();
@@ -453,7 +469,7 @@ public final class PirateShip extends Entity {
 		}
 		return player.getItemInHand(hand).isEmpty() ? InteractionResult.SUCCESS : InteractionResult.PASS;
 	}
-	private Vec3 seatPosition(Entity passenger,int seat) {
+	Vec3 seatPosition(Entity passenger,int seat) {
 		boolean captain=passenger instanceof Player p && ownedBy(p);
 		return local(captain?0:((seat%2==0)?-2:2),1.1,captain?2:-length()/2+2+(seat/2)*2);
 	}
@@ -479,6 +495,7 @@ public final class PirateShip extends Entity {
 		Ships.message(captain,target==null?"No ships in contact range.":"Target: "+(selected().enemy()?selected().getName().getString():"Player vessel")+" — "+Math.round(distanceTo(selected()))+" blocks");
 	}
 	public int fire(boolean port) {
+        if(boardingDisabled()||boardingSpent||Boarding.reserved(this))return 0;
 		if(docked()||reload>0||protectedHarbor()||!(level() instanceof ServerLevel server))return 0;
 		var guns=blocks.stream().filter(b->b.state().is(Ships.CANNON) && (b.pos().getX()<0)==port).toList();
 		int available=enemy()?gunLimit():Math.max(1,crew(GUNNER));int fired=0;
@@ -497,9 +514,27 @@ public final class PirateShip extends Entity {
 		}
 		if(fired>0){reload=(int)Math.round((shipClass()==3?48:60)/crewEfficiency());server.playSound(null,blockPosition(),net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(),net.minecraft.sounds.SoundSource.HOSTILE,2F,.7F);}return fired;
 	}
+    boolean boardingSpent;
+    private boolean boardingDisabled() { return enemy() && encounterKind==0 && hull()>0 && hull()<=maxHull()*.25F; }
+    boolean boardableBy(ServerPlayer player) {
+        return boardingDisabled() && !boardingSpent && burning==0 && !protectedHarbor() && isAlive()
+            && player.level()==level() && (patrolExpiresAt==0 || level().getGameTime()<patrolExpiresAt)
+            && lastAttacker!=null && player.level().getEntity(lastAttacker) instanceof PirateShip attacker && attacker.ownedBy(player);
+    }
+    void releaseBoardingCargo(ServerPlayer captain) {
+        if(!(level() instanceof ServerLevel server)||!boardingSpent||sinking)return;
+        sinking=true;
+        SeaLegends.victory(captain,this);PirateActivities.navalVictory(captain,this);Pirate.state(captain).navalVictories++;
+        for(int i=0;i<cargo.getContainerSize();i++) {
+            var stack=cargo.removeItemNoUpdate(i);
+            if(!stack.isEmpty()) {var pos=local(0,1.5,3);var drop=new net.minecraft.world.entity.item.ItemEntity(server,pos.x,pos.y,pos.z,stack);drop.setDeltaMovement(Vec3.ZERO);server.addFreshEntity(drop);}
+        }
+        cargo.setChanged();
+    }
 	public boolean cannonDamage(PirateShip attacker,boolean fire) {return cannonDamage(attacker,fire?Ships.FIRE_SHOT:Ships.SHOT);}
     public boolean cannonDamage(PirateShip attacker,net.minecraft.world.item.Item shot) {
         boolean fire=shot==Ships.FIRE_SHOT;
+        if(boardingSpent||Boarding.reserved(this))return false;
 		if(!(level() instanceof ServerLevel server)||sinking||attacker==this||protectedHarbor()||attacker.protectedHarbor()||attacker.level()!=level())return false;
 		if(enemy()&&patrolExpiresAt>0&&server.getGameTime()>=patrolExpiresAt)return false;
 		if(!enemy()&&!attacker.enemy()&&(!server.isPvpAllowed()||java.util.Objects.equals(owner,attacker.owner)))return false;
@@ -517,7 +552,10 @@ public final class PirateShip extends Entity {
         entityData.set(HULL,hull()-damage);
         if(shot==Ships.CHAIN_SHOT)riggingDamage=200;
         if(fire)burning=Math.max(burning,shipClass()==5?40:120);
-		if(hull()<=0)sink(attacker);return true;
+		if(hull()<=0)sink(attacker);
+        else if(boardingDisabled()&&attacker.owner!=null&&server.getServer().getPlayerList().getPlayer(attacker.owner) instanceof ServerPlayer captain)
+            captain.sendSystemMessage(Component.literal("Patrol disabled at 25% hull. Stop firing, approach within 24 blocks and use /boarding form. Wait for any fire to stop. Optional solo or cooperative boarding; sinking remains available."));
+        return true;
 	}
 	public boolean harborRepair(ServerPlayer captain) {
         if(!refitAllowed(captain)||hull()>=maxHull()&&burning==0||!Ships.pay(captain,Items.OAK_PLANKS,10,false)||!Ships.pay(captain,Items.EMERALD,2,false))return false;
@@ -542,27 +580,33 @@ public final class PirateShip extends Entity {
 	}
 	@Override public void tick() {
 		super.tick();setBoundingBox(footprint(position(),getYRot()));if(!(level() instanceof ServerLevel server))return;
+        // Boarding Recovery: Persisted attempts without a live encounter disappear without loot or credit.
+        if(boardingSpent&&!Boarding.reserved(this)){discard();return;}
+        if(Boarding.reserved(this)){controls=0;setDeltaMovement(Vec3.ZERO);return;}
         // Patrol Expiry: Reconcile before fire damage can turn cleanup into loot or quest credit.
         if(enemy()) {
             if(patrolExpiresAt==0)patrolExpiresAt=server.getGameTime()+12000;
             if(server.getGameTime()>=patrolExpiresAt||server.getDifficulty()==net.minecraft.world.Difficulty.PEACEFUL){discard();return;}
         }
 		for(var sailor:getPassengers())if(assignedCrew(sailor)&&!sailor.entityTags().contains(CREW_TAG)){sailor.addTag(CREW_TAG);sailor.addTag(CREW_OWNER+owner);}
-        roamingTick();crewMoraleTick();shantyTick(server);
+        unloading.tick();roamingTick();crewMoraleTick();shantyTick(server);
         if(encounterKind==1&&tickCount%10==0)server.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME,getX(),getY()+2,getZ(),4,2,1,4,.01);
         if(reload>0)reload--;
 		if(riggingDamage>0)riggingDamage--;
 		if(burning>0){burning--;if(tickCount%20==0){entityData.set(HULL,hull()-2);server.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME,getX(),getY()+1,getZ(),8,2,.5,3,.01);if(hull()<=0){sink(lastAttacker!=null && server.getEntity(lastAttacker) instanceof PirateShip attacker?attacker:this);return;}}}
 		if(crew(WORKER)>0&&hull()<maxHull()&&tickCount%80==0&&consume(Items.OAK_PLANKS)){entityData.set(HULL,Math.min(maxHull(),hull()+(float)(5*crewEfficiency())));burning=Math.max(0,burning-40);}
 		if(docked())return;
+        if(boardingDisabled()){controls=0;setDeltaMovement(Vec3.ZERO);return;}
 		if(enemy()){enemyTick(server);if(isRemoved())return;}
 		else if(getControllingPassenger()==null||lastInput==Long.MIN_VALUE||server.getGameTime()-lastInput>10)controls=0;
 		float yaw=getYRot()+(((controls&RIGHT)!=0?1:0)-((controls&LEFT)!=0?1:0))*(tier()==0?1.4F:tier()==1?.9F:.65F);
 		double throttle=((controls&FORWARD)!=0?1:0)-((controls&BACK)!=0?.45:0);
 		var desired=rotate(0,0,throttle*(tier()==0?.27:tier()==1?.2:.16)*classSpeed()*(riggingDamage>0?.6:1),yaw);var motion=getDeltaMovement().scale(.86).add(desired.scale(.14));
-		var next=position().add(motion);if((!enemy()||next.x*next.x+next.z*next.z>=112*112)&&clearWater(server,BlockPos.containing(next),tier(),yaw,this)){setYRot(yaw);setPos(next);setDeltaMovement(motion);}else setDeltaMovement(Vec3.ZERO);
+		var next=position().add(motion);if((!enemy()||next.x*next.x+next.z*next.z>=112*112)&&ShipCollision.clearSailing(this,next,yaw)){setYRot(yaw);setPos(next);setDeltaMovement(motion);}else setDeltaMovement(Vec3.ZERO);
 		if((controls&FIRE_LEFT)!=0)fire(true);if((controls&FIRE_RIGHT)!=0)fire(false);
 		if(getControllingPassenger() instanceof ServerPlayer captain) {
+            if(tickCount%5==0 && net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.canSend(captain,ShipStatusPayload.TYPE))
+                net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(captain,pilotStatus());
 			if((controls&MENU)!=0&&(previousControls&MENU)==0)captain.openMenu(new net.minecraft.world.SimpleMenuProvider((id,inv,p)->new ShipMenu(id,inv,null,this),Component.literal("Ship & Crew")));
 			if((controls&TARGET)!=0&&(previousControls&TARGET)==0)selectTarget(captain);
 			if((controls&DOCK)!=0&&(previousControls&DOCK)==0){var error=dock(captain);if(error!=null)Ships.message(captain,error);}
@@ -582,6 +626,21 @@ public final class PirateShip extends Entity {
 		}
 		Ships.message(captain,report);
 	}
+    public ShipStatusPayload pilotStatus() {
+        // Pilot HUD: Report authoritative speed, shared reload and the actual ammunition fallback.
+        int solid=0,fire=0,chain=0,piercing=0,planks=0;
+        for(int i=0;i<cargoSlots();i++) {
+            var stack=cargo.getItem(i);
+            if(stack.is(Ships.SHOT))solid+=stack.getCount();else if(stack.is(Ships.FIRE_SHOT))fire+=stack.getCount();
+            else if(stack.is(Ships.CHAIN_SHOT))chain+=stack.getCount();else if(stack.is(Ships.PIERCING_SHOT))piercing+=stack.getCount();
+            else if(stack.is(Items.OAK_PLANKS))planks+=stack.getCount();
+        }
+        String ammo=switch(ammunition){case 1->"Fire "+fire;case 2->"Chain "+chain;case 3->"Piercing "+piercing;default->"Auto: "+(fire>0?"fire "+fire:"solid "+solid);};
+        int stock=switch(ammunition){case 1->fire;case 2->chain;case 3->piercing;default->fire+solid;};
+        String readiness=protectedHarbor()?"Harbor safe":reload>0?"Reload "+((reload+19)/20)+"s":guns()==0?"No cannons":stock==0?"No ammo":"Ready";
+        return new ShipStatusPayload(getId(),getUUID(),"Hull "+Math.round(hull())+"/"+Math.round(maxHull())+" | "+String.format(java.util.Locale.ROOT,"%.1f",getDeltaMovement().horizontalDistance()*20)+" blocks/s",
+            readiness+" | "+ammo,"Volley cap "+Math.max(1,crew(GUNNER))+" | Repair "+(crew(WORKER)==0?"off":planks==0?"no planks":"on")+" | Auto-fire "+(holdFire?"off":crew(MATE)==0?"no mate":"on"));
+    }
 	private void enemyTick(ServerLevel level) {
 		var victim=level.getEntitiesOfClass(PirateShip.class,getBoundingBox().inflate(144),s->hostileTo(s)&&s.getControllingPassenger() instanceof ServerPlayer captain&&captain.isAlive()&&!captain.isCreative()&&!captain.isSpectator()).stream().min(Comparator.comparingDouble(this::distanceToSqr)).orElse(null);
 		controls=0;target=null;if(victim==null){if(++idle>2400){for(var p:List.copyOf(getPassengers())){p.stopRiding();if(!(p instanceof Player))p.discard();}discard();}else controls=FORWARD|(idle%400<80?RIGHT:0);return;}idle=0;target=victim.getUUID();
@@ -612,6 +671,8 @@ public final class PirateShip extends Entity {
 		ship.syncBuild(build);ship.cargo.setItem(0,new ItemStack(Ships.SHOT,64));ship.cargo.setItem(1,new ItemStack(Items.EMERALD,4));ship.cargo.setItem(2,new ItemStack(Items.IRON_INGOT,6));if(!level.addFreshEntity(ship)){ship.discard();return null;}return ship;
 	}
 	@Override protected void addAdditionalSaveData(ValueOutput out) {
+        out.putBoolean("BoardingSpent",boardingSpent);
+        unloading.save(out);
 		out.putBoolean("CrewExpedition",crewExpedition);out.putInt("Ammunition",ammunition);out.putInt("RiggingDamage",riggingDamage);
 		out.putBoolean("CrewRoaming",crewRoaming);out.store("RoamingCrew",UUIDUtil.CODEC.listOf(),List.copyOf(roamingCrew));
         out.putInt("ShipClass",shipClass());out.putInt("CrewMorale",morale);out.putInt("SailingTicks",sailingTicks);out.putLong("WagesUntil",wagesUntil);out.putLong("ProvisionsUntil",provisionsUntil);
@@ -623,6 +684,8 @@ public final class PirateShip extends Entity {
 		out.store("Build",ShipBlock.CODEC.listOf(),blocks);out.store("Cargo",ItemContainerContents.CODEC,ItemContainerContents.fromItems(cargo.getItems()));
 	}
 	@Override protected void readAdditionalSaveData(ValueInput in) {
+        boardingSpent=in.getBooleanOr("BoardingSpent",false);
+        unloading.load(in);
 		crewExpedition=in.getBooleanOr("CrewExpedition",false);ammunition=Math.clamp(in.getIntOr("Ammunition",0),0,3);riggingDamage=Math.clamp(in.getIntOr("RiggingDamage",0),0,200);
 		crewRoaming=in.getBooleanOr("CrewRoaming",false);roamingCrew.clear();roamingCrew.addAll(in.read("RoamingCrew",UUIDUtil.CODEC.listOf()).orElse(List.of()).stream().limit(18).toList());
         entityData.set(SHIP_CLASS,Math.clamp(in.getIntOr("ShipClass",0),0,CLASS_NAMES.length-1));morale=Math.clamp(in.getIntOr("CrewMorale",70),25,100);sailingTicks=Math.clamp(in.getIntOr("SailingTicks",0),0,1199);wagesUntil=Math.max(0,in.getLongOr("WagesUntil",0));provisionsUntil=Math.max(0,in.getLongOr("ProvisionsUntil",0));

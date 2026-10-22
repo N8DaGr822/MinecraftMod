@@ -8,6 +8,9 @@ import net.minecraft.world.phys.Vec3;
 
 public final class OneBlockPlayerState {
 	public OneBlockItems other = OneBlockItems.EMPTY;
+	public OneBlockItems ascensionOther = OneBlockItems.EMPTY;
+	public boolean ascensionInside, pendingAscension;
+	public java.util.UUID pendingTeam;
 	public boolean inside;
 	public ResourceKey<Level> returnLevel = Level.OVERWORLD;
 	public Vec3 returnPos = new Vec3(0, 80, 0);
@@ -17,6 +20,9 @@ public final class OneBlockPlayerState {
 	public boolean travelling;
 
 	public void read(ValueInput input) {
+		ascensionOther = input.read("darkspawn_ascension_other", OneBlockItems.CODEC).orElse(OneBlockItems.EMPTY);
+		ascensionInside = input.getBooleanOr("darkspawn_ascension_inside", false);
+		pendingAscension = false; pendingTeam = null;
 		other = input.read("darkspawn_oneblock_other", OneBlockItems.CODEC).orElse(OneBlockItems.EMPTY);
 		inside = input.getBooleanOr("darkspawn_oneblock_inside", false);
 		returnLevel = input.read("darkspawn_oneblock_return_level", Level.RESOURCE_KEY_CODEC).orElse(Level.OVERWORLD);
@@ -26,6 +32,8 @@ public final class OneBlockPlayerState {
 		hurtTicks = Math.clamp(input.getIntOr("darkspawn_oneblock_hurt", 0), 0, 100);
 	}
 	public void write(ValueOutput output) {
+		output.store("darkspawn_ascension_other", OneBlockItems.CODEC, ascensionOther);
+		output.putBoolean("darkspawn_ascension_inside", ascensionInside);
 		output.store("darkspawn_oneblock_other", OneBlockItems.CODEC, other);
 		output.putBoolean("darkspawn_oneblock_inside", inside);
 		output.store("darkspawn_oneblock_return_level", Level.RESOURCE_KEY_CODEC, returnLevel);
@@ -36,6 +44,7 @@ public final class OneBlockPlayerState {
 	public void copyFrom(OneBlockPlayerState old) {
 		// Death: Only the inactive profile is copied here; vanilla owns active item drops and keepInventory.
 		other = old.other; inside = old.inside; returnLevel = old.returnLevel; returnPos = old.returnPos;
+		ascensionOther = old.ascensionOther; ascensionInside = old.ascensionInside;
 		returnYaw = old.returnYaw; returnPitch = old.returnPitch;
 	}
 }

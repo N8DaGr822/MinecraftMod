@@ -25,7 +25,8 @@ public final class MountRegistry extends SavedData {
     public static final SavedDataType<MountRegistry> TYPE = new SavedDataType<>(Darkspawn.id("mount_registry"), () -> new MountRegistry(Map.of()), CODEC, null);
     private final Map<String, Entry> entries;
     private MountRegistry(Map<String, Entry> entries) { this.entries = new HashMap<>(entries); }
-    public static MountRegistry get(ServerLevel level) { return level.getServer().overworld().getDataStorage().computeIfAbsent(TYPE); }
+    // Ascension Possessions: Keep outside companion storage out of the new inventory profile.
+    public static MountRegistry get(ServerLevel level) { return (darkspawn.black.oneblock.Ascension.island(level)?level:level.getServer().overworld()).getDataStorage().computeIfAbsent(TYPE); }
     public String store(Entry entry) {
         String token = UUID.randomUUID().toString(); entries.put(token, entry); setDirty(); return token;
     }

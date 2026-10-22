@@ -69,6 +69,8 @@ public final class TestingCamp extends Item {
 	}
 	public static List<Supply> supplies(ServerLevel level) {
 		var result = new ArrayList<Supply>();
+		result.add(new Supply("Bonfire upgrades", List.of(new ItemStack(Items.IRON_INGOT, 8),
+			new ItemStack(Items.GOLD_INGOT, 4), new ItemStack(Items.DIAMOND, 2))));
 		var guide = new ItemStack(Items.WRITTEN_BOOK);
 		var guidePages = List.of(
 			"TESTING CAMP\n\nTake the dragon kit, cookbook and scrolls. Switch to Survival to test normal mechanics. Follow the signs clockwise around the camp. Place another camp in clear ground to restock.",
@@ -76,7 +78,9 @@ public final class TestingCamp extends Item {
 			"FARMING\n\nAll nine crops are planted. Use seeds and bone meal from the Farming barrel. The central lamp lights the plot at night. Take a bed from Base supplies and place it in the Overworld to set your spawn.",
 			"ARMOR\n\nCompare complete iron/diamond styles, expedition gear and legendary sets. Try inventory loadouts. Combat tools include a spear, axe, trident, mace and crossbow for testing each weapon bonus.",
 			"WORKSHOP\n\nFurnace, smoker and blast furnace have coal. The brewing stand has blaze powder; fill bottles at the water cauldron. Use XP bottles and lapis at the enchanting table. Keep the bookshelf gaps clear.",
-			"BASE TESTS\n\nBonfire starts OFF. Empty-hand right-click enables it; sneak-use empty-handed upgrades with 8 iron, then 4 gold, then 2 diamonds. Keep it off for hostile tests. Build a sorting line with Base supplies.",
+			"BASE TESTS\n\nBonfire starts OFF. Look at it for level, range and upgrade help. Empty-hand use toggles; sneak-use upgrades. The barrel beside it has 8 iron, 4 gold and 2 diamonds. Carry these in Survival to test payment. Creative upgrades are free.",
+			"SHELTER\n\nThe northern stone workshop blocks rain. Warm up beside its guarded campfire; the bonfire ward itself provides no heat. Cold biomes may still need expedition armor. Keep the ward OFF for ordinary hostile tests.",
+			"BONFIRE LEVELS\n\nLevels 1-4 cover 12x12x12, 24x24x12, 32x32x20 and 50x50x30 blocks. Blue flame: activating. Orange: active. No fuel needed. The ward excludes ordinary hostiles, not bosses or incoming projectiles.",
 			"GRIFFIN FLIGHT\n\n/summon darkspawn:griffin\n\nRide empty-handed. Default keys: Space rises, X descends, Shift dismounts. Rebind Descend / Land in Controls. Test flight in open space away from the camp.",
 			"TRAVEL\n\nOneBlock is in the inventory menu. Quarantine Gates still require dragon completion and a valid frame. The camp does not change progression, time, weather or gamerules.",
 			"PIRATE SEAS\n\nPlace a Sea Gate in the Overworld. Take ship parts, timber, ammunition, emeralds and a Logbound Compass. Test launch/dock, cargo, crew and restart with two players. Promotions are earned through harbor contacts; see your Journal.",
@@ -90,20 +94,39 @@ public final class TestingCamp extends Item {
             "SHIP CLASSES / CREW\n\nRefit tab: Clipper trades hull for speed; Ironclad trades speed for hull. Care tab: wages and provisions improve morale. Unpaid crew work slower but never desert. Shore leave lets crew walk on clear docked decks; load all sailors before recall/launch.",
             "DISCOVERY CHARTS\n\nLocate a landmark with its compass. Hold that compass in your other hand and use a Blank Discovery Chart. Share or copy the resulting map normally. Charting does not reveal Journal entries or bypass summon rituals.",
             "ARCHAEOLOGY\n\nBrush the two suspicious gravel samples southwest of this camp. Fresh regional landmarks have two supported deposits and themed cache finds. Breaking a deposit loses its find. Brush, charts and Awakening Seals are in barrel 18.",
-            "AWAKENED REMATCHES\n\nAfter a normal boss victory or its consumed heart, hold an Awakening Seal OFFHAND during the usual summon ritual. Harder health/armor/speed. Win an awakened trophy and colored laurel; no additional hearts or stronger gear. All ritual requirements still apply.",
+            "AWAKENED REMATCHES\n\nAfter a normal victory or consumed heart, hold an Awakening Seal OFFHAND during the usual ritual. Every fourth attack becomes three warned strikes: avoid marked circles and ring bands. Win a trophy and laurel; no extra hearts. All ritual requirements still apply.",
+            "WOLF HUNT\n\nAfter world dragon victory, visit an open taiga in Survival. /wolfhunt solo: 3 wolves. For 2–4 players: /wolfhunt form, friends /wolfhunt join <leader>, then /wolfhunt start: 6 wolves. Defeat all in 5 minutes; stay alive within 48 blocks. Win: /wolfhunt claim for 4 emeralds each.",
             "REGIONAL EVENTS\n\nAfter dragon completion, eligible habitats occasionally grant a 30-second boon with a local sound/particle cue. Initial wait: 20 minutes. Cooldowns survive reconnect. Server properties control event timing, ambience and naval encounter caps.",
             "MOUNT ROSTER\n\nUse /summon darkspawn:<id> in open space. griffin, woolly_rhino, flying_squirrel, poptart_cat, dragon_mount, winged_unicorn, riding_golem, sasquatch, cerberus, leopard, giant_scorpion, crocodile, seahorse, giant_mole. Seahorse needs water.",
 			"ACCESSORIES AND HUB\n\nEquip up to three accessories in the inventory slots below your portrait. Hub opens search, comparisons, favorites, character, companions and nearby storage. N toggles glasses; rebind in Controls. Favorites protect Sort and hub deposits.",
+			"INGREDIENT POUCH\n\nFind one in barrel 09. Brewing reagents only, with one bundle of capacity. Left-click to insert; right-click with an empty cursor to remove. Use in hand drops contents. No nested bags, bottles or finished potions. Ingredients must be removed before brewing.",
+            "QUIVER\n\nFind a quiver and bow in barrel 10; arrow samples in 11. One bundle capacity, all arrow types. Bows use loose arrows first, then the selected quiver stack. Scroll to select. Infinity saves ordinary arrows only. Crossbows need loose ammunition.",
+            "EXPLORER'S PACK\n\nFind a pack and exploration tools in barrel 09. Hold and use the pack to open six slots for maps, compasses, clocks, spyglasses and brushes. Move tools back to your inventory to use them. The pack stays locked while open. No nested storage.",
             "REGIONAL FISHING\n\nSix fish have swimming entities and matching buckets. Release in water. Fish rivers, oceans, jungles, cold water, deep oceans below Y40 and caves below Y0. Native treasure/junk rolls stay unchanged. Cook catches or use the Cooking Station.",
             "ANIMAL UTILITY\n\nSneak-use: carrot on an adult forest pig starts a truffle hunt; pumpkin seeds or wild herbs on a chicken changes its next egg; bottle on goat gives milk; bowl on mooshroom gives cream. Specialty harvest cooldown: five minutes. Ordinary interactions remain.",
             "FACTION VESSELS\n\nCare tab adds Raider, Battleship and Ghostship. Matching membership, rank 3, 60 standing; 64 iron + 16 emeralds. Existing size limits remain. Ammo order selects Chain or Piercing; ammunition must be in the hold.",
+            "DOCKED UNLOADING\n\nShip Jobs tab: mark a single chest within 16 blocks, then start unloading with a hired shipworker. Build a dry walking route. All hold cargo can move, including ammunition and repair planks. Stay nearby. Pause/recall before sailing; resume manually after reload.",
+            "PATROL BOARDING\n\nDamage an ordinary NPC patrol to 25% hull, stop firing, approach within 24 blocks. Sail > Board patrol or /boarding form. Friends: /boarding join <leader>. Leader: /boarding start. Start moves everyone aboard. Defeat sentries, collect shared cargo, leave the wreck within 60 seconds.",
+            "SHADOW INCURSION\n\nAfter the dragon: Survival, Overworld Deep Dark. /shadowincursion solo or form, join <leader>, start. Three drones solo, six cooperative. Dodge warned bursts; no event block destruction. Claim 4 sculk in the Overworld. Normal sculk hazards still apply.",
+            "SOUL STORM / END RIFT\n\nAfter the dragon: /soulstorm in Nether Soul Sand Valleys; /endrift on End islands. Solo or form, join <leader>, start. Three foes solo, six cooperative; five minutes within 48 blocks. Return to Overworld to claim 4 soul torches or chorus fruit. Rift particles are not a portal.",
+            "GROUND WALKER\n\nBarrel 22 has a mech. Place on clear solid ground in the Overworld, Nether or End. Empty-hand use pilots: WASD, Jump, Sneak to exit. Climbs one-block steps. Iron repairs 4 health every 2 seconds. Land and use a companion capsule to store; veterinary kit restores defeat tokens. No cargo, flight or weapons.",
+            "AIRCRAFT PROTOTYPE\n\nBarrel 22 has a core and 9 planks. Build a flat plus sign (optional corners) in a clear 5x5 area on solid ground. Use the core on its center from beside it. Empty-hand use pilots: WASD, Jump up, X down. Land, exit and sneak-use to restore blocks for editing. Capsule recovery works. No cargo or passengers.",
+            "MAGIC CARPET\n\nCraft PPP / AMA / PPP: P=purple carpet, A=amethyst shard, M=phantom membrane. Place on solid ground in a normal dimension to bind ownership. Empty-hand use rides; sneak-use opens care. WASD, Jump up, X down, Sneak dismount. Capsule storage and recovery use existing mount rules.",
+            "FUNGAL BLOOM\n\nAfter the dragon, visit surface Mushroom Fields in Survival. /fungalbloom solo starts 3 Sporelings. Or form, join <leader>, start for 2-4 players and 6 Sporelings. Five minutes, stay within 48 blocks. Any departure ends it. Claim 4 red mushrooms with /fungalbloom claim. No terrain changes.",
+            "FOSSIL RECONSTRUCTION\n\nBarrel 18: four fossil fragments + bone block craft an Ancient Tyrant Fossil. Craft BFB / SSS: B=bone block, F=fossil, S=smooth stone slab. Place the display; break to move it. Fragments come from Fossil Altar brushing; natural Tyrant Skulls provide replacement fossils after the dragon gate.",
+            "THEMATIC ENCHANTMENTS\n\nBarrel 22 has rank II samples. Hunter: bows gain +1/+2 damage against ordinary listed hostiles, never bosses. Soulward: worn chest armor adds 1/2 native protection points against undead. Both stack with native enchantments within normal limits.",
+            "FOOD ENCHANTMENTS\n\nButcher: melee livestock kills may add one raw meat. Forager: hoe harvesting mature wheat, carrots, potatoes or beetroot may add one produce. Chance: 12.5%/25%. Survival only; no babies, Silk Touch or automated harvest. Enchanting, loot and trades offer all four.",
+            "KRAKEN CLUES\n\nBarrel 20: note + compass + ink sac + prismarine shard craft a tide chart. Chart + nautilus shell + dragon breath craft the existing Kraken Sigil. Use notes/charts to read. Notes also come from wreck brushing and open-water Overworld ocean fishing. Original summons and gates remain.",
             "SHORE EXPEDITIONS\n\nCare > Shore expedition: assigned crew follow within 40 blocks of your docked ship. Nearby mate grants Resistance, worker Haste, lookout night vision. Recall everyone before launch. No extra crew slots or moving-deck walking.",
             "CULINARY BREWING\n\nAwkward potion + wild herbs, jungle pepper, goat milk, woodland truffle, marsh rice or frost garlic. Redstone extends; glowstone strengthens the first four. Gunpowder and dragon breath make splash/lingering bottles. Meals stay independent.",
             "WORLD AWAKENING\n\nBoss victories unlock the whole world. Sneak-use a brush on logs, mushrooms or an exposed lightning rod during thunder for renewable rewards, five-minute shared harvest cooldown. Plant Heartwood Seedlings in clear space after the Tree Spirit victory.",
             "DIRE WOLVES\n\nAfter the world's Mutant Wolf victory, offer four cooked beef in your main hand to a normal Dire Wolf. Empty-hand use toggles Follow/Rest. Named ownership survives reload; companions do not teleport or force chunks. Fossil/shadow natural spawn attempts halve after their bosses.",
             "NEXUS GAUNTLET\n\nUse a Nexus Key in the Overworld. Survival captain: world defeated all 16 bosses, 15 consumed hearts, one Nether Star. Up to five friends within 12 blocks opt in by holding a key. Creative captains may rehearse without changing shared boss progression.",
-            "NEXUS EXIT / RELICS\n\nUse key or /nexusleave to retreat; /nexusrecover retrieves equipment later. Five waves then an enhanced Void Eye Warden; 20-minute limit. Surviving entrants earn a core for one relic. Test supplies include all four. Keep the Overworld entrance clear. Use a disposable test world for rehearsals.",
-            "MOUNT CARE\n\nTaming foods, empty companion capsules and veterinary kits are supplied. Test trust, riding, Follow/Stay, capture/release and recovery. Keep named cargo and compare before/after reload; use a separate testing world.");
+            "NEXUS ROOMS\n\nArrive in the sheltered entry hall. Gather everyone through its north doorway, then /nexusbegin. /nexusstatus and the action bar show your objective, enemies and time. Five waves then the Warden; 20 minutes includes preparation.",
+            "NEXUS EXIT / RELICS\n\nUse key or /nexusleave to retreat; /nexusrecover retrieves equipment or rejoins your saved run. Surviving entrants earn one core after the Warden. Test supplies include all four relics. Keep arrival pads and the Overworld entrance clear. Use a disposable test world for rehearsals.",
+            "MOUNT CARE\n\nTaming foods, empty companion capsules and veterinary kits are supplied. Test trust, riding, Follow/Stay, capture/release and recovery. Keep named cargo and compare before/after reload; use a separate testing world.",
+			"NOAH'S LEGACY\n\nAdmin gift, supplied separately:\n/give @s darkspawn:legacy_of_noah\n\nOpening it binds the relics to you and gives a controls guide. Give it directly to the intended tester. Test Thalassar in open water.",
+			"ONEBLOCK ASCENSION\n\nOpen inventory > Ascension for teams, objectives, rewards and automation. Twelve phases reach Frostbound, Tidal Reach, Crystal Depths, Endreach, Astral Forge and Ascension Summit. Separate from legacy OneBlock. Return restores outside possessions; camp supplies do not travel with you.");
 		guide.set(DataComponents.WRITTEN_BOOK_CONTENT, new net.minecraft.world.item.component.WrittenBookContent(
 			net.minecraft.server.network.Filterable.passThrough("Testing Camp Guide"), "Darkspawn", 0,
 			guidePages.stream().map(text -> net.minecraft.server.network.Filterable.passThrough((Component) Component.literal(text))).toList(), true));
@@ -147,11 +170,17 @@ public final class TestingCamp extends Item {
 		for (String id : List.of("copper_block", "white_bed", "anvil", "smithing_table")) add(utilities, BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.withDefaultNamespace(id)), 8);
 		for (String id : List.of("dump_chest", "sorting_chest", "sorting_tube", "bank_chest", "leather_inventory_upgrade",
 			"iron_inventory_upgrade", "diamond_inventory_upgrade", "quarantine_gate", "containment_key")) add(utilities, BuiltInRegistries.ITEM.getValue(Darkspawn.id(id)), 16);
+		add(utilities, darkspawn.black.inventory.IngredientPouchItem.ITEM, 1);
+		add(utilities, darkspawn.black.inventory.ExplorerPackItem.ITEM, 1);
+		for (var item : List.of(Items.MAP, Items.COMPASS, Items.CLOCK, Items.SPYGLASS, Items.BRUSH)) add(utilities, item, 1);
 		result.add(new Supply("09 Base, storage and travel", utilities));
 		result.add(new Supply("10 Combat tools", stacks(1, Items.DIAMOND_AXE, Items.DIAMOND_SPEAR, Items.TRIDENT,
-			Items.MACE, Items.CROSSBOW, Items.DIAMOND_SHOVEL, Items.FISHING_ROD)));
-		result.add(new Supply("11 Target practice", stacks(16, Items.TARGET, Items.ARMOR_STAND, Items.ARROW,
-			Items.ZOMBIE_SPAWN_EGG, Items.SKELETON_SPAWN_EGG, Items.CREEPER_SPAWN_EGG)));
+			Items.MACE, Items.CROSSBOW, Items.DIAMOND_SHOVEL, Items.FISHING_ROD, Items.BOW, darkspawn.black.inventory.QuiverItem.ITEM)));
+        var practice=stacks(16, Items.TARGET, Items.ARMOR_STAND, Items.ARROW, Items.SPECTRAL_ARROW,
+			Items.ZOMBIE_SPAWN_EGG, Items.SKELETON_SPAWN_EGG, Items.CREEPER_SPAWN_EGG);
+        var tipped=new ItemStack(Items.TIPPED_ARROW,16);
+        tipped.set(DataComponents.POTION_CONTENTS,new net.minecraft.world.item.alchemy.PotionContents(net.minecraft.world.item.alchemy.Potions.SLOWNESS));
+        practice.add(tipped);result.add(new Supply("11 Target practice",practice));
 		var pirate = stacks(64, Pirate.GATE_ITEM, Ships.SHIPYARD_ITEM, Ships.HELM_ITEM, Ships.CANNON_ITEM,
 			Ships.SHOT, Ships.FIRE_SHOT, Items.EMERALD, Items.PRISMARINE_SHARD, Items.GOLD_INGOT, Items.IRON_INGOT);
 		add(pirate, LogboundCompass.ITEM, 1);
@@ -178,11 +207,22 @@ public final class TestingCamp extends Item {
 			Items.RABBIT, Items.WHEAT, Items.SWEET_BERRIES, Items.COOKIE, Items.COOKED_BEEF, Items.GOLDEN_APPLE,
 			Items.IRON_INGOT, Items.APPLE, Items.BONE, Items.CHICKEN, Items.KELP, Items.SPIDER_EYE, Items.COD, Items.BEETROOT)));
         result.add(new Supply("18 Charts archaeology rematches",stacks(16,darkspawn.black.worldgen.DiscoveryCharts.ITEM,
-            darkspawn.black.boss.AwakenedRematches.SEAL,Items.BRUSH,Items.ECHO_SHARD,Items.AMETHYST_SHARD,Items.DIAMOND,Items.BREAD)));
+            darkspawn.black.boss.AwakenedRematches.SEAL,Items.BRUSH,Items.ECHO_SHARD,Items.AMETHYST_SHARD,Items.DIAMOND,Items.BREAD,
+            darkspawn.black.worldgen.ExplorationFinds.FOSSIL_FRAGMENT,Items.BONE_BLOCK,Items.SMOOTH_STONE_SLAB)));
         result.add(new Supply("19 Accessories and utility",stacks(1,darkspawn.black.inventory.Accessories.ITEMS.toArray(Item[]::new))));
-        var fish=new ArrayList<ItemStack>();darkspawn.black.cooking.RegionalFishing.RAW.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.COOKED.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.BUCKETS.forEach(item->add(fish,item,1));add(fish,Items.FISHING_ROD,1);result.add(new Supply("20 Regional fishing",fish));
+        var fish=new ArrayList<ItemStack>();darkspawn.black.cooking.RegionalFishing.RAW.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.COOKED.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.BUCKETS.forEach(item->add(fish,item,1));add(fish,Items.FISHING_ROD,1);
+        fish.addAll(stacks(4,darkspawn.black.worldgen.ExplorationFinds.OCEAN_NOTE,Items.COMPASS,Items.INK_SAC,Items.PRISMARINE_SHARD,Items.NAUTILUS_SHELL,Items.DRAGON_BREATH));result.add(new Supply("20 Regional fishing",fish));
         result.add(new Supply("21 Animal husbandry",stacks(16,Items.PIG_SPAWN_EGG,Items.CHICKEN_SPAWN_EGG,Items.GOAT_SPAWN_EGG,Items.MOOSHROOM_SPAWN_EGG,Items.CARROT,Items.PUMPKIN_SEEDS,Items.GLASS_BOTTLE,Items.BOWL,Cooking.WILD_HERBS,darkspawn.black.cooking.AnimalUtility.TRUFFLE,darkspawn.black.cooking.AnimalUtility.GOAT_CHEESE,darkspawn.black.cooking.AnimalUtility.GOAT_MILK,darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM,darkspawn.black.cooking.AnimalUtility.RICH_EGG,darkspawn.black.cooking.AnimalUtility.HERBED_EGG)));
-        result.add(new Supply("22 Faction ammunition",stacks(64,darkspawn.black.pirate.Ships.CHAIN_SHOT,darkspawn.black.pirate.Ships.PIERCING_SHOT)));
+        // Enchantment Trials: Ready-enchanted equipment shares the ammunition barrel's spare slots.
+        var enchantmentTrials=stacks(64,darkspawn.black.pirate.Ships.CHAIN_SHOT,darkspawn.black.pirate.Ships.PIERCING_SHOT);
+        enchantmentTrials.add(new ItemStack(darkspawn.black.mount.MagicCarpetItem.ITEM));
+        enchantmentTrials.add(new ItemStack(darkspawn.black.mount.AircraftCoreItem.ITEM));
+        enchantmentTrials.add(new ItemStack(darkspawn.black.mount.GroundWalkerItem.ITEM));
+        enchantmentTrials.add(new ItemStack(Items.OAK_PLANKS,9));
+        var trialItems=List.of(Items.BOW,Items.IRON_SWORD,Items.IRON_HOE,Items.IRON_CHESTPLATE);
+        var trialEnchantments=List.of(darkspawn.black.equipment.ThematicEnchantments.HUNTER,darkspawn.black.equipment.ThematicEnchantments.BUTCHER,darkspawn.black.equipment.ThematicEnchantments.FORAGER,darkspawn.black.equipment.ThematicEnchantments.SOULWARD);
+        for(int i=0;i<trialItems.size();i++){var stack=new ItemStack(trialItems.get(i));stack.enchant(level.registryAccess().getOrThrow(trialEnchantments.get(i)),2);enchantmentTrials.add(stack);}
+        result.add(new Supply("22 Faction ammunition",enchantmentTrials));
         var brews=new ArrayList<ItemStack>();darkspawn.black.cooking.CulinaryBrewing.POTIONS.values().forEach(potion->brews.add(net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.POTION,potion)));brews.add(net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.POTION,net.minecraft.world.item.alchemy.Potions.AWKWARD));add(brews,Items.REDSTONE,32);add(brews,Items.GLOWSTONE_DUST,32);add(brews,Items.GUNPOWDER,32);add(brews,Items.DRAGON_BREATH,16);result.add(new Supply("23 Culinary brewing",brews));
         result.add(new Supply("24 World awakening",stacks(16,darkspawn.black.ecosystem.HeartwoodGrove.SEEDLING_ITEM,darkspawn.black.ecosystem.HeartwoodGrove.LOG_ITEM,Items.BONE_MEAL,Items.COOKED_BEEF,Items.BRUSH,Items.RED_MUSHROOM,Items.LIGHTNING_ROD.weathering().unaffected())));
         result.add(new Supply("25 Nexus and legendary relics",stacks(1,darkspawn.black.endgame.Nexus.KEY,darkspawn.black.endgame.LegendaryRelics.CORE,darkspawn.black.endgame.LegendaryRelics.TITANBREAKER,darkspawn.black.endgame.LegendaryRelics.VOIDBOW,darkspawn.black.endgame.LegendaryRelics.CARAPACE,darkspawn.black.endgame.LegendaryRelics.LANTERN)));
@@ -197,6 +237,7 @@ public final class TestingCamp extends Item {
 
 	public static List<BlockPos> barrelPositions(BlockPos center) {
 		var positions = new ArrayList<BlockPos>();
+		positions.add(center.offset(-6, 1, -1));
 		for (int x = -9; x <= 9; x += 2) positions.add(center.offset(x, 1, -9));
 		for (int z = -7; z <= 9; z += 2) positions.add(center.offset(9, 1, z));
 		for (int x = 7; x >= -9; x -= 2) positions.add(center.offset(x, 1, 9));
@@ -230,6 +271,18 @@ public final class TestingCamp extends Item {
 				return "Camp blocked at " + pos.toShortString() + ". Choose flat, open ground: 21 x 21 with four blocks of headroom.";
 			if (y == 0) plan.put(pos, Blocks.STONE_BRICKS.defaultBlockState());
 		}
+		// Camp Shelter: Fit a nonflammable workshop inside the existing checked headroom and footprint.
+		for (int x = -8; x <= 8; x++) for (int z = -8; z <= 0; z++) {
+			plan.put(center.offset(x, 4, z), Blocks.STONE_BRICKS.defaultBlockState());
+			if (x == -8 || x == 8 || z == -8) for (int y = 1; y <= 3; y++)
+				plan.put(center.offset(x, y, z), Blocks.STONE_BRICKS.defaultBlockState());
+		}
+		for (int x : new int[] {-6, 0, 6}) plan.put(center.offset(x, 4, -4), Blocks.SEA_LANTERN.defaultBlockState());
+		// Local Heat: A vanilla campfire warms players independently of the initially disabled ward.
+		plan.put(center.offset(-7, 1, -4), Blocks.CAMPFIRE.defaultBlockState());
+		plan.put(center.offset(-7, 2, -4), Blocks.IRON_BARS.defaultBlockState());
+		for (var offset : List.of(new BlockPos(-6, 1, -4), new BlockPos(-7, 1, -5), new BlockPos(-7, 1, -3)))
+			plan.put(center.offset(offset), Blocks.IRON_BARS.defaultBlockState());
 		Block[] stations = {Blocks.CRAFTING_TABLE, Cooking.STATION, Blocks.FURNACE, Blocks.SMOKER, Blocks.BLAST_FURNACE,
 			Blocks.STONECUTTER, Blocks.SMITHING_TABLE, Blocks.ANVIL, Blocks.GRINDSTONE, Blocks.BREWING_STAND};
 		for (int i = 0; i < stations.length; i++) {

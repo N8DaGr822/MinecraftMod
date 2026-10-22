@@ -101,11 +101,20 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
     private boolean companionResting;
     public UUID companionOwner(){return companionOwner;}
     public boolean tame(net.minecraft.server.level.ServerPlayer player) {
+        if(WolfHunt.combatant(this))return false;
         if(kind!=Kind.DIRE||reinforcement||companionOwner!=null||!player.isAlive()||player.isSpectator()||player.level()!=level()||distanceToSqr(player)>36||!player.hasLineOfSight(this)
             ||!WorldAwakening.get(player.level()).defeated(darkspawn.black.boss.BossKind.MUTANT_WOLF)||!player.getMainHandItem().is(Items.COOKED_BEEF)||player.getMainHandItem().getCount()<4)return false;
         player.getMainHandItem().consume(4,player);companionOwner=player.getUUID();setPersistenceRequired();setTarget(null);getNavigation().stop();return true;
     }
-    @Override public void setTarget(LivingEntity target){super.setTarget(companionOwner==null?target:null);}
+    @Override public void setTarget(LivingEntity target){super.setTarget(companionOwner==null&&(!WolfHunt.combatant(this)||WolfHunt.canTarget(this,target))?target:null);}
+    @Override public boolean canAttack(LivingEntity target){return (!WolfHunt.combatant(this)||WolfHunt.canTarget(this,target))&&super.canAttack(target);}
+    public void markHunt(){addTag(WolfHunt.TAG);xpReward=0;setPersistenceRequired();setCanPickUpLoot(false);}
+    @Override public boolean hurtServer(ServerLevel level,DamageSource source,float amount){
+        // Hunt Isolation: Only opted-in players can damage event wolves; administrative removal still works.
+        if(WolfHunt.combatant(this)&&!source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)
+            &&(!(source.getEntity() instanceof LivingEntity attacker)||!WolfHunt.canTarget(this,attacker)))return false;
+        return super.hurtServer(level,source,amount);
+    }
     @Override public void checkDespawn(){if(companionOwner==null)super.checkDespawn();}
     @Override public net.minecraft.world.InteractionResult mobInteract(Player player,net.minecraft.world.InteractionHand hand){
         if(companionOwner!=null&&companionOwner.equals(player.getUUID())){
@@ -171,6 +180,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	@Override
 	protected void customServerAiStep(ServerLevel level) {
 		super.customServerAiStep(level);
+		if (WolfHunt.combatant(this)) { WolfHunt.tickWolf(this); return; }
         if(companionOwner!=null){
             setTarget(null);var owner=level.getServer().getPlayerList().getPlayer(companionOwner);
             if(!companionResting&&owner!=null&&owner.level()==level&&owner.isAlive()&&distanceToSqr(owner)>9&&distanceToSqr(owner)<=48*48)getNavigation().moveTo(owner,1.1);
@@ -312,6 +322,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 
 	@Override
 	public boolean doHurtTarget(ServerLevel level, Entity target) {
+		if (WolfHunt.combatant(this) && (!(target instanceof LivingEntity living) || !WolfHunt.canTarget(this, living))) { return false; }
 		if (windup() > 0 || leaping()) { return false; }
 		boolean hit = super.doHurtTarget(level, target);
 		if (hit && kind == Kind.FROSTFANG && target instanceof LivingEntity living) {
@@ -327,6 +338,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 
 	@Override
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
+		if (WolfHunt.combatant(this)) { return; }
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
 		if (!killedByPlayer || reinforcement) { return; }
 		spawnAtLocation(level, new ItemStack(kind == Kind.RAVAGED ? Items.RABBIT_HIDE : Items.BONE));
@@ -349,6 +361,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+		if (WolfHunt.combatant(this)) { xpReward = 0; }
         companionOwner=input.read("CompanionOwner",net.minecraft.core.UUIDUtil.CODEC).orElse(null);companionResting=input.getBooleanOr("CompanionResting",false);
 		calledReinforcements = input.getBooleanOr("darkspawn_called_pack", false);
 		reinforcement = input.getBooleanOr("darkspawn_reinforcement", false);

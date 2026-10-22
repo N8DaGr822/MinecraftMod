@@ -106,6 +106,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 	private Vec3 volleyTarget = Vec3.ZERO;
 	private int leapTicks;
 	private int attack;
+	private final AwakenedPattern awakenedPattern = new AwakenedPattern();
 	private int cooldown = 100;
 	private long lastActiveTick = -1;
 
@@ -230,6 +231,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 		}
 		int nextPhase = BossPhase.advance(phase(), getHealth(), getMaxHealth());
 		if (nextPhase != phase()) {
+			awakenedPattern.reset();
 			// Pack Budget: Each crossed phase adds a finite wave, including a hit that skips phase two.
 			int count = (phase() == 1 ? (variant() == 2 ? 4 : 2) : 0) + (nextPhase == 3 ? 2 : 0);
 			spawnPack(level, count);
@@ -243,12 +245,14 @@ public final class MutantWolf extends Monster implements GeoEntity {
 		List<ServerPlayer> nearby = level.players().stream()
 				.filter(player -> eligible(player) && distanceToSqr(player) <= 128 * 128).toList();
 		if (nearby.isEmpty()) {
+			awakenedPattern.reset();
 			getNavigation().stop();
 			entityData.set(WINDUP, 0);
 			entityData.set(LEAPING, false);
 			return;
 		}
 		lastActiveTick = level.getGameTime();
+		if (awakenedPattern.tick(level, this, BossKind.MUTANT_WOLF, nearby)) { return; }
 		if (leaping()) {
 			tickPounce(level, nearby);
 			return;
@@ -285,6 +289,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 			getNavigation().moveTo(target, phase() == 3 ? 1.3 : 1.0);
 		}
 		if (--cooldown <= 0) {
+			if (awakenedPattern.begin(this, BossKind.MUTANT_WOLF, target)) { return; }
 			getNavigation().stop();
 			volleyTarget = target.getEyePosition().add(target.getDeltaMovement().scale(10));
 			// Telegraph Commitment: The pounce locks a reachable ground point before the player starts dodging.
@@ -495,6 +500,7 @@ public final class MutantWolf extends Monster implements GeoEntity {
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+		awakenedPattern.reset();
 		// Existing Saves: Missing awakening data means an active wolf, never a new summon animation.
 		entityData.set(AWAKENING, Math.clamp(input.getIntOr("darkspawn_awakening", 0), 0, AWAKENING_TICKS));
 		entityData.set(DEFEAT_TIME, Math.clamp(deathTime, 0, DEFEAT_TICKS));

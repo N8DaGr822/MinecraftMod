@@ -42,15 +42,18 @@ public final class Nexus {
             UUIDUtil.CODEC.listOf().optionalFieldOf("targets",List.of()).forGetter(r->List.copyOf(r.targets)),
             UUIDUtil.CODEC.listOf().optionalFieldOf("claimed",List.of()).forGetter(r->List.copyOf(r.claimed)),
             UUIDUtil.CODEC.listOf().optionalFieldOf("members",List.of()).forGetter(r->List.copyOf(r.members)),
-            Codec.BOOL.optionalFieldOf("built",false).forGetter(r->r.built)).apply(i,Run::new));
-        public static final SavedDataType<Run> TYPE=new SavedDataType<>(Darkspawn.id("nexus_run"),()->new Run(0,0,Map.of(),List.of(),List.of(),List.of(),false),CODEC,null);
+            Codec.BOOL.optionalFieldOf("built",false).forGetter(r->r.built),
+            Codec.BOOL.optionalFieldOf("rooms",false).forGetter(r->r.rooms),
+            Codec.BOOL.optionalFieldOf("awaiting",false).forGetter(r->r.awaiting)).apply(i,Run::new));
+        public static final SavedDataType<Run> TYPE=new SavedDataType<>(Darkspawn.id("nexus_run"),()->new Run(0,0,Map.of(),List.of(),List.of(),List.of(),false,false,false),CODEC,null);
         private int stage;
         private long deadline;
-        private boolean built;
+        private boolean built,rooms,awaiting;
         private final Map<String,GlobalPos> returns=new LinkedHashMap<>();
         private final Set<UUID> targets=new HashSet<>(),claimed=new HashSet<>(),members=new HashSet<>();
-        private Run(int stage,long deadline,Map<String,GlobalPos> returns,List<UUID> targets,List<UUID> claimed,List<UUID> members,boolean built){this.stage=Math.clamp(stage,0,7);this.deadline=deadline;this.returns.putAll(returns);this.targets.addAll(targets);this.claimed.addAll(claimed);this.members.addAll(members);this.built=built;}
+        private Run(int stage,long deadline,Map<String,GlobalPos> returns,List<UUID> targets,List<UUID> claimed,List<UUID> members,boolean built,boolean rooms,boolean awaiting){this.stage=Math.clamp(stage,0,7);this.deadline=deadline;this.returns.putAll(returns);this.targets.addAll(targets);this.claimed.addAll(claimed);this.members.addAll(members);this.built=built;this.rooms=rooms;this.awaiting=awaiting;}
         public int stage(){return stage;}
+        public boolean awaiting(){return awaiting;}
     }
     private Nexus() { }
     public static Run run(ServerLevel level){return level.getServer().overworld().getDataStorage().computeIfAbsent(Run.TYPE);}
@@ -75,6 +78,32 @@ public final class Nexus {
         }
         run.built=true;run.setDirty();
     }
+    private static boolean rooms(ServerLevel level,Run run){
+        if(run.rooms)return true;
+        var blocks=new LinkedHashMap<BlockPos,net.minecraft.world.level.block.state.BlockState>();
+        // Nexus Rooms: Keep the original arrival pads and wave positions; the north doorway joins the two spaces.
+        for(int x=-16;x<=16;x++)for(int z=16;z<=35;z++){
+            blocks.put(new BlockPos(x,72,z),Blocks.DEEPSLATE_TILES.defaultBlockState());
+            if(Math.abs(x)==16||z==16||z==35)for(int y=64;y<72;y++){
+                if(z==16&&Math.abs(x)<=3&&y<69)continue;
+                blocks.put(new BlockPos(x,y,z),(z==16?Blocks.CHISELED_DEEPSLATE:Blocks.DEEPSLATE_BRICKS).defaultBlockState());
+            }
+        }
+        for(int x:new int[]{-10,10})blocks.put(new BlockPos(x,72,24),Blocks.SEA_LANTERN.defaultBlockState());
+        for(int x:new int[]{-28,28})for(int z:new int[]{-20,4}){
+            for(int y=64;y<=70;y++)blocks.put(new BlockPos(x,y,z),Blocks.POLISHED_BASALT.defaultBlockState());
+            blocks.put(new BlockPos(x,71,z),Blocks.SEA_LANTERN.defaultBlockState());
+            blocks.put(new BlockPos(x,72,z),Blocks.AMETHYST_BLOCK.defaultBlockState());
+        }
+        // Upgrade Safety: Validate every placement before writing any; never replace player blocks or bury equipment.
+        for(var entry:blocks.entrySet()){
+            var existing=level.getBlockState(entry.getKey());
+            if(!existing.isAir()&&!existing.equals(entry.getValue())
+                ||!level.getEntities(null,new net.minecraft.world.phys.AABB(entry.getKey())).isEmpty())return false;
+        }
+        blocks.forEach((pos,state)->level.setBlock(pos,state,3));
+        run.rooms=true;run.setDirty();return true;
+    }
     public static boolean start(ServerPlayer captain){
         var server=captain.level().getServer();var level=server.getLevel(LEVEL);var run=run(captain.level());
         if(!traveler(captain)||!captain.level().dimension().equals(Level.OVERWORLD)||level==null||level.getDifficulty()==Difficulty.PEACEFUL)return false;
@@ -84,6 +113,7 @@ public final class Nexus {
         var group=new ArrayList<ServerPlayer>();group.add(captain);
         captain.level().players().stream().filter(p->p!=captain&&traveler(p)&&p.distanceToSqr(captain)<=12*12&&(p.getMainHandItem().is(KEY)||p.getOffhandItem().is(KEY))).limit(5).forEach(group::add);
         arena(level,run);
+        if(!rooms(level,run)){message(captain,"Nexus room upgrade is obstructed. Clear the entry-hall walls/roof or chamber pillars; your blocks and equipment were preserved. No star charged.");return false;}
         // Arrival Safety: Player-modified pads need dry air and safe support across the entire arrival footprint before charging.
         for(int i=0;i<group.size();i++){
             var player=group.get(i);var box=player.getBoundingBox().move(new Vec3(-10+i*4,64,24).subtract(player.position()));
@@ -95,13 +125,37 @@ public final class Nexus {
             if(!safe){message(captain,"Nexus arrival pads need clear, dry space over safe solid floors. Repair them before entering.");return false;}
         }
         darkspawn.black.pirate.Ships.pay(captain,Items.NETHER_STAR,1,true);
-        run.targets.clear();run.claimed.clear();run.members.clear();group.forEach(p->run.members.add(p.getUUID()));run.stage=1;run.deadline=server.overworld().getGameTime()+24000;
+        run.targets.clear();run.claimed.clear();run.members.clear();group.forEach(p->run.members.add(p.getUUID()));run.stage=1;run.awaiting=true;run.deadline=server.overworld().getGameTime()+24000;
         for(int i=0;i<group.size();i++){
             var player=group.get(i);run.returns.put(player.getUUID().toString(),GlobalPos.of(player.level().dimension(),player.blockPosition()));
             player.teleport(new TeleportTransition(level,new Vec3(-10+i*4,64,24),Vec3.ZERO,180,0,TeleportTransition.PLACE_PORTAL_TICKET));player.fallDistance=0;
-            message(player,"Nexus: five regional waves, then the Nexus Warden. Use your key or /nexusleave to retreat. Twenty-minute run limit.");
+            message(player,"Nexus entry hall: gather through the north doorway, then /nexusbegin. Five waves and the Warden; twenty minutes including preparation. /nexusstatus shows your objective; key or /nexusleave retreats.");
         }
-        spawnWave(level,run);run.setDirty();return true;
+        run.setDirty();return true;
+    }
+    public static boolean begin(ServerPlayer player){
+        var level=player.level();var run=run(level);
+        if(!level.dimension().equals(LEVEL)||run.stage!=1||!run.awaiting||!run.members.contains(player.getUUID()))return false;
+        if(level.getDifficulty()==Difficulty.PEACEFUL||level.getServer().overworld().getGameTime()>=run.deadline)return false;
+        for(var id:run.members){
+            var member=level.getServer().getPlayerList().getPlayer(id);
+            if(member==null||member.level()!=level||!member.isAlive()||member.isSpectator()
+                ||Math.abs(member.getX())>35||member.getZ()<-35||member.getZ()>10||member.getY()<64||member.getY()>72){
+                message(player,"Gather every entrant in the encounter chamber north of the entry hall, then /nexusbegin. Missing members can /nexusrecover from the Overworld.");return false;
+            }
+        }
+        run.awaiting=false;spawnWave(level,run);run.setDirty();return !run.targets.isEmpty();
+    }
+    public static String status(ServerPlayer player){
+        var run=run(player.level());
+        if(!player.level().dimension().equals(LEVEL))return "Nexus: use a key in the Overworld. Captain needs all 16 world victories, 15 consumed hearts and one Nether Star. Nearby friends hold a key to join.";
+        if(run.stage==0)return "Nexus recovery visit: /nexusleave returns to your saved entrance.";
+        if(run.stage==7)return run.claimed.isEmpty()?"Nexus ended without victory: recover equipment, then /nexusleave."
+            :"Nexus cleared: collect your core/equipment, then /nexusleave.";
+        long seconds=Math.max(0,(run.deadline-player.level().getServer().overworld().getGameTime())/20);
+        return (run.awaiting?"Entry hall → north doorway → gather party → /nexusbegin"
+            :run.stage==6?"Nexus Warden: "+run.targets.size()+" target remaining"
+            :"Nexus wave "+run.stage+"/5: "+run.targets.size()+" enemies remaining")+" | "+seconds+"s | /nexusleave to retreat";
     }
     public static boolean leave(ServerPlayer player){
         if(!player.level().dimension().equals(LEVEL))return false;
@@ -143,11 +197,12 @@ public final class Nexus {
         boolean departed=absent&&(run.stage==7||run.members.stream().map(id->server.getPlayerList().getPlayer(id)).anyMatch(java.util.Objects::nonNull));
         if(departed||run.stage<7&&(server.overworld().getGameTime()>=run.deadline||level.getDifficulty()==Difficulty.PEACEFUL)){
             var cleanup=new ArrayList<Entity>();level.getAllEntities().forEach(cleanup::add);for(var entity:cleanup)if(entity.entityTags().contains(TAG))entity.discard();
-            run.stage=level.players().isEmpty()?0:7;run.targets.clear();run.setDirty();messageAll(level,"Nexus run ended. Use your key or /nexusleave to return.");return;
+            run.stage=level.players().isEmpty()?0:7;run.awaiting=false;run.targets.clear();run.setDirty();messageAll(level,"Nexus run ended. Use your key or /nexusleave to return.");return;
         }
         if(absent)return;
         // Advance only from recorded deaths, never from unloaded, missing or discarded entities.
-        if(run.stage<7&&run.targets.isEmpty()){
+        level.players().forEach(p->p.sendOverlayMessage(Component.literal(status(p))));
+        if(run.stage<7&&!run.awaiting&&run.targets.isEmpty()){
             run.stage++;
             if(run.stage==7){
                 for(var p:level.players())if(p.isAlive()&&!p.isSpectator()&&run.members.contains(p.getUUID())&&run.claimed.add(p.getUUID())){
@@ -167,6 +222,8 @@ public final class Nexus {
         CommandRegistrationCallback.EVENT.register((dispatcher,access,environment)->{
             dispatcher.register(Commands.literal("nexusleave").executes(context->{var player=context.getSource().getPlayer();return player!=null&&leave(player)?1:0;}));
             dispatcher.register(Commands.literal("nexusrecover").executes(context->{var player=context.getSource().getPlayer();return player!=null&&recover(player)?1:0;}));
+            dispatcher.register(Commands.literal("nexusbegin").executes(context->{var player=context.getSource().getPlayer();return player!=null&&begin(player)?1:0;}));
+            dispatcher.register(Commands.literal("nexusstatus").executes(context->{var player=context.getSource().getPlayer();if(player==null)return 0;message(player,status(player));return 1;}));
         });
     }
 }

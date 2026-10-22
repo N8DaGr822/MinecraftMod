@@ -16,7 +16,8 @@ public final class NoahLedger extends SavedData {
     public static final SavedDataType<NoahLedger> TYPE = new SavedDataType<>(Darkspawn.id("noah_legacy"), () -> new NoahLedger(Map.of()), CODEC, null);
     private final Map<String, CompoundTag> entries;
     private NoahLedger(Map<String, CompoundTag> entries) { this.entries = new HashMap<>(entries); }
-    public static NoahLedger get(ServerLevel level) { return level.getServer().overworld().getDataStorage().computeIfAbsent(TYPE); }
+    // Ascension Possessions: Keep outside companion storage out of the new inventory profile.
+    public static NoahLedger get(ServerLevel level) { return (darkspawn.black.oneblock.Ascension.island(level)?level:level.getServer().overworld()).getDataStorage().computeIfAbsent(TYPE); }
     public CompoundTag entry(UUID owner) {
         return entries.computeIfAbsent(owner.toString(), key -> { setDirty(); return new CompoundTag(); });
     }

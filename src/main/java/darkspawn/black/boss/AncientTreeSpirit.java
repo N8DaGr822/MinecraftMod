@@ -110,6 +110,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 	private final List<UUID> healers = new ArrayList<>();
 	private Vec3 markedTarget = Vec3.ZERO;
 	private int attack;
+	private final AwakenedPattern awakenedPattern = new AwakenedPattern();
 	private int cooldown = 100;
 	private long lastActiveTick = -1;
 	private int forestVariant;
@@ -239,6 +240,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 		}
 		int nextPhase = BossPhase.advance(phase(), getHealth(), getMaxHealth());
 		if (nextPhase != phase()) {
+			awakenedPattern.reset();
 			if (phase() == 1) {
 				spawnHealers(level);
 			}
@@ -266,10 +268,12 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 		List<ServerPlayer> nearby = level.players().stream()
 				.filter(player -> eligible(player) && distanceToSqr(player) <= 128 * 128).toList();
 		if (nearby.isEmpty()) {
+			awakenedPattern.reset();
 			entityData.set(WINDUP, 0);
 			return;
 		}
 		lastActiveTick = level.getGameTime();
+		if (awakenedPattern.tick(level, this, BossKind.ANCIENT_TREE_SPIRIT, nearby)) { return; }
 		if (windup() > 0) {
 			telegraph(level, nearby);
 			entityData.set(WINDUP, windup() - 1);
@@ -282,6 +286,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 		}
 		if (--cooldown <= 0) {
 			ServerPlayer target = nearby.get(random.nextInt(nearby.size()));
+			if (awakenedPattern.begin(this, BossKind.ANCIENT_TREE_SPIRIT, target)) { return; }
 			attack = (attack + 1) % 3;
 			entityData.set(ATTACK_KIND, attack);
 			markedTarget = attack == 0 ? target.getEyePosition().add(target.getDeltaMovement().scale(12))
@@ -503,6 +508,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 	@Override
 	protected void readAdditionalSaveData(ValueInput input) {
 		super.readAdditionalSaveData(input);
+		awakenedPattern.reset();
 		// Existing Saves: Missing awakening data means an already-active encounter, never a fresh reveal.
 		entityData.set(AWAKENING, Math.clamp(input.getIntOr("darkspawn_awakening", 0), 0, AWAKENING_TICKS));
 		entityData.set(DEFEAT_TIME, Math.clamp(deathTime, 0, DEFEAT_TICKS));

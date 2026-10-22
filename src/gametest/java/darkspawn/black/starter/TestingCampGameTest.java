@@ -44,6 +44,20 @@ public final class TestingCampGameTest {
 			helper.assertTrue(helper.getLevel().getBlockState(center.offset(-5, 1, -6)).is(Blocks.CRAFTING_TABLE), "Crafting table installed");
 			var core = helper.getLevel().getBlockState(center.offset(-4, 2, -2));
 			helper.assertTrue(core.is(Bonfires.CORE) && core.getValue(BonfireBlock.PHASE) == 0, "Ward starts off for hostile tests");
+			helper.assertTrue(core.getValue(BonfireBlock.RANGE) == 1, "Bonfire starts at the first upgrade level");
+			var upgrades = (BarrelBlockEntity) helper.getLevel().getBlockEntity(center.offset(-6, 1, -1));
+			helper.assertTrue(upgrades.getItem(0).is(Items.IRON_INGOT) && upgrades.getItem(0).getCount() == 8
+				&& upgrades.getItem(1).is(Items.GOLD_INGOT) && upgrades.getItem(1).getCount() == 4
+				&& upgrades.getItem(2).is(Items.DIAMOND) && upgrades.getItem(2).getCount() == 2, "All three upgrade payments sit beside the bonfire");
+			// Shelter Placement: Skylight updates asynchronously; verify the solid roof and rain heightmap at placement.
+			var shelter = center.offset(-4, 2, -3);
+			helper.assertTrue(helper.getLevel().getBlockState(center.offset(-4, 4, -3)).is(Blocks.STONE_BRICKS)
+				&& helper.getLevel().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
+					shelter.getX(), shelter.getZ()) > shelter.getY(), "Workshop roof shelters the bonfire testing area");
+			helper.assertTrue(helper.getLevel().getBlockState(center.offset(-7, 1, -4)).is(Blocks.CAMPFIRE)
+				&& helper.getLevel().getBlockState(center.offset(-7, 1, -4)).getValue(net.minecraft.world.level.block.CampfireBlock.LIT),
+				"Separate lit hearth provides local heat while the ward is off");
+			helper.assertTrue(helper.getLevel().getBlockState(center.offset(-6, 1, -4)).is(Blocks.IRON_BARS), "Hearth has a walking guard");
 			helper.assertTrue(helper.getLevel().getBlockState(center).is(Blocks.STONE), "Existing ground preserved");
 			var table = center.offset(5, 1, -3);
 			long shelves = net.minecraft.world.level.block.EnchantingTableBlock.BOOKSHELF_OFFSETS.stream()
@@ -102,6 +116,8 @@ public final class TestingCampGameTest {
 			.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
 		helper.assertTrue(guide.pages().stream().anyMatch(page -> page.raw().getString().contains("FACTION SKIRMISHES"))
 			&& guide.pages().stream().anyMatch(page -> page.raw().getString().contains("Cinderjaw")), "Camp guide covers new islands and skirmish testing");
+		for (var topic : java.util.List.of("BONFIRE LEVELS", "SHELTER", "NOAH'S LEGACY", "ONEBLOCK ASCENSION", "INGREDIENT POUCH", "WOLF HUNT", "FUNGAL BLOOM", "SHADOW INCURSION", "SOUL STORM", "MAGIC CARPET", "NEXUS ROOMS"))
+			helper.assertTrue(guide.pages().stream().anyMatch(page -> page.raw().getString().contains(topic)), "Camp guide explains " + topic);
 		for (var item : java.util.List.of(darkspawn.black.worldgen.DiscoveryCharts.ITEM, darkspawn.black.boss.AwakenedRematches.SEAL, Items.BRUSH, darkspawn.black.pirate.Pirate.GATE_ITEM, darkspawn.black.pirate.LogboundCompass.ITEM,
 			darkspawn.black.pirate.Ships.SHIPYARD_ITEM, darkspawn.black.pirate.Ships.HELM_ITEM, darkspawn.black.pirate.Ships.CANNON_ITEM,
 			darkspawn.black.pirate.Ships.SHOT, darkspawn.black.pirate.Ships.FIRE_SHOT, darkspawn.black.pirate.PirateDrinks.BEER,
@@ -110,11 +126,25 @@ public final class TestingCampGameTest {
 			darkspawn.black.forsaken.ForsakenContent.BEACON_ITEM, darkspawn.black.forsaken.ForsakenContent.CORE,
 			darkspawn.black.mount.MountCompanions.CAPSULE, darkspawn.black.mount.MountCompanions.VET_KIT))
 			helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Expansion testing item supplied: " + item);
+        for (var key : java.util.List.of(darkspawn.black.equipment.ThematicEnchantments.HUNTER,
+            darkspawn.black.equipment.ThematicEnchantments.BUTCHER, darkspawn.black.equipment.ThematicEnchantments.FORAGER,
+            darkspawn.black.equipment.ThematicEnchantments.SOULWARD))
+            helper.assertTrue(all.stream().anyMatch(stack -> net.minecraft.world.item.enchantment.EnchantmentHelper.getItemEnchantmentLevel(
+                helper.getLevel().registryAccess().getOrThrow(key), stack) == 2), "Rank II trial supplied: " + key);
+        helper.assertTrue(guide.pages().stream().anyMatch(page -> page.raw().getString().contains("FOOD ENCHANTMENTS")),
+            "Guide explains enchantment restrictions and chances");
 		for (var item : darkspawn.black.boss.BossItems.HEARTS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every current heart supplied");
+		helper.assertTrue(all.stream().filter(stack -> stack.is(darkspawn.black.inventory.IngredientPouchItem.ITEM)).mapToInt(ItemStack::getCount).sum() == 1,
+			"Fresh camp supplies exactly one Ingredient Pouch");
+		for (var item : java.util.List.of(darkspawn.black.inventory.QuiverItem.ITEM, darkspawn.black.inventory.ExplorerPackItem.ITEM, darkspawn.black.mount.MagicCarpetItem.ITEM, darkspawn.black.mount.AircraftCoreItem.ITEM, darkspawn.black.mount.GroundWalkerItem.ITEM))
+			helper.assertTrue(all.stream().filter(stack -> stack.is(item)).mapToInt(ItemStack::getCount).sum() == 1,
+				"Fresh camp supplies exactly one utility container: " + item);
 		for (var item : darkspawn.black.boss.BossItems.SUMMONS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every regional summon supplied");
+        for(var item:java.util.List.of(darkspawn.black.worldgen.ExplorationFinds.FOSSIL_FRAGMENT,darkspawn.black.worldgen.ExplorationFinds.OCEAN_NOTE,Items.BONE_BLOCK,Items.SMOOTH_STONE_SLAB,Items.PRISMARINE_SHARD,Items.NAUTILUS_SHELL))
+            helper.assertTrue(all.stream().anyMatch(stack->stack.is(item)),"Fresh camp supports fossil reconstruction and ocean clues: "+item);
 		for (var item : darkspawn.black.forsaken.ForsakenContent.ARMOR.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Complete Quarantine armor supplied");
 		var positions = TestingCamp.barrelPositions(BlockPos.ZERO);
-		helper.assertTrue(positions.size() == 72 && positions.stream().distinct().count() == 72, "Expanded perimeter positions are unique");
+		helper.assertTrue(positions.size() == 73 && positions.stream().distinct().count() == 73, "Perimeter and dedicated upgrade positions are unique");
 		helper.assertTrue(supplies.stream().mapToInt(s -> (s.items().size() + 26) / 27).sum() <= positions.size(), "All expansion supplies fit");
 		var weapons = supplies.stream().filter(s -> s.name().equals("10 Combat tools")).findFirst().orElseThrow().items();
 		for (var item : java.util.List.of(Items.DIAMOND_AXE, Items.DIAMOND_SPEAR, Items.TRIDENT, Items.MACE, Items.CROSSBOW))

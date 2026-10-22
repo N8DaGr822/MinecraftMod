@@ -20,6 +20,51 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 public final class EndgameGameTest {
+    @GameTest public void nexusRoomUpgradePreservesObstructionsBeforePayment(GameTestHelper h){
+        var p=player(h);var server=p.level().getServer();var storage=server.overworld().getDataStorage();
+        var previous=WorldAwakening.get(p.level());var oldRun=Nexus.run(p.level());var level=server.getLevel(Nexus.LEVEL);
+        var obstacle=new BlockPos(-16,65,20);var probe=new BlockPos(-16,64,16);
+        var oldObstacle=level.getBlockState(obstacle);var oldProbe=level.getBlockState(probe);
+        try{
+            var data=WorldAwakening.TYPE.codec().parse(JsonOps.INSTANCE,new com.google.gson.JsonObject()).getOrThrow();storage.set(WorldAwakening.TYPE,data);
+            for(var kind:BossKind.values())data.unlock(kind,1);BossHearts.progress(p).restore(Arrays.stream(BossKind.values()).map(BossKind::id).toList());
+            var saved=new com.google.gson.JsonObject();saved.addProperty("built",true);
+            storage.set(Nexus.Run.TYPE,Nexus.Run.CODEC.parse(JsonOps.INSTANCE,saved).getOrThrow());
+            p.getInventory().setItem(1,new ItemStack(Items.NETHER_STAR,2));
+            level.setBlock(obstacle,Blocks.DIAMOND_BLOCK.defaultBlockState(),2);level.setBlock(probe,Blocks.AIR.defaultBlockState(),2);
+            h.assertTrue(!Nexus.start(p)&&p.getInventory().countItem(Items.NETHER_STAR)==2,"Legacy room obstruction rejects entry before payment");
+            h.assertTrue(level.getBlockState(obstacle).is(Blocks.DIAMOND_BLOCK)&&level.getBlockState(probe).isAir(),"Upgrade preserves obstruction and performs no partial room writes");
+            h.assertTrue(Nexus.run(level).stage()==0&&!Nexus.run(level).awaiting(),"Legacy save defaults do not fabricate a pending run");
+        }finally{
+            level.setBlock(obstacle,oldObstacle,2);level.setBlock(probe,oldProbe,2);
+            remove(p);storage.set(WorldAwakening.TYPE,previous);storage.set(Nexus.Run.TYPE,oldRun);
+        }h.succeed();
+    }
+    @GameTest public void nexusPreparationTimeoutCleansEnemiesButPreservesEquipment(GameTestHelper h){
+        var p=player(h);var server=p.level().getServer();var storage=server.overworld().getDataStorage();var oldRun=Nexus.run(p.level());var level=server.getLevel(Nexus.LEVEL);
+        var saved=new com.google.gson.JsonObject();saved.addProperty("stage",1);saved.addProperty("deadline",0);saved.addProperty("built",true);saved.addProperty("awaiting",true);
+        storage.set(Nexus.Run.TYPE,Nexus.Run.CODEC.parse(JsonOps.INSTANCE,saved).getOrThrow());
+        // Fixture Chunks: Immediate cleanup only visits tracked entities; unloaded enemies use the load hook.
+        boolean mobForced=level.setChunkForced(0,-1,true),equipmentForced=level.setChunkForced(0,1,true);
+        level.getChunkSource().tick(() -> true,false);
+        for(int tasks=0;tasks<10000&&level.getChunkSource().pollTask();tasks++){ }
+        var equipment=new net.minecraft.world.entity.item.ItemEntity(level,0,64,24,new ItemStack(Items.DIAMOND));level.addFreshEntity(equipment);
+        var mob=RegionalEcosystems.MOBS.get(RegionalKind.VOIDLING).create(level,EntitySpawnReason.EVENT);mob.setPos(0,64,-12);mob.addTag(Nexus.TAG);level.addFreshEntity(mob);
+        try{
+            h.assertTrue(level.getEntity(mob.getUUID())==mob,"Fixture enemy is tracked before timeout");
+            p.teleport(new net.minecraft.world.level.portal.TeleportTransition(level,new Vec3(0,64,24),Vec3.ZERO,0,0,net.minecraft.world.level.portal.TeleportTransition.PLACE_PORTAL_TICKET));
+            Nexus.advance(server);
+            h.assertTrue(Nexus.run(level).stage()==7&&!Nexus.run(level).awaiting(),"Expired preparation ends");
+            h.assertTrue(mob.isRemoved(),"Expired preparation clears tracked enemies");
+            h.assertTrue(!equipment.isRemoved(),"Failed run preserves dropped equipment");
+            var encoded=Nexus.Run.CODEC.encodeStart(JsonOps.INSTANCE,Nexus.run(level)).getOrThrow();storage.set(Nexus.Run.TYPE,Nexus.Run.CODEC.parse(JsonOps.INSTANCE,encoded).getOrThrow());
+            Nexus.advance(server);
+            h.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,new net.minecraft.world.phys.AABB(-36,60,-36,36,100,36),e->e.getItem().is(LegendaryRelics.CORE)).isEmpty(),"Reloaded failed run awards no victory core");
+        }finally{
+            equipment.discard();mob.discard();remove(p);storage.set(Nexus.Run.TYPE,oldRun);
+            if(mobForced)level.setChunkForced(0,-1,false);if(equipmentForced)level.setChunkForced(0,1,false);
+        }h.succeed();
+    }
     @GameTest public void polishNexusRejectsHazardousArrivalWithoutPayment(GameTestHelper h){
         var p=player(h);var server=p.level().getServer();var storage=server.overworld().getDataStorage();var previous=WorldAwakening.get(p.level());var oldRun=Nexus.run(p.level());var level=server.getLevel(Nexus.LEVEL);
         var data=WorldAwakening.TYPE.codec().parse(JsonOps.INSTANCE,new com.google.gson.JsonObject()).getOrThrow();storage.set(WorldAwakening.TYPE,data);
@@ -39,8 +84,11 @@ public final class EndgameGameTest {
         }h.succeed();
     }
 	private static ServerPlayer player(GameTestHelper helper) {
+		return player(helper,UUID.randomUUID());
+	}
+	private static ServerPlayer player(GameTestHelper helper,UUID id) {
 		var level = helper.getLevel();
-		var cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "nexus-"+UUID.randomUUID().toString().substring(0,6)), false);
+		var cookie = CommonListenerCookie.createInitial(new GameProfile(id, "nexus-"+id.toString().substring(0,6)), false);
 		var player = new ServerPlayer(level.getServer(), level, cookie.gameProfile(), cookie.clientInformation()) {
 			@Override public GameType gameMode() { return GameType.SURVIVAL; }
 			@Override public boolean isClientAuthoritative() { return false; }
@@ -121,8 +169,20 @@ public final class EndgameGameTest {
             p.getInventory().setItem(0,new ItemStack(Nexus.KEY));p.getInventory().setItem(1,new ItemStack(Items.NETHER_STAR,2));friend.getInventory().setItem(0,new ItemStack(Nexus.KEY));
             var origin=p.blockPosition();for(int x=-4;x<=4;x++)for(int z=-4;z<=4;z++)p.level().setBlock(origin.offset(x,-1,z),Blocks.STONE.defaultBlockState(),3);
             h.assertTrue(Nexus.start(p)&&p.level()==level&&friend.level()==level,"Qualified captain brings an opted-in unqualified friend");h.assertTrue(p.getInventory().countItem(Items.NETHER_STAR)==1,"Exactly one star charged for group");
+            h.assertTrue(Nexus.run(level).awaiting()&&!Nexus.begin(p),"Entry hall does not begin combat before the party reaches the chamber");
+            h.assertTrue(level.getBlockState(new BlockPos(0,72,24)).is(Blocks.DEEPSLATE_TILES)&&level.getBlockState(new BlockPos(0,64,16)).isAir(),"Sheltered approach has a clear doorway");
+            Nexus.advance(server);h.assertTrue(Nexus.run(level).stage()==1&&Nexus.run(level).awaiting(),"Empty preparation stage cannot award or skip waves");
             var save=Nexus.Run.CODEC.encodeStart(JsonOps.INSTANCE,Nexus.run(level)).getOrThrow();storage.set(Nexus.Run.TYPE,Nexus.Run.CODEC.parse(JsonOps.INSTANCE,save).getOrThrow());
-            h.assertTrue(Nexus.run(level).stage()==1,"Active wave survives codec reload");
+            h.assertTrue(Nexus.run(level).stage()==1&&Nexus.run(level).awaiting(),"Preparation survives codec reload");
+            p.teleportTo(-2,64,4);
+            var friendId=friend.getUUID();remove(friend);
+            h.assertTrue(!Nexus.begin(p),"Disconnected party member cannot be silently omitted from preparation");
+            friend=player(h,friendId);
+            h.assertTrue(Nexus.recover(friend),"Reconnected entrant can recover into the saved preparation stage");
+            friend.teleportTo(2,64,4);
+            h.assertTrue(Nexus.begin(p)&&!Nexus.begin(friend),"Gathered party starts exactly one first wave");
+            save=Nexus.Run.CODEC.encodeStart(JsonOps.INSTANCE,Nexus.run(level)).getOrThrow();storage.set(Nexus.Run.TYPE,Nexus.Run.CODEC.parse(JsonOps.INSTANCE,save).getOrThrow());
+            h.assertTrue(!Nexus.run(level).awaiting(),"Active combat survives codec reload without rearming preparation");
             for(int wave=1;wave<=6;wave++){
                 var enemies=new ArrayList<LivingEntity>();for(var entity:level.getAllEntities())if(entity instanceof LivingEntity mob&&mob.isAlive()&&mob.entityTags().contains(Nexus.TAG))enemies.add(mob);
                 h.assertTrue(!enemies.isEmpty(),"Wave contains actual entities");
@@ -130,6 +190,7 @@ public final class EndgameGameTest {
             }
             h.assertTrue(Nexus.run(level).stage()==7,"Five waves and Warden complete");
             long rewards=level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,new net.minecraft.world.phys.AABB(-36,60,-36,36,100,36),e->e.getItem().is(LegendaryRelics.CORE)).stream().mapToInt(e->e.getItem().getCount()).sum();Nexus.advance(server);
+            h.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,new net.minecraft.world.phys.AABB(-36,60,-36,36,100,36),e->e.getItem().is(LegendaryRelics.CORE)).stream().mapToInt(e->e.getItem().getCount()).sum()==rewards,"Repeated completion tick cannot duplicate cores");
             h.assertTrue(rewards==2,"One core for each survivor");h.assertTrue(Nexus.leave(p)&&Nexus.leave(friend),"Both return safely");Nexus.advance(server);
             h.assertTrue(Nexus.run(server.overworld()).stage()==0&&Nexus.recover(friend),"Unqualified friend can retrieve equipment after the run");h.assertTrue(Nexus.leave(friend),"Recovery has a safe exit");
         }finally{

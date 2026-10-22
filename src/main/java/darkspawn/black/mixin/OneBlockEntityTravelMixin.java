@@ -13,6 +13,7 @@ public abstract class OneBlockEntityTravelMixin {
 	@Inject(method = "teleport", at = @At("HEAD"), cancellable = true)
 	private void darkspawn$containEntities(TeleportTransition transition, CallbackInfoReturnable<Entity> ci) {
 		// Transfer Boundary: Items, projectiles, vehicles, and pets cannot carry possessions across profiles.
-		if (OneBlock.island(((Entity) (Object) this).level()) != OneBlock.island(transition.newLevel())) ci.setReturnValue(null);
+		if (OneBlock.island(((Entity) (Object) this).level()) != OneBlock.island(transition.newLevel())
+			|| darkspawn.black.oneblock.Ascension.island(((Entity) (Object) this).level()) != darkspawn.black.oneblock.Ascension.island(transition.newLevel())) ci.setReturnValue(null);
 	}
 }
