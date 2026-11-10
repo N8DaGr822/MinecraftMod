@@ -23,3 +23,20 @@ tasks.named('fullCheck') {
 	description = 'Pre-push checks without packaging: all unit tests, server GameTests and cuisine assets.'
 	dependsOn tasks.named('checkCuisineArt')
 }
+
+dependencies {
+	implementation module('core')
+	include module('core')
+	implementation module('storage')
+	include module('storage')
+	implementation module('bonfire')
+	include module('bonfire')
+	implementation module('quiver')
+	include module('quiver')
+	implementation module('ingredient_pouch')
+	include module('ingredient_pouch')
+	implementation module('explorer_pack')
+	include module('explorer_pack')
+	implementation module('enchantments')
+	include module('enchantments')
+}

@@ -27,8 +27,8 @@ public final class HomePorts {
         if(port==null||!port.center().equals(island.center()))return SeaServices.Reply.OWNER;
         if(port.level()>=2)return SeaServices.Reply.PORT_MAX;
         int iron=port.level()==0?32:16,wood=port.level()==0?32:64;
-        if(!Ships.pay(player,Items.IRON_INGOT,iron,false)||!Ships.pay(player,Items.OAK_PLANKS,wood,false)||!Ships.pay(player,Items.EMERALD,8,false))return SeaServices.Reply.COST;
-        Ships.pay(player,Items.IRON_INGOT,iron,true);Ships.pay(player,Items.OAK_PLANKS,wood,true);Ships.pay(player,Items.EMERALD,8,true);
+        if(!darkspawn.black.core.Payments.pay(player,Items.IRON_INGOT,iron,false)||!darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,wood,false)||!darkspawn.black.core.Payments.pay(player,Items.EMERALD,8,false))return SeaServices.Reply.COST;
+        darkspawn.black.core.Payments.pay(player,Items.IRON_INGOT,iron,true);darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,wood,true);darkspawn.black.core.Payments.pay(player,Items.EMERALD,8,true);
         ledger.homePort(new SeaLedger.HomePort(player.getUUID(),port.center(),port.level()+1));return SeaServices.Reply.DONE;
     }
 }

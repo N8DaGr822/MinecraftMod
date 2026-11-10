@@ -46,7 +46,7 @@ class BossRosterTest {
 	static void initialize() { TestBootstrap.initialize(); registries = VanillaRegistries.createWorldLookup(); }
 
 	private JsonElement resource(String path) throws Exception {
-		try (var stream = getClass().getResourceAsStream(path)) {
+		try (var stream = darkspawn.black.MergedResources.open(getClass(), path)) {
 			assertNotNull(stream, path);
 			return JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		}
@@ -205,7 +205,7 @@ class BossRosterTest {
 				assertTrue(model.getBone(bone.boneName()).isPresent(), name + ": " + bone.boneName());
 			}
 		}
-		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/endborn.png")) {
+		try (var stream = darkspawn.black.MergedResources.open(getClass(), "/assets/darkspawn/textures/entity/endborn.png")) {
 			assertNotNull(stream);
 			var texture = javax.imageio.ImageIO.read(stream);
 			assertNotNull(texture, "The packaged texture must decode as an image");
@@ -254,7 +254,7 @@ class BossRosterTest {
 		assertEquals(BossEntities.TREE_SPIRIT.getDimensions().height(), height, 0.001);
 		assertEquals(28, height, 0.001, "The Tree Spirit must render at its intended boss height");
 		assertEquals(4, heartFaces, "Elytra attackers need a visible weak point from all four sides");
-		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/ancient_tree_spirit.png")) {
+		try (var stream = darkspawn.black.MergedResources.open(getClass(), "/assets/darkspawn/textures/entity/ancient_tree_spirit.png")) {
 			assertNotNull(stream);
 			assertNotNull(javax.imageio.ImageIO.read(stream));
 		}
@@ -301,7 +301,7 @@ class BossRosterTest {
 			}
 		}
 		assertEquals(BossEntities.MUTANT_WOLF.getDimensions().height(), height, 0.001);
-		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/mutant_wolf.png")) {
+		try (var stream = darkspawn.black.MergedResources.open(getClass(), "/assets/darkspawn/textures/entity/mutant_wolf.png")) {
 			assertNotNull(stream);
 			var texture = javax.imageio.ImageIO.read(stream);
 			assertNotNull(texture);
@@ -343,7 +343,7 @@ class BossRosterTest {
 			}
 		}
 		assertEquals(BossEntities.BIOME_BOSSES.get(BossProfile.MUTANT_ZOMBIE).getDimensions().height(), height, 0.001);
-		try (var stream = getClass().getResourceAsStream("/assets/darkspawn/textures/entity/mutant_zombie.png")) {
+		try (var stream = darkspawn.black.MergedResources.open(getClass(), "/assets/darkspawn/textures/entity/mutant_zombie.png")) {
 			assertNotNull(stream); var texture = javax.imageio.ImageIO.read(stream); assertNotNull(texture);
 			assertEquals(texture.getWidth(), texture.getHeight());
 		}
@@ -387,7 +387,7 @@ class BossRosterTest {
 				if (name.equals("awaken")) { assertEquals(5, animation.length(), .001); }
 				for (var bone : animation.boneAnimations()) { assertTrue(model.getBone(bone.boneName()).isPresent(), bone.boneName()); }
 			}
-			try (var stream = getClass().getResourceAsStream(path + "textures/entity/" + profile.id() + ".png")) {
+			try (var stream = darkspawn.black.MergedResources.open(getClass(), path + "textures/entity/" + profile.id() + ".png")) {
 				assertNotNull(stream); assertNotNull(javax.imageio.ImageIO.read(stream));
 			}
 		}
@@ -433,7 +433,7 @@ class BossRosterTest {
 				}
 				assertEquals(3, shields);
 			}
-			try (var stream = getClass().getResourceAsStream(path + "textures/entity/" + entry.getValue() + ".png")) { assertNotNull(stream, id); assertNotNull(javax.imageio.ImageIO.read(stream), id); }
+			try (var stream = darkspawn.black.MergedResources.open(getClass(), path + "textures/entity/" + entry.getValue() + ".png")) { assertNotNull(stream, id); assertNotNull(javax.imageio.ImageIO.read(stream), id); }
 		}
 		Class.forName("darkspawn.black.client.ecosystem.CreatureGeoRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
 	}

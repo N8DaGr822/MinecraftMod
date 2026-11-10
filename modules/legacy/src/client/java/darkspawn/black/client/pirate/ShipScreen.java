@@ -1,6 +1,6 @@
 package darkspawn.black.client.pirate;
 
-import darkspawn.black.client.UiTheme;
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.pirate.ShipMenu;
 import darkspawn.black.pirate.ShipIdentityPayload;
 import java.util.ArrayList;

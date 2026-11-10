@@ -159,15 +159,15 @@ public final class PirateShip extends Entity {
         if(!classUnlocked(Pirate.state(captain),selected)||selected==shipClass()||!refitAllowed(captain)||!refitPort()||tier()<1
                 ||PirateProgression.captainTier(Pirate.state(captain))<1)return false;
         int iron=selected>=3?64:selected==2?48:16,emeralds=selected>=3?16:selected==0?0:8;
-        if(!Ships.pay(captain,Items.IRON_INGOT,iron,false)||!Ships.pay(captain,Items.EMERALD,emeralds,false))return false;
-        Ships.pay(captain,Items.IRON_INGOT,iron,true);Ships.pay(captain,Items.EMERALD,emeralds,true);
+        if(!darkspawn.black.core.Payments.pay(captain,Items.IRON_INGOT,iron,false)||!darkspawn.black.core.Payments.pay(captain,Items.EMERALD,emeralds,false))return false;
+        darkspawn.black.core.Payments.pay(captain,Items.IRON_INGOT,iron,true);darkspawn.black.core.Payments.pay(captain,Items.EMERALD,emeralds,true);
         // Refit Hull: Preserve damage fraction; switching classes cannot provide free repairs.
         float fraction=hull()/maxHull();entityData.set(SHIP_CLASS,selected);entityData.set(HULL,maxHull()*fraction);return true;
     }
     public boolean supportCrew(ServerPlayer captain,boolean wages) {
         if(!refitAllowed(captain)||crewCount()==0||level().getGameTime()<(wages?wagesUntil:provisionsUntil))return false;
         int cost=wages?crewCount():Math.max(1,(crewCount()+1)/2);
-        if(!Ships.pay(captain,wages?Items.EMERALD:Items.BREAD,cost,true))return false;
+        if(!darkspawn.black.core.Payments.pay(captain,wages?Items.EMERALD:Items.BREAD,cost,true))return false;
         if(wages)wagesUntil=level().getGameTime()+24000;else provisionsUntil=level().getGameTime()+12000;
         morale=Math.min(100,morale+(wages?20:10));return true;
     }
@@ -199,8 +199,8 @@ public final class PirateShip extends Entity {
     public boolean upgradeCargo(ServerPlayer captain) {
         if(!refitAllowed(captain)||!refitPort()||cargoTier>=2||PirateProgression.captainTier(Pirate.state(captain))<=cargoTier)return false;
         int iron=cargoTier==0?16:32,emeralds=cargoTier==0?4:8;
-        if(!Ships.pay(captain,Items.IRON_INGOT,iron,false)||!Ships.pay(captain,Items.EMERALD,emeralds,false))return false;
-        Ships.pay(captain,Items.IRON_INGOT,iron,true);Ships.pay(captain,Items.EMERALD,emeralds,true);cargoTier++;return true;
+        if(!darkspawn.black.core.Payments.pay(captain,Items.IRON_INGOT,iron,false)||!darkspawn.black.core.Payments.pay(captain,Items.EMERALD,emeralds,false))return false;
+        darkspawn.black.core.Payments.pay(captain,Items.IRON_INGOT,iron,true);darkspawn.black.core.Payments.pay(captain,Items.EMERALD,emeralds,true);cargoTier++;return true;
     }
     public boolean recruitOfficer(ServerPlayer captain,int index) {
         if(index<0||index>=3||!refitAllowed(captain)||!refitPort()||Pirate.state(captain).officerContracts[index]!=3||crew(NAVIGATOR+index)>0)return false;
@@ -335,10 +335,10 @@ public final class PirateShip extends Entity {
 		return level.getEntitiesOfClass(PirateShip.class,new AABB(center).inflate(rx,height,rz),ship -> ship!=ignore && !ship.isRemoved()).isEmpty();
 	}
 	public static PirateShip build(ServerPlayer player,BlockPos center) {
-		if(!player.level().dimension().equals(Pirate.LEVEL)||!clearWater(player.level(),center,0,0,null)||!Ships.pay(player,Items.OAK_PLANKS,105,false)||!Ships.pay(player,Ships.HELM_ITEM,1,false)) return null;
+		if(!player.level().dimension().equals(Pirate.LEVEL)||!clearWater(player.level(),center,0,0,null)||!darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,105,false)||!darkspawn.black.core.Payments.pay(player,Ships.HELM_ITEM,1,false)) return null;
 		var ship=new PirateShip(Ships.SHIP,player.level());ship.owner=player.getUUID();ship.setPos(center.getX()+.5,center.getY(),center.getZ()+.5);
 		if(!player.level().addFreshEntity(ship)) return null;
-		Ships.pay(player,Items.OAK_PLANKS,105,true);Ships.pay(player,Ships.HELM_ITEM,1,true);
+		darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,105,true);darkspawn.black.core.Payments.pay(player,Ships.HELM_ITEM,1,true);
 		for(int x=-3;x<=3;x++)for(int z=-7;z<=7;z++)player.level().setBlock(center.offset(x,0,z),Blocks.OAK_PLANKS.defaultBlockState(),3);
 		player.level().setBlock(center.above(),Ships.HELM.defaultBlockState(),3);
 		return ship;
@@ -402,7 +402,7 @@ public final class PirateShip extends Entity {
 		if(PirateProgression.captainTier(Pirate.state(captain))<=tier() && !captain.getAbilities().instabuild)return tier()==0?"Need 5 NPC wins OR 4 discoveries and 2 claimed contracts. See Journal.":"Need 12 NPC wins OR 8 discoveries and 4 claimed contracts. See Journal.";
         int nextTier=tier()+1,nextWidth=nextTier==1?11:15,nextLength=nextTier==1?23:31,nextHeight=nextTier==1?8:10;
         int planks=nextWidth*nextLength-width()*length();
-		if(!Ships.pay(captain,Items.OAK_PLANKS,planks,false))return "Expansion costs "+planks+" oak planks.";
+		if(!darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,planks,false))return "Expansion costs "+planks+" oak planks.";
 		var anchor=blockPosition();
 		for(int x=-nextWidth/2;x<=nextWidth/2;x++)for(int z=-nextLength/2;z<=nextLength/2;z++) {
             boolean outside=Math.abs(x)>width()/2||Math.abs(z)>length()/2;
@@ -414,12 +414,12 @@ public final class PirateShip extends Entity {
         double radians=Math.toRadians(getYRot()),rx=(Math.abs(Math.cos(radians))*nextWidth+Math.abs(Math.sin(radians))*nextLength)/2,rz=(Math.abs(Math.sin(radians))*nextWidth+Math.abs(Math.cos(radians))*nextLength)/2;
         var bounds=new AABB(getX()-rx,getY(),getZ()-rz,getX()+rx,getY()+nextHeight+1,getZ()+rz);
         if(level().getEntitiesOfClass(PirateShip.class,expanded,other->other!=this&&other.footprint(other.position(),other.getYRot()).intersects(bounds)).size()>0)return "Move other vessels out of the expanded footprint.";
-        Ships.pay(captain,Items.OAK_PLANKS,planks,true);
+        darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,planks,true);
 		for(int x=-nextWidth/2;x<=nextWidth/2;x++)for(int z=-nextLength/2;z<=nextLength/2;z++)if(Math.abs(x)>width()/2||Math.abs(z)>length()/2)level().setBlock(world(new BlockPos(x,0,z),getYRot(),anchor),Blocks.OAK_PLANKS.defaultBlockState(),3);
 		entityData.set(TIER,nextTier);entityData.set(HULL,Math.min(maxHull(),hull()+200));return null;
 	}
 	public boolean recruit(ServerPlayer captain,int role) {
-		if(!ownedBy(captain)||!docked()||!refitPort()||role<0||role>3||crew(role)>=(role==GUNNER?gunLimit():1)||!Ships.pay(captain,Items.EMERALD,PirateProgression.crewCost(Pirate.state(captain),role),false))return false;
+		if(!ownedBy(captain)||!docked()||!refitPort()||role<0||role>3||crew(role)>=(role==GUNNER?gunLimit():1)||!darkspawn.black.core.Payments.pay(captain,Items.EMERALD,PirateProgression.crewCost(Pirate.state(captain),role),false))return false;
 		Mob sailor;
         if(PirateProgression.crewOffer(Pirate.state(captain),role))sailor=switch(role) {
             case MATE -> net.minecraft.world.entity.EntityTypes.PIGLIN.create(captain.level(),new net.minecraft.world.entity.EntitySpawnRequest(EntitySpawnReason.MOB_SUMMONED,true));
@@ -434,7 +434,7 @@ public final class PirateShip extends Entity {
 		sailor.setCustomName(Component.literal(PirateProgression.crewName(Pirate.state(captain),role)));sailor.setCustomNameVisible(true);sailor.setPos(getX(),getY()+1,getZ());
 		if(!captain.level().addFreshEntity(sailor)){sailor.discard();return false;}
 		if(!sailor.startRiding(this)){sailor.discard();return false;}
-		Ships.pay(captain,Items.EMERALD,PirateProgression.crewCost(Pirate.state(captain),role),true);return true;
+		darkspawn.black.core.Payments.pay(captain,Items.EMERALD,PirateProgression.crewCost(Pirate.state(captain),role),true);return true;
 	}
     public boolean recruitGarrick(ServerPlayer captain) {
         if(!captain.isAlive()||captain.isSpectator()||!ownedBy(captain)||!docked()||!refitPort()||captain.level()!=level()||captain.distanceToSqr(this)>48*48||Pirate.state(captain).garrickRescue!=3||crew(GUNNER)>=gunLimit())return false;
@@ -558,8 +558,8 @@ public final class PirateShip extends Entity {
         return true;
 	}
 	public boolean harborRepair(ServerPlayer captain) {
-        if(!refitAllowed(captain)||hull()>=maxHull()&&burning==0||!Ships.pay(captain,Items.OAK_PLANKS,10,false)||!Ships.pay(captain,Items.EMERALD,2,false))return false;
-        Ships.pay(captain,Items.OAK_PLANKS,10,true);Ships.pay(captain,Items.EMERALD,2,true);entityData.set(HULL,Math.min(maxHull(),hull()+50));burning=0;return true;
+        if(!refitAllowed(captain)||hull()>=maxHull()&&burning==0||!darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,10,false)||!darkspawn.black.core.Payments.pay(captain,Items.EMERALD,2,false))return false;
+        darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,10,true);darkspawn.black.core.Payments.pay(captain,Items.EMERALD,2,true);entityData.set(HULL,Math.min(maxHull(),hull()+50));burning=0;return true;
     }
     private void sink(PirateShip attacker) {
 		if(!(level() instanceof ServerLevel server)||sinking)return;sinking=true;

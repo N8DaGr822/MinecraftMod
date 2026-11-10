@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_bonfire-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Bonfire Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.bonfire.BonfireGameTest",
+      "darkspawn.black.bonfire.BonfireUpgradeGameTest"
+    ]
+  }
+}

@@ -38,8 +38,8 @@ public final class SeaServices {
     private SeaServices() { }
     private static Reply trade(ServerPlayer p,Item item,int count,int price){
         if(p.getInventory().getFreeSlot()<0)return Reply.SPACE;
-        if(!Ships.pay(p,Items.EMERALD,price,false))return Reply.COST;
-        Ships.pay(p,Items.EMERALD,price,true);p.getInventory().add(new ItemStack(item,count));return Reply.DONE;
+        if(!darkspawn.black.core.Payments.pay(p,Items.EMERALD,price,false))return Reply.COST;
+        darkspawn.black.core.Payments.pay(p,Items.EMERALD,price,true);p.getInventory().add(new ItemStack(item,count));return Reply.DONE;
     }
     public static Reply execute(ServerPlayer p,int action){
         if(!p.isAlive()||p.isSpectator()||!p.level().dimension().equals(Pirate.LEVEL))return Reply.HARBOR;
@@ -62,12 +62,12 @@ public final class SeaServices {
         if(action==2)return trade(p,Ships.SHOT,16,state.renown>=50?1:2);
         if(action==4){p.sendSystemMessage(net.minecraft.network.chat.Component.literal(SevenSeals.rumor(state)));return Reply.DONE;}
         if(action==5){if(state.ghostVoyage)return Reply.GHOST_ACTIVE;state.ghostVoyage=true;return Reply.DONE;}
-        if(action==6){if(state.infamy==0)return Reply.NO_INFAMY;if(!Ships.pay(p,Items.GOLD_INGOT,8,false))return Reply.COST;Ships.pay(p,Items.GOLD_INGOT,8,true);state.infamy=Math.max(0,state.infamy-10);return Reply.DONE;}
+        if(action==6){if(state.infamy==0)return Reply.NO_INFAMY;if(!darkspawn.black.core.Payments.pay(p,Items.GOLD_INGOT,8,false))return Reply.COST;darkspawn.black.core.Payments.pay(p,Items.GOLD_INGOT,8,true);state.infamy=Math.max(0,state.infamy-10);return Reply.DONE;}
         if(action>=7&&action<=10){
             int index=action-7,bit=1<<index;
             if((ledger.lost(p.getUUID())&bit)==0)return Reply.NO_RESCUE;
-            if(!Ships.pay(p,Items.EMERALD,8,false))return Reply.COST;
-            Ships.pay(p,Items.EMERALD,8,true);ledger.recover(p.getUUID(),bit);
+            if(!darkspawn.black.core.Payments.pay(p,Items.EMERALD,8,false))return Reply.COST;
+            darkspawn.black.core.Payments.pay(p,Items.EMERALD,8,true);ledger.recover(p.getUUID(),bit);
             if(index<3)state.officerContracts[index]=3;else state.garrickRescue=3;
             return Reply.DONE;
         }

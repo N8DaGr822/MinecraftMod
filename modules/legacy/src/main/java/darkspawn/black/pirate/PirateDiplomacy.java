@@ -55,8 +55,8 @@ public final class PirateDiplomacy {
             var old=faction(state.factionMembership);if(old==null)return false;
             state.factionMembership="";PirateProgression.addStanding(state,old,-25);return true;
         }
-        if(action==11&&PirateProgression.standing(state,selected)<25&&Ships.pay(player,Items.GOLD_INGOT,8,false)) {
-            Ships.pay(player,Items.GOLD_INGOT,8,true);
+        if(action==11&&PirateProgression.standing(state,selected)<25&&darkspawn.black.core.Payments.pay(player,Items.GOLD_INGOT,8,false)) {
+            darkspawn.black.core.Payments.pay(player,Items.GOLD_INGOT,8,true);
             state.factionStanding[selected.ordinal()]=Math.min(25,PirateProgression.standing(state,selected)+5);return true;
         }
         return false;

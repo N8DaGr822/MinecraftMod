@@ -44,6 +44,7 @@ public final class TaigaEcosystem {
 	}
 
 	public static void initialize() {
+		darkspawn.black.core.hook.WardExemptions.register(entity -> entity instanceof TaigaWolf wolf && wolf.companionOwner() != null);
 		var snowy = BiomeSelectors.includeByKey(Biomes.SNOWY_TAIGA);
 		WOLVES.forEach((kind, type) -> {
 			FabricDefaultAttributeRegistry.register(type, TaigaWolf.attributes(kind));

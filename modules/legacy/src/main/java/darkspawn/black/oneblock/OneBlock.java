@@ -50,6 +50,10 @@ public final class OneBlock {
 	public static OneBlockProgress progress(ServerLevel level) { return level.getDataStorage().computeIfAbsent(OneBlockProgress.TYPE); }
 
 	public static void initialize() {
+		darkspawn.black.core.hook.TravelBoundary.register(new darkspawn.black.core.hook.TravelBoundary.Boundary() {
+			@Override public boolean isolated(ServerPlayer player) { var state = state(player); return state.inside || state.ascensionInside || state.travelling; }
+			@Override public String zone(Level level) { return island(level) ? "oneblock" : Ascension.island(level) ? "ascension" : ""; }
+		});
 		PayloadTypeRegistry.serverboundPlay().register(OneBlockActionPayload.TYPE, OneBlockActionPayload.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(OneBlockStatusPayload.TYPE, OneBlockStatusPayload.CODEC);
 		ServerPlayNetworking.registerGlobalReceiver(OneBlockActionPayload.TYPE, (payload, context) -> request(context.player(), payload.action()));
@@ -214,14 +218,14 @@ public final class OneBlock {
 			if (player.teleport(new TeleportTransition(destination, pos, Vec3.ZERO, entering ? 0 : state.returnYaw, entering ? 0 : state.returnPitch, TeleportTransition.PLACE_PORTAL_TICKET)) == null) return false;
 			switchItems(player);
 			if (entering) { state.returnLevel = origin.dimension(); state.returnPos = oldPos; state.returnYaw = yaw; state.returnPitch = pitch; }
-			player.fallDistance = 0; ((darkspawn.black.mixin.OneBlockSaveAccess) server.getPlayerList()).darkspawn$saveProfile(player);
+			player.fallDistance = 0; darkspawn.black.core.PlayerSaves.save(player);
 			sync(player); return true;
 		} finally { state.travelling = false; }
 	}
 	public static void switchItems(ServerPlayer player) {
 		var state = state(player); var outgoing = OneBlockItems.capture(player);
 		state.other.apply(player); state.other = outgoing; state.inside = island(player.level());
-		darkspawn.black.equipment.ArmorStyleBonuses.update(player); darkspawn.black.equipment.LegendaryArmor.update(player);
+		darkspawn.black.core.hook.EquipmentChanged.fire(player);
 		player.inventoryMenu.broadcastFullState();
 	}
 	public static void sync(ServerPlayer player) {

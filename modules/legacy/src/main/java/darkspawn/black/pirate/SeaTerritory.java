@@ -56,8 +56,8 @@ public final class SeaTerritory {
         if(SIEGES.getOrDefault(level,Map.of()).containsKey(island.center()))return SeaServices.Reply.CONTESTED;
         if(action==12){
             if(fort.defenses()>=2)return SeaServices.Reply.MAX_DEFENSE;
-            if(!Ships.pay(p,Items.IRON_INGOT,8,false)||!Ships.pay(p,Items.OAK_PLANKS,24,false))return SeaServices.Reply.COST;
-            Ships.pay(p,Items.IRON_INGOT,8,true);Ships.pay(p,Items.OAK_PLANKS,24,true);ledger.fort(new SeaLedger.Fort(fort.center(),fort.owner(),fort.name(),fort.defenses()+1,fort.suppliesAfter()));return SeaServices.Reply.DONE;
+            if(!darkspawn.black.core.Payments.pay(p,Items.IRON_INGOT,8,false)||!darkspawn.black.core.Payments.pay(p,Items.OAK_PLANKS,24,false))return SeaServices.Reply.COST;
+            darkspawn.black.core.Payments.pay(p,Items.IRON_INGOT,8,true);darkspawn.black.core.Payments.pay(p,Items.OAK_PLANKS,24,true);ledger.fort(new SeaLedger.Fort(fort.center(),fort.owner(),fort.name(),fort.defenses()+1,fort.suppliesAfter()));return SeaServices.Reply.DONE;
         }
         if(level.getGameTime()<fort.suppliesAfter())return SeaServices.Reply.SUPPLY_WAIT;
         if(p.getInventory().getFreeSlot()<0)return SeaServices.Reply.SPACE;

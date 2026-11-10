@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_ingredient_pouch-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Ingredient Pouch Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.ingredientpouch.IngredientPouchGameTest"
+    ]
+  }
+}

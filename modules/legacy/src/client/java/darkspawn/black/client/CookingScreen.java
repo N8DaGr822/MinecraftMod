@@ -1,5 +1,6 @@
 package darkspawn.black.client;
 
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.cooking.CookingMenu;
 import darkspawn.black.cooking.MealItem;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -19,7 +20,7 @@ public final class CookingScreen extends AbstractContainerScreen<CookingMenu> {
 	@Override
 	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
 		super.extractBackground(graphics, mouseX, mouseY, partialTick);
-		darkspawn.black.client.UiTheme.panel(graphics, leftPos, topPos, imageWidth, imageHeight);
+		darkspawn.black.core.client.UiTheme.panel(graphics, leftPos, topPos, imageWidth, imageHeight);
 		for (Slot slot : menu.slots) {
 			int x = leftPos + slot.x;
 			int y = topPos + slot.y;
@@ -32,15 +33,15 @@ public final class CookingScreen extends AbstractContainerScreen<CookingMenu> {
 	@Override
 	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
 		super.extractLabels(graphics, mouseX, mouseY);
-		graphics.text(font, Component.translatable("container.darkspawn.ingredients"), 20, 22, darkspawn.black.client.UiTheme.INK, false);
-		graphics.text(font, "->", 146, 40, darkspawn.black.client.UiTheme.INK, false);
+		graphics.text(font, Component.translatable("container.darkspawn.ingredients"), 20, 22, darkspawn.black.core.client.UiTheme.INK, false);
+		graphics.text(font, "->", 146, 40, darkspawn.black.core.client.UiTheme.INK, false);
 		ItemStack output = menu.getSlot(CookingMenu.RESULT_SLOT).getItem();
 		if (output.isEmpty()) {
 			fittedLabel(graphics, Component.translatable(menu.isRecipeLocked()
-				? "container.darkspawn.recipe_locked" : "container.darkspawn.cooking_hint"), 68, darkspawn.black.client.UiTheme.INK, mouseX, mouseY);
+				? "container.darkspawn.recipe_locked" : "container.darkspawn.cooking_hint"), 68, darkspawn.black.core.client.UiTheme.INK, mouseX, mouseY);
 		} else {
-			fittedLabel(graphics, output.getHoverName(), 62, darkspawn.black.client.UiTheme.INK, mouseX, mouseY);
-			fittedLabel(graphics, MealItem.nutritionDescription(output), 76, darkspawn.black.client.UiTheme.INK, mouseX, mouseY);
+			fittedLabel(graphics, output.getHoverName(), 62, darkspawn.black.core.client.UiTheme.INK, mouseX, mouseY);
+			fittedLabel(graphics, MealItem.nutritionDescription(output), 76, darkspawn.black.core.client.UiTheme.INK, mouseX, mouseY);
 			if (output.getItem() instanceof MealItem meal) {
 				fittedLabel(graphics, meal.effectDescription(), 90, 0xFF31552C, mouseX, mouseY);
 			}

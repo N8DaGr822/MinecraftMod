@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResourceCoverageTest {
     @Test void registeredItemsAndBlocksHaveVisualDefinitionsAndNames() throws Exception {
         TestBootstrap.initialize();
-        try (var stream = getClass().getResourceAsStream("/assets/darkspawn/lang/en_us.json")) {
+        try (var stream = darkspawn.black.MergedResources.open(getClass(), "/assets/darkspawn/lang/en_us.json")) {
             assertNotNull(stream);
             var names = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
             // Registry Coverage: Check actual registered content, including items omitted from art catalogs.

@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "darkspawn.black.quiver.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"QuiverMouseMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

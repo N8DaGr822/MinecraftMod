@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_quiver-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Quiver Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.quiver.QuiverGameTest"
+    ]
+  }
+}

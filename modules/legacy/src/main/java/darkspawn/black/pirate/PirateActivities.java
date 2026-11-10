@@ -43,8 +43,8 @@ public final class PirateActivities {
         var state=Pirate.state(player);
         if(island.kind()==2&&chest.equals(island.center().offset(3,0,-4)))return complete(player,0);
         if(island.kind()==4&&chest.equals(island.center().offset(0,0,-6))&&state.repeatContracts[2]==1) {
-            if(!Ships.pay(player,Items.PRISMARINE_SHARD,4,false)){Ships.message(player,"Shrine expedition: bring four prismarine shards.");return false;}
-            Ships.pay(player,Items.PRISMARINE_SHARD,4,true);return complete(player,2);
+            if(!darkspawn.black.core.Payments.pay(player,Items.PRISMARINE_SHARD,4,false)){Ships.message(player,"Shrine expedition: bring four prismarine shards.");return false;}
+            darkspawn.black.core.Payments.pay(player,Items.PRISMARINE_SHARD,4,true);return complete(player,2);
         }
         if(island.kind()==1&&chest.equals(island.center().offset(-1,0,-5))&&state.garrickRescue==1) {
             // Rescue Papers: Bind the personal objective to the same fort as this captain's captive.

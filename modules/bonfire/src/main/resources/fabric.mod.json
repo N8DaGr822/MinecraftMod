@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_bonfire",
+	"version": "${version}",
+	"name": "Darkspawn Bonfire",
+	"description": "Barracks bonfire: an upgradeable ward that keeps ordinary hostiles out of a base. Other mods exempt their friendly or boss mobs through Darkspawn Core.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_bonfire/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.bonfire.BonfireMod"
+		],
+		"client": [
+			"darkspawn.black.bonfire.client.BonfireClient"
+		]
+	},
+	"mixins": [
+		"darkspawn_bonfire.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

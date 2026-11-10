@@ -233,8 +233,7 @@ public final class NoahLegacy {
                 message(player,"Calling across the deep. Use the conch again when Thalassar's waters have loaded.");return false;
             }
             if(!active.isOwnedBy(player)||active.isVehicle()||active.isLeashed()){message(player,"Dismount and unleash Thalassar before calling him.");return false;}
-            if(darkspawn.black.oneblock.OneBlock.island(active.level())!=darkspawn.black.oneblock.OneBlock.island(level)
-                ||darkspawn.black.oneblock.Ascension.island(active.level())!=darkspawn.black.oneblock.Ascension.island(level)){message(player,"Rest Thalassar before crossing the OneBlock boundary.");return false;}
+            if(!darkspawn.black.core.hook.TravelBoundary.sameZone(active.level(),level)){message(player,"Rest Thalassar before crossing the OneBlock boundary.");return false;}
         }
         if(dismiss){if(active==null)return false;rest(active,false);message(player,"Thalassar rests beneath the tides.");return true;}
         var mount=Mounts.THALASSAR.create(level,EntitySpawnReason.COMMAND);if(mount==null)return false;

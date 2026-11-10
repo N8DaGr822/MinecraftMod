@@ -81,6 +81,7 @@ public final class BossEntities {
 	}
 
 	public static void register() {
+		darkspawn.black.core.hook.WardExemptions.register(entity -> entity instanceof BiomeBoss || entity instanceof AncientTreeSpirit || entity instanceof MutantWolf);
 		FabricDefaultAttributeRegistry.register(TREE_SPIRIT, AncientTreeSpirit.attributes());
 		FabricDefaultAttributeRegistry.register(HEARTWOOD_SAPLING, HeartwoodSapling.attributes());
 		FabricDefaultAttributeRegistry.register(MUTANT_WOLF, MutantWolf.attributes());

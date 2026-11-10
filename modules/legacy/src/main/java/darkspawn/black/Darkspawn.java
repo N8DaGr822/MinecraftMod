@@ -12,15 +12,14 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Darkspawn implements ModInitializer {
-	public static final String MOD_ID = "darkspawn";
+	public static final String MOD_ID = darkspawn.black.core.DarkspawnCore.NAMESPACE;
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = darkspawn.black.core.DarkspawnCore.LOGGER;
 
 	@Override
 	public void onInitialize() {
@@ -31,14 +30,13 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.oneblock.AscensionProtection.initialize();
 		ServerTuning.initialize();
         darkspawn.black.audio.DarkspawnSounds.initialize();
-		darkspawn.black.inventory.IngredientPouchItem.register();
-        darkspawn.black.inventory.QuiverItem.register();
-        darkspawn.black.inventory.ExplorerPackItem.register();
 		darkspawn.black.equipment.ExpeditionArmor.initialize();
 		darkspawn.black.equipment.LegendaryArmor.initialize();
 		darkspawn.black.equipment.ArmorStyles.initialize();
+		darkspawn.black.core.hook.EquipmentChanged.EVENT.register(player -> {
+			darkspawn.black.equipment.ArmorStyleBonuses.update(player); darkspawn.black.equipment.LegendaryArmor.update(player);
+		});
 		darkspawn.black.equipment.Temperature.initialize();
-		darkspawn.black.storage.Storage.initialize();
 		darkspawn.black.boss.BossEffects.initialize();
 		BossItems.register();
         darkspawn.black.boss.AwakenedRematches.initialize();
@@ -47,7 +45,6 @@ public class Darkspawn implements ModInitializer {
         darkspawn.black.endgame.Nexus.initialize();
 		darkspawn.black.mount.Mounts.initialize();
 		darkspawn.black.legacy.NoahLegacy.initialize();
-		darkspawn.black.bonfire.Bonfires.initialize();
 		darkspawn.black.starter.DragonStarterChest.initialize();
 		darkspawn.black.boss.Endborn.initializeSpawning();
 		BossEmpowerment.initialize();
@@ -82,13 +79,12 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.worldgen.LandmarkCompass.initialize();
         darkspawn.black.worldgen.DiscoveryCharts.initialize();
         darkspawn.black.worldgen.ExplorationFinds.initialize();
-        darkspawn.black.equipment.ThematicEnchantments.initialize();
 		darkspawn.black.journal.Journal.initialize();
 
 		LOGGER.info("Hello Fabric world!");
 	}
 
 	public static Identifier id(String path) {
-		return Identifier.fromNamespaceAndPath(MOD_ID, path);
+		return darkspawn.black.core.DarkspawnCore.id(path);
 	}
 }

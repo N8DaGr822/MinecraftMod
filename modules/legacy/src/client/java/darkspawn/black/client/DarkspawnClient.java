@@ -23,7 +23,6 @@ public class DarkspawnClient implements ClientModInitializer {
             });
         }
 		TemperatureHud.initialize();
-		BonfireHud.initialize();
 		OneBlockControls.initialize();
         net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.oneblock.AscensionGuardian.TYPE,AscensionGuardianRenderer::new);
 		JournalControls.initialize();
@@ -41,8 +40,6 @@ public class DarkspawnClient implements ClientModInitializer {
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
 						context -> CreatureAssets.MOBS.contains(kind.id) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, "mutant_wolf") : new darkspawn.black.client.ecosystem.TaigaWolfRenderer(context, kind)));
 		MenuScreens.register(Cooking.MENU, CookingScreen::new);
-		MenuScreens.register(darkspawn.black.storage.Storage.MENU, StorageScreen::new);
-		MenuScreens.register(darkspawn.black.inventory.ExplorerPackItem.MENU, ExplorerPackScreen::new);
 		MenuScreens.register(darkspawn.black.forsaken.Forsaken.MENU, QuarantineScreen::new);
 		darkspawn.black.forsaken.ForsakenContent.MOBS.forEach((kind, type) ->
 			net.minecraft.client.renderer.entity.EntityRenderers.register(type, context -> new CreatureGeoRenderer<>(context, type, kind.width / 3, kind.id)));
@@ -80,17 +77,6 @@ public class DarkspawnClient implements ClientModInitializer {
 			}
 			if (stack.is(darkspawn.black.equipment.ExpeditionArmor.SPELUNKING.get(net.minecraft.world.item.equipment.ArmorType.BOOTS))) {
 				lines.add(Component.translatable("tooltip.darkspawn.spelunking_boots").withStyle(ChatFormatting.GRAY));
-			}
-			if (stack.getItem() instanceof net.minecraft.world.item.BlockItem blockItem
-					&& blockItem.getBlock() instanceof darkspawn.black.storage.SortingTubeBlock) {
-				lines.add(Component.translatable(blockItem.getBlock() == darkspawn.black.storage.Storage.TUBE
-					? "storage.darkspawn.tube_hint" : "storage.darkspawn.block_hint").withStyle(ChatFormatting.GRAY));
-				var contents = stack.get(darkspawn.black.storage.Storage.BANK_CONTENTS);
-				if (contents != null) {
-					long count = java.util.stream.Stream.concat(contents.stored().stream(), contents.trash().stream())
-						.mapToLong(darkspawn.black.storage.BankContents.Entry::count).sum();
-					lines.add(Component.translatable("storage.darkspawn.bank_item_hint", count, contents.tier() + 1).withStyle(ChatFormatting.GRAY));
-				}
 			}
 			if (stack.getItem() instanceof MealItem meal) {
 				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));

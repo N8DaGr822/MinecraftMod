@@ -1,5 +1,6 @@
 package darkspawn.black.client;
 
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.journal.JournalRequestPayload;
 import darkspawn.black.journal.JournalSnapshotPayload;
@@ -31,7 +32,7 @@ public final class JournalScreen extends Screen {
         int tabWidth=(width-16)/SECTIONS.length;
         for (int i=0;i<SECTIONS.length;i++) {
             String tab=SECTIONS[i];
-            addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn."+tab), pressed -> { section=tab; selected=0; listPage=0; detailPage=0; filter(); })
+            addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.translatable("journal.darkspawn."+tab), pressed -> { section=tab; selected=0; listPage=0; detailPage=0; filter(); })
                 .bounds(8+i*tabWidth,32,tabWidth-2,20).tooltip(Tooltip.create(Component.translatable("journal.darkspawn."+tab))).build());
         }
         var search = addRenderableWidget(new EditBox(font,8,59,width-16,18,Component.translatable("journal.darkspawn.search")));
@@ -39,15 +40,15 @@ public final class JournalScreen extends Screen {
         search.setResponder(value -> { query=value; selected=0; listPage=0; detailPage=0; filter(); });
         for(int i=0;i<rows;i++) {
             final int row=i;
-            entryButtons.add(addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.empty(), pressed -> { selected=listPage*rows+row; detailPage=0; update(); })
+            entryButtons.add(addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.empty(), pressed -> { selected=listPage*rows+row; detailPage=0; update(); })
                 .bounds(8,88+i*22,listWidth,20).build()));
         }
-        previous=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.literal("<"), b -> { listPage--; update(); }).bounds(8,height-48,28,18).build());
-        next=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.literal(">"), b -> { listPage++; update(); }).bounds(40,height-48,28,18).build());
-        detailPrevious=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn.previous"), b -> { detailPage--; update(); }).bounds(listWidth+24,height-28,70,20).build());
-        detailNext=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn.next"), b -> { detailPage++; update(); }).bounds(width-78,height-28,70,20).build());
-        addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("gui.back"), b -> onClose()).bounds(8,height-26,listWidth,20).build());
-        refresh=addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("journal.darkspawn.refresh"), b -> request()).bounds(width-78,6,70,20).build());
+        previous=addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.literal("<"), b -> { listPage--; update(); }).bounds(8,height-48,28,18).build());
+        next=addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.literal(">"), b -> { listPage++; update(); }).bounds(40,height-48,28,18).build());
+        detailPrevious=addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.translatable("journal.darkspawn.previous"), b -> { detailPage--; update(); }).bounds(listWidth+24,height-28,70,20).build());
+        detailNext=addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.translatable("journal.darkspawn.next"), b -> { detailPage++; update(); }).bounds(width-78,height-28,70,20).build());
+        addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.translatable("gui.back"), b -> onClose()).bounds(8,height-26,listWidth,20).build());
+        refresh=addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.translatable("journal.darkspawn.refresh"), b -> request()).bounds(width-78,6,70,20).build());
         filter(); if (!requested) request();
     }
     private void request() { requested=true; refreshTicks=20; ClientPlayNetworking.send(new JournalRequestPayload()); }

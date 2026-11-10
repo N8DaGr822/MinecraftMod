@@ -1,6 +1,6 @@
 package darkspawn.black.client.pirate;
 
-import darkspawn.black.client.UiTheme;
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.pirate.*;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;

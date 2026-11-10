@@ -465,14 +465,14 @@ public final class ShipsGameTest {
             for(int i=0;i<8;i++)state.logboundVisited.add(new BlockPos(i*256,65,0));
             captain.getInventory().clearContent();for(int i=0;i<3;i++)captain.getInventory().setItem(i,new ItemStack(Items.OAK_PLANKS,64));
             helper.assertTrue(ship.upgrade(captain)==null&&ship.tier()==1,"Independent milestones unlock first expansion");
-            helper.assertTrue(ship.upgrade(captain)!=null&&Ships.pay(captain,Items.OAK_PLANKS,44,false),"Second expansion rejects insufficient funds without consuming remainder");
+            helper.assertTrue(ship.upgrade(captain)!=null&&darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,44,false),"Second expansion rejects insufficient funds without consuming remainder");
             captain.getInventory().clearContent();for(int i=0;i<4;i++)captain.getInventory().setItem(i,new ItemStack(Items.OAK_PLANKS,64));
             captain.level().setBlockAndUpdate(pos.offset(7,0,15),Blocks.STONE.defaultBlockState());
-            helper.assertTrue(ship.upgrade(captain)!=null&&Ships.pay(captain,Items.OAK_PLANKS,256,false),"Blocked outer corner rejects atomically");captain.level().setBlockAndUpdate(pos.offset(7,0,15),Blocks.AIR.defaultBlockState());
+            helper.assertTrue(ship.upgrade(captain)!=null&&darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,256,false),"Blocked outer corner rejects atomically");captain.level().setBlockAndUpdate(pos.offset(7,0,15),Blocks.AIR.defaultBlockState());
             captain.level().setBlockAndUpdate(pos.above(9),Blocks.STONE.defaultBlockState());
             helper.assertTrue(ship.upgrade(captain)!=null,"New height above existing deck must also be clear");captain.level().setBlockAndUpdate(pos.above(9),Blocks.AIR.defaultBlockState());
             helper.assertTrue(ship.upgrade(captain)==null&&ship.tier()==2&&ship.width()==15&&ship.length()==31&&ship.height()==10&&ship.blockLimit()==1536&&ship.gunLimit()==12,"Third tier has real expanded bounds");
-            helper.assertTrue(Ships.pay(captain,Items.OAK_PLANKS,44,false)&&!Ships.pay(captain,Items.OAK_PLANKS,45,false)&&ship.upgrade(captain)!=null,"Third tier costs exactly 212 planks and cannot expand again");
+            helper.assertTrue(darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,44,false)&&!darkspawn.black.core.Payments.pay(captain,Items.OAK_PLANKS,45,false)&&ship.upgrade(captain)!=null,"Third tier costs exactly 212 planks and cannot expand again");
             int added=0;
             outer:for(int y=3;y<=10;y++)for(int x=-7;x<=7;x++)for(int z=-15;z<=15;z++){
                 captain.level().setBlockAndUpdate(pos.offset(x,y,z),Blocks.OAK_PLANKS.defaultBlockState());if(++added==1070)break outer;

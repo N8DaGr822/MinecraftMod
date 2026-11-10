@@ -669,7 +669,7 @@ public final class PirateGameTest {
 			for(int i=0;i<player.getInventory().getContainerSize();i++)player.getInventory().setItem(i,new ItemStack(Items.STONE,64));
 			helper.assertTrue(!HarborGuide.islandContract(player,0,5)&&Pirate.state(player).islandContracts[0]==1,"Full inventory retains reward");player.getInventory().clearContent();
 			for(int i=0;i<3;i++)helper.assertTrue(HarborGuide.islandContract(player,i,5)&&!HarborGuide.islandContract(player,i,5)&&!HarborGuide.islandContract(player,i,4),"Each contract pays once and cannot restart");
-			helper.assertTrue(Ships.pay(player,Items.EMERALD,20,false)&&!Ships.pay(player,Items.EMERALD,21,false),"Rewards total exactly 6 + 8 + 6 emeralds");
+			helper.assertTrue(darkspawn.black.core.Payments.pay(player,Items.EMERALD,20,false)&&!darkspawn.black.core.Payments.pay(player,Items.EMERALD,21,false),"Rewards total exactly 6 + 8 + 6 emeralds");
 			var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,player.registryAccess());player.saveWithoutId(output);
 			Pirate.state(other).read(TagValueInput.create(ProblemReporter.DISCARDING,other.registryAccess(),output.buildResult()));
 			helper.assertTrue(java.util.Arrays.equals(Pirate.state(other).islandContracts,new int[]{2,2,2})&&Pirate.state(other).islandObjectives==7,"Native save preserves contract and objective states");
@@ -893,7 +893,7 @@ public final class PirateGameTest {
 			player.getInventory().clearContent();Pirate.state(player).logboundSecondsRemaining=123;
 			helper.assertTrue(!HarborGuide.compass(player),"Replacement requires an ordinary compass");
 			player.getInventory().setItem(0,new ItemStack(Items.COMPASS));
-			helper.assertTrue(HarborGuide.compass(player)&&!Ships.pay(player,Items.COMPASS,1,false)&&Pirate.state(player).logboundSecondsRemaining==123,"Replacement consumes payment and preserves progress");
+			helper.assertTrue(HarborGuide.compass(player)&&!darkspawn.black.core.Payments.pay(player,Items.COMPASS,1,false)&&Pirate.state(player).logboundSecondsRemaining==123,"Replacement consumes payment and preserves progress");
 		} finally {remove(player);}
 		helper.succeed();
 	}
@@ -910,7 +910,7 @@ public final class PirateGameTest {
 			for(int i=0;i<player.getInventory().getContainerSize();i++)player.getInventory().setItem(i,new ItemStack(Items.STONE,64));
 			helper.assertTrue(!HarborGuide.contract(player,5)&&Pirate.state(player).harborContract==1,"Full inventory preserves an unclaimed reward");
 			player.getInventory().clearContent();
-			helper.assertTrue(HarborGuide.contract(player,5)&&Ships.pay(player,Items.EMERALD,4,false)&&!Ships.pay(player,Items.EMERALD,5,false),"Survey pays exactly four emeralds");
+			helper.assertTrue(HarborGuide.contract(player,5)&&darkspawn.black.core.Payments.pay(player,Items.EMERALD,4,false)&&!darkspawn.black.core.Payments.pay(player,Items.EMERALD,5,false),"Survey pays exactly four emeralds");
 			helper.assertTrue(!HarborGuide.contract(player,5)&&!HarborGuide.contract(player,4)&&!HarborGuide.contract(player,6),"Completed contract cannot be replayed or reset");
 			Pirate.state(player).logboundCompassIssued=true;
 			var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,player.registryAccess());player.saveWithoutId(output);

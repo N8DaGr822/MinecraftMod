@@ -75,13 +75,11 @@ public final class RegionalEncounter {
 	private boolean survivor(ServerPlayer p) { return p.isAlive() && p.gameMode() == net.minecraft.world.level.GameType.SURVIVAL; }
 	private boolean inside(ServerPlayer p, Hunt hunt) { return p.position().distanceToSqr(hunt.center) <= 48 * 48; }
 	private boolean unlocked(ServerPlayer p) {
-		var end = p.level().getServer().getLevel(Level.END);
-		return end != null && end.getDragonFight() != null && end.getDragonFight().hasPreviouslyKilledDragon();
+		return darkspawn.black.core.DragonGate.defeated(p.level().getServer());
 	}
 	private boolean eligible(ServerPlayer p) {
-		var state = darkspawn.black.oneblock.OneBlock.state(p);
 		return ServerTuning.regionalEvents && survivor(p) && p.level().dimension() == dimension
-			&& !state.inside && !state.ascensionInside && !state.travelling
+			&& !darkspawn.black.core.hook.TravelBoundary.isolated(p)
 			&& p.level().getDifficulty() != Difficulty.PEACEFUL && unlocked(p)
 			&& (p.level().getBiome(p.blockPosition()).is(biome) || kind == RegionalKind.VOIDLING && (p.level().getBiome(p.blockPosition()).is(Biomes.END_MIDLANDS) || p.level().getBiome(p.blockPosition()).is(Biomes.END_BARRENS) || p.level().getBiome(p.blockPosition()).is(Biomes.THE_END)))
 			&& (!surface || p.level().canSeeSky(p.blockPosition()));
@@ -258,8 +256,7 @@ public final class RegionalEncounter {
 			: "{title}: /{command} solo or /{command} form, then friends /{command} join <leader>. Requires {habitat} and world dragon victory.");
 	}
 	public int claim(ServerPlayer p) {
-		var state = darkspawn.black.oneblock.OneBlock.state(p);
-		if (!survivor(p) || p.level().dimension() != Level.OVERWORLD || state.inside || state.ascensionInside || state.travelling
+		if (!survivor(p) || p.level().dimension() != Level.OVERWORLD || darkspawn.black.core.hook.TravelBoundary.isolated(p)
 			|| p.containerMenu != p.inventoryMenu || !p.inventoryMenu.getCarried().isEmpty())
 			return message(p, "Claim in Overworld Survival after closing containers and finishing island travel.");
 		var saved = ledger(p.level());

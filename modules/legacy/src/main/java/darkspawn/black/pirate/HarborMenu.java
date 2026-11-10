@@ -55,7 +55,7 @@ public final class HarborMenu extends AbstractContainerMenu {
             else if(action==9&&!state.factionMembership.isEmpty())reason=HarborFeedback.MEMBERSHIP;
             else if(action==9&&PirateProgression.standing(state,selected)<25)reason=HarborFeedback.TRUST;
             else if(action==11&&PirateProgression.standing(state,selected)>=25)reason=HarborFeedback.TRUSTED;
-            else if(action==11&&!Ships.pay(server,net.minecraft.world.item.Items.GOLD_INGOT,8,false))reason=HarborFeedback.GOLD;
+            else if(action==11&&!darkspawn.black.core.Payments.pay(server,net.minecraft.world.item.Items.GOLD_INGOT,8,false))reason=HarborFeedback.GOLD;
             if(reason==HarborFeedback.NONE&&!PirateDiplomacy.membership(server,selected,action))reason=HarborFeedback.LOCATION;
             data.set(0,reason==HarborFeedback.NONE?9:8);data.set(13,reason.ordinal());
         }

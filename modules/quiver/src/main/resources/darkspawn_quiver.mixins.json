@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "darkspawn.black.quiver.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"QuiverAmmoMixin",
+		"QuiverProjectileMixin",
+		"QuiverStorageMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

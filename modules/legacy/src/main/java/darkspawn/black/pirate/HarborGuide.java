@@ -55,10 +55,10 @@ public final class HarborGuide {
 		if(!inHarbor(player))return false;
 		var state=Pirate.state(player);
 		for(int i=0;i<player.getInventory().getContainerSize();i++) if(player.getInventory().getItem(i).is(LogboundCompass.ITEM)) return false;
-		if(player.getInventory().getFreeSlot()<0 || (state.logboundCompassIssued&&!Ships.pay(player,Items.COMPASS,1,false))) return false;
+		if(player.getInventory().getFreeSlot()<0 || (state.logboundCompassIssued&&!darkspawn.black.core.Payments.pay(player,Items.COMPASS,1,false))) return false;
 		var compass=new ItemStack(LogboundCompass.ITEM);
 		if(!player.getInventory().add(compass)) return false;
-		if(state.logboundCompassIssued) Ships.pay(player,Items.COMPASS,1,true);
+		if(state.logboundCompassIssued) darkspawn.black.core.Payments.pay(player,Items.COMPASS,1,true);
 		state.logboundCompassIssued=true;
 		if(state.logboundDestination.isEmpty()) state.logboundDestination=LogboundCompass.FIRST_COVE;
 		for(int i=0;i<player.getInventory().getContainerSize();i++) if(player.getInventory().getItem(i).is(LogboundCompass.ITEM)) LogboundCompass.ITEM.inventoryTick(player.getInventory().getItem(i),player.level(),player,null);

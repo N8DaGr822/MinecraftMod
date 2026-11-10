@@ -17,14 +17,7 @@ public final class DarkspawnSounds {
 	private DarkspawnSounds() {}
 	public static void initialize() {
 		if (!EVENTS.isEmpty()) return;
-		try (var stream = DarkspawnSounds.class.getResourceAsStream("/assets/darkspawn/sounds.json")) {
-			if (stream == null) throw new IllegalStateException("Missing Darkspawn sound manifest");
-			var manifest = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
-			for (String key : manifest.keySet()) {
-				var id = Darkspawn.id(key);
-				EVENTS.put(key, Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id)));
-			}
-		} catch (java.io.IOException error) { throw new IllegalStateException("Cannot load Darkspawn sounds", error); }
+		EVENTS.putAll(darkspawn.black.core.Sounds.register(Darkspawn.MOD_ID));
 	}
 	public static SoundEvent get(String key) {
 		var event = EVENTS.get(key);

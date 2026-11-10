@@ -15,12 +15,7 @@ public final class Culinary {
 	private Culinary() {}
 	public static CulinaryProgress progress(Player player) { return ((CulinaryPlayer) player).darkspawn$culinary(); }
 	public static void award(ServerPlayer player, String path, String criterion) {
-		if (!path.equals("root")) {
-			var end = player.level().getServer().getLevel(net.minecraft.world.level.Level.END);
-			if (end != null && end.getDragonFight() != null && end.getDragonFight().hasPreviouslyKilledDragon()) award(player, "root", "dragon");
-		}
-		var advancement = player.level().getServer().getAdvancements().get(Darkspawn.id("progress/" + path));
-		if (advancement != null) player.getAdvancements().award(advancement, criterion);
+		darkspawn.black.core.Progress.award(player, path, criterion);
 	}
 	public static void eaten(ServerPlayer player, ItemStack stack) {
 		var food = stack.get(DataComponents.FOOD);

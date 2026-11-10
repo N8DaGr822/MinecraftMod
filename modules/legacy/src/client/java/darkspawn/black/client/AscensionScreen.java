@@ -1,5 +1,6 @@
 package darkspawn.black.client;
 
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.oneblock.*;
 import java.util.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

@@ -43,7 +43,7 @@ public enum HarborFeedback {
         else if(action==5){
             if(progress==0)return ACCEPT;
             if(!ready)return OBJECTIVE;
-            if(selected==13&&(!Ships.pay(player,Items.IRON_INGOT,8,false)||!Ships.pay(player,Items.OAK_PLANKS,16,false)))return SUPPLIES;
+            if(selected==13&&(!darkspawn.black.core.Payments.pay(player,Items.IRON_INGOT,8,false)||!darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,16,false)))return SUPPLIES;
             if(selected==10){var ship=Ships.nearby(player,player.blockPosition());if(ship==null||!ship.docked()||!ship.protectedHarbor()||player.distanceToSqr(ship)>48*48)return SHIP;if(ship.crew(PirateShip.GUNNER)>=ship.gunLimit())return BERTH;}
             if((selected<4||selected>=7&&selected<=9||selected==11)&&player.getInventory().getFreeSlot()<0)return SPACE;
         }

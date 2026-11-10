@@ -65,6 +65,7 @@ public final class Cooking {
 	}
 
 	public static void initialize() {
+		darkspawn.black.core.hook.ClimateProtection.register(player -> player.hasEffect(MealEffects.WARMING) ? new darkspawn.black.core.hook.ClimateProtection.Protection(15, 0) : darkspawn.black.core.hook.ClimateProtection.Protection.NONE);
 		Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Darkspawn.id("cooking"), CookingRecipe.SERIALIZER);
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> entries.accept(STATION_ITEM));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {

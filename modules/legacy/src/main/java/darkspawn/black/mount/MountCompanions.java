@@ -122,8 +122,7 @@ public final class MountCompanions {
         mount.setHealth(Math.max(1, mount.getMaxHealth() / 4)); mount.clearFire(); mount.removeAllEffects();
         String id = store(mount, true);
         var owner = level.getServer().getPlayerList().getPlayer(mount.getOwnerReference().getUUID());
-        if (owner != null && OneBlock.island(owner.level()) == OneBlock.island(level)
-                && darkspawn.black.oneblock.Ascension.island(owner.level()) == darkspawn.black.oneblock.Ascension.island(level)) giveToken(owner, id, mount.getName(), true);
+        if (owner != null && darkspawn.black.core.hook.TravelBoundary.sameZone(owner.level(), level)) giveToken(owner, id, mount.getName(), true);
         mount.discard();
     }
     private static void giveToken(ServerPlayer player, String id, Component name, boolean recovery) {

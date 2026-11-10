@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RegionalEcosystemTest {
 	@BeforeAll static void initialize() { TestBootstrap.initialize(); }
 	private JsonElement resource(String path) throws Exception {
-		try (var stream = getClass().getResourceAsStream(path)) {
+		try (var stream = darkspawn.black.MergedResources.open(getClass(), path)) {
 			assertNotNull(stream, path); return JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		}
 	}

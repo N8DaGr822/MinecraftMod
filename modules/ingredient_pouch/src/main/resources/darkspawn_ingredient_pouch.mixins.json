@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "darkspawn.black.ingredientpouch.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"IngredientPouchStorageMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

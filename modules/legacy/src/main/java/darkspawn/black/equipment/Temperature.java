@@ -1,7 +1,6 @@
 package darkspawn.black.equipment;
 
 import darkspawn.black.Darkspawn;
-import darkspawn.black.cooking.MealEffects;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -111,7 +110,7 @@ public final class Temperature {
 			cooling += Math.clamp(EnchantmentHelper.getItemEnchantmentLevel(coolEnchant, item), 0, 2) * 3;
 		}
 		if (state(player).wetSeconds > 0) cold += diver * 10;
-		if (player.hasEffect(MealEffects.WARMING)) cold += 15;
+		var provided = darkspawn.black.core.hook.ClimateProtection.total(player); cold += provided.cold(); heat += provided.heat();
 		if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) heat += 20;
 		// Specialist Gear: Enchantments contribute at most 24 points; insulation has a cost in hot regions.
 		if (climate > 0) return Math.max(0, climate + mountain * 5 - heat - cooling);

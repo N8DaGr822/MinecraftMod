@@ -40,6 +40,9 @@ public final class Pirate {
 	}
 	public static PiratePlayerState state(ServerPlayer player) { return ((PiratePlayer) player).darkspawn$pirate(); }
 	public static void initialize() {
+		darkspawn.black.core.hook.JournalSections.register(Pirate::journal);
+		// Friendly Exceptions: Recruitment keeps the original monster entity category.
+		darkspawn.black.core.hook.WardExemptions.register(entity -> PirateShip.loyalCrew(entity) || PirateDiplomacy.contact(entity));
 		PirateIslandStructure.initialize();
 		Ships.initialize();
 		PirateDrinks.initialize();
@@ -68,22 +71,7 @@ public final class Pirate {
 		return state(player).lastTravel == Long.MIN_VALUE || now - state(player).lastTravel >= 40;
 	}
 	public static Vec3 safePosition(ServerPlayer player, ServerLevel level, BlockPos center) {
-		// Bounded Arrival: Load only the destination neighborhood, never excavate another player's build.
-		for (int radius = 0; radius <= 4; radius++) for (int x = -radius; x <= radius; x++) for (int z = -radius; z <= radius; z++) {
-			if (Math.max(Math.abs(x), Math.abs(z)) != radius) continue;
-			for (int y = 0; y <= 4; y++) {
-				var pos = center.offset(x, y % 2 == 0 ? y / 2 : -(y + 1) / 2, z);
-				if (!level.getWorldBorder().isWithinBounds(pos) || pos.getY() <= level.getMinY() || pos.getY() + 1 >= level.getMaxY()) continue;
-				level.getChunk(pos);
-				var floor = level.getBlockState(pos.below());
-				if (!floor.isSolidRender() || floor.is(Blocks.MAGMA_BLOCK) || floor.is(Blocks.CACTUS)
-					|| !level.isEmptyBlock(pos) || !level.isEmptyBlock(pos.above())) continue;
-				var at = Vec3.atBottomCenterOf(pos); var box = player.getBoundingBox().move(at.subtract(player.position()));
-				if (level.noCollision(player, box) && level.getEntities(player, box).isEmpty()
-					&& level.players().stream().noneMatch(other -> other != player && other.getBoundingBox().intersects(box))) return at;
-			}
-		}
-		return null;
+		return darkspawn.black.core.SafeArrival.position(player, level, center);
 	}
 	public static boolean enter(ServerPlayer player, BlockPos gate) {
 		var origin = player.level();
@@ -119,8 +107,22 @@ public final class Pirate {
 		if (player.teleport(new TeleportTransition(level, pos, Vec3.ZERO, player.getYRot(), player.getXRot(), TeleportTransition.PLACE_PORTAL_TICKET)) == null) return false;
 		player.fallDistance = 0;
 		state(player).lastTravel = level.getServer().overworld().getGameTime();
-		((darkspawn.black.mixin.OneBlockSaveAccess) level.getServer().getPlayerList()).darkspawn$saveProfile(player);
+		darkspawn.black.core.PlayerSaves.save(player);
 		return true;
 	}
 	public static void message(ServerPlayer player, String key) { player.sendOverlayMessage(Component.translatable("message.darkspawn.pirate_" + key)); }
+	private static void journal(ServerPlayer player, java.util.function.Consumer<darkspawn.black.core.hook.JournalSections.Entry> out) {
+		var pirateState = state(player);
+		out.accept(new darkspawn.black.core.hook.JournalSections.Entry("pirate/sea_legend","overview","Your Sea Legend",SeaLegends.journal(pirateState),true));
+		out.accept(new darkspawn.black.core.hook.JournalSections.Entry("pirate/progression","overview","Factions and Captaincy",PirateProgression.journal(pirateState),true));
+		out.accept(new darkspawn.black.core.hook.JournalSections.Entry("pirate/first_seal","landmarks",pirateState.firstSealClue?(pirateState.sealContract==3?"Seven Seals: "+Integer.bitCount(pirateState.seals)+"/7":"Seven Seals: The First Binding"):"An undiscovered binding",PirateOfficers.sealJournal(pirateState),pirateState.firstSealClue));
+		// Pirate Field Notes: Keep island clues readable after the arrival message disappears.
+		int clues = pirateState.pirateClues;
+		for (int kind = 0; kind < IslandDiscoveries.NAMES.length; kind++) {
+			boolean known = (clues & (1 << kind)) != 0;
+			out.accept(new darkspawn.black.core.hook.JournalSections.Entry("pirate/island_" + kind,"landmarks",
+				known ? IslandDiscoveries.NAMES[kind] : "Uncharted island",
+				known ? IslandDiscoveries.clue(kind) : "Explore Pirate Seas to record this island's field notes.",known));
+		}
+	}
 }

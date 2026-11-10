@@ -59,13 +59,11 @@ public final class WolfHunt {
 	private static boolean survivor(ServerPlayer p) { return p.isAlive() && p.gameMode() == net.minecraft.world.level.GameType.SURVIVAL; }
 	private static boolean inside(ServerPlayer p, Hunt hunt) { return p.position().distanceToSqr(hunt.center) <= 48 * 48; }
 	private static boolean unlocked(ServerPlayer p) {
-		var end = p.level().getServer().getLevel(Level.END);
-		return end != null && end.getDragonFight() != null && end.getDragonFight().hasPreviouslyKilledDragon();
+		return darkspawn.black.core.DragonGate.defeated(p.level().getServer());
 	}
 	private static boolean eligible(ServerPlayer p) {
-		var state = darkspawn.black.oneblock.OneBlock.state(p);
 		return ServerTuning.regionalEvents && survivor(p) && p.level().dimension() == Level.OVERWORLD
-			&& !state.inside && !state.ascensionInside && !state.travelling
+			&& !darkspawn.black.core.hook.TravelBoundary.isolated(p)
 			&& p.level().getDifficulty() != Difficulty.PEACEFUL && unlocked(p)
 			&& p.level().getBiome(p.blockPosition()).is(MutantWolfSummonItem.TAIGAS)
 			&& p.level().canSeeSky(p.blockPosition());
@@ -228,8 +226,7 @@ public final class WolfHunt {
 			: "Wolf Hunt: /wolfhunt solo or /wolfhunt form, then friends /wolfhunt join <leader>. Requires a surface taiga and world dragon victory.");
 	}
 	public static int claim(ServerPlayer p) {
-		var state = darkspawn.black.oneblock.OneBlock.state(p);
-		if (!survivor(p) || p.level().dimension() != Level.OVERWORLD || state.inside || state.ascensionInside || state.travelling
+		if (!survivor(p) || p.level().dimension() != Level.OVERWORLD || darkspawn.black.core.hook.TravelBoundary.isolated(p)
 			|| p.containerMenu != p.inventoryMenu || !p.inventoryMenu.getCarried().isEmpty())
 			return message(p, "Claim in Overworld Survival after closing containers and finishing island travel.");
 		var saved = WolfHuntLedger.get(p.level());

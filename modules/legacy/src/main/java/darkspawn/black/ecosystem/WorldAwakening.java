@@ -40,7 +40,7 @@ public final class WorldAwakening extends SavedData {
         long now=level.getServer().overworld().getGameTime();String key="harvest/"+player.getUUID();
         if(now<data.events.getOrDefault(key,0L)){player.sendSystemMessage(net.minecraft.network.chat.Component.literal("The awakened habitat needs time: one harvest per explorer every five minutes."));return false;}
         // Container Conservation: Fungal cream returns a bowl when cooked, so harvesting must supply one.
-        if(reward==darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM&&!darkspawn.black.pirate.Ships.pay(player,Items.BOWL,1,true)){
+        if(reward==darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM&&!darkspawn.black.core.Payments.pay(player,Items.BOWL,1,true)){
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal("Carry an empty bowl to collect fungal cream."));return false;
         }
         data.events.put(key,now+6000);data.setDirty();player.getInventory().add(new ItemStack(reward));return true;

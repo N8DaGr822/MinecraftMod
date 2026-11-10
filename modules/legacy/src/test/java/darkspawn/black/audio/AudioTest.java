@@ -15,8 +15,8 @@ class AudioTest {
 	@BeforeAll static void bootstrap() { TestBootstrap.initialize(); }
 	@Test void everySoundIsRegisteredPackagedAndCaptioned() throws Exception {
 		var root = "/assets/darkspawn/";
-		var manifest = JsonParser.parseReader(new InputStreamReader(getClass().getResourceAsStream(root+"sounds.json"), StandardCharsets.UTF_8)).getAsJsonObject();
-		var language = JsonParser.parseReader(new InputStreamReader(getClass().getResourceAsStream(root+"lang/en_us.json"), StandardCharsets.UTF_8)).getAsJsonObject();
+		var manifest = JsonParser.parseReader(new InputStreamReader(darkspawn.black.MergedResources.open(getClass(), root+"sounds.json"), StandardCharsets.UTF_8)).getAsJsonObject();
+		var language = JsonParser.parseReader(new InputStreamReader(darkspawn.black.MergedResources.open(getClass(), root+"lang/en_us.json"), StandardCharsets.UTF_8)).getAsJsonObject();
 		var files = new HashSet<String>();
 		var creatures = new HashSet<String>();
 		for (var entry : manifest.entrySet()) {
@@ -29,7 +29,7 @@ class AudioTest {
 				String name = sound.get("name").getAsString();
 				assertTrue(name.startsWith("darkspawn:"));
 				if (entry.getKey().startsWith("music.")) assertTrue(sound.get("stream").getAsBoolean());
-				if (files.add(name)) try (var stream = getClass().getResourceAsStream(root+"sounds/"+name.substring(10)+".ogg")) {
+				if (files.add(name)) try (var stream = darkspawn.black.MergedResources.open(getClass(), root+"sounds/"+name.substring(10)+".ogg")) {
 					assertNotNull(stream, name);
 					assertEquals("OggS", new String(stream.readNBytes(4), StandardCharsets.US_ASCII), name);
 				}

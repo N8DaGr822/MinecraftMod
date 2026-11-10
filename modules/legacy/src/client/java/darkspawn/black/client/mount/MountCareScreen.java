@@ -1,5 +1,6 @@
 package darkspawn.black.client.mount;
 
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.mount.MountMenu;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public final class MountCareScreen extends AbstractContainerScreen<MountMenu> {
         containerTick();
     }
     private void button(int action, String key, int x, int y, int width) {
-        buttons.put(action, addRenderableWidget(darkspawn.black.client.UiTheme.button(Component.translatable("mount.darkspawn." + key),
+        buttons.put(action, addRenderableWidget(darkspawn.black.core.client.UiTheme.button(Component.translatable("mount.darkspawn." + key),
             ignored -> minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action))
             .bounds(leftPos+x, topPos+y, width, 18).tooltip(Tooltip.create(Component.translatable("mount.darkspawn."+key+"_hint"))).build()));
     }
@@ -45,7 +46,7 @@ public final class MountCareScreen extends AbstractContainerScreen<MountMenu> {
     }
     @Override public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        darkspawn.black.client.UiTheme.panel(graphics, leftPos, topPos, imageWidth, imageHeight);
+        darkspawn.black.core.client.UiTheme.panel(graphics, leftPos, topPos, imageWidth, imageHeight);
         for (var slot : menu.slots) {
             int x = leftPos+slot.x, y = topPos+slot.y;
             graphics.fill(x-1,y-1,x+17,y+17,0xFF566F73); graphics.fill(x,y,x+16,y+16,0xFFB0C1B9);

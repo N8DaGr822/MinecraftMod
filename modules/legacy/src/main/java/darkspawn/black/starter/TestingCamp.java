@@ -168,12 +168,12 @@ public final class TestingCamp extends Item {
 			Items.CHEST, Items.OBSIDIAN);
 		for (String id : List.of("copper_block", "white_bed", "anvil", "smithing_table")) add(utilities, BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.withDefaultNamespace(id)), 8);
 		for (String id : List.of("dump_chest", "sorting_chest", "sorting_tube", "bank_chest", "quarantine_gate", "containment_key")) add(utilities, BuiltInRegistries.ITEM.getValue(Darkspawn.id(id)), 16);
-		add(utilities, darkspawn.black.inventory.IngredientPouchItem.ITEM, 1);
-		add(utilities, darkspawn.black.inventory.ExplorerPackItem.ITEM, 1);
+		add(utilities, darkspawn.black.ingredientpouch.IngredientPouchItem.ITEM, 1);
+		add(utilities, darkspawn.black.explorerpack.ExplorerPackItem.ITEM, 1);
 		for (var item : List.of(Items.MAP, Items.COMPASS, Items.CLOCK, Items.SPYGLASS, Items.BRUSH)) add(utilities, item, 1);
 		result.add(new Supply("09 Base, storage and travel", utilities));
 		result.add(new Supply("10 Combat tools", stacks(1, Items.DIAMOND_AXE, Items.DIAMOND_SPEAR, Items.TRIDENT,
-			Items.MACE, Items.CROSSBOW, Items.DIAMOND_SHOVEL, Items.FISHING_ROD, Items.BOW, darkspawn.black.inventory.QuiverItem.ITEM)));
+			Items.MACE, Items.CROSSBOW, Items.DIAMOND_SHOVEL, Items.FISHING_ROD, Items.BOW, darkspawn.black.quiver.QuiverItem.ITEM)));
         var practice=stacks(16, Items.TARGET, Items.ARMOR_STAND, Items.ARROW, Items.SPECTRAL_ARROW,
 			Items.ZOMBIE_SPAWN_EGG, Items.SKELETON_SPAWN_EGG, Items.CREEPER_SPAWN_EGG);
         var tipped=new ItemStack(Items.TIPPED_ARROW,16);
@@ -217,7 +217,7 @@ public final class TestingCamp extends Item {
         enchantmentTrials.add(new ItemStack(darkspawn.black.mount.GroundWalkerItem.ITEM));
         enchantmentTrials.add(new ItemStack(Items.OAK_PLANKS,9));
         var trialItems=List.of(Items.BOW,Items.IRON_SWORD,Items.IRON_HOE,Items.IRON_CHESTPLATE);
-        var trialEnchantments=List.of(darkspawn.black.equipment.ThematicEnchantments.HUNTER,darkspawn.black.equipment.ThematicEnchantments.BUTCHER,darkspawn.black.equipment.ThematicEnchantments.FORAGER,darkspawn.black.equipment.ThematicEnchantments.SOULWARD);
+        var trialEnchantments=List.of(darkspawn.black.enchantments.ThematicEnchantments.HUNTER,darkspawn.black.enchantments.ThematicEnchantments.BUTCHER,darkspawn.black.enchantments.ThematicEnchantments.FORAGER,darkspawn.black.enchantments.ThematicEnchantments.SOULWARD);
         for(int i=0;i<trialItems.size();i++){var stack=new ItemStack(trialItems.get(i));stack.enchant(level.registryAccess().getOrThrow(trialEnchantments.get(i)),2);enchantmentTrials.add(stack);}
         result.add(new Supply("22 Faction ammunition",enchantmentTrials));
         var brews=new ArrayList<ItemStack>();darkspawn.black.cooking.CulinaryBrewing.POTIONS.values().forEach(potion->brews.add(net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.POTION,potion)));brews.add(net.minecraft.world.item.alchemy.PotionContents.createItemStack(Items.POTION,net.minecraft.world.item.alchemy.Potions.AWKWARD));add(brews,Items.REDSTONE,32);add(brews,Items.GLOWSTONE_DUST,32);add(brews,Items.GUNPOWDER,32);add(brews,Items.DRAGON_BREATH,16);result.add(new Supply("23 Culinary brewing",brews));

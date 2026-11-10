@@ -109,7 +109,7 @@ public final class Nexus {
         if(!traveler(captain)||!captain.level().dimension().equals(Level.OVERWORLD)||level==null||level.getDifficulty()==Difficulty.PEACEFUL)return false;
         if(run.stage!=0||!level.players().isEmpty()){message(captain,"The shared Nexus is occupied. Finish or exit the active run first.");return false;}
         if(!captain.isCreative()&&!qualified(captain)){message(captain,"Nexus entry: all 16 boss families defeated in this world and 15 different hearts consumed by the captain.");return false;}
-        if(!darkspawn.black.pirate.Ships.pay(captain,Items.NETHER_STAR,1,false)){message(captain,"Starting the Nexus costs one Nether Star. Keys are reusable.");return false;}
+        if(!darkspawn.black.core.Payments.pay(captain,Items.NETHER_STAR,1,false)){message(captain,"Starting the Nexus costs one Nether Star. Keys are reusable.");return false;}
         var group=new ArrayList<ServerPlayer>();group.add(captain);
         captain.level().players().stream().filter(p->p!=captain&&traveler(p)&&p.distanceToSqr(captain)<=12*12&&(p.getMainHandItem().is(KEY)||p.getOffhandItem().is(KEY))).limit(5).forEach(group::add);
         arena(level,run);
@@ -124,7 +124,7 @@ public final class Nexus {
             }
             if(!safe){message(captain,"Nexus arrival pads need clear, dry space over safe solid floors. Repair them before entering.");return false;}
         }
-        darkspawn.black.pirate.Ships.pay(captain,Items.NETHER_STAR,1,true);
+        darkspawn.black.core.Payments.pay(captain,Items.NETHER_STAR,1,true);
         run.targets.clear();run.claimed.clear();run.members.clear();group.forEach(p->run.members.add(p.getUUID()));run.stage=1;run.awaiting=true;run.deadline=server.overworld().getGameTime()+24000;
         for(int i=0;i<group.size();i++){
             var player=group.get(i);run.returns.put(player.getUUID().toString(),GlobalPos.of(player.level().dimension(),player.blockPosition()));

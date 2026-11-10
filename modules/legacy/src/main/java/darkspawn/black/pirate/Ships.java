@@ -99,11 +99,4 @@ public final class Ships {
 		player.openMenu(new SimpleMenuProvider((id,inventory,viewer) -> new ShipMenu(id,inventory,station,nearby(player,station)),Component.literal("Ship & Crew")));
 	}
 	public static void message(net.minecraft.world.entity.player.Player player, String text) { player.sendOverlayMessage(Component.literal(text)); }
-	public static boolean pay(ServerPlayer player, Item item, int count, boolean consume) {
-		if (player.getAbilities().instabuild) return true;
-		int total = 0; for (int i=0;i<player.getInventory().getContainerSize();i++) if (player.getInventory().getItem(i).is(item)) total += player.getInventory().getItem(i).getCount();
-		if (total < count) return false;
-		if (consume) for (int i=0;i<player.getInventory().getContainerSize() && count>0;i++) { var stack=player.getInventory().getItem(i); if(stack.is(item)){int take=Math.min(count,stack.getCount());stack.shrink(take);count-=take;} }
-		return true;
-	}
 }

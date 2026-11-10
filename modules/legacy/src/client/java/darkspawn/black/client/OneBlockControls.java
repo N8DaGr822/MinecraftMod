@@ -1,5 +1,6 @@
 package darkspawn.black.client;
 
+import darkspawn.black.core.client.UiTheme;
 import darkspawn.black.oneblock.OneBlock;
 import darkspawn.black.oneblock.OneBlockActionPayload;
 import darkspawn.black.oneblock.OneBlockProgress;
@@ -32,9 +33,9 @@ public final class OneBlockControls {
 				Screens.getWidgets(screen).add(guide);
 			}
 			// Inventory UI: The narrow left margin avoids covering inventory slots.
-			var travel = darkspawn.black.client.UiTheme.button(Component.empty(), button -> ClientPlayNetworking.send(new OneBlockActionPayload(0)))
+			var travel = darkspawn.black.core.client.UiTheme.button(Component.empty(), button -> ClientPlayNetworking.send(new OneBlockActionPayload(0)))
 				.bounds(6, 6, 62, 20).build();
-			var advance = darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.oneblock_advance"), button -> ClientPlayNetworking.send(new OneBlockActionPayload(1)))
+			var advance = darkspawn.black.core.client.UiTheme.button(Component.translatable("button.darkspawn.oneblock_advance"), button -> ClientPlayNetworking.send(new OneBlockActionPayload(1)))
 				.bounds(6, 30, 62, 20).build();
 			Runnable refresh = () -> {
 				if (client.player == null) { travel.active = false; advance.active = false; return; }

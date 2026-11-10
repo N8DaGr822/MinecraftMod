@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "darkspawn.black.explorerpack.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"ExplorerPackStorageMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

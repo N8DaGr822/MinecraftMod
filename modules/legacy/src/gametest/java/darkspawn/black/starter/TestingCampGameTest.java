@@ -126,17 +126,17 @@ public final class TestingCampGameTest {
 			darkspawn.black.forsaken.ForsakenContent.BEACON_ITEM, darkspawn.black.forsaken.ForsakenContent.CORE,
 			darkspawn.black.mount.MountCompanions.CAPSULE, darkspawn.black.mount.MountCompanions.VET_KIT))
 			helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Expansion testing item supplied: " + item);
-        for (var key : java.util.List.of(darkspawn.black.equipment.ThematicEnchantments.HUNTER,
-            darkspawn.black.equipment.ThematicEnchantments.BUTCHER, darkspawn.black.equipment.ThematicEnchantments.FORAGER,
-            darkspawn.black.equipment.ThematicEnchantments.SOULWARD))
+        for (var key : java.util.List.of(darkspawn.black.enchantments.ThematicEnchantments.HUNTER,
+            darkspawn.black.enchantments.ThematicEnchantments.BUTCHER, darkspawn.black.enchantments.ThematicEnchantments.FORAGER,
+            darkspawn.black.enchantments.ThematicEnchantments.SOULWARD))
             helper.assertTrue(all.stream().anyMatch(stack -> net.minecraft.world.item.enchantment.EnchantmentHelper.getItemEnchantmentLevel(
                 helper.getLevel().registryAccess().getOrThrow(key), stack) == 2), "Rank II trial supplied: " + key);
         helper.assertTrue(guide.pages().stream().anyMatch(page -> page.raw().getString().contains("FOOD ENCHANTMENTS")),
             "Guide explains enchantment restrictions and chances");
 		for (var item : darkspawn.black.boss.BossItems.HEARTS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every current heart supplied");
-		helper.assertTrue(all.stream().filter(stack -> stack.is(darkspawn.black.inventory.IngredientPouchItem.ITEM)).mapToInt(ItemStack::getCount).sum() == 1,
+		helper.assertTrue(all.stream().filter(stack -> stack.is(darkspawn.black.ingredientpouch.IngredientPouchItem.ITEM)).mapToInt(ItemStack::getCount).sum() == 1,
 			"Fresh camp supplies exactly one Ingredient Pouch");
-		for (var item : java.util.List.of(darkspawn.black.inventory.QuiverItem.ITEM, darkspawn.black.inventory.ExplorerPackItem.ITEM, darkspawn.black.mount.MagicCarpetItem.ITEM, darkspawn.black.mount.AircraftCoreItem.ITEM, darkspawn.black.mount.GroundWalkerItem.ITEM))
+		for (var item : java.util.List.of(darkspawn.black.quiver.QuiverItem.ITEM, darkspawn.black.explorerpack.ExplorerPackItem.ITEM, darkspawn.black.mount.MagicCarpetItem.ITEM, darkspawn.black.mount.AircraftCoreItem.ITEM, darkspawn.black.mount.GroundWalkerItem.ITEM))
 			helper.assertTrue(all.stream().filter(stack -> stack.is(item)).mapToInt(ItemStack::getCount).sum() == 1,
 				"Fresh camp supplies exactly one utility container: " + item);
 		for (var item : darkspawn.black.boss.BossItems.SUMMONS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every regional summon supplied");

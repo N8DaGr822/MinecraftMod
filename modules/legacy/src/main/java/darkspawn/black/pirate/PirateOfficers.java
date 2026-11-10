@@ -22,8 +22,8 @@ public final class PirateOfficers {
         if(action==4&&state.officerContracts[index]==0){state.officerContracts[index]=1;return true;}
         if(action==6&&(state.officerContracts[index]==1||state.officerContracts[index]==2)){state.officerContracts[index]=0;return true;}
         if(action!=5||state.officerContracts[index]!=2)return false;
-        if(index==1&&(!Ships.pay(player,Items.IRON_INGOT,8,false)||!Ships.pay(player,Items.OAK_PLANKS,16,false)))return false;
-        if(index==1){Ships.pay(player,Items.IRON_INGOT,8,true);Ships.pay(player,Items.OAK_PLANKS,16,true);}
+        if(index==1&&(!darkspawn.black.core.Payments.pay(player,Items.IRON_INGOT,8,false)||!darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,16,false)))return false;
+        if(index==1){darkspawn.black.core.Payments.pay(player,Items.IRON_INGOT,8,true);darkspawn.black.core.Payments.pay(player,Items.OAK_PLANKS,16,true);}
         state.officerContracts[index]=3;SeaLegends.renown(player,5);Ships.message(player,NAMES[index]+" is ready to join. Use the Crew tab aboard your docked harbor ship.");return true;
     }
     static boolean inspect(ServerPlayer player,IslandDiscoveries.Island island,BlockPos chest) {

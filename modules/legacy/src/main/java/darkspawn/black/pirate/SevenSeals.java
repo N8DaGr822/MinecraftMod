@@ -46,7 +46,7 @@ public final class SevenSeals {
         if(action<14||action>17||!p.isAlive()||p.isSpectator()||!p.level().dimension().equals(Pirate.LEVEL))return SeaServices.Reply.BLOCKED;
         var island=IslandDiscoveries.at(p.level(),p.blockPosition());if(island==null||island.kind()!=4)return SeaServices.Reply.SHRINE;
         var state=Pirate.state(p);if(state.sealContract!=3)return SeaServices.Reply.FIRST;
-        if(action==14){if((state.seals&16)!=0)return SeaServices.Reply.RECORDED;if(!Ships.pay(p,Items.PRISMARINE_SHARD,8,false))return SeaServices.Reply.COST;Ships.pay(p,Items.PRISMARINE_SHARD,8,true);discover(p,4);return SeaServices.Reply.DONE;}
+        if(action==14){if((state.seals&16)!=0)return SeaServices.Reply.RECORDED;if(!darkspawn.black.core.Payments.pay(p,Items.PRISMARINE_SHARD,8,false))return SeaServices.Reply.COST;darkspawn.black.core.Payments.pay(p,Items.PRISMARINE_SHARD,8,true);discover(p,4);return SeaServices.Reply.DONE;}
         if(state.ending!=0)return SeaServices.Reply.ENDED;if(state.seals!=127)return SeaServices.Reply.SEALS;
         var ledger=SeaLedger.get(p.level());var battle=ledger.battle(p.getUUID());
         if(action==16&&(battle==null||!battle.defeated()))return summon(p,island.center());

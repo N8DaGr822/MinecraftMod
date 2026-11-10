@@ -65,8 +65,8 @@ public final class PirateProgression {
             if(island.kind()!=faction.island||state.factionContracts[index]!=1||(state.factionObjectives&bit)!=0)continue;
             BlockPos cache=island.center().offset(faction==Faction.CORSAIRS?1:faction==Faction.FLEET?-1:0,0,faction==Faction.FLEET?-5:faction==Faction.CORSAIRS?-4:-6);
             if(!pos.equals(cache))return false;
-            if(faction==Faction.DROWNED&&!Ships.pay(player,Items.PRISMARINE_SHARD,4,false)){Ships.message(player,"Bring four prismarine shards as an offering; inspect the shrine cache again.");return false;}
-            if(faction==Faction.DROWNED)Ships.pay(player,Items.PRISMARINE_SHARD,4,true);
+            if(faction==Faction.DROWNED&&!darkspawn.black.core.Payments.pay(player,Items.PRISMARINE_SHARD,4,false)){Ships.message(player,"Bring four prismarine shards as an offering; inspect the shrine cache again.");return false;}
+            if(faction==Faction.DROWNED)darkspawn.black.core.Payments.pay(player,Items.PRISMARINE_SHARD,4,true);
             state.factionObjectives|=bit;Ships.message(player,"Faction objective complete. Return to Briggs, the board or your faction contact for your commendation.");return true;
         }
         return false;

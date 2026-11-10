@@ -219,7 +219,7 @@ public final class Ascension {
             // Profile Boundary: Visits within Ascension keep the active inventory; only entry/return swaps it.
             if(wasInside!=entering)switchItems(p);
             if(!wasInside&&entering){state.returnLevel=origin.dimension();state.returnPos=oldPos;state.returnYaw=yaw;state.returnPitch=pitch;}
-            p.fallDistance=0;((darkspawn.black.mixin.OneBlockSaveAccess)server.getPlayerList()).darkspawn$saveProfile(p);OneBlock.sync(p);return true;
+            p.fallDistance=0;darkspawn.black.core.PlayerSaves.save(p);OneBlock.sync(p);return true;
         }finally{state.travelling=false;}
     }
     private static boolean recoveryReady(ServerPlayer p){
@@ -234,6 +234,6 @@ public final class Ascension {
     }
     private static void switchItems(ServerPlayer p){
         var state=OneBlock.state(p);var outgoing=OneBlockItems.capture(p);state.ascensionOther.apply(p);state.ascensionOther=outgoing;state.ascensionInside=island(p.level());
-        darkspawn.black.equipment.ArmorStyleBonuses.update(p);darkspawn.black.equipment.LegendaryArmor.update(p);p.inventoryMenu.broadcastFullState();
+        darkspawn.black.core.hook.EquipmentChanged.fire(p);p.inventoryMenu.broadcastFullState();
     }
 }
