@@ -4,7 +4,7 @@ Use Java 25. Run these commands from the repository root. Keep the default build
 
 ## Modules (split in progress)
 
-The build is a Gradle multi-project. Each mod lives in `modules/<name>` (`core`, `storage`, `bonfire`, `quiver`, `ingredient_pouch`, `explorer_pack`, `enchantments`) and `modules/legacy` holds the rest of the original mod (mod id `darkspawn`). Task names without a project path run in every module (`test`, `playBuild`, `fullCheck`); prefer one module at a time, for example `:storage:test` or `:legacy:runGameTest '-PgameTestFilter=darkspawn-gametest:wolf_hunt*'`. Each module's GameTest ids are prefixed with its own test mod id (`darkspawn_storage-gametest:...`). Jars are written to `modules/<name>/build/libs`; the legacy jar keeps the `darkspawn-<version>.jar` name and nests every extracted module. Classpath tests that read files Minecraft merges (lang, `sounds.json`, tags) must use `MergedResources` because several jars now ship them.
+The build is a Gradle multi-project. Each mod lives in `modules/<name>` (`core`, `storage`, `bonfire`, `quiver`, `ingredient_pouch`, `explorer_pack`, `enchantments`, `armor_styles`, `expedition_gear`, `climate`, `legendary_armor`) and `modules/legacy` holds the rest of the original mod (mod id `darkspawn`). Task names without a project path run in every module (`test`, `playBuild`, `fullCheck`); prefer one module at a time, for example `:storage:test` or `:legacy:runGameTest '-PgameTestFilter=darkspawn-gametest:wolf_hunt*'`. Each module's GameTest ids are prefixed with its own test mod id (`darkspawn_storage-gametest:...`). Jars are written to `modules/<name>/build/libs`; the legacy jar keeps the `darkspawn-<version>.jar` name and nests every extracted module. Classpath tests that read files Minecraft merges (lang, `sounds.json`, tags) must use `MergedResources` because several jars now ship them.
 
 ## Develop without creating a JAR
 
@@ -33,6 +33,7 @@ This explicitly packages the mod without unit tests or a headless test server. K
 | Mount source/texture parity | `node tools/assets/verify-mounts.cjs` and `node tools/assets/griffin-model.cjs --check`, followed by visual review |
 | Cooking logic | `.\gradlew.bat test --tests 'darkspawn.black.cooking.*' --max-workers=1` |
 | Registered item/block visual definitions and names | `.\gradlew.bat test --tests 'darkspawn.black.ResourceCoverageTest' --max-workers=1` |
+| Equipment (styles, expedition gear, climate, legendary armor) | `:armor_styles:runGameTest`, `:expedition_gear:runGameTest`, `:climate:runGameTest`, `:legendary_armor:runGameTest` (each standalone, separate `-PgameTestRunDir`) plus their `:<module>:test`; legacy `equipment_integration_game_test*` for meals, boss powers and essences with the equipment mods, and `testing_camp_game_test*` for supplied armor. Live rendering, trims and HUD remain visual checks. |
 | Thematic enchantments | `:enchantments:runGameTest; :legacy:runGameTest '-PgameTestFilter=darkspawn-gametest:boss_hunter_enchantment_game_test*'`; `testing_camp_game_test*` for supplied rank II trials. Compile common/client and run `ResourceCoverageTest`. Live enchanting/trades and balance remain acceptance checks. |
 | Fossil display and ocean clues | `runGameTest '-PgameTestFilter=darkspawn-gametest:exploration_finds_game_test*'`; also `boss_structure_game_test_regional_archaeology*`, `husbandry_fishing_game_test_fish*` and `testing_camp_game_test*` for shared loot/fishing/camp changes. Run `ResourceCoverageTest`, `verify-resource-links.py` and `preview-fossil-display.py`; live fishing and visual acceptance remain. |
 | NPC patrol boarding | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:ships_game_test_boarding*' --max-workers=1`; run `ships_game_test*` for shared ship damage/tick/menu changes and `testing_camp_game_test*` for guide changes |
@@ -44,7 +45,7 @@ This explicitly packages the mod without unit tests or a headless test server. K
 | OneBlock logic | `.\gradlew.bat test --tests 'darkspawn.black.oneblock.*' --max-workers=1` |
 | Ascension teams, bridges, generator recovery, MVP phases, Guardian, automation and hardening | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:ascension*' --max-workers=1`; also run `one_block_game_test*` when changing shared travel/harvesting, and storage/Forsaken checks for native protection hooks |
 | Ascension chapter UI, new encounters, relay/drive and membership recovery | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:ascension_chapter_game_test*' --max-workers=1`; run the complete Ascension group for catalog, save or team changes. Live GUI and multiplayer checks remain necessary. |
-| One specific unit test | `.\gradlew.bat test --tests 'darkspawn.black.equipment.TemperatureTest' --max-workers=1` |
+| One specific unit test | `.\gradlew.bat :climate:test --tests 'darkspawn.black.climate.TemperatureTest' --max-workers=1` |
 | Awakened boss patterns | Boss unit tests plus `runGameTest '-PgameTestFilter=darkspawn-gametest:awakened_pattern_game_test*'`; run `boss_encounter_game_test*` for shared AI regressions. Live multiplayer and dodge readability remain necessary. |
 | Wolf Hunt | `test --tests 'darkspawn.black.ecosystem.WolfHuntLedgerTest'` and `runGameTest '-PgameTestFilter=darkspawn-gametest:wolf_hunt_game_test*'`; run `taiga_game_test*` for shared wolf behavior and starter-camp tests for guide changes. Live cooperative balance and reconnect acceptance remain necessary. |
 | Fish and animal server behavior | `.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:husbandry_fishing_game_test*' --max-workers=1` |
@@ -57,7 +58,7 @@ This explicitly packages the mod without unit tests or a headless test server. K
 For server behavior, select a registered GameTest ID with the Fabric filter:
 
 ```powershell
-.\gradlew.bat runGameTest '-PgameTestFilter=darkspawn-gametest:expedition_armor_game_test_temperature_samples_biome_shelter_wetness_and_campfires' --max-workers=1
+.\gradlew.bat :climate:runGameTest '-PgameTestFilter=darkspawn_climate-gametest:climate_game_test_temperature_samples_biome_shelter_wetness_and_campfires' --max-workers=1
 ```
 
 Use IDs from the GameTest output, not Java class names. Check the output's selected-test count and results; a mistyped filter is not validation. Omit the property to run every server test. Broaden checks when changes affect shared systems such as inventory, saving or networking. Playtest controls and appearance in Minecraft after the JAR is ready.
