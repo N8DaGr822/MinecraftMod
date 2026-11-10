@@ -1,9 +1,8 @@
-package darkspawn.black.client;
+package darkspawn.black.core.client;
 
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.vertex.PoseStack;
-import darkspawn.black.Darkspawn;
-import darkspawn.black.equipment.ExpeditionArmor;
+import darkspawn.black.core.DarkspawnCore;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,20 +21,33 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.level.ItemLike;
 
-public final class ExpeditionArmorRenderer implements ArmorRenderer {
-	private static final Identifier NOAH = Darkspawn.id("textures/equipment/noah.png"), NOAH_PULSE = Darkspawn.id("textures/equipment/noah_pulse.png");
+/**
+ * Renders armor from a JSON box geometry ({@code assets/darkspawn/geometry/armor/<family>.json}) and a 256x128 material
+ * texture ({@code textures/equipment/<family>.png}), with native trims drawn through a {@code *_style_overlay} equipment asset.
+ * Each armor mod registers its own families.
+ */
+public final class ArmorGeometryRenderer implements ArmorRenderer {
+	public static final String IRON_TRIM = "iron_style_overlay", DIAMOND_TRIM = "diamond_style_overlay", NETHERITE_TRIM = "netherite_style_overlay";
 	private final Map<EquipmentSlot, HumanoidModel<HumanoidRenderState>> models = new EnumMap<>(EquipmentSlot.class);
 	private final Map<EquipmentSlot, HumanoidModel<HumanoidRenderState>> trimModels = new EnumMap<>(EquipmentSlot.class);
 	private final net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer equipmentRenderer;
 	private final Identifier texture;
+	private final Identifier pulseTexture;
 	private final String trimAsset;
 
-	ExpeditionArmorRenderer(EntityRendererProvider.Context context, String family) {
+	public ArmorGeometryRenderer(EntityRendererProvider.Context context, String family, String trimAsset) {
+		this(context, family, trimAsset, null);
+	}
+
+	/** @param pulseFamily optional second texture shown on alternate 12-tick beats */
+	public ArmorGeometryRenderer(EntityRendererProvider.Context context, String family, String trimAsset, String pulseFamily) {
 		equipmentRenderer = context.getEquipmentRenderer();
-		trimAsset = darkspawn.black.equipment.LegendaryArmor.NAMES.contains(family) ? "netherite_style_overlay" : family.startsWith("diamond_") ? "diamond_style_overlay" : "iron_style_overlay";
-		texture = Darkspawn.id("textures/equipment/" + family + ".png");
-		try (var reader = context.getResourceManager().getResourceOrThrow(Darkspawn.id("geometry/armor/" + family + ".json")).openAsReader()) {
+		this.trimAsset = trimAsset;
+		texture = DarkspawnCore.id("textures/equipment/" + family + ".png");
+		pulseTexture = pulseFamily == null ? null : DarkspawnCore.id("textures/equipment/" + pulseFamily + ".png");
+		try (var reader = context.getResourceManager().getResourceOrThrow(DarkspawnCore.id("geometry/armor/" + family + ".json")).openAsReader()) {
 			var geometry = JsonParser.parseReader(reader).getAsJsonObject();
 			for (ArmorType type : new ArmorType[] { ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS }) {
 				MeshDefinition mesh = new MeshDefinition();
@@ -72,25 +84,18 @@ public final class ExpeditionArmorRenderer implements ArmorRenderer {
 				if (hasTrim) trimModels.put(type.getSlot(), new HumanoidModel<>(LayerDefinition.create(trimMesh, 64, 32).bakeRoot()));
 			}
 		} catch (IOException error) {
-			throw new IllegalStateException("Cannot load expedition armor geometry: " + family, error);
+			throw new IllegalStateException("Cannot load armor geometry: " + family, error);
 		}
 	}
 
-	public static void initialize() {
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "noah"), darkspawn.black.legacy.NoahLegacy.ARMOR.values().toArray(net.minecraft.world.level.ItemLike[]::new));
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "quarantine"), darkspawn.black.forsaken.ForsakenContent.ARMOR.values().toArray(net.minecraft.world.level.ItemLike[]::new));
-		darkspawn.black.equipment.LegendaryArmor.SETS.forEach((name, pieces) -> ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, name), pieces.values().toArray(net.minecraft.world.level.ItemLike[]::new)));
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "mountaineering"), ExpeditionArmor.MOUNTAINEERING.values().toArray(net.minecraft.world.level.ItemLike[]::new));
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "spelunking"), ExpeditionArmor.SPELUNKING.values().toArray(net.minecraft.world.level.ItemLike[]::new));
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "diver"), ExpeditionArmor.DIVER.values().toArray(net.minecraft.world.level.ItemLike[]::new));
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "desert_wanderer"), ExpeditionArmor.DESERT_WANDERER.values().toArray(net.minecraft.world.level.ItemLike[]::new));
-		ArmorRenderer.register(context -> new ExpeditionArmorRenderer(context, "ashwalker"), ExpeditionArmor.ASHWALKER.values().toArray(net.minecraft.world.level.ItemLike[]::new));
+	public static void register(String family, String trimAsset, ItemLike... items) {
+		ArmorRenderer.register(context -> new ArmorGeometryRenderer(context, family, trimAsset), items);
 	}
 
 	@Override public void render(PoseStack pose, SubmitNodeCollector collector, ItemStack stack, HumanoidRenderState state,
 			EquipmentSlot slot, int light, HumanoidModel<HumanoidRenderState> vanillaModel) {
 		// Pose Ownership: Copy the wearer's native armor transforms at submission time, including crouching and riding.
-		var renderedTexture = texture.equals(NOAH) && ((int)state.ageInTicks / 12) % 2 == 1 ? NOAH_PULSE : texture;
+		var renderedTexture = pulseTexture != null && ((int)state.ageInTicks / 12) % 2 == 1 ? pulseTexture : texture;
 		ArmorRenderer.submitTransformCopyingModel(vanillaModel, state, models.get(slot), state, false, collector, pose,
 			stack.hasFoil() ? RenderTypes.armorCutoutNoCullGlint(renderedTexture) : RenderTypes.armorCutoutNoCull(renderedTexture),
 			light, OverlayTexture.NO_OVERLAY, state.outlineColor);
@@ -101,7 +106,7 @@ public final class ExpeditionArmorRenderer implements ArmorRenderer {
 			var layer = slot == EquipmentSlot.LEGS ? net.minecraft.client.resources.model.EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS
 				: net.minecraft.client.resources.model.EquipmentClientInfo.LayerType.HUMANOID;
 			equipmentRenderer.renderLayers(layer,
-				net.minecraft.resources.ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, Darkspawn.id(trimAsset)),
+				net.minecraft.resources.ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, DarkspawnCore.id(trimAsset)),
 				net.fabricmc.fabric.api.client.rendering.v1.TransformCopyingModel.create(vanillaModel, trimModels.get(slot), false),
 				com.mojang.datafixers.util.Pair.of(state, state), trimStack, pose, collector, light, state.outlineColor);
 		}

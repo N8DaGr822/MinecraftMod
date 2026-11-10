@@ -1,9 +1,7 @@
-package darkspawn.black.equipment;
+package darkspawn.black.armorstyles;
 
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
-import darkspawn.black.TestBootstrap;
-import darkspawn.black.boss.BossEmpowerment;
 import java.io.InputStreamReader;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.registries.VanillaRegistries;
@@ -16,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArmorStylesTest {
-	@BeforeAll static void initialize() { TestBootstrap.initialize(); }
+	@BeforeAll static void initialize() { ArmorStylesTestBootstrap.initialize(); }
 
 	@Test void trimmedItemModelsKeepAllSpritesOnTheEquipmentAtlas() throws Exception {
 		var sources = json("/assets/minecraft/atlases/blocks.json").getAsJsonArray("sources");
@@ -24,8 +22,7 @@ class ArmorStylesTest {
 			.anyMatch(source -> "minecraft:directory".equals(source.get("type").getAsString())
 				&& "equipment".equals(source.get("source").getAsString()) && "equipment/".equals(source.get("prefix").getAsString())),
 			"Equipment inventory sprites must be stitched into the blocks atlas");
-		var families = java.util.stream.Stream.concat(LegendaryArmor.NAMES.stream(), ArmorStyles.STYLES.stream()
-			.flatMap(style -> java.util.stream.Stream.of("iron_" + style, "diamond_" + style))).toList();
+		var families = ArmorStyles.STYLES.stream().flatMap(style -> java.util.stream.Stream.of("iron_" + style, "diamond_" + style)).toList();
 		for (String family : families) for (String slot : java.util.List.of("helmet", "chestplate", "leggings", "boots")) {
 			String id = family + "_" + slot;
 			var base = json("/assets/darkspawn/models/item/" + id + ".json").getAsJsonObject("textures");
@@ -46,7 +43,6 @@ class ArmorStylesTest {
 			original.set(DataComponents.CUSTOM_NAME, Component.literal("Family Heirloom"));
 			original.setDamageValue(31);
 			original.enchant(lookup.getOrThrow(Enchantments.PROTECTION), 3);
-			original.set(BossEmpowerment.POWER, "armor_highland");
 			for (String style : ArmorStyles.STYLES) {
 				var styled = ArmorStyles.apply(original, style);
 				assertTrue(styled.is(item));
@@ -121,25 +117,6 @@ class ArmorStylesTest {
 					assertEquals(ArmorStyles.STYLES.size() - 1, selector.getAsJsonArray("cases").size());
 					assertEquals(11, selector.getAsJsonObject("fallback").getAsJsonArray("cases").size());
 				}
-			}
-		}
-	}
-	@Test void legendaryAssetsHaveAllSlotsAndValidTrimBounds() throws Exception {
-		assertEquals(5, LegendaryArmor.SETS.size());
-		for (String family : LegendaryArmor.NAMES) {
-			var geometry = json("/assets/darkspawn/geometry/armor/" + family + ".json");
-			var slots = new java.util.HashSet<String>();
-			for (var part : geometry.getAsJsonArray("parts")) for (var value : part.getAsJsonObject().getAsJsonArray("cubes")) {
-				var cube = value.getAsJsonObject(); slots.add(cube.get("slot").getAsString());
-				if (!cube.has("trim_uv")) continue;
-				var uv = cube.getAsJsonArray("trim_uv"); var size = cube.getAsJsonArray("size");
-				assertTrue(uv.get(0).getAsDouble() + 2 * (size.get(0).getAsDouble() + size.get(2).getAsDouble()) <= 64, family);
-				assertTrue(uv.get(1).getAsDouble() + size.get(1).getAsDouble() + size.get(2).getAsDouble() <= 32, family);
-			}
-			assertEquals(java.util.Set.of("helmet", "chestplate", "leggings", "boots"), slots);
-			for (String slot : slots) {
-				assertFalse(json("/assets/darkspawn/models/item/" + family + "_" + slot + ".json").getAsJsonArray("elements").isEmpty());
-				assertEquals("minecraft:select", json("/assets/darkspawn/items/" + family + "_" + slot + ".json").getAsJsonObject("model").get("type").getAsString());
 			}
 		}
 	}

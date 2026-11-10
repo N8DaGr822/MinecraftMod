@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_armor_styles-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Armor Styles Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.armorstyles.ArmorStylesGameTest"
+    ]
+  }
+}

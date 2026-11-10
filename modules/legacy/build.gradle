@@ -39,4 +39,6 @@ dependencies {
 	include module('explorer_pack')
 	implementation module('enchantments')
 	include module('enchantments')
+	implementation module('armor_styles')
+	include module('armor_styles')
 }

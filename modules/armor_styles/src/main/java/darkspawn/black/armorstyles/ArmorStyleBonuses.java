@@ -1,6 +1,6 @@
-package darkspawn.black.equipment;
+package darkspawn.black.armorstyles;
 
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -62,7 +62,7 @@ public final class ArmorStyleBonuses {
 		set(player, Attributes.ATTACK_DAMAGE, "style_war_chief", style.equals("war_chief") ? 1 : 0, AttributeModifier.Operation.ADD_VALUE);
 		set(player, Attributes.ATTACK_SPEED, "style_berserker", style.equals("berserker") ? .10 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 		set(player, Attributes.ATTACK_DAMAGE, "style_brawler", 0, AttributeModifier.Operation.ADD_VALUE);
-		boolean hadRoyalGuard = player.getAttribute(Attributes.MAX_HEALTH).getModifier(Darkspawn.id("style_royal_guard")) != null;
+		boolean hadRoyalGuard = player.getAttribute(Attributes.MAX_HEALTH).getModifier(DarkspawnCore.id("style_royal_guard")) != null;
 		set(player, Attributes.MAX_HEALTH, "style_royal_guard", 0, AttributeModifier.Operation.ADD_VALUE);
 		set(player, Attributes.KNOCKBACK_RESISTANCE, "style_juggernaut", style.equals("juggernaut") ? .15 : 0, AttributeModifier.Operation.ADD_VALUE);
 		set(player, Attributes.MOVEMENT_SPEED, "style_pathfinder", style.equals("pathfinder") ? .05 : 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
@@ -73,7 +73,7 @@ public final class ArmorStyleBonuses {
 	private static void set(ServerPlayer player, Holder<Attribute> type, String id, double amount, AttributeModifier.Operation operation) {
 		var attribute = player.getAttribute(type);
 		if (attribute == null) return;
-		var key = Darkspawn.id(id);
+		var key = DarkspawnCore.id(id);
 		var current = attribute.getModifier(key);
 		if (current != null && current.amount() == amount && current.operation() == operation) return;
 		attribute.removeModifier(key);

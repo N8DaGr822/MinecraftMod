@@ -3,6 +3,7 @@ package darkspawn.black.starter;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.bonfire.Bonfires;
 import darkspawn.black.cooking.*;
+import darkspawn.black.armorstyles.ArmorStyles;
 import darkspawn.black.equipment.*;
 import darkspawn.black.boss.BossItems;
 import darkspawn.black.boss.BossProfile;

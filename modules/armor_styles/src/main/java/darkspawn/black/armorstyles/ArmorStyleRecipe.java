@@ -1,4 +1,4 @@
-package darkspawn.black.equipment;
+package darkspawn.black.armorstyles;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

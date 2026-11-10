@@ -26,8 +26,7 @@ public class DarkspawnClient implements ClientModInitializer {
 		OneBlockControls.initialize();
         net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.oneblock.AscensionGuardian.TYPE,AscensionGuardianRenderer::new);
 		JournalControls.initialize();
-		ExpeditionArmorRenderer.initialize();
-		ArmorStyleRenderer.initialize();
+		LegacyArmorRenderers.initialize();
 		darkspawn.black.client.legacy.NoahClient.initialize();
 		darkspawn.black.client.mount.GriffinClient.initialize();
 		darkspawn.black.client.pirate.ShipClient.initialize();
@@ -56,10 +55,6 @@ public class DarkspawnClient implements ClientModInitializer {
 			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("tooltip.darkspawn.bio_scanner").withStyle(ChatFormatting.GREEN));
 			String legendary = darkspawn.black.equipment.LegendaryArmor.family(stack);
 			if (!legendary.isEmpty()) lines.add(Component.translatable("tooltip.darkspawn.legendary." + legendary).withStyle(ChatFormatting.GOLD));
-			if (darkspawn.black.equipment.ArmorStyles.supports(stack)) {
-				lines.add(Component.translatable("tooltip.darkspawn.armor_style", Component.translatable("armor_style.darkspawn." + darkspawn.black.equipment.ArmorStyles.style(stack))).withStyle(ChatFormatting.GRAY));
-				lines.add(Component.translatable("tooltip.darkspawn.style_bonus." + darkspawn.black.equipment.ArmorStyles.style(stack)).withStyle(ChatFormatting.LIGHT_PURPLE));
-			}
 			if (stack.is(darkspawn.black.equipment.ExpeditionArmor.DIVER.get(net.minecraft.world.item.equipment.ArmorType.HELMET))) {
 				lines.add(Component.translatable("tooltip.darkspawn.diver_helmet").withStyle(ChatFormatting.GRAY));
 			}

@@ -4,7 +4,7 @@ import darkspawn.black.bonfire.BonfireBlock;
 import darkspawn.black.bonfire.Bonfires;
 import darkspawn.black.cooking.Cooking;
 import darkspawn.black.cooking.CookingRecipe;
-import darkspawn.black.equipment.ArmorStyles;
+import darkspawn.black.armorstyles.ArmorStyles;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;

@@ -26,6 +26,7 @@ public final class TestBootstrap {
 		new darkspawn.black.ingredientpouch.IngredientPouchMod().onInitialize();
 		new darkspawn.black.explorerpack.ExplorerPackMod().onInitialize();
 		new darkspawn.black.enchantments.EnchantmentsMod().onInitialize();
+		new darkspawn.black.armorstyles.ArmorStylesMod().onInitialize();
 		new Darkspawn().onInitialize();
 		// Minecraft 26.3: Bind defaults after registering all mod items and components.
 		var registries = VanillaRegistries.createWorldLookup();

@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_armor_styles",
+	"version": "${version}",
+	"name": "Darkspawn Armor Styles",
+	"description": "Fifteen cosmetic smithing styles for iron and diamond armor, each with a full-set bonus.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_armor_styles/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.armorstyles.ArmorStylesMod"
+		],
+		"client": [
+			"darkspawn.black.armorstyles.client.ArmorStylesClient"
+		]
+	},
+	"mixins": [
+		"darkspawn_armor_styles.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

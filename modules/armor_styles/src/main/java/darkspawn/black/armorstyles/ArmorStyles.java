@@ -1,7 +1,7 @@
-package darkspawn.black.equipment;
+package darkspawn.black.armorstyles;
 
 import com.mojang.serialization.Codec;
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
 import java.util.List;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -16,12 +16,12 @@ public final class ArmorStyles {
 		? com.mojang.serialization.DataResult.success(value)
 		: com.mojang.serialization.DataResult.error(() -> "Unknown armor style: " + value));
 	public static final DataComponentType<String> STYLE = Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE,
-		Darkspawn.id("armor_style"), DataComponentType.<String>builder().persistent(STYLE_CODEC)
+		DarkspawnCore.id("armor_style"), DataComponentType.<String>builder().persistent(STYLE_CODEC)
 			.networkSynchronized(ByteBufCodecs.STRING_UTF8).build());
 	private ArmorStyles() { }
 
 	public static void initialize() {
-		Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, Darkspawn.id("armor_style"), ArmorStyleRecipe.SERIALIZER);
+		Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, DarkspawnCore.id("armor_style"), ArmorStyleRecipe.SERIALIZER);
 		ArmorStyleBonuses.initialize();
 	}
 

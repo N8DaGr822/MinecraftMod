@@ -32,10 +32,7 @@ public class Darkspawn implements ModInitializer {
         darkspawn.black.audio.DarkspawnSounds.initialize();
 		darkspawn.black.equipment.ExpeditionArmor.initialize();
 		darkspawn.black.equipment.LegendaryArmor.initialize();
-		darkspawn.black.equipment.ArmorStyles.initialize();
-		darkspawn.black.core.hook.EquipmentChanged.EVENT.register(player -> {
-			darkspawn.black.equipment.ArmorStyleBonuses.update(player); darkspawn.black.equipment.LegendaryArmor.update(player);
-		});
+		darkspawn.black.core.hook.EquipmentChanged.EVENT.register(darkspawn.black.equipment.LegendaryArmor::update);
 		darkspawn.black.equipment.Temperature.initialize();
 		darkspawn.black.boss.BossEffects.initialize();
 		BossItems.register();
