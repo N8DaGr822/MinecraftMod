@@ -150,7 +150,7 @@ public final class TestingCamp extends Item {
 		Cuisine.SCROLLS.values().forEach(item -> add(scrolls, item, 4));
 		result.add(new Supply("04 Cookbook and recipe scrolls", scrolls));
 		var crops = stacks(64, Items.BONE_MEAL, Items.WHEAT_SEEDS, Items.CARROT, Items.POTATO, Items.BEETROOT_SEEDS);
-		Agriculture.CROPS.forEach(crop -> { add(crops, crop.seeds(), 64); add(crops, crop.ingredient(), 64); });
+		darkspawn.black.farming.Agriculture.CROPS.forEach(crop -> { add(crops, crop.seeds(), 64); add(crops, crop.ingredient(), 64); });
 		add(crops, Items.DIAMOND_HOE, 1);
 		result.add(new Supply("05 Farming", crops));
 		var expedition = new ArrayList<ItemStack>();
@@ -211,7 +211,7 @@ public final class TestingCamp extends Item {
             darkspawn.black.worldgen.ExplorationFinds.FOSSIL_FRAGMENT,Items.BONE_BLOCK,Items.SMOOTH_STONE_SLAB)));
         var fish=new ArrayList<ItemStack>();darkspawn.black.cooking.RegionalFishing.RAW.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.COOKED.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.BUCKETS.forEach(item->add(fish,item,1));add(fish,Items.FISHING_ROD,1);
         fish.addAll(stacks(4,darkspawn.black.worldgen.ExplorationFinds.OCEAN_NOTE,Items.COMPASS,Items.INK_SAC,Items.PRISMARINE_SHARD,Items.NAUTILUS_SHELL,Items.DRAGON_BREATH));result.add(new Supply("20 Regional fishing",fish));
-        result.add(new Supply("21 Animal husbandry",stacks(16,Items.PIG_SPAWN_EGG,Items.CHICKEN_SPAWN_EGG,Items.GOAT_SPAWN_EGG,Items.MOOSHROOM_SPAWN_EGG,Items.CARROT,Items.PUMPKIN_SEEDS,Items.GLASS_BOTTLE,Items.BOWL,Cooking.WILD_HERBS,darkspawn.black.cooking.AnimalUtility.TRUFFLE,darkspawn.black.cooking.AnimalUtility.GOAT_CHEESE,darkspawn.black.cooking.AnimalUtility.GOAT_MILK,darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM,darkspawn.black.cooking.AnimalUtility.RICH_EGG,darkspawn.black.cooking.AnimalUtility.HERBED_EGG)));
+        result.add(new Supply("21 Animal husbandry",stacks(16,Items.PIG_SPAWN_EGG,Items.CHICKEN_SPAWN_EGG,Items.GOAT_SPAWN_EGG,Items.MOOSHROOM_SPAWN_EGG,Items.CARROT,Items.PUMPKIN_SEEDS,Items.GLASS_BOTTLE,Items.BOWL,darkspawn.black.farming.Agriculture.WILD_HERBS,darkspawn.black.cooking.AnimalUtility.TRUFFLE,darkspawn.black.cooking.AnimalUtility.GOAT_CHEESE,darkspawn.black.cooking.AnimalUtility.GOAT_MILK,darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM,darkspawn.black.cooking.AnimalUtility.RICH_EGG,darkspawn.black.cooking.AnimalUtility.HERBED_EGG)));
         // Enchantment Trials: Ready-enchanted equipment shares the ammunition barrel's spare slots.
         var enchantmentTrials=stacks(64,darkspawn.black.pirate.Ships.CHAIN_SHOT,darkspawn.black.pirate.Ships.PIERCING_SHOT);
         enchantmentTrials.add(new ItemStack(darkspawn.black.mount.MagicCarpetItem.ITEM));
@@ -302,7 +302,7 @@ public final class TestingCamp extends Item {
 		plan.put(center.offset(-4, 2, -2), Bonfires.CORE.defaultBlockState());
 		for (int x = 2; x <= 6; x++) for (int z = 2; z <= 6; z++) {
 			plan.put(center.offset(x, 1, z), (x == 4 && z == 4 ? Blocks.WATER.defaultBlockState() : Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7)));
-			if (!(x == 4 && z == 4)) plan.put(center.offset(x, 2, z), Agriculture.CROPS.get(((x - 2) * 5 + z - 2) % Agriculture.CROPS.size()).block().getStateForAge(0));
+			if (!(x == 4 && z == 4)) plan.put(center.offset(x, 2, z), darkspawn.black.farming.Agriculture.CROPS.get(((x - 2) * 5 + z - 2) % darkspawn.black.farming.Agriculture.CROPS.size()).block().getStateForAge(0));
 		}
 		plan.put(center.offset(4, 2, 4), Blocks.SEA_LANTERN.defaultBlockState());
 		for(int x:new int[]{-5,-3})plan.put(center.offset(x,1,4),Blocks.SUSPICIOUS_GRAVEL.defaultBlockState());

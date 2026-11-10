@@ -1,7 +1,7 @@
-package darkspawn.black.cooking;
+package darkspawn.black.farming;
 
 import com.mojang.serialization.JsonOps;
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
 import java.util.List;
 import java.util.Optional;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -32,6 +32,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.trading.TradeSets;
 import net.minecraft.world.item.trading.VillagerTrades;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmlandBlock;
@@ -186,7 +187,7 @@ public final class AgricultureGameTest {
 		// Regional seeds originate in biome mutations, not novice trades.
 		for (var crop : Agriculture.STANDARD_CROPS) {
 			String name = BuiltInRegistries.ITEM.getKey(crop.seeds()).getPath();
-			var trade = registry.getOrThrow(ResourceKey.create(Registries.VILLAGER_TRADE, Darkspawn.id("farmer/1/emerald_" + name)));
+			var trade = registry.getOrThrow(ResourceKey.create(Registries.VILLAGER_TRADE, DarkspawnCore.id("farmer/1/emerald_" + name)));
 			helper.assertTrue(pool.contains(trade), "Every seed must be obtainable from the novice trade pool");
 			var offer = trade.value().getOffer(context);
 			helper.assertTrue(offer != null && offer.getResult().is(crop.seeds()) && offer.getResult().getCount() == 4
@@ -233,5 +234,24 @@ public final class AgricultureGameTest {
 			farmer.discard();
 			helper.succeed();
 		});
+	}
+
+	@GameTest public void regionalCropsRespectBiomesAndReturnTheirOwnSeeds(GameTestHelper helper) {
+		var biomes = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
+		var snow = biomes.getOrThrow(Biomes.SNOWY_PLAINS);
+		var jungle = biomes.getOrThrow(Biomes.JUNGLE);
+		var swamp = biomes.getOrThrow(Biomes.SWAMP);
+		helper.assertTrue(Agriculture.regionalVariant(Agriculture.GARLIC.block(), snow) == Agriculture.FROST_GARLIC, "Snow ripens frost garlic");
+		helper.assertTrue(Agriculture.regionalVariant(Agriculture.PEPPER.block(), jungle) == Agriculture.JUNGLE_PEPPER, "Jungle ripens jungle pepper");
+		helper.assertTrue(Agriculture.regionalVariant(Agriculture.RICE.block(), swamp) == Agriculture.MARSH_RICE, "Swamp ripens marsh rice");
+		helper.assertTrue(Agriculture.regionalVariant(Agriculture.GARLIC.block(), jungle) == null, "Wrong biome cannot mutate garlic");
+		for (var crop : List.of(Agriculture.FROST_GARLIC, Agriculture.JUNGLE_PEPPER, Agriculture.MARSH_RICE)) {
+			helper.assertTrue(crop.block().asItem() == crop.seeds(), "Variant retains its own planting identity");
+			var drops = net.minecraft.world.level.block.Block.getDrops(crop.block().getStateForAge(7), helper.getLevel(), helper.absolutePos(BlockPos.ZERO), null);
+			helper.assertTrue(drops.stream().anyMatch(s -> s.is(crop.seeds())) && drops.stream().anyMatch(s -> s.is(crop.ingredient())), "Mature harvest gives renewable seeds and regional produce");
+			var unripe = net.minecraft.world.level.block.Block.getDrops(crop.block().getStateForAge(0), helper.getLevel(), helper.absolutePos(BlockPos.ZERO), null);
+			helper.assertTrue(unripe.stream().noneMatch(s -> s.is(crop.ingredient())), "Unripe crops cannot produce food");
+		}
+		helper.succeed();
 	}
 }

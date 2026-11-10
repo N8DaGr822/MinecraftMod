@@ -13,7 +13,7 @@ public final class ExpansionBrewingGameTest {
     @GameTest public void nativeBrewingConsumesIngredientAndPreservesVanilla(GameTestHelper h){
         var level=h.getLevel();var pos=h.absolutePos(new BlockPos(1,1,1));level.setBlock(pos,Blocks.BREWING_STAND.defaultBlockState(),3);
         var stand=(BrewingStandBlockEntity)level.getBlockEntity(pos);
-        stand.setItem(0,PotionContents.createItemStack(Items.POTION,Potions.AWKWARD));stand.setItem(1,PotionContents.createItemStack(Items.POTION,Potions.AWKWARD));stand.setItem(3,new ItemStack(Cooking.WILD_HERBS,2));stand.setItem(4,new ItemStack(Items.BLAZE_POWDER));
+        stand.setItem(0,PotionContents.createItemStack(Items.POTION,Potions.AWKWARD));stand.setItem(1,PotionContents.createItemStack(Items.POTION,Potions.AWKWARD));stand.setItem(3,new ItemStack(darkspawn.black.farming.Agriculture.WILD_HERBS,2));stand.setItem(4,new ItemStack(Items.BLAZE_POWDER));
         for(int i=0;i<401;i++)BrewingStandBlockEntity.serverTick(level,pos,level.getBlockState(pos),stand);
         h.assertTrue(stand.getItem(0).get(DataComponents.POTION_CONTENTS).is(CulinaryBrewing.POTIONS.get("herbal_restoration"))&&stand.getItem(1).get(DataComponents.POTION_CONTENTS).is(CulinaryBrewing.POTIONS.get("herbal_restoration")),"Actual stand brews both bottles");
         h.assertTrue(stand.getItem(3).getCount()==1,"One reagent per batch");

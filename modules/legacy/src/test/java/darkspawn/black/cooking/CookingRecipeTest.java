@@ -66,8 +66,8 @@ class CookingRecipeTest {
 		matches("fish_chowder", Cooking.FISH_CHOWDER, Items.COOKED_COD, Items.POTATO, Items.MILK_BUCKET, Items.BOWL);
 		matches("fish_chowder", Cooking.FISH_CHOWDER, Items.COOKED_SALMON, Items.POTATO, Items.MILK_BUCKET, Items.BOWL);
 		matches("chicken_cordon_bleu", Cooking.CHICKEN_CORDON_BLEU, Items.COOKED_CHICKEN, Items.WHEAT, Cooking.CHEESE);
-		matches("woodland_stew", Cooking.WOODLAND_STEW, Items.RED_MUSHROOM, Items.CARROT, Cooking.WILD_HERBS, Items.BOWL);
-		matches("woodland_stew", Cooking.WOODLAND_STEW, Items.BROWN_MUSHROOM, Items.CARROT, Cooking.WILD_HERBS, Items.BOWL);
+		matches("woodland_stew", Cooking.WOODLAND_STEW, Items.RED_MUSHROOM, Items.CARROT, darkspawn.black.farming.Agriculture.WILD_HERBS, Items.BOWL);
+		matches("woodland_stew", Cooking.WOODLAND_STEW, Items.BROWN_MUSHROOM, Items.CARROT, darkspawn.black.farming.Agriculture.WILD_HERBS, Items.BOWL);
 		assertInstanceOf(ShapedRecipe.class, recipe("cooking_station"));
 	}
 

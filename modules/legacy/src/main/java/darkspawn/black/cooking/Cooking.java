@@ -34,7 +34,6 @@ public final class Cooking {
 				@Override public String toString() { return "darkspawn:cooking"; }
 			});
 	public static final Item SALT = register("salt", Item::new);
-	public static final Item WILD_HERBS = register("wild_herbs", Item::new);
 	public static final Item BUTTER = register("butter", Item::new);
 	public static final Item CHEESE = register("cheese", properties -> new Item(properties.food(new FoodProperties.Builder()
 			.nutrition(3).saturationModifier(0.5F).build())));
@@ -70,7 +69,6 @@ public final class Cooking {
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> entries.accept(STATION_ITEM));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
 			entries.accept(SALT);
-			entries.accept(WILD_HERBS);
 			entries.accept(CHEESE);
 			entries.accept(BUTTER);
 			entries.accept(HERB_STEAK);

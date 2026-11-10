@@ -1,8 +1,7 @@
-package darkspawn.black.cooking;
+package darkspawn.black.farming;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import darkspawn.black.TestBootstrap;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -15,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AgricultureAssetsTest {
 	@BeforeAll
-	static void initialize() { TestBootstrap.initialize(); }
+	static void initialize() { FarmingTestBootstrap.initialize(); }
 
 	private JsonObject json(String path) throws Exception {
-		try (var stream = darkspawn.black.MergedResources.open(getClass(), path)) {
+		try (var stream = MergedResources.open(getClass(), path)) {
 			assertNotNull(stream, path);
 			return JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
 		}
@@ -62,6 +61,6 @@ class AgricultureAssetsTest {
 				assertTrue(names.has("item.darkspawn." + name));
 			}
 		}
-		model(json("/assets/darkspawn/items/butter.json").getAsJsonObject("model").get("model").getAsString(), checked);
+		model(json("/assets/darkspawn/items/wild_herbs.json").getAsJsonObject("model").get("model").getAsString(), checked);
 	}
 }

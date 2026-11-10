@@ -6,7 +6,13 @@ from pathlib import Path
 from cuisine import MEALS, BOSSES, FEASTS
 
 root=Path(__file__).resolve().parents[2]
-assets=root/'modules/legacy/src/main/resources/assets/darkspawn'
+class Assets:
+    # Cuisine art is split across module jars (core holds the shared atlas); resolve each path in whichever module owns it.
+    def __truediv__(self,rel):
+        hits=sorted(root.glob('modules/*/src/main/resources/assets/darkspawn/'+rel))
+        assert len(hits)<=1,(rel,hits)
+        return hits[0] if hits else root/'modules/legacy/src/main/resources/assets/darkspawn'/rel
+assets=Assets()
 for file,size in [('textures/block/cuisine_atlas.png',512),('icon.png',256)]:
     raw=(assets/file).read_bytes()
     assert raw[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',raw[16:24])==(size,size),file

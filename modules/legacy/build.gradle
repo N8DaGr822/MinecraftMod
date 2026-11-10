@@ -47,4 +47,6 @@ dependencies {
 	include module('climate')
 	implementation module('legendary_armor')
 	include module('legendary_armor')
+	implementation module('farming')
+	include module('farming')
 }

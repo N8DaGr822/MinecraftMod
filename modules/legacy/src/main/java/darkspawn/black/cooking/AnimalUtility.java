@@ -32,7 +32,7 @@ public final class AnimalUtility {
         net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(e->{for(var item:java.util.List.of(TRUFFLE,RICH_EGG,HERBED_EGG,GOAT_MILK,GOAT_CHEESE,FUNGAL_CREAM))e.accept(item);});
         UseEntityCallback.EVENT.register((player,world,hand,entity,hit)->{
             if(!player.isShiftKeyDown()||!(entity instanceof Animal animal)||animal.isBaby()||!animal.isAlive()||player.isSpectator())return InteractionResult.PASS;
-            var held=player.getItemInHand(hand);boolean candidate=animal instanceof Pig&&held.is(Items.CARROT)||animal instanceof Chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(Cooking.WILD_HERBS))||animal instanceof Goat&&held.is(Items.GLASS_BOTTLE)||animal instanceof MushroomCow&&held.is(Items.BOWL);
+            var held=player.getItemInHand(hand);boolean candidate=animal instanceof Pig&&held.is(Items.CARROT)||animal instanceof Chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(darkspawn.black.farming.Agriculture.WILD_HERBS))||animal instanceof Goat&&held.is(Items.GLASS_BOTTLE)||animal instanceof MushroomCow&&held.is(Items.BOWL);
             if(!candidate)return InteractionResult.PASS;
             if(player instanceof ServerPlayer server)interact(server,animal,hand);
             return InteractionResult.SUCCESS;
@@ -47,7 +47,7 @@ public final class AnimalUtility {
             if(!p.level().getBiome(animal.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_FOREST)){p.sendSystemMessage(Component.literal("Pigs hunt truffles on grass or podzol in forests."));return false;}
             for(var pos:BlockPos.betweenClosed(animal.blockPosition().offset(-3,-1,-3),animal.blockPosition().offset(3,0,3))){if(!p.level().hasChunkAt(pos))continue;var ground=p.level().getBlockState(pos);if((ground.is(Blocks.GRASS_BLOCK)||ground.is(Blocks.PODZOL))&&p.level().getBlockState(pos.above()).isAir()){s.forage=pos.above().immutable();break;}}
             if(s.forage==null)return false;s.forageUntil=now+600;animal.getNavigation().moveTo(s.forage.getX()+.5,s.forage.getY(),s.forage.getZ()+.5,.8);
-        }else if(animal instanceof Chicken chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(Cooking.WILD_HERBS))&&!chicken.isChickenJockey()){s.egg=held.is(Items.PUMPKIN_SEEDS)?1:2;}
+        }else if(animal instanceof Chicken chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(darkspawn.black.farming.Agriculture.WILD_HERBS))&&!chicken.isChickenJockey()){s.egg=held.is(Items.PUMPKIN_SEEDS)?1:2;}
         else if(animal instanceof Goat&&held.is(Items.GLASS_BOTTLE))reward=GOAT_MILK;
         else if(animal instanceof MushroomCow&&held.is(Items.BOWL))reward=FUNGAL_CREAM;
         else return false;

@@ -87,7 +87,7 @@ public final class IngredientPouchProfileGameTest {
 	@GameTest
 	public void modBrewingHerbsAreEligible(GameTestHelper h) {
 		// Optional tag entry: present only when the crop's mod is loaded.
-		h.assertTrue(IngredientPouchItem.accepts(new ItemStack(darkspawn.black.cooking.Cooking.WILD_HERBS)), "Mod brewing herbs are eligible");
+		h.assertTrue(IngredientPouchItem.accepts(new ItemStack(darkspawn.black.farming.Agriculture.WILD_HERBS)), "Mod brewing herbs are eligible");
 		h.succeed();
 	}
 }

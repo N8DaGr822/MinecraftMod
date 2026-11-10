@@ -32,24 +32,6 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class CuisineGameTest {
-	@GameTest public void regionalCropsRespectBiomesAndReturnTheirOwnSeeds(GameTestHelper helper) {
-		var biomes = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
-		var snow = biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS);
-		var jungle = biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.JUNGLE);
-		var swamp = biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.SWAMP);
-		helper.assertTrue(Agriculture.regionalVariant(Agriculture.GARLIC.block(), snow) == Agriculture.FROST_GARLIC, "Snow ripens frost garlic");
-		helper.assertTrue(Agriculture.regionalVariant(Agriculture.PEPPER.block(), jungle) == Agriculture.JUNGLE_PEPPER, "Jungle ripens jungle pepper");
-		helper.assertTrue(Agriculture.regionalVariant(Agriculture.RICE.block(), swamp) == Agriculture.MARSH_RICE, "Swamp ripens marsh rice");
-		helper.assertTrue(Agriculture.regionalVariant(Agriculture.GARLIC.block(), jungle) == null, "Wrong biome cannot mutate garlic");
-		for (var crop : List.of(Agriculture.FROST_GARLIC, Agriculture.JUNGLE_PEPPER, Agriculture.MARSH_RICE)) {
-			helper.assertTrue(crop.block().asItem() == crop.seeds(), "Variant retains its own planting identity");
-			var drops = net.minecraft.world.level.block.Block.getDrops(crop.block().getStateForAge(7), helper.getLevel(), helper.absolutePos(BlockPos.ZERO), null);
-			helper.assertTrue(drops.stream().anyMatch(s -> s.is(crop.seeds())) && drops.stream().anyMatch(s -> s.is(crop.ingredient())), "Mature harvest gives renewable seeds and regional produce");
-			var unripe = net.minecraft.world.level.block.Block.getDrops(crop.block().getStateForAge(0), helper.getLevel(), helper.absolutePos(BlockPos.ZERO), null);
-			helper.assertTrue(unripe.stream().noneMatch(s -> s.is(crop.ingredient())), "Unripe crops cannot produce food");
-		}
-		helper.succeed();
-	}
 	@GameTest public void newEquipmentPowersRespectBlocksAndDoNotStack(GameTestHelper helper) {
 		var player = player(helper);
 		var target = helper.spawnWithNoFreeWill(EntityTypes.HUSK, new BlockPos(2,2,2));
@@ -98,9 +80,9 @@ public final class CuisineGameTest {
 	private static void remove(ServerPlayer player) { player.level().getServer().getPlayerList().remove(player); player.discard(); }
 	private static void fillShadow(CookingMenu menu) {
 		menu.getSlot(0).set(new ItemStack(Cuisine.INGREDIENTS.get(BossKind.SHADOW_CREEPER_QUEEN), 2));
-		menu.getSlot(1).set(new ItemStack(Agriculture.RICE.ingredient(), 2));
+		menu.getSlot(1).set(new ItemStack(darkspawn.black.farming.Agriculture.RICE.ingredient(), 2));
 		menu.getSlot(2).set(new ItemStack(Cooking.BUTTER, 2));
-		menu.getSlot(3).set(new ItemStack(Cooking.WILD_HERBS, 2));
+		menu.getSlot(3).set(new ItemStack(darkspawn.black.farming.Agriculture.WILD_HERBS, 2));
 	}
 	@GameTest public void lockedCookingAndDuplicateScrollsCannotConsumeOrDuplicate(GameTestHelper helper) {
 		var player = player(helper);

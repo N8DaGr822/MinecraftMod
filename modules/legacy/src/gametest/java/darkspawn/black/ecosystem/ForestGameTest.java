@@ -93,20 +93,20 @@ public final class ForestGameTest {
 			barkling.mobInteract(player, InteractionHand.MAIN_HAND);
 			secondPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.SHEARS));
 			barkling.mobInteract(secondPlayer, InteractionHand.MAIN_HAND);
-			helper.assertTrue(count(secondPlayer, Cooking.WILD_HERBS) == 0, "A second player must share this creature's harvest cooldown");
-			helper.assertTrue(count(player, Cooking.WILD_HERBS) == 1 && shears.getDamageValue() == 1, "Repeated harvest must grant one herb and consume one durability");
+			helper.assertTrue(count(secondPlayer, darkspawn.black.farming.Agriculture.WILD_HERBS) == 0, "A second player must share this creature's harvest cooldown");
+			helper.assertTrue(count(player, darkspawn.black.farming.Agriculture.WILD_HERBS) == 1 && shears.getDamageValue() == 1, "Repeated harvest must grant one herb and consume one durability");
 			helper.assertTrue(barkling.getTarget() == null && !barkling.isPreventingPlayerRest(helper.getLevel(), player), "Harvest must leave the Barkling neutral");
 			var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.getLevel().registryAccess());
 			barkling.saveWithoutId(output);
 			var saved = output.buildResult();
 			barkling.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.getLevel().registryAccess(), saved));
 			barkling.mobInteract(player, InteractionHand.MAIN_HAND);
-			helper.assertTrue(count(player, Cooking.WILD_HERBS) == 1 && !barkling.herbsReady(), "Reload must not bypass herb regrowth");
+			helper.assertTrue(count(player, darkspawn.black.farming.Agriculture.WILD_HERBS) == 1 && !barkling.herbsReady(), "Reload must not bypass herb regrowth");
 			// Saved Clock Boundary: Expire this creature's cooldown without advancing every test's world clock.
 			saved.putLong("darkspawn_herbs_ready_at", helper.getLevel().getGameTime());
 			barkling.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.getLevel().registryAccess(), saved));
 			barkling.mobInteract(player, InteractionHand.MAIN_HAND);
-			helper.assertTrue(count(player, Cooking.WILD_HERBS) == 2 && shears.getDamageValue() == 2, "Herbs must be renewable when the saved cooldown expires");
+			helper.assertTrue(count(player, darkspawn.black.farming.Agriculture.WILD_HERBS) == 2 && shears.getDamageValue() == 2, "Herbs must be renewable when the saved cooldown expires");
 		} finally { barkling.discard(); removePlayer(player); removePlayer(secondPlayer); }
 		helper.succeed();
 	}
@@ -120,7 +120,7 @@ public final class ForestGameTest {
 			ItemStack shears = new ItemStack(Items.SHEARS);
 			player.setItemInHand(InteractionHand.MAIN_HAND, shears);
 			barkling.mobInteract(player, InteractionHand.MAIN_HAND);
-			var drops = helper.getLevel().getEntitiesOfClass(ItemEntity.class, barkling.getBoundingBox().inflate(2), item -> item.getItem().is(Cooking.WILD_HERBS));
+			var drops = helper.getLevel().getEntitiesOfClass(ItemEntity.class, barkling.getBoundingBox().inflate(2), item -> item.getItem().is(darkspawn.black.farming.Agriculture.WILD_HERBS));
 			helper.assertTrue(drops.size() == 1 && drops.getFirst().getItem().getCount() == 1, "Full inventory must drop exactly one harvest");
 			drops.forEach(ItemEntity::discard);
 			barkling.setTarget(player);
@@ -224,11 +224,11 @@ public final class ForestGameTest {
 			ent.dropCustomDeathLoot(helper.getLevel(), ent.damageSources().playerAttack(player), true);
 			var drops = helper.getLevel().getEntitiesOfClass(ItemEntity.class, ent.getBoundingBox().inflate(2));
 			helper.assertTrue(drops.size() == 2 && drops.stream().anyMatch(item -> item.getItem().is(BossItems.ANCIENT_HEARTWOOD))
-					&& drops.stream().anyMatch(item -> item.getItem().is(Cooking.WILD_HERBS)), "Herald must drop herbs and the existing summon, without boss rewards");
+					&& drops.stream().anyMatch(item -> item.getItem().is(darkspawn.black.farming.Agriculture.WILD_HERBS)), "Herald must drop herbs and the existing summon, without boss rewards");
 			drops.forEach(ItemEntity::discard);
 			CookingMenu menu = new CookingMenu(1, player.getInventory());
 			menu.getSlot(0).set(new ItemStack(Items.BOWL));
-			menu.getSlot(1).set(new ItemStack(Cooking.WILD_HERBS));
+			menu.getSlot(1).set(new ItemStack(darkspawn.black.farming.Agriculture.WILD_HERBS));
 			menu.getSlot(2).set(new ItemStack(Items.CARROT));
 			menu.getSlot(3).set(new ItemStack(Items.BROWN_MUSHROOM));
 			menu.clicked(4, 0, ContainerInput.PICKUP, player);

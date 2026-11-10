@@ -225,7 +225,7 @@ public final class ForestMob extends Monster implements RangedAttackMob, darkspa
 		}
 		// Herb Harvest: Commit the cooldown before granting items so repeated interactions cannot duplicate a harvest.
 		herbsReadyAt = level.getGameTime() + 6000;
-		ItemStack herbs = new ItemStack(Cooking.WILD_HERBS);
+		ItemStack herbs = new ItemStack(darkspawn.black.farming.Agriculture.WILD_HERBS);
 		if (!player.getInventory().add(herbs)) { spawnAtLocation(level, herbs); }
 		shears.hurtAndBreak(1, player, hand.asEquipmentSlot());
 		level.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + 0.8, getZ(), 8, 0.3, 0.3, 0.3, 0);
@@ -247,7 +247,7 @@ public final class ForestMob extends Monster implements RangedAttackMob, darkspa
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
 		if (!killedByPlayer) { return; }
-		spawnAtLocation(level, new ItemStack(kind == Kind.BARKLING ? Items.STICK : Cooking.WILD_HERBS));
+		spawnAtLocation(level, new ItemStack(kind == Kind.BARKLING ? Items.STICK : darkspawn.black.farming.Agriculture.WILD_HERBS));
 		if (kind == Kind.ANCIENT_ENT) { spawnAtLocation(level, new ItemStack(BossItems.ANCIENT_HEARTWOOD)); }
 	}
 
