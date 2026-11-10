@@ -9,7 +9,7 @@ class GroundWalkerModelTest {
     @BeforeAll static void initialize() { TestBootstrap.initialize(); }
     @Test void mechanicalLegsAlternateAndResetForTheNextEntity() throws Exception {
         var modelClass=Class.forName("darkspawn.black.client.mount.GroundWalkerModel");
-        var stateClass=Class.forName("darkspawn.black.client.mount.GriffinRenderState");
+        var stateClass=Class.forName("darkspawn.black.mountkit.client.GriffinRenderState");
         var layer=modelClass.getMethod("createBodyLayer").invoke(null);
         var root=layer.getClass().getMethod("bakeRoot").invoke(layer);
         var model=modelClass.getConstructors()[0].newInstance(root);

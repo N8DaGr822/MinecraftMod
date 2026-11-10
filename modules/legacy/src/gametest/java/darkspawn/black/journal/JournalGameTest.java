@@ -62,8 +62,8 @@ public final class JournalGameTest {
     @GameTest public void observationRequiresSightAndRangeWithoutLoadingChunks(GameTestHelper helper) {
         var player=player(helper);var level=player.level();var pos=player.blockPosition();
         for(var at:BlockPos.betweenClosed(pos.offset(-5,-1,-5),pos.offset(5,4,5)))level.setBlockAndUpdate(at,Blocks.AIR.defaultBlockState());
-        var seen=darkspawn.black.mount.Mounts.LEOPARD.create(level,EntitySpawnReason.COMMAND);
-        var hidden=darkspawn.black.mount.Mounts.GIANT_SCORPION.create(level,EntitySpawnReason.COMMAND);
+        var seen=darkspawn.black.creaturemounts.CreatureMounts.LEOPARD.create(level,EntitySpawnReason.COMMAND);
+        var hidden=darkspawn.black.creaturemounts.CreatureMounts.GIANT_SCORPION.create(level,EntitySpawnReason.COMMAND);
         seen.setPos(Vec3.atBottomCenterOf(pos.east(3)));hidden.setPos(Vec3.atBottomCenterOf(pos.west(3)));
         seen.setNoAi(true);hidden.setNoAi(true);seen.setNoGravity(true);hidden.setNoGravity(true);level.addFreshEntity(seen);level.addFreshEntity(hidden);
         for(var at:BlockPos.betweenClosed(pos.offset(-1,0,-2),pos.offset(-1,4,2)))level.setBlockAndUpdate(at,Blocks.STONE.defaultBlockState());

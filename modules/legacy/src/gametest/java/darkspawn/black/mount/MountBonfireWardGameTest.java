@@ -1,5 +1,8 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.creaturemounts.CreatureMounts;
+
+import darkspawn.black.creaturemounts.Griffin;
 import darkspawn.black.bonfire.BonfireBlock;
 import darkspawn.black.bonfire.BonfireWards;
 import darkspawn.black.bonfire.Bonfires;
@@ -34,7 +37,7 @@ public final class MountBonfireWardGameTest {
 	@GameTest(skyAccess = true)
 	public void friendlyMountsAndDeliberateBossesAreNotBlocked(GameTestHelper helper) {
 		var pos = core(helper);
-		var mount = new Griffin(Mounts.GRIFFIN, helper.getLevel());
+		var mount = new Griffin(CreatureMounts.GRIFFIN, helper.getLevel());
 		var boss = new WitherBoss(EntityTypes.WITHER, helper.getLevel());
 		try {
 			enable(helper, pos);

@@ -31,6 +31,8 @@ dependencies {
 	include module('creature_kit')
 	implementation module('mount_kit')
 	include module('mount_kit')
+	implementation module('creature_mounts')
+	include module('creature_mounts')
 	implementation module('storage')
 	include module('storage')
 	implementation module('bonfire')

@@ -1,5 +1,6 @@
 package darkspawn.black.client.mount;
 
+import darkspawn.black.mountkit.client.GriffinRenderState;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.mount.MagicCarpet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

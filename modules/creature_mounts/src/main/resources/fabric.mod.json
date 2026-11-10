@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_creature_mounts",
+	"version": "${version}",
+	"name": "Darkspawn Creature Mounts",
+	"description": "Fourteen tameable, rideable creature mounts (griffin, woolly rhino, flying squirrel, poptart cat, dragon, winged unicorn, riding golem, sasquatch, cerberus, leopard, giant scorpion, crocodile, seahorse and giant mole) with natural habitats, trust taming, breeding, rider abilities and companion capsules.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_creature_mounts/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.creaturemounts.CreatureMounts"
+		],
+		"client": [
+			"darkspawn.black.creaturemounts.client.CreatureMountsClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*",
+		"darkspawn_mount_kit": "*"
+	}
+}

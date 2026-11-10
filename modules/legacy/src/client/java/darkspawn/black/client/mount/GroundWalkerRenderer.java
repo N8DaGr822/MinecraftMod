@@ -1,5 +1,6 @@
 package darkspawn.black.client.mount;
 
+import darkspawn.black.mountkit.client.GriffinRenderState;
 import darkspawn.black.mount.GroundWalker;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

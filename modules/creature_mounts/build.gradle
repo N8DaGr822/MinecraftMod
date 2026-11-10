@@ -1,0 +1,10 @@
+plugins {
+	id 'darkspawn.fabric-module'
+}
+
+dependencies {
+	implementation module('core')
+	include module('core')
+	implementation module('mount_kit')
+	include module('mount_kit')
+}

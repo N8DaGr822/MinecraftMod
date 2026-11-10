@@ -1,5 +1,6 @@
 package darkspawn.black.client.mount;
 
+import darkspawn.black.mountkit.client.GriffinRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

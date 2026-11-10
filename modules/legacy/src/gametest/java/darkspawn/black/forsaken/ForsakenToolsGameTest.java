@@ -42,7 +42,7 @@ public final class ForsakenToolsGameTest {
 		for (var at : BlockPos.betweenClosed(pos.offset(-6, -1, -6), pos.offset(6, 4, 6))) level.setBlockAndUpdate(at, Blocks.AIR.defaultBlockState());
 		var player = player(level, pos); var blade = new ItemStack(ForsakenContent.BLADE); player.setItemInHand(InteractionHand.MAIN_HAND, blade);
 		var near = infected(level, pos.east(3)); var far = infected(level, pos.south(5)); var hidden = infected(level, pos.west(3));
-		var pet = darkspawn.black.mount.Mounts.LEOPARD.create(level, EntitySpawnReason.COMMAND);
+		var pet = darkspawn.black.creaturemounts.CreatureMounts.LEOPARD.create(level, EntitySpawnReason.COMMAND);
 		pet.setPos(Vec3.atBottomCenterOf(pos.north(2))); pet.setNoAi(true); level.addFreshEntity(pet); float petHealth = pet.getHealth();
 		for (var at : BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(-1, 3, 1))) level.setBlockAndUpdate(at, Blocks.STONE.defaultBlockState());
 		helper.startSequence().thenWaitUntil(() -> {
