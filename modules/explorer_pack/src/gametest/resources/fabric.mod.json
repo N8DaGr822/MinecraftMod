@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_explorer_pack-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Explorer Pack Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.explorerpack.ExplorerPackGameTest"
+    ]
+  }
+}

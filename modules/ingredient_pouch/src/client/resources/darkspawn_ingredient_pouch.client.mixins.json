@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "darkspawn.black.ingredientpouch.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"IngredientPouchMouseMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

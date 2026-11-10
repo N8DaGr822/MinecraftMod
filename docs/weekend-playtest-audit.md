@@ -54,7 +54,7 @@ The three new regression cases reproduced all three defects before the fixes and
 
 | Area | Source paths inspected / automated coverage |
 | --- | --- |
-| Inventory, accessories, loadouts and storage | Hub request authority, item conservation, favorites, switching interruption, storage routing and save components; full inventory/storage/accessory tests. |
+| Storage and container items | Item conservation, storage routing, chest sorting and save components; storage, quiver, pouch and pack tests. |
 | Travel and progression | OneBlock profile isolation/travel, Forsaken entry/return/fabrication, Nexus group entry/rewards/recovery; full dimension and progression tests. |
 | Mounts, wildlife and base protection | Companion ownership, care/cargo, capture/recovery, friendly classifications and ward movement; full mount/ecosystem/bonfire tests. |
 | Combat and equipment | Boss-heart modifiers, empowered weapons, legendary relic effects and temperature sampling; full boss/equipment/temperature tests. |
@@ -69,7 +69,7 @@ Baseline unfiltered `fullCheck --rerun-tasks --max-workers=1` passed 95 unit tes
 ### Remaining polish priorities
 
 1. **Live multiplayer acceptance:** save/restart and reconnect, death/recovery across dimensions, five-player ship boarding/standing, client observers and latency. Automated serialization and simulated-player tests cannot establish the entire live experience.
-2. **UI and artwork acceptance:** inspect normal and large GUI scales, inventory/loadout/hub layouts, book wrapping, held-item poses, armor fit and animated creature/rider alignment. Tempest now uses its custom in-flight model; orientation, return, lighting and observer view still need live review.
+2. **UI and artwork acceptance:** inspect normal and large GUI scales, inventory and storage layouts, book wrapping, held-item poses, armor fit and animated creature/rider alignment. Tempest now uses its custom in-flight model; orientation, return, lighting and observer view still need live review.
 3. **Gameplay balance:** measure natural encounter frequency, resource/loot availability, temperature pacing, Nexus difficulty and travel costs with real survival progression. Passing behavior tests does not establish that these feel fair or enjoyable.
 4. **Feature expansion:** keep new boss move sets, authored Nexus dungeon content, deeper crew AI and other brainstorm items separate from bug fixes. Their absence is not evidence of a regression in the implemented systems.
 
@@ -89,11 +89,10 @@ Pre-push verification: unfiltered `fullCheck --rerun-tasks --max-workers=1` pass
 | Ships and crew | Three sizes, separate Standard/Clipper/Ironclad/Corsair Raider/Fleet Battleship/Drowned Ghostship specializations; solid/fire/chain/piercing ammunition; docked roaming and shore support; forgiving wages/morale. Standing decks are implemented; pilot/observer agreement needs live acceptance. [Exact costs and limits](endgame-expansion-playtest.md) |
 | Size limits | 4/8/12 gun positions; ordinary crew and officers give maximum NPC counts of 10/14/18, with four player seats separate. Specialization does not add a fourth size tier. |
 | Exploration | Boss-landmark finder, discovery maps, regional caches and brushable archaeology, cosmetic awakened rematches, regional boons/audio and bounded server settings. [Server playtest](server-playtest.md) |
-| Accessories and hub | All six accessories, three slots, glasses toggle; compact Inventory/Character/Companions/Storage/Journal tabs, search, favorites, comparisons and nearby accessible sorting storage. [Field utilities](field-utilities-playtest.md) |
 | Fishing and livestock | Six swimming fish species, buckets, catches and recipes; pig truffles, chicken feed effects, goat dairy and mooshroom cream. [Field utilities](field-utilities-playtest.md) |
 | Brewing and world progression | Six culinary potion families / sixteen variants, shared boss unlocks, planted Heartwood, dire-wolf companionship, regional harvests and reduced fossil/shadow natural spawning. Changes preserve existing builds. [Endgame rules](endgame-expansion-playtest.md) |
 | Endgame | Group Nexus entry, five waves and an enhanced existing Void Eye Warden, saved run/recovery support, four legendary utility relics. [Nexus acceptance](endgame-expansion-playtest.md) |
-| Testing Camp | Fresh camps contain supply groups through 25 and guide pages, including accessories/fish/animal supplies, brewing, ammunition, world harvests, Nexus and relics. Existing camps do not refill or rebuild themselves. |
+| Testing Camp | Fresh camps contain supply groups through 25 and guide pages, including fish/animal supplies, brewing, ammunition, world harvests, Nexus and relics. Existing camps do not refill or rebuild themselves. |
 
 ## Brainstorm ideas still absent or only partly represented
 
@@ -133,7 +132,7 @@ Creature sound and boss music resources already exist; the old backlog wording m
 1. Request a current play build before installing: these checks did not update a playable JAR. Use matching client/server mod versions and the tested dependency pins in the server guide.
 2. Create a fresh Testing Camp in clear space. Existing camp supplies and already-generated terrain do not automatically gain new content; explore fresh chunks for new island/structure generation.
 3. With all five players, check GUI scales, item names/icons, fish/mount rendering, sound levels and ship boarding/menus. Four seats means five players cannot all ride one ship simultaneously.
-4. Exercise save/restart, death/recovery, shared navigation, docked crew recall, accessory/loadout changes and nearby storage permissions.
+4. Exercise save/restart, death/recovery, shared navigation, docked crew recall, armor changes and nearby storage permissions.
 5. Rehearse Nexus entry, death, retreat and recovery in a disposable world; then assess real progression, combat difficulty, cooking/brewing overlap and exploration frequency.
 
 Prior unfiltered verification passed 94 unit and 291 server tests; the subsequently added fungal-harvest test passed in the focused five-test endgame run. Those historical results are detailed in the endgame guide. Live five-player gameplay, balance, visual acceptance and third-party mod compatibility remain unverified.

@@ -1,0 +1,99 @@
+package darkspawn.black.creaturekit.client;
+
+import darkspawn.black.core.DarkspawnCore;
+import darkspawn.black.creaturekit.CreatureAudio;
+import java.util.ArrayList;
+import java.util.List;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Mob;
+
+/** Local encounter score: sticky nearest boss, phase crossfades, and no server music packets. */
+public final class EncounterMusic {
+	private static final List<Score> SCORES = new ArrayList<>();
+	private static Mob boss;
+	private static Object world;
+	private static String key;
+	private static int ticks;
+	private static float warningGain = 1F;
+	private EncounterMusic() {}
+	public static void initialize() { ClientTickEvents.END_CLIENT_TICK.register(EncounterMusic::tick); }
+	public static boolean active() { return key != null || !SCORES.isEmpty(); }
+	private static void tick(Minecraft client) {
+		if (client.level != world) {
+			for (var score : SCORES) client.getSoundManager().stop(score);
+			SCORES.clear(); boss = null; key = null; world = client.level; warningGain = 1F;
+		}
+		if (client.isPaused()) return;
+		// Warning Audibility: Briefly lower only our encounter score while the synchronized telegraph is active.
+		float targetGain = boss != null && boss.isAlive() && CreatureAudio.warning(boss) > 0 ? .45F : 1F;
+		warningGain += Math.clamp(targetGain - warningGain, -.15F, .04F);
+		for (var score : SCORES) {
+			score.age++;
+			if (score.fading && ++score.fadeTicks > 45) {
+				client.getSoundManager().stop(score);
+				score.finish();
+			}
+		}
+		SCORES.removeIf(Score::isStopped);
+		if (++ticks % 10 != 0) return;
+		boolean eligible = client.level != null && client.player != null && client.player.isAlive() && !client.player.isSpectator();
+		if (!eligible) boss = null;
+		else {
+			if (boss != null && (!boss.isAlive() || boss.isRemoved() || boss.distanceToSqr(client.player) > 80 * 80)) boss = null;
+			if (boss == null) {
+				double closest = 64 * 64;
+				for (var entity : client.level.entitiesForRendering()) {
+					if (entity instanceof Mob mob && mob.isAlive() && CreatureAudio.boss(mob)) {
+						double distance = mob.distanceToSqr(client.player);
+						if (distance < closest) { boss = mob; closest = distance; }
+					}
+				}
+			}
+		}
+		String next = boss instanceof CreatureAudio audio ? "music." + audio.musicTheme() + "." + Math.clamp(CreatureAudio.phase(boss), 1, 3) : null;
+		// Optional Scores: A boss whose mod ships no score leaves vanilla music alone.
+		if (next != null && sound(next) == null) next = null;
+		boolean changed = !java.util.Objects.equals(next, key);
+		// A resource reload or muted start can discard a channel. Retry only when audible.
+		boolean missing = key != null && client.options.getSoundSourceVolume(SoundSource.MUSIC) > 0
+				&& client.options.getSoundSourceVolume(SoundSource.MASTER) > 0
+				&& SCORES.stream().noneMatch(s -> !s.fading && (s.age < 40 || client.getSoundManager().isActive(s)));
+		if (changed || missing) {
+			for (var score : SCORES) score.fading = true;
+			key = next;
+			if (key != null) {
+				client.getMusicManager().stopPlaying();
+				// Bound overlap even if phases change or resources reload repeatedly.
+				while (SCORES.size() >= 2) client.getSoundManager().stop(SCORES.removeFirst());
+				var score = new Score(key); SCORES.add(score); client.getSoundManager().play(score);
+			}
+		}
+	}
+	private static SoundEvent sound(String key) { return BuiltInRegistries.SOUND_EVENT.getValue(DarkspawnCore.id(key)); }
+	private static final class Score extends AbstractTickableSoundInstance {
+		private boolean fading;
+		private int fadeTicks;
+		private int age;
+		private final float targetVolume;
+		private float envelope = .001F;
+		void finish() { stop(); }
+		Score(String key) {
+			super(sound(key), SoundSource.MUSIC, RandomSource.create());
+			targetVolume = key.endsWith(".3") ? .56F : key.endsWith(".2") ? .46F : .36F;
+			looping = true; delay = 0; relative = true; attenuation = SoundInstance.Attenuation.NONE;
+			volume = .001F; pitch = 1;
+		}
+		@Override public void tick() {
+			envelope = fading ? Math.max(0, envelope - .0125F) : Math.min(targetVolume, envelope + .00625F);
+			volume = envelope * warningGain;
+			if (fading && envelope <= 0) stop();
+		}
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "darkspawn.black.creaturekit.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"EncounterMusicMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

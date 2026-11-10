@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_cooking-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Cooking Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.cooking.CookingGameTest",
+      "darkspawn.black.cooking.CuisineGameTest"
+    ]
+  }
+}

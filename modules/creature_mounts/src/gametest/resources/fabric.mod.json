@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_creature_mounts-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Creature Mounts Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.creaturemounts.GriffinGameTest",
+      "darkspawn.black.creaturemounts.MountCareGameTest",
+      "darkspawn.black.creaturemounts.MountHabitatGameTest",
+      "darkspawn.black.creaturemounts.TravelMountGameTest"
+    ]
+  }
+}

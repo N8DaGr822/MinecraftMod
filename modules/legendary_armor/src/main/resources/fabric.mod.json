@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_legendary_armor",
+	"version": "${version}",
+	"name": "Darkspawn Legendary Armor",
+	"description": "Five netherite-tier legendary armor sets (Dragonlord, Phoenix, Voidwalker, Titan, Soul Reaper) with full-set powers. Their cores are forged from boss essences when a mod provides them; otherwise the sets are creative-only.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_legendary_armor/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.legendaryarmor.LegendaryArmorMod"
+		],
+		"client": [
+			"darkspawn.black.legendaryarmor.client.LegendaryArmorClient"
+		]
+	},
+	"mixins": [
+		"darkspawn_legendary_armor.mixins.json"
+	],
+	"suggests": {
+		"darkspawn_bosses": "*"
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

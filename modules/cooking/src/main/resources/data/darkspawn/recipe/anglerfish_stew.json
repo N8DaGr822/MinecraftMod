@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:cooked_anglerfish",
+        "darkspawn:wild_herbs"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:cooked_anglerfish",
+    "minecraft:potato",
+    "darkspawn:wild_herbs",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "darkspawn:anglerfish_stew"
+  }
+}

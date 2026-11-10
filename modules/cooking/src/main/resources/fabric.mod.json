@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_cooking",
+	"version": "${version}",
+	"name": "Darkspawn Cooking",
+	"description": "Cooking Station, salt, butter and cheese, meals with replaceable buffs, regional and field-kitchen cuisine, six-serving feasts, recipe scrolls, the cookbook, diet variety and the Chef villager. Dishes made from vanilla ingredients work alone; recipes that use farming, fishing, husbandry or boss ingredients load only when those items exist.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_cooking/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.cooking.CookingMod"
+		],
+		"client": [
+			"darkspawn.black.cooking.client.CookingClient"
+		]
+	},
+	"mixins": [
+		"darkspawn_cooking.mixins.json"
+	],
+	"suggests": {
+		"darkspawn_farming": "*",
+		"darkspawn_fishing": "*",
+		"darkspawn_husbandry": "*",
+		"darkspawn_climate": "*"
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

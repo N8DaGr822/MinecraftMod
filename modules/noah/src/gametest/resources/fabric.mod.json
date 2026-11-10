@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_noah-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Legacy of Noah Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.noah.NoahGameTest"
+    ]
+  }
+}

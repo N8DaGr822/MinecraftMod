@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_legendary_armor-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Legendary Armor Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.legendaryarmor.LegendaryArmorGameTest"
+    ]
+  }
+}

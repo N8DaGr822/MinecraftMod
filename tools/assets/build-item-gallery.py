@@ -11,7 +11,7 @@ ASSETS = ROOT / "src/main/resources/assets/darkspawn"
 catalog = json.loads(Path(__file__).with_name("item-art.json").read_text())
 names = json.loads((ASSETS / "lang/en_us.json").read_text())
 render = runpy.run_path(str(Path(__file__).with_name("review-blocks.py")))["render"]
-groups = {"kitchen": "Food & farming", "utility": "Inventory upgrades", "heart": "Boss hearts",
+groups = {"kitchen": "Food & farming", "utility": "Utility", "heart": "Boss hearts",
           "summon": "Summoning", "essence": "Essences", "trophy": "Regional materials"}
 
 

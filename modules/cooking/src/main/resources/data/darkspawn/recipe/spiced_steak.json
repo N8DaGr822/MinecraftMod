@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:garlic",
+        "darkspawn:pepper"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "minecraft:cooked_beef",
+    "darkspawn:pepper",
+    "darkspawn:garlic",
+    "darkspawn:salt"
+  ],
+  "result": {
+    "id": "darkspawn:spiced_steak"
+  }
+}

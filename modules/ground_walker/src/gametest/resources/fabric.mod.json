@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_ground_walker-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Ground Walker Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.groundwalker.GroundWalkerGameTest"
+    ]
+  }
+}

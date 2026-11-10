@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "darkspawn.black.armorstyles.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"ArmorStyleAttackMixin",
+		"ArmorStyleCombatMixin",
+		"ArmorStyleWearMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

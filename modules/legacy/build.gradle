@@ -1,0 +1,74 @@
+plugins {
+	id 'darkspawn.fabric-module'
+}
+
+fabricApi {
+	configureDataGeneration {
+		client = true
+		modId = 'darkspawn'
+	}
+}
+
+dependencies {
+	implementation "com.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}"
+}
+
+tasks.register('checkCuisineArt', Exec) {
+	group = 'verification'
+	description = 'Check cuisine models, textures and item references without starting Minecraft.'
+	commandLine providers.gradleProperty('pythonExecutable').getOrElse('python'), rootProject.file('tools/assets/verify-cuisine-art.py').absolutePath
+}
+
+tasks.named('fullCheck') {
+	description = 'Pre-push checks without packaging: all unit tests, server GameTests and cuisine assets.'
+	dependsOn tasks.named('checkCuisineArt')
+}
+
+dependencies {
+	implementation module('core')
+	include module('core')
+	implementation module('creature_kit')
+	include module('creature_kit')
+	implementation module('mount_kit')
+	include module('mount_kit')
+	implementation module('creature_mounts')
+	include module('creature_mounts')
+	implementation module('magic_carpet')
+	include module('magic_carpet')
+	implementation module('aircraft')
+	include module('aircraft')
+	implementation module('ground_walker')
+	include module('ground_walker')
+	implementation module('noah')
+	include module('noah')
+	implementation module('storage')
+	include module('storage')
+	implementation module('bonfire')
+	include module('bonfire')
+	implementation module('quiver')
+	include module('quiver')
+	implementation module('ingredient_pouch')
+	include module('ingredient_pouch')
+	implementation module('explorer_pack')
+	include module('explorer_pack')
+	implementation module('enchantments')
+	include module('enchantments')
+	implementation module('armor_styles')
+	include module('armor_styles')
+	implementation module('expedition_gear')
+	include module('expedition_gear')
+	implementation module('climate')
+	include module('climate')
+	implementation module('legendary_armor')
+	include module('legendary_armor')
+	implementation module('farming')
+	include module('farming')
+	implementation module('fishing')
+	include module('fishing')
+	implementation module('husbandry')
+	include module('husbandry')
+	implementation module('culinary_brewing')
+	include module('culinary_brewing')
+	implementation module('cooking')
+	include module('cooking')
+}

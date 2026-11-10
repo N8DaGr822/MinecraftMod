@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"package": "darkspawn.black.cooking.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"MealUtilityEffectMixin",
+		"CulinaryPlayerMixin",
+		"DietMixin",
+		"MealExhaustionMixin",
+		"MealPhysiologyMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

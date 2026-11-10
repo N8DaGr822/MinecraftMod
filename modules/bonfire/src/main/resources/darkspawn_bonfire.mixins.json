@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "darkspawn.black.bonfire.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"BonfireMovementMixin",
+		"BonfireServerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

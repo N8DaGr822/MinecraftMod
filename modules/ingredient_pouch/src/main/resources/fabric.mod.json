@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_ingredient_pouch",
+	"version": "${version}",
+	"name": "Darkspawn Ingredient Pouch",
+	"description": "Bundle-style pouch for brewing reagents.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_ingredient_pouch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.ingredientpouch.IngredientPouchMod"
+		]
+	},
+	"mixins": [
+		"darkspawn_ingredient_pouch.mixins.json",
+		{
+			"config": "darkspawn_ingredient_pouch.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

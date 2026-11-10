@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:map",
+    "minecraft:filled_map",
+    "minecraft:compass",
+    "minecraft:recovery_compass",
+    "minecraft:clock",
+    "minecraft:spyglass",
+    "minecraft:brush",
+    {
+      "id": "darkspawn:landmark_compass",
+      "required": false
+    },
+    {
+      "id": "darkspawn:logbound_compass",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:rice",
+        "darkspawn:woodland_truffle"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:woodland_truffle",
+    "darkspawn:rice",
+    "darkspawn:butter",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "darkspawn:truffle_risotto"
+  }
+}

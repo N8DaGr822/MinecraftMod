@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_storage-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Storage Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.storage.StorageGameTest"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_culinary_brewing-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Culinary Brewing Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.culinarybrewing.CulinaryBrewingGameTest"
+    ]
+  }
+}

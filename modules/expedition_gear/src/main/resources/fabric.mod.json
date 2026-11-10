@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_expedition_gear",
+	"version": "${version}",
+	"name": "Darkspawn Expedition Gear",
+	"description": "Five expedition armor families: mountaineering, spelunking headlamp and padded boots, diving, desert wanderer and ashwalker. Supplies climate protection when Darkspawn Climate is installed.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_expedition_gear/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.expeditiongear.ExpeditionGearMod"
+		],
+		"client": [
+			"darkspawn.black.expeditiongear.client.ExpeditionGearClient"
+		]
+	},
+	"mixins": [
+		"darkspawn_expedition_gear.mixins.json"
+	],
+	"suggests": {
+		"darkspawn_climate": "*"
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

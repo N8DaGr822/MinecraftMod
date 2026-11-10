@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:cooked_piranha",
+        "darkspawn:wild_herbs"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:cooked_piranha",
+    "minecraft:potato",
+    "darkspawn:wild_herbs",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "darkspawn:piranha_pepper_bowl"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:cooked_pike",
+        "darkspawn:wild_herbs"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:cooked_pike",
+    "minecraft:potato",
+    "darkspawn:wild_herbs",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "darkspawn:pike_chowder"
+  }
+}

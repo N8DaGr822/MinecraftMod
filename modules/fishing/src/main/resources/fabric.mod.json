@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_fishing",
+	"version": "${version}",
+	"name": "Darkspawn Fishing",
+	"description": "Six regional fish (pike, tuna, anglerfish, arctic cod, piranha, cave fish) that swim, bucket and cook. Plain cod and salmon catches are sometimes replaced by the fish of the region you fish in.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_fishing/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.fishing.FishingMod"
+		],
+		"client": [
+			"darkspawn.black.fishing.client.FishingClient"
+		]
+	},
+	"mixins": [
+		"darkspawn_fishing.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*"
+	}
+}

@@ -1,0 +1,8 @@
+plugins {
+	id 'darkspawn.fabric-module'
+}
+
+dependencies {
+	implementation module('core')
+	include module('core')
+}

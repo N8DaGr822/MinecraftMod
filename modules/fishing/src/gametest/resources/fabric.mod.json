@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_fishing-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Fishing Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.fishing.FishingGameTest"
+    ]
+  }
+}

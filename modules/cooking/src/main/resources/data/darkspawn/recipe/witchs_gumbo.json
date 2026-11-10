@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:rice",
+        "darkspawn:wild_herbs",
+        "darkspawn:witch_spice"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:witch_spice",
+    "darkspawn:rice",
+    "darkspawn:butter",
+    "darkspawn:wild_herbs"
+  ],
+  "result": {
+    "id": "darkspawn:witchs_gumbo"
+  }
+}

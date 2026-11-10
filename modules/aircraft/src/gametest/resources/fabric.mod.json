@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_aircraft-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Aircraft Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.aircraft.AircraftGameTest",
+      "darkspawn.black.aircraft.VehicleOperationsGameTest"
+    ]
+  }
+}
