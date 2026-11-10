@@ -34,13 +34,13 @@ public final class WorldAwakening extends SavedData {
         if(!player.isAlive()||player.isSpectator()||!player.isShiftKeyDown()||player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos))>36||!player.level().mayInteract(player,pos))return false;
         var level=player.level();var data=get(level);var block=level.getBlockState(pos);Item reward=null;
         if(block.is(BlockTags.LOGS)&&data.defeated(BossKind.ANCIENT_TREE_SPIRIT))reward=level.getRandom().nextInt(4)==0?HeartwoodGrove.SEEDLING_ITEM:BossItems.LIVING_HEARTWOOD;
-        if((block.is(Blocks.RED_MUSHROOM)||block.is(Blocks.BROWN_MUSHROOM))&&data.defeated(BossKind.MYCELIAL_SOVEREIGN))reward=darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM;
+        if((block.is(Blocks.RED_MUSHROOM)||block.is(Blocks.BROWN_MUSHROOM))&&data.defeated(BossKind.MYCELIAL_SOVEREIGN))reward=darkspawn.black.husbandry.AnimalUtility.FUNGAL_CREAM;
         if(block.is(Blocks.LIGHTNING_ROD.weathering().unaffected())&&level.isThundering()&&level.canSeeSky(pos.above())&&data.defeated(BossKind.THUNDER_BIRD))reward=RegionalEcosystems.STORMFORGED_FEATHER;
         if(reward==null||player.getInventory().getFreeSlot()<0)return false;
         long now=level.getServer().overworld().getGameTime();String key="harvest/"+player.getUUID();
         if(now<data.events.getOrDefault(key,0L)){player.sendSystemMessage(net.minecraft.network.chat.Component.literal("The awakened habitat needs time: one harvest per explorer every five minutes."));return false;}
         // Container Conservation: Fungal cream returns a bowl when cooked, so harvesting must supply one.
-        if(reward==darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM&&!darkspawn.black.core.Payments.pay(player,Items.BOWL,1,true)){
+        if(reward==darkspawn.black.husbandry.AnimalUtility.FUNGAL_CREAM&&!darkspawn.black.core.Payments.pay(player,Items.BOWL,1,true)){
             player.sendSystemMessage(net.minecraft.network.chat.Component.literal("Carry an empty bowl to collect fungal cream."));return false;
         }
         data.events.put(key,now+6000);data.setDirty();player.getInventory().add(new ItemStack(reward));return true;

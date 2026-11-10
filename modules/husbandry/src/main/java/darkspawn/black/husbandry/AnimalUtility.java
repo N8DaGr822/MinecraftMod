@@ -1,4 +1,4 @@
-package darkspawn.black.cooking;
+package darkspawn.black.husbandry;
 
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -15,24 +15,30 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.network.chat.Component;
+import darkspawn.black.core.DarkspawnCore;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 
 public final class AnimalUtility {
-    public static final Item TRUFFLE=food("woodland_truffle",2),RICH_EGG=Cuisine.register("rich_egg",Item::new),HERBED_EGG=Cuisine.register("herbed_egg",Item::new),GOAT_CHEESE=food("goat_cheese",4),FUNGAL_CREAM=Cuisine.register("fungal_cream",p->new Item(p.craftRemainder(Items.BOWL)));
-    public static final Item GOAT_MILK=Cuisine.register("goat_milk",p->new Item(p.stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
-    private static Item food(String id,int hunger){return Cuisine.register(id,p->new Item(p.food(new FoodProperties.Builder().nutrition(hunger).saturationModifier(.4F).build())));}
+    public static final Item TRUFFLE=food("woodland_truffle",2),RICH_EGG=register("rich_egg",Item::new),HERBED_EGG=register("herbed_egg",Item::new),GOAT_CHEESE=food("goat_cheese",4),FUNGAL_CREAM=register("fungal_cream",p->new Item(p.craftRemainder(Items.BOWL)));
+    public static final Item GOAT_MILK=register("goat_milk",p->new Item(p.stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
+    private static Item food(String id,int hunger){return register(id,p->new Item(p.food(new FoodProperties.Builder().nutrition(hunger).saturationModifier(.4F).build())));}
+    // Herbed Eggs: Any item in this tag (Darkspawn wild herbs when farming is installed) queues a herbed egg.
+    public static final TagKey<Item> HERBED_EGG_FEED=TagKey.create(Registries.ITEM,DarkspawnCore.id("herbed_egg_feed"));
+    private static <T extends Item> T register(String name,java.util.function.Function<Item.Properties,T> factory){
+        var key=ResourceKey.create(Registries.ITEM,DarkspawnCore.id(name));
+        return Registry.register(BuiltInRegistries.ITEM,key,factory.apply(new Item.Properties().setId(key)));
+    }
     private AnimalUtility() { }
     public static AnimalUtilityState state(Animal animal){return ((AnimalUtilityState.Holder)animal).darkspawn$animalUtility();}
     public static void initialize(){
-        String[] meals={"pike_chowder","tuna_rice_bowl","anglerfish_stew","arctic_cod_soup","piranha_pepper_bowl","cave_fish_broth","truffle_risotto","farm_omelette","herbed_omelette","goat_cheese_plate","fungal_cream_soup"};
-        for(int i=0;i<meals.length;i++){
-            String name=meals[i];var effect=i==3?MealEffects.WARMING:i==5?MealEffects.MINER:i==6?MealEffects.HEARTY:i==8?MealEffects.IRON_STOMACH:MealEffects.DEEP_BREATH;
-            var item=Cuisine.register(name,p->new MealItem(p.stacksTo(16).usingConvertsTo(Items.BOWL).food(new FoodProperties.Builder().nutrition(8).saturationModifier(.7F).alwaysEdible().build()),effect,2400));
-            Cuisine.DISHES.put(name,new Cuisine.Dish(item,"Field kitchen",""));
-        }
-        net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(e->{for(var item:java.util.List.of(TRUFFLE,RICH_EGG,HERBED_EGG,GOAT_MILK,GOAT_CHEESE,FUNGAL_CREAM))e.accept(item);});
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(e->{for(var item:java.util.List.of(TRUFFLE,RICH_EGG,HERBED_EGG,GOAT_MILK,GOAT_CHEESE,FUNGAL_CREAM))e.accept(item);});
         UseEntityCallback.EVENT.register((player,world,hand,entity,hit)->{
             if(!player.isShiftKeyDown()||!(entity instanceof Animal animal)||animal.isBaby()||!animal.isAlive()||player.isSpectator())return InteractionResult.PASS;
-            var held=player.getItemInHand(hand);boolean candidate=animal instanceof Pig&&held.is(Items.CARROT)||animal instanceof Chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(darkspawn.black.farming.Agriculture.WILD_HERBS))||animal instanceof Goat&&held.is(Items.GLASS_BOTTLE)||animal instanceof MushroomCow&&held.is(Items.BOWL);
+            var held=player.getItemInHand(hand);boolean candidate=animal instanceof Pig&&held.is(Items.CARROT)||animal instanceof Chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(HERBED_EGG_FEED))||animal instanceof Goat&&held.is(Items.GLASS_BOTTLE)||animal instanceof MushroomCow&&held.is(Items.BOWL);
             if(!candidate)return InteractionResult.PASS;
             if(player instanceof ServerPlayer server)interact(server,animal,hand);
             return InteractionResult.SUCCESS;
@@ -47,7 +53,7 @@ public final class AnimalUtility {
             if(!p.level().getBiome(animal.blockPosition()).is(net.minecraft.tags.BiomeTags.IS_FOREST)){p.sendSystemMessage(Component.literal("Pigs hunt truffles on grass or podzol in forests."));return false;}
             for(var pos:BlockPos.betweenClosed(animal.blockPosition().offset(-3,-1,-3),animal.blockPosition().offset(3,0,3))){if(!p.level().hasChunkAt(pos))continue;var ground=p.level().getBlockState(pos);if((ground.is(Blocks.GRASS_BLOCK)||ground.is(Blocks.PODZOL))&&p.level().getBlockState(pos.above()).isAir()){s.forage=pos.above().immutable();break;}}
             if(s.forage==null)return false;s.forageUntil=now+600;animal.getNavigation().moveTo(s.forage.getX()+.5,s.forage.getY(),s.forage.getZ()+.5,.8);
-        }else if(animal instanceof Chicken chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(darkspawn.black.farming.Agriculture.WILD_HERBS))&&!chicken.isChickenJockey()){s.egg=held.is(Items.PUMPKIN_SEEDS)?1:2;}
+        }else if(animal instanceof Chicken chicken&&(held.is(Items.PUMPKIN_SEEDS)||held.is(HERBED_EGG_FEED))&&!chicken.isChickenJockey()){s.egg=held.is(Items.PUMPKIN_SEEDS)?1:2;}
         else if(animal instanceof Goat&&held.is(Items.GLASS_BOTTLE))reward=GOAT_MILK;
         else if(animal instanceof MushroomCow&&held.is(Items.BOWL))reward=FUNGAL_CREAM;
         else return false;

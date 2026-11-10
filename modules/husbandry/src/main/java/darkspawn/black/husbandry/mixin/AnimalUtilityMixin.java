@@ -1,5 +1,5 @@
-package darkspawn.black.mixin;
-import darkspawn.black.cooking.*;
+package darkspawn.black.husbandry.mixin;
+import darkspawn.black.husbandry.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.storage.*;
 import org.spongepowered.asm.mixin.*;

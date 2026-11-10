@@ -1,4 +1,4 @@
-package darkspawn.black.cooking;
+package darkspawn.black.husbandry;
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.embedded.EmbeddedChannel;
 import java.util.*;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.*;
 import net.minecraft.world.phys.Vec3;
 
-public final class HusbandryFishingGameTest {
+public final class HusbandryGameTest {
 	private static ServerPlayer player(GameTestHelper helper) {
 		var level = helper.getLevel();
 		var cookie = CommonListenerCookie.createInitial(new GameProfile(UUID.randomUUID(), "husbandry-test"), false);
@@ -59,5 +59,13 @@ public final class HusbandryFishingGameTest {
             h.assertTrue(state.forage==null&&level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,pig.getBoundingBox().inflate(3),e->e.getItem().is(AnimalUtility.TRUFFLE)).size()==before+1,"Reachable patch awards exactly one truffle");h.assertTrue(level.getBlockState(patch.below()).is(Blocks.PODZOL),"Foraging preserves terrain");
             var cow=EntityTypes.MOOSHROOM.create(level,EntitySpawnReason.COMMAND);cow.setPos(p.position());p.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.BOWL,2));h.assertTrue(AnimalUtility.interact(p,cow,InteractionHand.MAIN_HAND)&&!AnimalUtility.interact(p,cow,InteractionHand.MAIN_HAND),"Mooshroom specialty harvest is cooldown limited");h.assertTrue(p.getInventory().countItem(AnimalUtility.FUNGAL_CREAM)==1&&p.getMainHandItem().getCount()==1,"Cream costs one bowl once");
         }finally{level.setBlockAndUpdate(patch.below(),Blocks.AIR.defaultBlockState());remove(p);}h.succeed();
+    }
+    @GameTest public void herbedFeedAndGoatCheeseFollowInstalledModules(GameTestHelper h){
+        var herbs=net.minecraft.core.registries.BuiltInRegistries.ITEM.getOptional(darkspawn.black.core.DarkspawnCore.id("wild_herbs"));
+        h.assertTrue(herbs.map(item->new ItemStack(item).is(AnimalUtility.HERBED_EGG_FEED)).orElse(true),"Wild herbs feed chickens whenever farming is installed");
+        boolean salt=net.minecraft.core.registries.BuiltInRegistries.ITEM.containsKey(darkspawn.black.core.DarkspawnCore.id("salt"));
+        var cheese=h.getLevel().getServer().getRecipeManager().byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE,darkspawn.black.core.DarkspawnCore.id("goat_cheese")));
+        h.assertTrue(cheese.isPresent()==salt,"Goat cheese is craftable exactly when a mod supplies salt");
+        h.succeed();
     }
 }

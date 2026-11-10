@@ -1,5 +1,5 @@
-package darkspawn.black.mixin;
-import darkspawn.black.cooking.*;
+package darkspawn.black.husbandry.mixin;
+import darkspawn.black.husbandry.*;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;

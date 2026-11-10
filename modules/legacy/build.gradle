@@ -51,4 +51,6 @@ dependencies {
 	include module('farming')
 	implementation module('fishing')
 	include module('fishing')
+	implementation module('husbandry')
+	include module('husbandry')
 }

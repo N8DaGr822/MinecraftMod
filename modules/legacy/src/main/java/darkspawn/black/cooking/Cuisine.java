@@ -120,6 +120,14 @@ public final class Cuisine {
   addFeast("nether_feast", MealEffects.FIREPROOF, "");
   addFeast("ender_banquet", MealEffects.FLOATING, "");
   addFeast("hero_feast", MealEffects.FEAST, "Eat 20 distinct meals, or trade with a master Chef");
+  // Field kitchen: dishes made from fishing and husbandry ingredients.
+  String[] fieldMeals = {"pike_chowder","tuna_rice_bowl","anglerfish_stew","arctic_cod_soup","piranha_pepper_bowl","cave_fish_broth","truffle_risotto","farm_omelette","herbed_omelette","goat_cheese_plate","fungal_cream_soup"};
+  for (int i = 0; i < fieldMeals.length; i++) {
+   String name = fieldMeals[i];
+   var effect = i == 3 ? MealEffects.WARMING : i == 5 ? MealEffects.MINER : i == 6 ? MealEffects.HEARTY : i == 8 ? MealEffects.IRON_STOMACH : MealEffects.DEEP_BREATH;
+   var item = register(name, p -> new MealItem(p.stacksTo(16).usingConvertsTo(Items.BOWL).food(new FoodProperties.Builder().nutrition(8).saturationModifier(.7F).alwaysEdible().build()), effect, 2400));
+   DISHES.put(name, new Dish(item, "Field kitchen", ""));
+  }
   for (BossKind kind : BossKind.values()) {
    String name = kind.id() + "_trophy";
    TROPHIES.put(kind, blockItem(name, new TrophyBlock(blockProperties(name))));

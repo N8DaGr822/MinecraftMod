@@ -1,4 +1,4 @@
-package darkspawn.black.cooking;
+package darkspawn.black.husbandry;
 import net.minecraft.core.BlockPos;
 public final class AnimalUtilityState {
     public long readyAt;

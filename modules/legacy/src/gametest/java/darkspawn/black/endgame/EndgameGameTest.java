@@ -127,7 +127,7 @@ public final class EndgameGameTest {
         try{
             p.setShiftKeyDown(true);p.getInventory().setItem(0,new ItemStack(Items.BRUSH));var pos=p.blockPosition().east();p.level().setBlock(pos.below(),Blocks.MYCELIUM.defaultBlockState(),3);p.level().setBlock(pos,Blocks.RED_MUSHROOM.defaultBlockState(),3);
             data.unlock(BossKind.MYCELIAL_SOVEREIGN,1);h.assertTrue(!WorldAwakening.harvest(p,pos),"Cream requires an empty bowl");
-            p.getInventory().setItem(1,new ItemStack(Items.BOWL,2));h.assertTrue(WorldAwakening.harvest(p,pos)&&p.getInventory().countItem(Items.BOWL)==1&&p.getInventory().countItem(darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM)==1,"Exactly one bowl becomes cream");
+            p.getInventory().setItem(1,new ItemStack(Items.BOWL,2));h.assertTrue(WorldAwakening.harvest(p,pos)&&p.getInventory().countItem(Items.BOWL)==1&&p.getInventory().countItem(darkspawn.black.husbandry.AnimalUtility.FUNGAL_CREAM)==1,"Exactly one bowl becomes cream");
             var saved=WorldAwakening.TYPE.codec().encodeStart(JsonOps.INSTANCE,data).getOrThrow();storage.set(WorldAwakening.TYPE,WorldAwakening.TYPE.codec().parse(JsonOps.INSTANCE,saved).getOrThrow());
             h.assertTrue(!WorldAwakening.harvest(p,pos)&&p.getInventory().countItem(Items.BOWL)==1&&p.level().getBlockState(pos).is(Blocks.RED_MUSHROOM),"Saved cooldown blocks repeat payment and preserves the mushroom");
         }finally{remove(p);storage.set(WorldAwakening.TYPE,previous);}h.succeed();
