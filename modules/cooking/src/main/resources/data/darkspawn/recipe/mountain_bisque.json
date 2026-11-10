@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:mineral_salt",
+        "darkspawn:rice",
+        "darkspawn:wild_herbs"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:mineral_salt",
+    "darkspawn:rice",
+    "darkspawn:butter",
+    "darkspawn:wild_herbs"
+  ],
+  "result": {
+    "id": "darkspawn:mountain_bisque"
+  }
+}

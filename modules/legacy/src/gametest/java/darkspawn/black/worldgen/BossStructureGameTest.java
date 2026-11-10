@@ -85,7 +85,7 @@ public final class BossStructureGameTest {
 				helper.assertTrue(books.size()==1,"Every chest includes exactly one clue book");
 				var book=books.getFirst().get(DataComponents.WRITTEN_BOOK_CONTENT);
 				helper.assertTrue(book!=null && book.pages().size()==3 && book.getPages(false).getFirst().getString().contains("Ender Dragon"),"Clue must explain dragon gate");
-				helper.assertTrue(loot.stream().noneMatch(s->darkspawn.black.cooking.Cuisine.TROPHIES.containsValue(s.getItem()) || darkspawn.black.cooking.Cuisine.INGREDIENTS.containsValue(s.getItem())),"Landmarks cannot grant victory rewards");
+				helper.assertTrue(loot.stream().noneMatch(s->darkspawn.black.boss.BossCuisine.TROPHIES.containsValue(s.getItem()) || darkspawn.black.boss.BossCuisine.INGREDIENTS.containsValue(s.getItem())),"Landmarks cannot grant victory rewards");
 			}
 		}
 		helper.succeed();

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:onion",
+        "darkspawn:rice"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "minecraft:cooked_salmon",
+    "darkspawn:rice",
+    "darkspawn:onion",
+    "darkspawn:salt"
+  ],
+  "result": {
+    "id": "darkspawn:seafood_rice"
+  }
+}

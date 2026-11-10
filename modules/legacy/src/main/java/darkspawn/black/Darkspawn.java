@@ -4,7 +4,6 @@ import darkspawn.black.boss.BossEntities;
 import darkspawn.black.boss.BossItems;
 import darkspawn.black.boss.BossEmpowerment;
 import darkspawn.black.health.BossHearts;
-import darkspawn.black.cooking.Cooking;
 import darkspawn.black.ecosystem.ForestEcosystem;
 
 import net.fabricmc.api.ModInitializer;
@@ -42,10 +41,7 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.boss.Endborn.initializeSpawning();
 		BossEmpowerment.initialize();
 		BossHearts.initialize();
-		Cooking.initialize();
-		darkspawn.black.cooking.Cuisine.initialize();
-		darkspawn.black.cooking.Culinary.initialize();
-		darkspawn.black.cooking.VillageKitchen.initialize();
+		darkspawn.black.boss.BossCuisine.initialize();
 		darkspawn.black.boss.EquipmentPowers.initialize();
 		ForestEcosystem.initialize();
         darkspawn.black.ecosystem.WorldAwakening.initialize();

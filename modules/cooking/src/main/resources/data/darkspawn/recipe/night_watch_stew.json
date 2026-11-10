@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:onion"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "minecraft:brown_mushroom",
+    "minecraft:golden_carrot",
+    "darkspawn:onion",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "darkspawn:night_watch_stew"
+  }
+}

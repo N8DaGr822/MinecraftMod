@@ -52,7 +52,7 @@ public final class ExplorationFindsGameTest {
                 var loot=table.getRandomItems(params,seed*0x9E3779B97F4A7C15L);
                 h.assertTrue(loot.size()==1&&loot.getFirst().getCount()==1,"Deposits retain one finite find");
                 found|=loot.getFirst().is(site.equals("fossil_altar")?ExplorationFinds.FOSSIL_FRAGMENT:ExplorationFinds.OCEAN_NOTE);
-                h.assertTrue(!BossItems.HEARTS.containsValue(loot.getFirst().getItem())&&!darkspawn.black.cooking.Cuisine.TROPHIES.containsValue(loot.getFirst().getItem()),"Finds never grant boss victory rewards");
+                h.assertTrue(!BossItems.HEARTS.containsValue(loot.getFirst().getItem())&&!darkspawn.black.boss.BossCuisine.TROPHIES.containsValue(loot.getFirst().getItem()),"Finds never grant boss victory rewards");
             }
             h.assertTrue(found,"New find is reachable from real archaeology loot: "+site);
         }
@@ -86,7 +86,7 @@ public final class ExplorationFindsGameTest {
             level.setBlock(pos,ExplorationFinds.DISPLAY.defaultBlockState(),2);
             var drops=Block.getDrops(level.getBlockState(pos),level,pos,null);
             h.assertTrue(drops.size()==1&&drops.getFirst().is(ExplorationFinds.DISPLAY_ITEM)&&drops.getFirst().getCount()==1,"Breaking relocates exactly one reconstructed display");
-            h.assertTrue(!darkspawn.black.cooking.Cuisine.TROPHIES.containsValue(ExplorationFinds.DISPLAY_ITEM),"Reconstruction is separate from earned boss trophies");
+            h.assertTrue(!darkspawn.black.boss.BossCuisine.TROPHIES.containsValue(ExplorationFinds.DISPLAY_ITEM),"Reconstruction is separate from earned boss trophies");
             h.assertTrue(new ItemStack(ExplorationFinds.TIDE_CHART).get(DataComponents.LORE)!=null,"New finds carry visible next-step guidance");
         } finally {level.setBlock(pos,Blocks.AIR.defaultBlockState(),2);}h.succeed();
     }

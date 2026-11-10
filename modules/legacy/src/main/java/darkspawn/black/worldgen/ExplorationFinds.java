@@ -1,7 +1,7 @@
 package darkspawn.black.worldgen;
 
 import darkspawn.black.Darkspawn;
-import darkspawn.black.cooking.TrophyBlock;
+import darkspawn.black.boss.TrophyBlock;
 import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;

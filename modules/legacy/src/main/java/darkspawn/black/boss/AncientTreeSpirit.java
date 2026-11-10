@@ -434,7 +434,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 	@Override
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
-		darkspawn.black.cooking.BossCuisineRewards.grant(this, level, participants, BossKind.ANCIENT_TREE_SPIRIT, 160);
+		darkspawn.black.boss.BossCuisine.grant(this, level, participants, BossKind.ANCIENT_TREE_SPIRIT, 160);
         if(entityTags().contains(AwakenedRematches.TAG))return;
 		if (!participants.isEmpty()) {
 			spawnAtLocation(level, new ItemStack(BossItems.LIVING_HEARTWOOD));

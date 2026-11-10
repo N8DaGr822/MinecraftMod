@@ -38,7 +38,7 @@ public final class AwakenedRematches {
     }
     public static void consume(ServerPlayer player,LivingEntity boss){if(boss.entityTags().contains(TAG))player.getOffhandItem().consume(1,player);}
     public static ItemStack trophy(BossKind kind) {
-        var stack=new ItemStack(darkspawn.black.cooking.Cuisine.TROPHIES.get(kind));
+        var stack=new ItemStack(darkspawn.black.boss.BossCuisine.TROPHIES.get(kind));
         stack.set(DataComponents.CUSTOM_NAME,Component.literal("Awakened "+kind.id().replace('_',' ')+" Trophy"));stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE,true);
         stack.set(DataComponents.LORE,new ItemLore(java.util.List.of(Component.literal("Earned in an awakened rematch. Display trophy; no combat bonus."))));return stack;
     }

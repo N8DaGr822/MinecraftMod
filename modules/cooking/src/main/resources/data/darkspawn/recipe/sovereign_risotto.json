@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:rice",
+        "darkspawn:sovereign_cap",
+        "darkspawn:wild_herbs"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:sovereign_cap",
+    "darkspawn:rice",
+    "darkspawn:butter",
+    "darkspawn:wild_herbs"
+  ],
+  "result": {
+    "id": "darkspawn:sovereign_risotto"
+  }
+}

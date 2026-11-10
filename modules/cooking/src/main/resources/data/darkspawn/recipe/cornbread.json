@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:corn"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:corn",
+    "minecraft:wheat",
+    "darkspawn:butter"
+  ],
+  "result": {
+    "id": "darkspawn:cornbread"
+  }
+}

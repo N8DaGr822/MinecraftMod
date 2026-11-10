@@ -122,10 +122,10 @@ public final class PirateGameTest {
             var saved=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.registryAccess());boss.saveWithoutId(saved);
             var copy=new darkspawn.black.boss.MutantWolf(darkspawn.black.boss.BossEntities.MUTANT_WOLF,p.level());copy.load(TagValueInput.create(ProblemReporter.DISCARDING,p.registryAccess(),saved.buildResult()));
             helper.assertTrue(copy.entityTags().contains(darkspawn.black.boss.AwakenedRematches.TAG)&&Math.abs(copy.getMaxHealth()-boss.getMaxHealth())<.1,"Awakened tag and attribute modifiers persist");copy.discard();
-            boss.setPos(p.position());darkspawn.black.cooking.BossCuisineRewards.grant(boss,p.level(),java.util.Set.of(p.getUUID()),kind,192);
+            boss.setPos(p.position());darkspawn.black.boss.BossCuisine.grant(boss,p.level(),java.util.Set.of(p.getUUID()),kind,192);
             var rewards=p.level().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,p.getBoundingBox().inflate(3),e->e.getItem().has(DataComponents.ENCHANTMENT_GLINT_OVERRIDE));
             helper.assertTrue(rewards.size()==2&&rewards.stream().noneMatch(e->e.getItem().is(darkspawn.black.boss.BossItems.HEARTS.get(kind))),"Awakened victory grants two cosmetics, no heart");rewards.forEach(net.minecraft.world.entity.Entity::discard);
-            helper.assertTrue(darkspawn.black.boss.AwakenedRematches.cosmetic(kind).is(Items.LEATHER_HELMET)&&darkspawn.black.boss.AwakenedRematches.trophy(kind).is(darkspawn.black.cooking.Cuisine.TROPHIES.get(kind)),"Rematch rewards are cosmetic equipment and trophy");
+            helper.assertTrue(darkspawn.black.boss.AwakenedRematches.cosmetic(kind).is(Items.LEATHER_HELMET)&&darkspawn.black.boss.AwakenedRematches.trophy(kind).is(darkspawn.black.boss.BossCuisine.TROPHIES.get(kind)),"Rematch rewards are cosmetic equipment and trophy");
         } finally {boss.discard();remove(p);}helper.succeed();
     }
 

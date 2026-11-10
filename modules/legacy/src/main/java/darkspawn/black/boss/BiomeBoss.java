@@ -688,7 +688,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean killedByPlayer) {
 		super.dropCustomDeathLoot(level, source, killedByPlayer);
         if(entityTags().contains(darkspawn.black.endgame.Nexus.TAG))return;
-		darkspawn.black.cooking.BossCuisineRewards.grant(this, level, participants, profile.kind(), 192);
+		darkspawn.black.boss.BossCuisine.grant(this, level, participants, profile.kind(), 192);
         if(entityTags().contains(AwakenedRematches.TAG))return;
 		if (!participants.isEmpty()) { spawnAtLocation(level, new ItemStack(BossItems.ESSENCES.get(profile))); }
 		for (UUID id : participants) {

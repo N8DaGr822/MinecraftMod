@@ -3,8 +3,6 @@ package darkspawn.black.client;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.boss.CreatureAssets;
 import darkspawn.black.client.ecosystem.CreatureGeoRenderer;
-import darkspawn.black.cooking.Cooking;
-import darkspawn.black.cooking.MealItem;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -31,7 +29,6 @@ public class DarkspawnClient implements ClientModInitializer {
 		darkspawn.black.ecosystem.TaigaEcosystem.WOLVES.forEach((kind, type) ->
 				net.minecraft.client.renderer.entity.EntityRenderers.register(type,
 						context -> CreatureAssets.MOBS.contains(kind.id) ? new CreatureGeoRenderer<>(context, type, kind.width / 3, "mutant_wolf") : new darkspawn.black.client.ecosystem.TaigaWolfRenderer(context, kind)));
-		MenuScreens.register(Cooking.MENU, CookingScreen::new);
 		MenuScreens.register(darkspawn.black.forsaken.Forsaken.MENU, QuarantineScreen::new);
 		darkspawn.black.forsaken.ForsakenContent.MOBS.forEach((kind, type) ->
 			net.minecraft.client.renderer.entity.EntityRenderers.register(type, context -> new CreatureGeoRenderer<>(context, type, kind.width / 3, kind.id)));
@@ -46,12 +43,6 @@ public class DarkspawnClient implements ClientModInitializer {
 			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("message.darkspawn.forsaken_scan_mode", Component.translatable("scanner.darkspawn.mode_" + darkspawn.black.forsaken.NestScannerItem.mode(stack))).withStyle(ChatFormatting.AQUA));
 			if (darkspawn.black.forsaken.ForsakenContent.ARMOR.containsValue(stack.getItem())) lines.add(Component.translatable("tooltip.darkspawn.quarantine").withStyle(ChatFormatting.GREEN));
 			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("tooltip.darkspawn.bio_scanner").withStyle(ChatFormatting.GREEN));
-			if (stack.getItem() instanceof MealItem meal) {
-				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));
-				lines.add(meal.effectDescription().copy().withStyle(ChatFormatting.GREEN));
-				lines.add(meal.effectDetail().copy().withStyle(ChatFormatting.GRAY));
-				lines.add(Component.translatable("tooltip.darkspawn.meal_replaces").withStyle(ChatFormatting.GRAY));
-			}
 		});
 	}
 }

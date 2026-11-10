@@ -55,4 +55,6 @@ dependencies {
 	include module('husbandry')
 	implementation module('culinary_brewing')
 	include module('culinary_brewing')
+	implementation module('cooking')
+	include module('cooking')
 }

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:fungal_cream",
+        "darkspawn:onion"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "darkspawn:fungal_cream",
+    "minecraft:brown_mushroom",
+    "darkspawn:onion",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "darkspawn:fungal_cream_soup"
+  }
+}

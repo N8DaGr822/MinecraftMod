@@ -1,0 +1,20 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:garlic"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "minecraft:bread",
+    "darkspawn:garlic",
+    "darkspawn:butter"
+  ],
+  "result": {
+    "id": "darkspawn:garlic_bread"
+  }
+}

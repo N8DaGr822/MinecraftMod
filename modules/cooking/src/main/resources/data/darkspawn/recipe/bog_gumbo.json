@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:onion",
+        "darkspawn:wild_herbs"
+      ]
+    }
+  ],
+  "type": "darkspawn:cooking",
+  "ingredients": [
+    "minecraft:cooked_cod",
+    "minecraft:brown_mushroom",
+    "darkspawn:onion",
+    "darkspawn:wild_herbs"
+  ],
+  "result": {
+    "id": "darkspawn:bog_gumbo"
+  }
+}
