@@ -1,9 +1,9 @@
-package darkspawn.black.client;
+package darkspawn.black.climate.client;
 
-import darkspawn.black.Darkspawn;
-import darkspawn.black.equipment.Temperature;
-import darkspawn.black.equipment.TemperaturePayload;
-import darkspawn.black.equipment.TemperatureState;
+import darkspawn.black.core.DarkspawnCore;
+import darkspawn.black.climate.Temperature;
+import darkspawn.black.climate.TemperaturePayload;
+import darkspawn.black.climate.TemperatureState;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -18,7 +18,7 @@ public final class TemperatureHud {
 			state.restore(payload.exposure(), payload.wetSeconds(), 0); state.target = payload.target();
 		});
 		// Dedicated HUD: Keep climate warnings away from other action-bar messages.
-		HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Darkspawn.id("temperature"), (graphics, delta) -> {
+		HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, DarkspawnCore.id("temperature"), (graphics, delta) -> {
 			var client = Minecraft.getInstance(); var player = client.player;
 			if (player == null || player.isCreative() || player.isSpectator()) return;
 			var state = Temperature.state(player);

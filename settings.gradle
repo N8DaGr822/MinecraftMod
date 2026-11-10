@@ -13,7 +13,7 @@ rootProject.name = 'darkspawn'
 
 // Each module lives in modules/<name> and builds its own mod jar (see buildSrc darkspawn.fabric-module).
 // `legacy` is the remaining monomod (mod id `darkspawn`) while features are extracted from it.
-['core', 'storage', 'bonfire', 'quiver', 'ingredient_pouch', 'explorer_pack', 'enchantments', 'armor_styles', 'expedition_gear', 'legacy'].each { name ->
+['core', 'storage', 'bonfire', 'quiver', 'ingredient_pouch', 'explorer_pack', 'enchantments', 'armor_styles', 'expedition_gear', 'climate', 'legacy'].each { name ->
 	include ":${name}"
 	project(":${name}").projectDir = file("modules/${name}")
 }

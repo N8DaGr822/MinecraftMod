@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_climate-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Climate Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.climate.ClimateGameTest"
+    ]
+  }
+}

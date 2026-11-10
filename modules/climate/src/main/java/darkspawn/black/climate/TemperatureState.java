@@ -1,4 +1,4 @@
-package darkspawn.black.equipment;
+package darkspawn.black.climate;
 
 public final class TemperatureState {
 	public static final int WARNING = 35, STRAIN = 60, DANGER = 85;

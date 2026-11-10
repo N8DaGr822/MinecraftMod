@@ -22,7 +22,6 @@ public class DarkspawnClient implements ClientModInitializer {
                 @Override public net.minecraft.resources.Identifier getTextureLocation(net.minecraft.client.renderer.entity.state.LivingEntityRenderState state){return Darkspawn.id("textures/entity/fish/"+id+".png");}
             });
         }
-		TemperatureHud.initialize();
 		OneBlockControls.initialize();
         net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.oneblock.AscensionGuardian.TYPE,AscensionGuardianRenderer::new);
 		JournalControls.initialize();

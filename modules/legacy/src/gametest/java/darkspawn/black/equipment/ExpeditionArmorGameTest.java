@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.armorstyles.ArmorStyleBonuses;
 import darkspawn.black.armorstyles.ArmorStyles;
+import darkspawn.black.climate.Temperature;
+import darkspawn.black.climate.TemperatureState;
 import darkspawn.black.expeditiongear.ExpeditionArmor;
 import darkspawn.black.boss.BossEmpowerment;
 import darkspawn.black.boss.EquipmentPowers;
@@ -89,68 +91,6 @@ public final class ExpeditionArmorGameTest {
 		helper.succeed();
 	}
 
-	@GameTest public void temperatureDamageAndModifiersRecoverWithoutErasingOtherEffects(GameTestHelper helper) {
-		var player = player(helper);
-		try {
-			for (var piece : ExpeditionArmor.MOUNTAINEERING.entrySet()) player.setItemSlot(piece.getKey().getSlot(), new ItemStack(piece.getValue()));
-			player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 600));
-			Temperature.state(player).restore(-100, 0, 4);
-			Temperature.tick(player);
-			helper.assertTrue(player.getHealth() == 19 && Temperature.state(player).exposure == -98, "Climate damage bypasses armor and powder-snow immunity while recovery remains gradual");
-			helper.assertTrue(player.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(Darkspawn.id("temperature_movement")) != null, "Severe exposure adds its own slowdown");
-			Temperature.state(player).restore(0, 0, 0); Temperature.tick(player);
-			helper.assertTrue(player.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(Darkspawn.id("temperature_movement")) == null && player.hasEffect(MobEffects.SLOWNESS), "Recovery removes only climate-owned penalties");
-			Temperature.state(player).restore(100, 0, 4); player.damageCooldownTime = 0;
-			Temperature.tick(player);
-			helper.assertTrue(player.getHealth() == 18, "Heat and cold both damage through the normal server damage path");
-		} finally { remove(player); }
-		helper.succeed();
-	}
-
-	@GameTest public void temperaturePersistsThroughSavingButDeathClearsExposure(GameTestHelper helper) {
-		var player = player(helper); var next = player(helper);
-		try {
-			Temperature.state(player).restore(-91, 27, 3);
-			var output = net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, helper.getLevel().registryAccess());
-			player.saveWithoutId(output); Temperature.state(player).restore(0, 0, 0);
-			player.load(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, helper.getLevel().registryAccess(), output.buildResult()));
-			helper.assertTrue(Temperature.state(player).exposure == -91 && Temperature.state(player).wetSeconds == 27 && Temperature.state(player).dangerSeconds == 3, "Saved exposure, wetness and damage cadence survive reconnect");
-			helper.assertTrue(Temperature.state(next).exposure == 0, "Players have independent climate state");
-			net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.COPY_FROM.invoker().copyFromPlayer(player, next, false);
-			helper.assertTrue(Temperature.state(next).exposure == 0, "Death respawn starts comfortable");
-			net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.COPY_FROM.invoker().copyFromPlayer(player, next, true);
-			helper.assertTrue(Temperature.state(next).exposure == -91 && Temperature.state(next).wetSeconds == 27 && Temperature.state(next).dangerSeconds == 3, "Living transfers retain climate state");
-		} finally { remove(player); remove(next); }
-		helper.succeed();
-	}
-
-	// Shelter Timing: Allow asynchronous skylight updates to finish during the full server suite.
-	@GameTest(skyAccess = true, maxTicks = 100) public void temperatureSamplesBiomeShelterWetnessAndCampfires(GameTestHelper helper) {
-		var player = player(helper); var level = helper.getLevel(); var pos = player.blockPosition();
-		var originalBiome = level.getBiome(pos).unwrapKey().orElseThrow(); long originalTime = level.getOverworldClockTime();
-		helper.setBiome(net.minecraft.world.level.biome.Biomes.DESERT); helper.setTime(6000);
-		helper.runAfterDelay(5, () -> {
-			try {
-				float dry = Temperature.climate(player);
-				Temperature.state(player).wetSeconds = 30;
-				helper.assertTrue(Temperature.climate(player) == dry - 20, "Wetness cools the sampled environment");
-				Temperature.state(player).wetSeconds = 0;
-				level.setBlockAndUpdate(pos.below(), net.minecraft.world.level.block.Blocks.CAMPFIRE.defaultBlockState());
-				helper.assertTrue(Temperature.climate(player) == Math.min(170, dry + 55), "Lit campfire contributes bounded local heat");
-				level.setBlockAndUpdate(pos.below(), net.minecraft.world.level.block.Blocks.CAMPFIRE.defaultBlockState().setValue(net.minecraft.world.level.block.CampfireBlock.LIT, false));
-				helper.assertTrue(Temperature.climate(player) == dry, "Extinguished fire provides no heat");
-				level.setBlockAndUpdate(pos.above(14), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState());
-			} catch (RuntimeException | Error failure) { remove(player); helper.setBiome(originalBiome); helper.setTime(originalTime); throw failure; }
-			// Shelter Sampling: Sky visibility follows asynchronous lighting, not a fixed number of server ticks.
-			helper.startSequence().thenWaitUntil(() -> helper.assertTrue(!level.canSeeSky(player.blockPosition()), "Roof lighting has reached the player")).thenExecute(() -> {
-				try {
-					helper.assertTrue(Math.abs(Temperature.climate(player)) < TemperatureState.WARNING, "Deep cover moderates desert climate for spelunking");
-					Temperature.state(player).wetSeconds = 1; Temperature.tick(player);
-					helper.assertTrue(Temperature.state(player).wetSeconds == 0, "Sheltered players dry naturally");
-				} finally { level.setBlockAndUpdate(pos.above(14), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()); remove(player); helper.setBiome(originalBiome); helper.setTime(originalTime); }
-			}).thenSucceed();
-		});
-	}
 	private static void styleArmor(ServerPlayer player, String style) {
 		for (ArmorType type : new ArmorType[] { ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS }) {
 			String metal = type == ArmorType.HELMET || type == ArmorType.LEGGINGS ? "iron" : "diamond";

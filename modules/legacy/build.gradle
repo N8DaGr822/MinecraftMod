@@ -43,4 +43,6 @@ dependencies {
 	include module('armor_styles')
 	implementation module('expedition_gear')
 	include module('expedition_gear')
+	implementation module('climate')
+	include module('climate')
 }

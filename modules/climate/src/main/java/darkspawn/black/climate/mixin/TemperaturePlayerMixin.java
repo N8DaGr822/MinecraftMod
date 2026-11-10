@@ -1,7 +1,7 @@
-package darkspawn.black.mixin;
+package darkspawn.black.climate.mixin;
 
-import darkspawn.black.equipment.TemperaturePlayer;
-import darkspawn.black.equipment.TemperatureState;
+import darkspawn.black.climate.TemperaturePlayer;
+import darkspawn.black.climate.TemperatureState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;

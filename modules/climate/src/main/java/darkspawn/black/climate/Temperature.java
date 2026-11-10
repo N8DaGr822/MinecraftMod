@@ -1,6 +1,6 @@
-package darkspawn.black.equipment;
+package darkspawn.black.climate;
 
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
 import darkspawn.black.core.hook.ClimateProtection;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -26,10 +26,10 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 public final class Temperature {
-	public static final ResourceKey<Enchantment> WARMTH = ResourceKey.create(Registries.ENCHANTMENT, Darkspawn.id("warmth"));
-	public static final ResourceKey<Enchantment> COOLING = ResourceKey.create(Registries.ENCHANTMENT, Darkspawn.id("cooling"));
-	public static final ResourceKey<DamageType> COLD = ResourceKey.create(Registries.DAMAGE_TYPE, Darkspawn.id("hypothermia"));
-	public static final ResourceKey<DamageType> HEAT = ResourceKey.create(Registries.DAMAGE_TYPE, Darkspawn.id("heatstroke"));
+	public static final ResourceKey<Enchantment> WARMTH = ResourceKey.create(Registries.ENCHANTMENT, DarkspawnCore.id("warmth"));
+	public static final ResourceKey<Enchantment> COOLING = ResourceKey.create(Registries.ENCHANTMENT, DarkspawnCore.id("cooling"));
+	public static final ResourceKey<DamageType> COLD = ResourceKey.create(Registries.DAMAGE_TYPE, DarkspawnCore.id("hypothermia"));
+	public static final ResourceKey<DamageType> HEAT = ResourceKey.create(Registries.DAMAGE_TYPE, DarkspawnCore.id("heatstroke"));
 	private static final ArmorType[] SLOTS = { ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS };
 	private Temperature() { }
 
@@ -116,7 +116,7 @@ public final class Temperature {
 
 	private static void modifier(ServerPlayer player, net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> type, String name, double amount) {
 		var attribute = player.getAttribute(type); if (attribute == null) return;
-		var id = Darkspawn.id(name); var old = attribute.getModifier(id);
+		var id = DarkspawnCore.id(name); var old = attribute.getModifier(id);
 		if (old != null && old.amount() == amount) return;
 		attribute.removeModifier(id);
 		if (amount != 0) attribute.addTransientModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
