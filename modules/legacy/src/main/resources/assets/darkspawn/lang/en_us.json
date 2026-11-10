@@ -1,10 +1,4 @@
 {
-  "item.darkspawn.magic_carpet": "Magic Carpet",
-  "entity.darkspawn.magic_carpet": "Magic Carpet",
-  "tooltip.darkspawn.magic_carpet": "Place on clear solid ground to bind. Empty-hand use rides; sneak-use opens care. Amethyst repairs it.",
-  "message.darkspawn.magic_carpet_mounted": "Magic Carpet: WASD to steer, Jump to rise, X to descend, Sneak to dismount. Land before packing.",
-  "message.darkspawn.magic_carpet_blocked": "Carpet needs clear, dry, loaded space above solid ground.",
-  "message.darkspawn.magic_carpet_placed": "Carpet bound to you. Empty-hand use rides; sneak-use opens Follow/Stay and storage. A companion capsule packs it safely.",
   "item.darkspawn.tyrant_fossil_fragment": "Tyrant Fossil Fragment",
   "item.darkspawn.saltworn_ocean_note": "Saltworn Ocean Note",
   "item.darkspawn.decoded_tide_chart": "Decoded Tide Chart",
@@ -1153,21 +1147,5 @@
   "key.darkspawn.noah_cast": "Cast selected Tempest power",
   "key.darkspawn.noah_ultimate": "Wrath of the Seventh Sea",
   "message.darkspawn.thalassar_controls": "Thalassar: WASD to ride, Space/X for depth, mount ability key for Abyssal Dash.",
-  "entity.darkspawn.ascension_guardian": "Ascension Guardian",
-  "entity.darkspawn.aircraft": "Prototype Aircraft",
-  "item.darkspawn.aircraft_core": "Aircraft Core",
-  "message.darkspawn.aircraft_mounted": "Aircraft: WASD steers, Jump rises, X descends, Sneak exits. Land before editing.",
-  "message.darkspawn.aircraft_assembled": "Aircraft assembled and bound to you. Empty-hand use to pilot. Land and sneak-use to restore the blocks for editing.",
-  "message.darkspawn.aircraft_blocked": "Use the core on a flat 3x3 airframe: center plus four arms, optional corners. Use planks, logs, wool, glass or iron blocks. Clear a 5x5 area on solid ground and stand beside it.",
-  "message.darkspawn.aircraft_edit": "Airframe restored in its original orientation. Edit the blocks and use the returned core on the center.",
-  "message.darkspawn.aircraft_edit_blocked": "Only the owner can edit a stopped, landed, empty aircraft. Clear the landing area and stand beside it.",
-  "entity.darkspawn.ground_walker": "Ground Walker",
-  "item.darkspawn.ground_walker": "Ground Walker",
-  "tooltip.darkspawn.ground_walker": "Place on clear solid ground. One pilot; ground travel and one-block steps. Iron repairs; capsules store.",
-  "message.darkspawn.ground_walker_mounted": "Ground Walker: WASD to move, Jump, Sneak to dismount. No flight or weapons.",
-  "message.darkspawn.ground_walker_blocked": "Placement blocked: the walker needs clear space and safe solid ground.",
-  "message.darkspawn.ground_walker_placed": "Ground Walker placed and bound to you. Empty-hand use pilots; iron repairs. Sneak-use for recovery instructions.",
-  "message.darkspawn.ground_walker_care": "Repair with iron. Land and use a companion capsule to store. Defeat recovery uses a veterinary kit and recovery token. No cargo or animal care.",
-  "message.darkspawn.ground_walker_repaired": "Repaired 4 health, up to maximum.",
-  "message.darkspawn.ground_walker_repair_wait": "Repairs require damage and two seconds between uses."
+  "entity.darkspawn.ascension_guardian": "Ascension Guardian"
 }

@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "darkspawn_magic_carpet",
+	"version": "${version}",
+	"name": "Darkspawn Magic Carpet",
+	"description": "A craftable, owner-bound flying Magic Carpet: place it on clear solid ground, ride it with server-authoritative controls, repair it with amethyst and store it in a Companion Capsule. It travels in the Overworld, Nether and End.",
+	"authors": [
+		"nathen.lentz"
+	],
+	"contact": {
+		"sources": "https://github.com/N8DaGr822/MinecraftMod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/darkspawn_magic_carpet/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"darkspawn.black.magiccarpet.MagicCarpetMod"
+		],
+		"client": [
+			"darkspawn.black.magiccarpet.client.MagicCarpetClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"darkspawn_core": "*",
+		"darkspawn_mount_kit": "*"
+	}
+}

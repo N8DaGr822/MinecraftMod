@@ -214,9 +214,9 @@ public final class TestingCamp extends Item {
         result.add(new Supply("21 Animal husbandry",stacks(16,Items.PIG_SPAWN_EGG,Items.CHICKEN_SPAWN_EGG,Items.GOAT_SPAWN_EGG,Items.MOOSHROOM_SPAWN_EGG,Items.CARROT,Items.PUMPKIN_SEEDS,Items.GLASS_BOTTLE,Items.BOWL,darkspawn.black.farming.Agriculture.WILD_HERBS,darkspawn.black.husbandry.AnimalUtility.TRUFFLE,darkspawn.black.husbandry.AnimalUtility.GOAT_CHEESE,darkspawn.black.husbandry.AnimalUtility.GOAT_MILK,darkspawn.black.husbandry.AnimalUtility.FUNGAL_CREAM,darkspawn.black.husbandry.AnimalUtility.RICH_EGG,darkspawn.black.husbandry.AnimalUtility.HERBED_EGG)));
         // Enchantment Trials: Ready-enchanted equipment shares the ammunition barrel's spare slots.
         var enchantmentTrials=stacks(64,darkspawn.black.pirate.Ships.CHAIN_SHOT,darkspawn.black.pirate.Ships.PIERCING_SHOT);
-        enchantmentTrials.add(new ItemStack(darkspawn.black.mount.MagicCarpetItem.ITEM));
-        enchantmentTrials.add(new ItemStack(darkspawn.black.mount.AircraftCoreItem.ITEM));
-        enchantmentTrials.add(new ItemStack(darkspawn.black.mount.GroundWalkerItem.ITEM));
+        enchantmentTrials.add(new ItemStack(darkspawn.black.magiccarpet.MagicCarpetItem.ITEM));
+        enchantmentTrials.add(new ItemStack(darkspawn.black.aircraft.AircraftCoreItem.ITEM));
+        enchantmentTrials.add(new ItemStack(darkspawn.black.groundwalker.GroundWalkerItem.ITEM));
         enchantmentTrials.add(new ItemStack(Items.OAK_PLANKS,9));
         var trialItems=List.of(Items.BOW,Items.IRON_SWORD,Items.IRON_HOE,Items.IRON_CHESTPLATE);
         var trialEnchantments=List.of(darkspawn.black.enchantments.ThematicEnchantments.HUNTER,darkspawn.black.enchantments.ThematicEnchantments.BUTCHER,darkspawn.black.enchantments.ThematicEnchantments.FORAGER,darkspawn.black.enchantments.ThematicEnchantments.SOULWARD);

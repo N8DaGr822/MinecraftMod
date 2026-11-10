@@ -13,9 +13,6 @@ import net.minecraft.world.entity.MobCategory;
 
 public final class Mounts {
 	private Mounts() { }
-    public static final EntityType<GroundWalker> GROUND_WALKER = register("ground_walker", GroundWalker::new, 1.8F, 2.5F, 2.4F);
-    public static final EntityType<Aircraft> AIRCRAFT = register("aircraft", Aircraft::new, 4.25F, 1F, 1.1F);
-    public static final EntityType<MagicCarpet> MAGIC_CARPET = register("magic_carpet", MagicCarpet::new, 1.7F, .25F, .3F);
     public static final EntityType<Thalassar> THALASSAR = register("thalassar", Thalassar::new, 1.3F, 1.8F, 1.45F);
     private static <T extends PrototypeMount> EntityType<T> register(String id, EntityType.EntityFactory<T> factory, float width, float height, float seat) {
         var key = ResourceKey.create(Registries.ENTITY_TYPE, Darkspawn.id(id));
@@ -26,12 +23,9 @@ public final class Mounts {
 	public static void initialize() {
 		darkspawn.black.mountkit.MountKit.initialize();
 		darkspawn.black.creaturemounts.CreatureMounts.initialize();
-        FabricDefaultAttributeRegistry.register(MAGIC_CARPET, MagicCarpet.attributes());
-        MagicCarpetItem.initialize();
-        FabricDefaultAttributeRegistry.register(AIRCRAFT, Aircraft.attributes());
-        AircraftCoreItem.initialize();
-        FabricDefaultAttributeRegistry.register(GROUND_WALKER, GroundWalker.attributes());
-        GroundWalkerItem.initialize();
+		darkspawn.black.magiccarpet.MagicCarpetMod.initialize();
+		darkspawn.black.aircraft.AircraftMod.initialize();
+		darkspawn.black.groundwalker.GroundWalkerMod.initialize();
         FabricDefaultAttributeRegistry.register(THALASSAR, Thalassar.attributes());
 	}
 }

@@ -22,6 +22,9 @@ public final class TestBootstrap {
 		// Extracted modules are separate mods at runtime; initialize the ones legacy code still uses.
 		new darkspawn.black.creaturekit.CreatureKit().onInitialize();
 		new darkspawn.black.mountkit.MountKit().onInitialize();
+		new darkspawn.black.groundwalker.GroundWalkerMod().onInitialize();
+		new darkspawn.black.aircraft.AircraftMod().onInitialize();
+		new darkspawn.black.magiccarpet.MagicCarpetMod().onInitialize();
 		new darkspawn.black.creaturemounts.CreatureMounts().onInitialize();
 		new darkspawn.black.storage.StorageMod().onInitialize();
 		new darkspawn.black.bonfire.BonfireMod().onInitialize();

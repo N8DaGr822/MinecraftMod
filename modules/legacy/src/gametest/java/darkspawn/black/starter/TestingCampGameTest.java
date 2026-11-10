@@ -136,7 +136,7 @@ public final class TestingCampGameTest {
 		for (var item : darkspawn.black.boss.BossItems.HEARTS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every current heart supplied");
 		helper.assertTrue(all.stream().filter(stack -> stack.is(darkspawn.black.ingredientpouch.IngredientPouchItem.ITEM)).mapToInt(ItemStack::getCount).sum() == 1,
 			"Fresh camp supplies exactly one Ingredient Pouch");
-		for (var item : java.util.List.of(darkspawn.black.quiver.QuiverItem.ITEM, darkspawn.black.explorerpack.ExplorerPackItem.ITEM, darkspawn.black.mount.MagicCarpetItem.ITEM, darkspawn.black.mount.AircraftCoreItem.ITEM, darkspawn.black.mount.GroundWalkerItem.ITEM))
+		for (var item : java.util.List.of(darkspawn.black.quiver.QuiverItem.ITEM, darkspawn.black.explorerpack.ExplorerPackItem.ITEM, darkspawn.black.magiccarpet.MagicCarpetItem.ITEM, darkspawn.black.aircraft.AircraftCoreItem.ITEM, darkspawn.black.groundwalker.GroundWalkerItem.ITEM))
 			helper.assertTrue(all.stream().filter(stack -> stack.is(item)).mapToInt(ItemStack::getCount).sum() == 1,
 				"Fresh camp supplies exactly one utility container: " + item);
 		for (var item : darkspawn.black.boss.BossItems.SUMMONS.values()) helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Every regional summon supplied");

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_magic_carpet-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Magic Carpet Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.magiccarpet.MagicCarpetGameTest"
+    ]
+  }
+}
