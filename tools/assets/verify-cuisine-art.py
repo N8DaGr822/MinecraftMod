@@ -13,7 +13,8 @@ class Assets:
         assert len(hits)<=1,(rel,hits)
         return hits[0] if hits else root/'modules/legacy/src/main/resources/assets/darkspawn'/rel
 assets=Assets()
-for file,size in [('textures/block/cuisine_atlas.png',512),('icon.png',256)]:
+# Cooking owns cuisine_atlas (legacy boss items use it too); farming ships its own copy for the regional crops.
+for file,size in [('textures/block/cuisine_atlas.png',512),('textures/block/farming_atlas.png',512),('icon.png',256)]:
     raw=(assets/file).read_bytes()
     assert raw[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',raw[16:24])==(size,size),file
 models=[]
@@ -53,7 +54,8 @@ for name in ('frost_garlic','jungle_pepper','marsh_rice'):
     models += [p['apply']['model'].split(':')[1] for p in states]+['item/'+name,'item/'+name+'_seeds']
 for id in models:
     obj=json.loads((assets/f'models/{id}.json').read_text())
-    assert obj['textures']['atlas']=='darkspawn:block/cuisine_atlas',id
+    expected='darkspawn:block/farming_atlas' if '/modules/farming/' in str(assets/f'models/{id}.json') else 'darkspawn:block/cuisine_atlas'
+    assert obj['textures']['atlas']==expected,id
     for e in obj['elements']:
         assert all(-16<=a<b<=32 for a,b in zip(e['from'],e['to'])),(id,e['name'])
         for face in e['faces'].values():
