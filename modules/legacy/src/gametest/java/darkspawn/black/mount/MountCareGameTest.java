@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.noah.NoahMod;
+
 import darkspawn.black.creaturemounts.CreatureMounts;
 
 import darkspawn.black.creaturemounts.Seahorse;
@@ -99,7 +101,7 @@ public final class MountCareGameTest {
         helper.succeed();
     }
     @GameTest public void genericCareMenuRejectsUniqueCompanions(GameTestHelper helper){
-        var p=player(helper);var m=Mounts.THALASSAR.create(p.level(),EntitySpawnReason.COMMAND);
+        var p=player(helper);var m=NoahMod.THALASSAR.create(p.level(),EntitySpawnReason.COMMAND);
         try{
             m.bond(p);m.setPos(p.position());p.level().addFreshEntity(m);
             var menu=new MountMenu(1,p.getInventory(),m);

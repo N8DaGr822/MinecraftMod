@@ -39,6 +39,8 @@ dependencies {
 	include module('aircraft')
 	implementation module('ground_walker')
 	include module('ground_walker')
+	implementation module('noah')
+	include module('noah')
 	implementation module('storage')
 	include module('storage')
 	implementation module('bonfire')

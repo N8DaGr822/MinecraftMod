@@ -35,8 +35,12 @@ public class Darkspawn implements ModInitializer {
 		BossEntities.register();
         darkspawn.black.endgame.LegendaryRelics.initialize();
         darkspawn.black.endgame.Nexus.initialize();
-		darkspawn.black.mount.Mounts.initialize();
-		darkspawn.black.legacy.NoahLegacy.initialize();
+		// Extracted mods initialize from their own entrypoints; these idempotent calls keep their content ready for legacy code.
+		darkspawn.black.creaturemounts.CreatureMounts.initialize();
+		darkspawn.black.magiccarpet.MagicCarpetMod.initialize();
+		darkspawn.black.aircraft.AircraftMod.initialize();
+		darkspawn.black.groundwalker.GroundWalkerMod.initialize();
+		darkspawn.black.noah.NoahMod.initialize();
 		darkspawn.black.starter.DragonStarterChest.initialize();
 		darkspawn.black.boss.Endborn.initializeSpawning();
 		BossEmpowerment.initialize();

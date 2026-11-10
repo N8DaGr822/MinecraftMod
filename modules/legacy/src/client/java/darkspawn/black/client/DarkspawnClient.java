@@ -18,7 +18,6 @@ public class DarkspawnClient implements ClientModInitializer {
         net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.oneblock.AscensionGuardian.TYPE,AscensionGuardianRenderer::new);
 		JournalControls.initialize();
 		LegacyArmorRenderers.initialize();
-		darkspawn.black.client.legacy.NoahClient.initialize();
 		darkspawn.black.client.pirate.ShipClient.initialize();
 		darkspawn.black.client.boss.BossClient.initialize();
 		darkspawn.black.ecosystem.ForestEcosystem.MOBS.forEach((kind, type) ->

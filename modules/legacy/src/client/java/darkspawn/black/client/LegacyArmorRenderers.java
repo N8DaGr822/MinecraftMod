@@ -8,7 +8,6 @@ final class LegacyArmorRenderers {
 	private LegacyArmorRenderers() { }
 
 	static void initialize() {
-		ArmorRenderer.register(context -> new ArmorGeometryRenderer(context, "noah", ArmorGeometryRenderer.IRON_TRIM, "noah_pulse"), darkspawn.black.legacy.NoahLegacy.ARMOR.values().toArray(ItemLike[]::new));
 		ArmorGeometryRenderer.register("quarantine", ArmorGeometryRenderer.IRON_TRIM, darkspawn.black.forsaken.ForsakenContent.ARMOR.values().toArray(ItemLike[]::new));
 	}
 }

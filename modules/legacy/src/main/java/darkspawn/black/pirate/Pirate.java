@@ -40,6 +40,7 @@ public final class Pirate {
 	}
 	public static PiratePlayerState state(ServerPlayer player) { return ((PiratePlayer) player).darkspawn$pirate(); }
 	public static void initialize() {
+		if (net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("darkspawn_noah")) darkspawn.black.pirate.compat.NoahCompat.initialize();
 		darkspawn.black.core.hook.JournalSections.register(Pirate::journal);
 		// Friendly Exceptions: Recruitment keeps the original monster entity category.
 		darkspawn.black.core.hook.WardExemptions.register(entity -> PirateShip.loyalCrew(entity) || PirateDiplomacy.contact(entity));
