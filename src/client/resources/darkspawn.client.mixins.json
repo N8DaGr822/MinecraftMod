@@ -4,11 +4,7 @@
   "compatibilityLevel": "JAVA_25",
   "client": [
     "ExampleClientMixin",
-    "ContainerScreenExpansionMixin",
     "IngredientPouchMouseMixin",
-    "InventoryScreenExpansionMixin",
-    "CreativeInventoryExpansionMixin",
-    "SlotPositionAccessor",
     "EncounterMusicMixin"
   ],
   "injectors": {

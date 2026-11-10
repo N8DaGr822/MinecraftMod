@@ -74,8 +74,6 @@ public final class GroundWalkerGameTest {
             mech.care.setFollowing(true);
             h.assertTrue(!mech.care.following && !mech.care.requestBreeding(owner),"No follow or breeding");
             var menu=new MountMenu(1,owner.getInventory(),mech);
-            darkspawn.black.inventory.InventoryHub.request(owner,new darkspawn.black.inventory.HubRequestPayload(3,mech.getId(),owner.inventoryMenu.getStateId()));
-            h.assertTrue(owner.containerMenu==owner.inventoryMenu,"Hub cannot open machine cargo");
             h.assertTrue(!menu.stillValid(owner) && !menu.clickMenuButton(owner,MountMenu.FOLLOW),"No animal cargo/care menu");
             mech.setHealth(79); owner.setItemInHand(InteractionHand.MAIN_HAND,new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT,3));
             mech.mobInteract(owner,InteractionHand.MAIN_HAND);

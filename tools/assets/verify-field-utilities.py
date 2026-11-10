@@ -11,10 +11,10 @@ catalog = {}
 for statement in ast.parse((Path(__file__).with_name('field-utilities.py')).read_text()).body:
     if isinstance(statement, ast.Assign):
         for target in statement.targets:
-            if isinstance(target, ast.Name) and target.id in {'FISH', 'ACCESSORIES', 'MEALS', 'EXTRAS'}:
+            if isinstance(target, ast.Name) and target.id in {'FISH', 'MEALS', 'EXTRAS'}:
                 catalog[target.id] = ast.literal_eval(statement.value)
 fish = catalog['FISH']
-items = catalog['ACCESSORIES'] + catalog['MEALS'] + catalog['EXTRAS'] + fish + ['cooked_' + f for f in fish] + [f + '_bucket' for f in fish]
+items = catalog['MEALS'] + catalog['EXTRAS'] + fish + ['cooked_' + f for f in fish] + [f + '_bucket' for f in fish]
 language = json.loads((assets/'lang/en_us.json').read_text(encoding='utf-8'))
 for item in items:
     declaration = json.loads((assets/'items'/f'{item}.json').read_text())
@@ -35,7 +35,7 @@ for species in fish:
 for meal in catalog['MEALS']:
     recipe = json.loads((data/'recipe'/f'{meal}.json').read_text())
     assert recipe['type'] == 'darkspawn:cooking' and 'minecraft:bowl' in recipe['ingredients'], meal
-for recipe_id in catalog['ACCESSORIES'] + ['goat_cheese']:
+for recipe_id in ['goat_cheese']:
     recipe = json.loads((data/'recipe'/f'{recipe_id}.json').read_text())
     assert recipe['type'] == 'minecraft:crafting_shapeless' and recipe['ingredients'], recipe_id
     advancement = json.loads((data/'advancement/recipes'/f'{recipe_id}.json').read_text())

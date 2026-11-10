@@ -1,38 +1,21 @@
 package darkspawn.black.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.boss.CreatureAssets;
 import darkspawn.black.client.ecosystem.CreatureGeoRenderer;
-import darkspawn.black.inventory.SortInventoryPayload;
-import darkspawn.black.inventory.InventoryExpansion;
-import darkspawn.black.inventory.InventoryTierPayload;
 import darkspawn.black.cooking.Cooking;
 import darkspawn.black.cooking.MealItem;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
-import net.fabricmc.fabric.api.client.screen.v1.Screens;
 
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.network.chat.Component;
 
 public class DarkspawnClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		ArmorLoadoutControls.initialize();
-        InventoryHubControls.initialize();
         for(int i=0;i<darkspawn.black.cooking.RegionalFishing.TYPES.size();i++){
             String id=darkspawn.black.cooking.RegionalFishing.IDS[i];
             net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.cooking.RegionalFishing.TYPES.get(i),context->new net.minecraft.client.renderer.entity.CodRenderer(context){
@@ -116,65 +99,5 @@ public class DarkspawnClient implements ClientModInitializer {
 				lines.add(Component.translatable("tooltip.darkspawn.meal_replaces").withStyle(ChatFormatting.GRAY));
 			}
 		});
-		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
-		ClientPlayNetworking.registerGlobalReceiver(InventoryTierPayload.TYPE, (payload, context) ->
-				InventoryExpansion.setTier(context.player().getInventory(), payload.tier()));
-		KeyMapping sortInventory = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.darkspawn.sort_inventory", InputConstants.Type.KEYBOARD, InputConstants.KEY_R,
-				KeyMapping.Category.register(Darkspawn.id("inventory"))));
-
-		// Keyboard Input: Use the shortcut during gameplay, leaving text fields and menus alone.
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (sortInventory.consumeClick()) {
-				if (client.gui.screen() == null && client.gui.overlay() == null) {
-					requestSort(client);
-				}
-			}
-		});
-
-		ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
-			if (screen instanceof CreativeModeInventoryScreen && ClientPlayNetworking.canSend(SortInventoryPayload.TYPE)) {
-				Screens.getWidgets(screen).add(darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.expanded_inventory"),
-						button -> client.gui.setScreen(new ExpandedInventoryScreen(client.player)))
-						.bounds(width - 116, 6, 110, 20).build());
-			}
-			if (!(screen instanceof InventoryScreen)) {
-				return;
-			}
-
-			var trash = UiTheme.button(Component.translatable("button.darkspawn.empty_trash"), button -> {
-				if (client.player != null) ClientPlayNetworking.send(new darkspawn.black.inventory.TrashInventoryPayload(client.player.inventoryMenu.getStateId()));
-			}).bounds(width - 68, 30, 62, 20)
-				.tooltip(Tooltip.create(Component.translatable("tooltip.darkspawn.empty_trash"))).build();
-			Runnable updateTrash = () -> trash.active = canSort(client)
-				&& ClientPlayNetworking.canSend(darkspawn.black.inventory.TrashInventoryPayload.TYPE)
-				&& client.player.inventoryMenu.getSlot(InventoryExpansion.TRASH_MENU_SLOT).hasItem();
-			updateTrash.run(); Screens.getWidgets(screen).add(trash);
-			ScreenEvents.afterTick(screen).register(current -> updateTrash.run());
-
-			// Inventory UI: Anchor outside the inventory so opening the recipe book cannot cover slots.
-			Button sortButton = darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.sort_inventory"),
-					button -> requestSort(client))
-					.bounds(width - 68, 6, 62, 20)
-					.tooltip(Tooltip.create(Component.translatable("tooltip.darkspawn.sort_inventory")))
-					.build();
-			sortButton.active = canSort(client);
-			Screens.getWidgets(screen).add(sortButton);
-			ScreenEvents.afterTick(screen).register(currentScreen -> sortButton.active = canSort(client));
-		});
-	}
-
-	private static boolean canSort(Minecraft client) {
-		return client.player != null && client.player.isAlive() && !client.player.isSpectator()
-				&& client.player.containerMenu == client.player.inventoryMenu
-				&& client.player.inventoryMenu.getCarried().isEmpty()
-				&& ClientPlayNetworking.canSend(SortInventoryPayload.TYPE);
-	}
-
-	private static void requestSort(Minecraft client) {
-		if (canSort(client)) {
-			// Server Authority: Send only the current menu revision, never client-supplied item stacks.
-			ClientPlayNetworking.send(new SortInventoryPayload(client.player.inventoryMenu.getStateId()));
-		}
 	}
 }

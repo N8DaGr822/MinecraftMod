@@ -1,9 +1,5 @@
 package darkspawn.black;
 
-import darkspawn.black.inventory.InventorySorter;
-import darkspawn.black.inventory.InventoryExpansion;
-import darkspawn.black.inventory.InventoryUpgradeItem;
-import darkspawn.black.inventory.SortInventoryPayload;
 import darkspawn.black.boss.BossEntities;
 import darkspawn.black.boss.BossItems;
 import darkspawn.black.boss.BossEmpowerment;
@@ -12,8 +8,6 @@ import darkspawn.black.cooking.Cooking;
 import darkspawn.black.ecosystem.ForestEcosystem;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 import net.minecraft.resources.Identifier;
 
@@ -37,18 +31,13 @@ public class Darkspawn implements ModInitializer {
 		darkspawn.black.oneblock.AscensionProtection.initialize();
 		ServerTuning.initialize();
         darkspawn.black.audio.DarkspawnSounds.initialize();
-		InventoryUpgradeItem.register();
 		darkspawn.black.inventory.IngredientPouchItem.register();
         darkspawn.black.inventory.QuiverItem.register();
         darkspawn.black.inventory.ExplorerPackItem.register();
-		InventoryExpansion.initialize();
-        darkspawn.black.inventory.Accessories.initialize();
-        darkspawn.black.inventory.InventoryHub.initialize();
 		darkspawn.black.equipment.ExpeditionArmor.initialize();
 		darkspawn.black.equipment.LegendaryArmor.initialize();
 		darkspawn.black.equipment.ArmorStyles.initialize();
 		darkspawn.black.equipment.Temperature.initialize();
-		darkspawn.black.inventory.ArmorLoadouts.initialize();
 		darkspawn.black.storage.Storage.initialize();
 		darkspawn.black.boss.BossEffects.initialize();
 		BossItems.register();
@@ -95,9 +84,6 @@ public class Darkspawn implements ModInitializer {
         darkspawn.black.worldgen.ExplorationFinds.initialize();
         darkspawn.black.equipment.ThematicEnchantments.initialize();
 		darkspawn.black.journal.Journal.initialize();
-		PayloadTypeRegistry.serverboundPlay().register(SortInventoryPayload.TYPE, SortInventoryPayload.CODEC);
-		ServerPlayNetworking.registerGlobalReceiver(SortInventoryPayload.TYPE,
-				(payload, context) -> InventorySorter.sort(context.player(), payload.stateId()));
 
 		LOGGER.info("Hello Fabric world!");
 	}

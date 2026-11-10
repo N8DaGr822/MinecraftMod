@@ -377,9 +377,6 @@ public final class PirateGameTest {
 		try {
 			player.inventoryMenu.setCarried(new ItemStack(Items.EMERALD));
 			helper.assertTrue(!Pirate.enter(player, gate), "Carried inventory rejects travel"); player.inventoryMenu.setCarried(ItemStack.EMPTY);
-			var trash = player.inventoryMenu.getSlot(darkspawn.black.inventory.InventoryExpansion.TRASH_MENU_SLOT);
-			trash.set(new ItemStack(Items.DIAMOND));
-			helper.assertTrue(!Pirate.enter(player, gate) && trash.getItem().is(Items.DIAMOND), "Staged trash is never lost in transit"); trash.set(ItemStack.EMPTY);
 			player.setOnGround(false); helper.assertTrue(!Pirate.enter(player, gate), "Airborne departure rejected"); ready(player);
 			helper.assertTrue(!Pirate.enter(player, gate.east(20)) && Pirate.state(player).entrance == null, "Invalid and distant gate cannot replace return state");
 			var blocked = gate.east(30);

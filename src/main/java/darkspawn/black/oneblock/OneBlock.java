@@ -1,7 +1,6 @@
 package darkspawn.black.oneblock;
 
 import darkspawn.black.Darkspawn;
-import darkspawn.black.inventory.ArmorLoadouts;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -172,9 +171,8 @@ public final class OneBlock {
 			|| player.isChangingDimension() || !player.connection.hasClientLoaded()
 			|| player.isFallFlying() || player.isUsingItem() || player.isOnFire() || player.isInWater() || state(player).hurtTicks > 0
 			|| player.containerMenu != player.inventoryMenu || !player.inventoryMenu.getCarried().isEmpty()
-			|| !player.getShoulderEntityLeft().isEmpty() || !player.getShoulderEntityRight().isEmpty() || ArmorLoadouts.state(player).pending >= 0) return false;
+			|| !player.getShoulderEntityLeft().isEmpty() || !player.getShoulderEntityRight().isEmpty()) return false;
 		for (int slot = 1; slot <= 4; slot++) if (!player.inventoryMenu.getSlot(slot).getItem().isEmpty()) return false;
-		if (player.inventoryMenu.getSlot(darkspawn.black.inventory.InventoryExpansion.TRASH_MENU_SLOT).hasItem()) return false;
 		for (var entity : player.level().getEntities(player, player.getBoundingBox().inflate(16))) {
 			if (entity instanceof net.minecraft.world.entity.Leashable leash && leash.getLeashHolder() == player) return false;
 		}
@@ -224,7 +222,7 @@ public final class OneBlock {
 		var state = state(player); var outgoing = OneBlockItems.capture(player);
 		state.other.apply(player); state.other = outgoing; state.inside = island(player.level());
 		darkspawn.black.equipment.ArmorStyleBonuses.update(player); darkspawn.black.equipment.LegendaryArmor.update(player);
-		ArmorLoadouts.sync(player); player.inventoryMenu.broadcastFullState();
+		player.inventoryMenu.broadcastFullState();
 	}
 	public static void sync(ServerPlayer player) {
 		if (!ServerPlayNetworking.canSend(player, OneBlockStatusPayload.TYPE)) return;

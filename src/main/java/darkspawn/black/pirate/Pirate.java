@@ -60,7 +60,6 @@ public final class Pirate {
 			|| player.isSleeping() || player.isFallFlying() || player.isUsingItem() || player.isOnFire() || player.isInWater()
 			|| player.hurtTime > 0 || player.isChangingDimension() || !player.connection.hasClientLoaded()
 			|| player.containerMenu != player.inventoryMenu || !player.inventoryMenu.getCarried().isEmpty()
-			|| player.inventoryMenu.getSlot(darkspawn.black.inventory.InventoryExpansion.TRASH_MENU_SLOT).hasItem()
 			|| !player.getShoulderEntityLeft().isEmpty() || !player.getShoulderEntityRight().isEmpty()) return false;
 		for (var entity : player.level().getEntities(player, player.getBoundingBox().inflate(16))) {
 			if (entity instanceof net.minecraft.world.entity.Leashable leash && leash.getLeashHolder() == player) return false;

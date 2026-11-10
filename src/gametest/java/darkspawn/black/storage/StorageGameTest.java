@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import darkspawn.black.inventory.InventoryExpansion;
 
 public final class StorageGameTest {
 	private static StorageBlockEntity chest(GameTestHelper helper, int x, StorageBlock block) {
@@ -128,14 +127,13 @@ public final class StorageGameTest {
 			menu.clicked(27, 1, ContainerInput.PICKUP, player);
 			helper.assertTrue(sorting.filter(0).isEmpty() && menu.getCarried().getCount() == 12, "Clearing ghost consumes nothing");
 			menu.setCarried(ItemStack.EMPTY);
-			InventoryExpansion.setTier(player.getInventory(), 1);
 			player.getInventory().setItem(0, new ItemStack(Items.DIAMOND_SWORD));
 			player.getInventory().setItem(9, new ItemStack(Items.COBBLESTONE, 40));
 			player.getInventory().setItem(36, new ItemStack(Items.DIAMOND_BOOTS));
 			player.getInventory().setItem(40, new ItemStack(Items.SHIELD));
-			player.getInventory().setItem(InventoryExpansion.FIRST_EXTRA_SLOT, new ItemStack(Items.COBBLESTONE, 30));
+			player.getInventory().setItem(35, new ItemStack(Items.COBBLESTONE, 30));
 			menu.action(player, StorageMenu.DEPOSIT, "");
-			helper.assertTrue(sorting.countItem(Items.COBBLESTONE) == 70 && player.getInventory().getItem(9).isEmpty() && player.getInventory().getItem(43).isEmpty(), "Deposit includes extra unlocked rows");
+			helper.assertTrue(sorting.countItem(Items.COBBLESTONE) == 70 && player.getInventory().getItem(9).isEmpty() && player.getInventory().getItem(35).isEmpty(), "Deposit covers every main inventory row");
 			helper.assertTrue(player.getInventory().getItem(0).is(Items.DIAMOND_SWORD) && player.getInventory().getItem(36).is(Items.DIAMOND_BOOTS) && player.getInventory().getItem(40).is(Items.SHIELD), "Hotbar, armor and offhand stay untouched");
 		} finally { remove(player); }
 		helper.succeed();

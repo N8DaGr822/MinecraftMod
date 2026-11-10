@@ -36,7 +36,7 @@ October 15 expansion: new camps also supply pirate gates/compasses, shipyards/he
 
 The **Charts archaeology rematches** supplies include blank discovery charts, Awakening Seals, brushes, echo shards, amethyst, diamonds and bread. Two suspicious-gravel samples southwest of the center use real regional archaeology loot. Brush each until it releases its find; deposits are single-use. New guide pages explain home ports, refits, care/roaming, chart creation, archaeology, awakened rituals and regional events. Existing currency/wood/iron supplies cover port and ship payments. See the [server playtest route](server-playtest.md). Place a fresh camp for these additions; existing camps are not automatically altered.
 
-Accessories/hub/fishing/animal expansion: three new supply groups contain all six accessories, regional raw/cooked fish and six fish buckets, a fishing rod, animal spawn eggs, specialty feed and ingredients. Eleven new dishes and their ingredients flow through the existing recipe-driven supply lists. Three guide pages explain controls and habitat conditions. See [field utility rules and acceptance](field-utilities-playtest.md).
+Fishing/animal expansion: two supply groups contain regional raw/cooked fish and six fish buckets, a fishing rod, animal spawn eggs, specialty feed and ingredients. Eleven new dishes and their ingredients flow through the existing recipe-driven supply lists. Guide pages explain controls and habitat conditions. (Barrel 19, formerly accessories, was removed with the inventory changes; later barrel numbers are unchanged.) See [field utility rules and acceptance](field-utilities-playtest.md).
 
 Barrels around the perimeter have visible signs and named inventories. Follow them clockwise from the northwest corner: guide, combat kit, pantry, prepared food, farming/equipment, utilities, then armor styles. Large categories span numbered barrels.
 
@@ -50,7 +50,7 @@ Barrels around the perimeter have visible signs and named inventories. Follow th
 - **Legendary armor:** all five sets and their cores.
 - **Armor styles:** each of the fifteen styles in complete iron and diamond sets, one labeled barrel per style.
 - **Crafting and fuel:** metals, wood, basic materials, books, lapis, XP bottles, coal, and brewing supplies.
-- **Base, storage and travel:** bonfire supplies, beds, storage chests and tubes, inventory upgrades, Quarantine Gates and keys, and obsidian.
+- **Base, storage and travel:** bonfire supplies, beds, storage chests and tubes, Quarantine Gates and keys, and obsidian.
 - **Combat tools:** diamond axe and spear, trident, mace, crossbow, shovel, and fishing rod.
 - **Target practice:** targets, armor stands, arrows, and zombie/skeleton/creeper spawn eggs. Keep the bonfire off when testing ordinary hostiles.
 
@@ -61,7 +61,7 @@ All stacks respect normal stack limits. The camp has 72 possible perimeter barre
 1. Take the combat kit, testing guide, cookbook, and recipe scrolls. Switch to Survival to exercise normal mechanics.
 2. Cook a basic dish, a regional dish, and a boss dish using the cookbook. Compare those with the prepared meals and feast servings.
 3. Grow and harvest the crop plot. Replant from the supplied seeds.
-4. Compare armor styles and loadouts, then take expedition gear into hot/cold biomes. Use XP bottles and the enchanting setup for equipment tests.
+4. Compare armor styles, then take expedition gear into hot/cold biomes. Use XP bottles and the enchanting setup for equipment tests.
 5. Build a dump-chest/tube/sorting-chest line. Test the bonfire separately, keeping it off during ordinary hostile tests.
 6. Run `/summon darkspawn:griffin` in open space. Empty-hand ride; Space rises, X descends, Shift dismounts.
 7. Enter OneBlock through the inventory menu. Forsaken travel still requires dragon completion and the normal valid gate frame. The camp does not alter dragon state, recipes, gamerules, weather, time, or player progression.

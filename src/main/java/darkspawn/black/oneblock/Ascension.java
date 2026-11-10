@@ -226,16 +226,14 @@ public final class Ascension {
         // Emergency Return: Relax ground/combat restrictions only after membership removal, preserving all item boundaries.
         if(!p.isAlive()||p.isPassenger()||p.isVehicle()||p.isChangingDimension()||!p.connection.hasClientLoaded()
             ||p.isSleeping()||p.isUsingItem()||p.containerMenu!=p.inventoryMenu||!p.inventoryMenu.getCarried().isEmpty()
-            ||!p.getShoulderEntityLeft().isEmpty()||!p.getShoulderEntityRight().isEmpty()
-            ||darkspawn.black.inventory.ArmorLoadouts.state(p).pending>=0)return false;
+            ||!p.getShoulderEntityLeft().isEmpty()||!p.getShoulderEntityRight().isEmpty())return false;
         for(int slot=1;slot<=4;slot++)if(p.inventoryMenu.getSlot(slot).hasItem())return false;
-        if(p.inventoryMenu.getSlot(darkspawn.black.inventory.InventoryExpansion.TRASH_MENU_SLOT).hasItem())return false;
         for(var entity:p.level().getEntities(p,p.getBoundingBox().inflate(16)))
             if(entity instanceof net.minecraft.world.entity.Leashable leash&&leash.getLeashHolder()==p)return false;
         OneBlock.state(p).pendingTicks=0;return true;
     }
     private static void switchItems(ServerPlayer p){
         var state=OneBlock.state(p);var outgoing=OneBlockItems.capture(p);state.ascensionOther.apply(p);state.ascensionOther=outgoing;state.ascensionInside=island(p.level());
-        darkspawn.black.equipment.ArmorStyleBonuses.update(p);darkspawn.black.equipment.LegendaryArmor.update(p);darkspawn.black.inventory.ArmorLoadouts.sync(p);p.inventoryMenu.broadcastFullState();
+        darkspawn.black.equipment.ArmorStyleBonuses.update(p);darkspawn.black.equipment.LegendaryArmor.update(p);p.inventoryMenu.broadcastFullState();
     }
 }

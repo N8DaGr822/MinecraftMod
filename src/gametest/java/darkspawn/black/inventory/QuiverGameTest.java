@@ -141,12 +141,11 @@ public final class QuiverGameTest {
             h.assertTrue(count(q)==2&&arrows(p).size()==1,"Full inventory does not require spilling ammunition");
         }finally{arrows(p).forEach(net.minecraft.world.entity.Entity::discard);remove(p);}h.succeed();
     }
-    @GameTest public void profilesSortingExpandedSlotsAndDeathPreserveQuiver(GameTestHelper h){
+    @GameTest public void profilesAndDeathPreserveQuiver(GameTestHelper h){
         var p=player(h);
         try{
-            InventoryExpansion.setTier(p.getInventory(),1);var q=quiver(tipped(6));p.getInventory().setItem(InventoryExpansion.FIRST_EXTRA_SLOT,q);
-            var bow=new ItemStack(Items.BOW);p.getInventory().setItem(0,bow);h.assertTrue(p.getProjectile(bow).is(Items.TIPPED_ARROW),"Expanded inventory quiver can feed bow");
-            InventorySorter.sort(p,p.inventoryMenu.getStateId());
+            var q=quiver(tipped(6));p.getInventory().setItem(35,q);
+            var bow=new ItemStack(Items.BOW);p.getInventory().setItem(0,bow);h.assertTrue(p.getProjectile(bow).is(Items.TIPPED_ARROW),"Main inventory quiver can feed bow");
             var profile=OneBlockItems.capture(p);var ops=p.registryAccess().createSerializationContext(com.mojang.serialization.JsonOps.INSTANCE);
             var saved=OneBlockItems.CODEC.encodeStart(ops,profile).getOrThrow();OneBlockItems.EMPTY.apply(p);
             h.assertTrue(p.getProjectile(new ItemStack(Items.BOW)).isEmpty(),"Empty dimension profile has no access to outside quiver");

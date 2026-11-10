@@ -52,7 +52,7 @@ public final class QuiverItem extends BundleItem {
     }
     private static Ammo find(Player player,ItemStack weapon){
         if(!(weapon.getItem() instanceof BowItem bow))return null;
-        // Native Priority: Held and loose ammunition always wins, including expanded inventory slots.
+        // Native Priority: Held and loose ammunition always wins over quiver contents.
         if(!ProjectileWeaponItem.getHeldProjectile(player,bow.getSupportedHeldProjectiles()).isEmpty())return null;
         var supported=bow.getAllSupportedProjectiles();var inventory=player.getInventory();
         for(int slot=0;slot<inventory.getContainerSize();slot++)if(supported.test(inventory.getItem(slot)))return null;

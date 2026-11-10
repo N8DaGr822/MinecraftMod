@@ -260,4 +260,12 @@ public final class MountCareGameTest {
         }finally{registry.remove(entry.getKey());mount.discard();cleanup(owner);}
         helper.succeed();
     }
+    @GameTest public void genericCareMenuRejectsUniqueCompanions(GameTestHelper helper){
+        var p=player(helper);var m=Mounts.THALASSAR.create(p.level(),EntitySpawnReason.COMMAND);
+        try{
+            m.bond(p);m.setPos(p.position());p.level().addFreshEntity(m);
+            var menu=new MountMenu(1,p.getInventory(),m);
+            helper.assertTrue(!menu.stillValid(p)&&!menu.clickMenuButton(p,MountMenu.FOLLOW),"Generic care menu rejects unique companions even if constructed directly");
+        }finally{p.closeContainer();m.discard();cleanup(p);}helper.succeed();
+    }
 }

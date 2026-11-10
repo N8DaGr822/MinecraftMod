@@ -1,6 +1,5 @@
 package darkspawn.black.storage;
 
-import darkspawn.black.inventory.InventoryExpansion;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -167,13 +166,14 @@ public final class StorageMenu extends AbstractContainerMenu {
 	public void action(Player player, int action, String search) {
 		if (chest == null || !stillValid(player) || !getCarried().isEmpty()) { return; }
 		if (action == DEPOSIT) {
-			for (int slot : InventoryExpansion.sortableSlots(player.getInventory())) {
+			// Deposit Scope: Main inventory rows only; the hotbar and equipment stay put.
+			for (int slot = Inventory.SELECTION_SIZE; slot < Inventory.INVENTORY_SIZE; slot++) {
 				ItemStack stack = player.getInventory().getItem(slot);
 				stack.shrink(chest.insert(stack, false));
 			}
 			player.getInventory().setChanged();
 		} else if (action == ORDER && !isBank()) {
-			darkspawn.black.inventory.InventorySorter.sortContainer(chest);
+			ContainerSorter.sortContainer(chest);
 		} else if (isBank()) {
 			switch (action) {
 				case PREVIOUS -> data.set(1, Math.max(0, page() - 1));

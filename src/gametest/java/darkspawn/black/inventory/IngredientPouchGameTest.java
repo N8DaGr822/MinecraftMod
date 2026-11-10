@@ -112,7 +112,7 @@ public final class IngredientPouchGameTest {
 	}
 
 	@GameTest
-	public void sortingFavoritesAndProfileSerializationKeepContents(GameTestHelper h) {
+	public void profileSerializationKeepsContents(GameTestHelper h) {
 		var p = player(h);
 		try {
 			var pouch = new ItemStack(IngredientPouchItem.ITEM);
@@ -121,9 +121,6 @@ public final class IngredientPouchGameTest {
 			pouch.set(DataComponents.BUNDLE_CONTENTS, contents.toImmutable());
 			p.getInventory().setItem(9, pouch);
 			p.getInventory().setItem(10, new ItemStack(Items.APPLE));
-			Accessories.state(p).favorites = 1;
-			InventorySorter.sort(p, p.inventoryMenu.getStateId());
-			h.assertTrue(ItemStack.matches(pouch, p.getInventory().getItem(9)), "Favorite pouch remains in place with contents");
 			var ops = p.registryAccess().createSerializationContext(com.mojang.serialization.JsonOps.INSTANCE);
 			var profile = OneBlockItems.capture(p);
 			var saved = OneBlockItems.CODEC.encodeStart(ops, profile).getOrThrow();
@@ -144,10 +141,6 @@ public final class IngredientPouchGameTest {
 			OneBlockItems.EMPTY.apply(p);
 			restored.ascensionOther.apply(p);
 			h.assertTrue(ItemStack.matches(pouch, p.getInventory().getItem(9)), "Ascension inactive profile preserves pouch independently");
-			Accessories.state(p).favorites = 0;
-			InventorySorter.sort(p, p.inventoryMenu.getStateId());
-			h.assertTrue(java.util.Arrays.stream(InventoryExpansion.sortableSlots(p.getInventory()))
-				.filter(i -> ItemStack.matches(pouch, p.getInventory().getItem(i))).count() == 1, "Sorting preserves one filled pouch");
 		} finally { remove(p); }
 		h.succeed();
 	}

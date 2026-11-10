@@ -1,55 +1,22 @@
-package darkspawn.black.inventory;
+package darkspawn.black.storage;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-public final class InventorySorter {
-	private InventorySorter() {
-	}
-
-	public static void sort(ServerPlayer player, int expectedStateId) {
-		// Inventory Safety: Only sort the player's own inventory on the server thread.
-		if (!player.isAlive() || player.isSpectator()
-				|| player.containerMenu != player.inventoryMenu
-				|| !player.inventoryMenu.getCarried().isEmpty()) {
-			return;
-		}
-
-		// State Sync: Reject requests based on an inventory the server has already changed.
-		if (player.inventoryMenu.getStateId() != expectedStateId) {
-			player.inventoryMenu.broadcastFullState();
-			player.sendOverlayMessage(Component.translatable("message.darkspawn.inventory_changed"));
-			return;
-		}
-
-		boolean changed = sortSlots(player.getInventory(), java.util.Arrays.stream(InventoryExpansion.sortableSlots(player.getInventory())).filter(slot -> !Accessories.state(player).favorite(slot)).toArray());
-		player.inventoryMenu.broadcastChanges();
-		player.sendOverlayMessage(Component.translatable(changed
-				? "message.darkspawn.inventory_sorted"
-				: "message.darkspawn.inventory_already_sorted"));
-	}
-
-	static boolean sortMainInventory(Container inventory) {
-		if (inventory.getContainerSize() < Inventory.INVENTORY_SIZE) {
-			throw new IllegalArgumentException("Sorting requires a full player inventory.");
-		}
-
-		return sortSlots(inventory, InventoryExpansion.sortableSlots(inventory));
+public final class ContainerSorter {
+	private ContainerSorter() {
 	}
 
 	public static boolean sortContainer(Container inventory) {
 		return sortSlots(inventory, java.util.stream.IntStream.range(0, inventory.getContainerSize()).toArray());
 	}
 
-	private static boolean sortSlots(Container inventory, int[] slots) {
+	static boolean sortSlots(Container inventory, int[] slots) {
 		List<ItemStack> sorted = new ArrayList<>(slots.length);
 		// Stack Safety: Work on copies and compare every component before combining stacks.
 		for (int slot : slots) {
@@ -96,7 +63,7 @@ public final class InventorySorter {
 			return false;
 		}
 
-		// Protected Slots: Only write the slots selected by the player-inventory or container caller.
+		// Protected Slots: Only write the slots selected by the caller.
 		for (int index = 0; index < slots.length; index++) {
 			inventory.setItem(slots[index], index < sorted.size() ? sorted.get(index) : ItemStack.EMPTY);
 		}

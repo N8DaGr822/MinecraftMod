@@ -66,8 +66,6 @@ public final class AircraftGameTest {
             h.assertTrue(craft.isOwnedBy(owner) && new java.util.HashSet<>(craft.blocks()).equals(new java.util.HashSet<>(build())),"Exact build and owner captured");
             for (var block:build()) h.assertTrue(h.getLevel().getBlockState(pos.offset(block.pos())).isAir(),"Captured blocks removed once");
             h.assertTrue(!craft.care.requestBreeding(owner),"Aircraft cannot breed");
-            darkspawn.black.inventory.InventoryHub.request(owner,new darkspawn.black.inventory.HubRequestPayload(3,craft.getId(),owner.inventoryMenu.getStateId()));
-            h.assertTrue(owner.containerMenu==owner.inventoryMenu,"Inventory hub cannot expose aircraft cargo");
             var menu=new MountMenu(1,owner.getInventory(),craft);
             h.assertTrue(!menu.stillValid(owner) && !menu.clickMenuButton(owner,MountMenu.FOLLOW),"Generic care rejects aircraft even if constructed directly");
             var capsule=new ItemStack(MountCompanions.CAPSULE); var id=craft.getUUID();

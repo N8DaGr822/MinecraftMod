@@ -31,7 +31,7 @@ public final class OneBlockControls {
 					.bounds(6,128,62,20).tooltip(Tooltip.create(Component.literal("Team islands, objectives, rewards and automation"))).build();
 				Screens.getWidgets(screen).add(guide);
 			}
-			// Inventory UI: The narrow left margin avoids covering slots, including the expanded inventory.
+			// Inventory UI: The narrow left margin avoids covering inventory slots.
 			var travel = darkspawn.black.client.UiTheme.button(Component.empty(), button -> ClientPlayNetworking.send(new OneBlockActionPayload(0)))
 				.bounds(6, 6, 62, 20).build();
 			var advance = darkspawn.black.client.UiTheme.button(Component.translatable("button.darkspawn.oneblock_advance"), button -> ClientPlayNetworking.send(new OneBlockActionPayload(1)))

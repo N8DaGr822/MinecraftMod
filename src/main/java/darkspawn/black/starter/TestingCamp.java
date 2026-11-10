@@ -76,7 +76,7 @@ public final class TestingCamp extends Item {
 			"TESTING CAMP\n\nTake the dragon kit, cookbook and scrolls. Switch to Survival to test normal mechanics. Follow the signs clockwise around the camp. Place another camp in clear ground to restock.",
 			"COOKING\n\nUse scrolls to learn recipes. Open the cookbook, then combine the listed ingredients at the Cooking Station. Pantry barrels contain all cooking ingredients; meal barrels provide ready-made samples.",
 			"FARMING\n\nAll nine crops are planted. Use seeds and bone meal from the Farming barrel. The central lamp lights the plot at night. Take a bed from Base supplies and place it in the Overworld to set your spawn.",
-			"ARMOR\n\nCompare complete iron/diamond styles, expedition gear and legendary sets. Try inventory loadouts. Combat tools include a spear, axe, trident, mace and crossbow for testing each weapon bonus.",
+			"ARMOR\n\nCompare complete iron/diamond styles, expedition gear and legendary sets. Combat tools include a spear, axe, trident, mace and crossbow for testing each weapon bonus.",
 			"WORKSHOP\n\nFurnace, smoker and blast furnace have coal. The brewing stand has blaze powder; fill bottles at the water cauldron. Use XP bottles and lapis at the enchanting table. Keep the bookshelf gaps clear.",
 			"BASE TESTS\n\nBonfire starts OFF. Look at it for level, range and upgrade help. Empty-hand use toggles; sneak-use upgrades. The barrel beside it has 8 iron, 4 gold and 2 diamonds. Carry these in Survival to test payment. Creative upgrades are free.",
 			"SHELTER\n\nThe northern stone workshop blocks rain. Warm up beside its guarded campfire; the bonfire ward itself provides no heat. Cold biomes may still need expedition armor. Keep the ward OFF for ordinary hostile tests.",
@@ -98,7 +98,6 @@ public final class TestingCamp extends Item {
             "WOLF HUNT\n\nAfter world dragon victory, visit an open taiga in Survival. /wolfhunt solo: 3 wolves. For 2–4 players: /wolfhunt form, friends /wolfhunt join <leader>, then /wolfhunt start: 6 wolves. Defeat all in 5 minutes; stay alive within 48 blocks. Win: /wolfhunt claim for 4 emeralds each.",
             "REGIONAL EVENTS\n\nAfter dragon completion, eligible habitats occasionally grant a 30-second boon with a local sound/particle cue. Initial wait: 20 minutes. Cooldowns survive reconnect. Server properties control event timing, ambience and naval encounter caps.",
             "MOUNT ROSTER\n\nUse /summon darkspawn:<id> in open space. griffin, woolly_rhino, flying_squirrel, poptart_cat, dragon_mount, winged_unicorn, riding_golem, sasquatch, cerberus, leopard, giant_scorpion, crocodile, seahorse, giant_mole. Seahorse needs water.",
-			"ACCESSORIES AND HUB\n\nEquip up to three accessories in the inventory slots below your portrait. Hub opens search, comparisons, favorites, character, companions and nearby storage. N toggles glasses; rebind in Controls. Favorites protect Sort and hub deposits.",
 			"INGREDIENT POUCH\n\nFind one in barrel 09. Brewing reagents only, with one bundle of capacity. Left-click to insert; right-click with an empty cursor to remove. Use in hand drops contents. No nested bags, bottles or finished potions. Ingredients must be removed before brewing.",
             "QUIVER\n\nFind a quiver and bow in barrel 10; arrow samples in 11. One bundle capacity, all arrow types. Bows use loose arrows first, then the selected quiver stack. Scroll to select. Infinity saves ordinary arrows only. Crossbows need loose ammunition.",
             "EXPLORER'S PACK\n\nFind a pack and exploration tools in barrel 09. Hold and use the pack to open six slots for maps, compasses, clocks, spyglasses and brushes. Move tools back to your inventory to use them. The pack stays locked while open. No nested storage.",
@@ -168,8 +167,7 @@ public final class TestingCamp extends Item {
 		var utilities = stacks(16, Bonfires.ITEM, Items.STONE_BRICKS, Items.WATER_BUCKET, Items.CAMPFIRE, Items.TORCH,
 			Items.CHEST, Items.OBSIDIAN);
 		for (String id : List.of("copper_block", "white_bed", "anvil", "smithing_table")) add(utilities, BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.withDefaultNamespace(id)), 8);
-		for (String id : List.of("dump_chest", "sorting_chest", "sorting_tube", "bank_chest", "leather_inventory_upgrade",
-			"iron_inventory_upgrade", "diamond_inventory_upgrade", "quarantine_gate", "containment_key")) add(utilities, BuiltInRegistries.ITEM.getValue(Darkspawn.id(id)), 16);
+		for (String id : List.of("dump_chest", "sorting_chest", "sorting_tube", "bank_chest", "quarantine_gate", "containment_key")) add(utilities, BuiltInRegistries.ITEM.getValue(Darkspawn.id(id)), 16);
 		add(utilities, darkspawn.black.inventory.IngredientPouchItem.ITEM, 1);
 		add(utilities, darkspawn.black.inventory.ExplorerPackItem.ITEM, 1);
 		for (var item : List.of(Items.MAP, Items.COMPASS, Items.CLOCK, Items.SPYGLASS, Items.BRUSH)) add(utilities, item, 1);
@@ -209,7 +207,6 @@ public final class TestingCamp extends Item {
         result.add(new Supply("18 Charts archaeology rematches",stacks(16,darkspawn.black.worldgen.DiscoveryCharts.ITEM,
             darkspawn.black.boss.AwakenedRematches.SEAL,Items.BRUSH,Items.ECHO_SHARD,Items.AMETHYST_SHARD,Items.DIAMOND,Items.BREAD,
             darkspawn.black.worldgen.ExplorationFinds.FOSSIL_FRAGMENT,Items.BONE_BLOCK,Items.SMOOTH_STONE_SLAB)));
-        result.add(new Supply("19 Accessories and utility",stacks(1,darkspawn.black.inventory.Accessories.ITEMS.toArray(Item[]::new))));
         var fish=new ArrayList<ItemStack>();darkspawn.black.cooking.RegionalFishing.RAW.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.COOKED.forEach(item->add(fish,item,16));darkspawn.black.cooking.RegionalFishing.BUCKETS.forEach(item->add(fish,item,1));add(fish,Items.FISHING_ROD,1);
         fish.addAll(stacks(4,darkspawn.black.worldgen.ExplorationFinds.OCEAN_NOTE,Items.COMPASS,Items.INK_SAC,Items.PRISMARINE_SHARD,Items.NAUTILUS_SHELL,Items.DRAGON_BREATH));result.add(new Supply("20 Regional fishing",fish));
         result.add(new Supply("21 Animal husbandry",stacks(16,Items.PIG_SPAWN_EGG,Items.CHICKEN_SPAWN_EGG,Items.GOAT_SPAWN_EGG,Items.MOOSHROOM_SPAWN_EGG,Items.CARROT,Items.PUMPKIN_SEEDS,Items.GLASS_BOTTLE,Items.BOWL,Cooking.WILD_HERBS,darkspawn.black.cooking.AnimalUtility.TRUFFLE,darkspawn.black.cooking.AnimalUtility.GOAT_CHEESE,darkspawn.black.cooking.AnimalUtility.GOAT_MILK,darkspawn.black.cooking.AnimalUtility.FUNGAL_CREAM,darkspawn.black.cooking.AnimalUtility.RICH_EGG,darkspawn.black.cooking.AnimalUtility.HERBED_EGG)));

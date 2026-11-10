@@ -1,11 +1,8 @@
 package darkspawn.black.oneblock;
 
 import com.mojang.authlib.GameProfile;
-import darkspawn.black.inventory.ArmorLoadouts;
-import darkspawn.black.inventory.InventoryExpansion;
 import darkspawn.black.health.BossHearts;
 import io.netty.channel.embedded.EmbeddedChannel;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -51,47 +48,28 @@ public final class OneBlockGameTest {
 		player.connection.handleAcceptPlayerLoad(new net.minecraft.network.protocol.game.ServerboundPlayerLoadedPacket()); player.hasChangedDimension(); player.setOnGround(true);
 	}
 	private static void remove(ServerPlayer player) { player.level().getServer().getPlayerList().remove(player); player.discard(); }
-	@GameTest public void stagedTrashCannotCrossInventoryProfiles(GameTestHelper helper) {
-		var player = player(helper);
-		try {
-			var trash = player.inventoryMenu.getSlot(InventoryExpansion.TRASH_MENU_SLOT);
-			trash.set(new ItemStack(Items.DIAMOND, 2));
-			helper.assertTrue(!OneBlock.travel(player) && !OneBlock.island(player.level()) && trash.getItem().getCount() == 2, "Staged trash blocks travel without consuming it");
-			player.inventoryMenu.removed(player);
-			travel(helper, player);
-			helper.assertTrue(player.getInventory().countItem(Items.DIAMOND) == 0, "Returned trash stays in its original profile");
-			travel(helper, player);
-			helper.assertTrue(player.getInventory().countItem(Items.DIAMOND) == 2, "Returning restores exactly the original items");
-		} finally { remove(player); }
-		helper.succeed();
-	}
 	private static void travel(GameTestHelper helper, ServerPlayer player) { ready(player); helper.assertTrue(OneBlock.travel(player), "Safe OneBlock travel must succeed: alive=" + player.isAlive() + ", mode=" + player.gameMode() + ", ground=" + player.onGround() + ", loading=" + player.isChangingDimension() + ", loaded=" + player.connection.hasClientLoaded() + ", hurt=" + OneBlock.state(player).hurtTicks + ", using=" + player.isUsingItem() + ", menu=" + (player.containerMenu == player.inventoryMenu)); ready(player); }
 
-	@GameTest public void profilesPreserveFullInventoriesEquipmentAndSharedUpgrades(GameTestHelper helper) {
+	@GameTest public void profilesPreserveFullInventoriesEquipmentAndSharedProgress(GameTestHelper helper) {
 		var player = player(helper); var other = player(helper);
 		try {
-			InventoryExpansion.setTier(player.getInventory(), 3); ArmorLoadouts.state(player).unlocked = 3;
 			darkspawn.black.journal.Journal.progress(player).discover("entity/leopard");
 			for (int slot = 0; slot < 36; slot++) player.getInventory().setItem(slot, new ItemStack(Items.COBBLESTONE, 64));
-			for (int slot = 43; slot < 70; slot++) player.getInventory().setItem(slot, new ItemStack(Items.IRON_INGOT, 64));
 			var helmet = new ItemStack(Items.DIAMOND_HELMET); helmet.setDamageValue(17); helmet.set(DataComponents.CUSTOM_NAME, Component.literal("Outside heirloom"));
 			player.setItemSlot(EquipmentSlot.HEAD, helmet); player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
 			player.getEnderChestInventory().setItem(26, new ItemStack(Items.DIAMOND, 19));
-			var stored = new ArrayList<ItemStack>(); for (int i = 0; i < 12; i++) stored.add(ItemStack.EMPTY);
-			stored.set(4, new ItemStack(Items.NETHERITE_HELMET)); ArmorLoadouts.state(player).restoreItems(stored, 0);
 			BossHearts.progress(player).restore(List.of("ancient_tree_spirit")); BossHearts.apply(player);
 			player.experienceLevel = 12; player.getFoodData().setFoodLevel(14);
 			var before = OneBlockItems.capture(player); var hearts = BossHearts.progress(player).savedBosses();
 			travel(helper, player);
 			helper.assertTrue(OneBlock.island(player.level()) && player.getInventory().isEmpty() && player.getEnderChestInventory().isEmpty(), "First arrival has no outside possessions");
-			helper.assertTrue(ArmorLoadouts.state(player).stored(1, 0).isEmpty(), "Inactive loadouts are isolated too");
-			helper.assertTrue(InventoryExpansion.tier(player.getInventory()) == 3 && ArmorLoadouts.state(player).unlocked == 3 && player.experienceLevel == 12 && player.getFoodData().getFoodLevel() == 14 && BossHearts.progress(player).savedBosses().equals(hearts), "Character upgrades, XP, and hunger remain shared");
+			helper.assertTrue(player.experienceLevel == 12 && player.getFoodData().getFoodLevel() == 14 && BossHearts.progress(player).savedBosses().equals(hearts), "Boss hearts, XP, and hunger remain shared");
 			player.getInventory().setItem(0, new ItemStack(Items.OAK_LOG, 7)); player.getEnderChestInventory().setItem(0, new ItemStack(Items.DIRT, 9));
 			travel(helper, other); helper.assertTrue(other.getInventory().isEmpty(), "A second arrival has an independent item profile");
 			travel(helper, player);
 			var restored = OneBlockItems.capture(player);
 			for (int i = 0; i < before.inventory().size(); i++) helper.assertTrue(ItemStack.matches(before.inventory().get(i), restored.inventory().get(i)), "Outside slot " + i + " is restored exactly");
-			helper.assertTrue(player.getEnderChestInventory().getItem(26).getCount() == 19 && ArmorLoadouts.state(player).stored(1, 0).is(Items.NETHERITE_HELMET), "Ender Chest and inactive armor return");
+			helper.assertTrue(player.getEnderChestInventory().getItem(26).getCount() == 19 && player.getItemBySlot(EquipmentSlot.HEAD).getDamageValue() == 17, "Ender Chest and worn armor return");
 			travel(helper, player);
 			helper.assertTrue(player.getInventory().getItem(0).is(Items.OAK_LOG) && player.getInventory().getItem(0).getCount() == 7 && player.getEnderChestInventory().getItem(0).getCount() == 9, "OneBlock possessions persist between visits without importing outside items");
 			helper.assertTrue(darkspawn.black.journal.Journal.progress(player).knows("entity/leopard") && !darkspawn.black.journal.Journal.progress(other).knows("entity/leopard"), "Journal knowledge crosses item profiles but remains personal");

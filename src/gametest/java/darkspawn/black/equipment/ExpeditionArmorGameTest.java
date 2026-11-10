@@ -5,8 +5,6 @@ import darkspawn.black.Darkspawn;
 import darkspawn.black.boss.BossEmpowerment;
 import darkspawn.black.boss.EquipmentPowers;
 import darkspawn.black.cooking.MealEffects;
-import darkspawn.black.inventory.ArmorLoadoutPayload;
-import darkspawn.black.inventory.ArmorLoadouts;
 import io.netty.channel.embedded.EmbeddedChannel;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
@@ -74,8 +72,8 @@ public final class ExpeditionArmorGameTest {
 			MealEffects.apply(player, MealEffects.WARMING, 600);
 			helper.assertTrue(Temperature.protectedClimate(player, -170) == -51, "Existing warming food helps without replacing clothing");
 			player.removeAllEffects(); Temperature.state(player).restore(-70, 10, 0);
-			ArmorLoadouts.state(player).unlocked = 2; swap(player, 1);
-			helper.assertTrue(Temperature.state(player).exposure == -70 && Temperature.protectedClimate(player, -110) == -110, "Loadout swap preserves exposure and stored protection is inactive");
+			takeOffArmor(player);
+			helper.assertTrue(Temperature.state(player).exposure == -70 && Temperature.protectedClimate(player, -110) == -110, "Unequipping preserves exposure and removed protection is inactive");
 			for (var piece : ExpeditionArmor.DESERT_WANDERER.entrySet()) player.setItemSlot(piece.getKey().getSlot(), new ItemStack(piece.getValue()));
 			helper.assertTrue(Temperature.protectedClimate(player, 110) == 30, "Desert suit supports sustained dry heat");
 			player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
@@ -157,45 +155,49 @@ public final class ExpeditionArmorGameTest {
 			player.setItemSlot(type.getSlot(), ArmorStyles.apply(new ItemStack(item), style));
 		}
 	}
-	private static void swap(ServerPlayer player, int target) {
-		player.setOnGround(true);
-		player.inventoryMenu.broadcastFullState();
-		ArmorLoadouts.request(player, new ArmorLoadoutPayload(target, ArmorLoadouts.state(player).revision, player.inventoryMenu.getStateId()));
-		for (int i = 0; i < ArmorLoadouts.SWITCH_TICKS; i++) ArmorLoadouts.tick(player);
+	private static final ArmorType[] ARMOR_TYPES = { ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS };
+	// Unequip: Take off worn armor so cases can prove that only equipped pieces grant bonuses.
+	private static java.util.List<ItemStack> takeOffArmor(ServerPlayer player) {
+		var removed = new java.util.ArrayList<ItemStack>();
+		for (ArmorType type : ARMOR_TYPES) { removed.add(player.getItemBySlot(type.getSlot())); player.setItemSlot(type.getSlot(), ItemStack.EMPTY); }
+		ArmorStyleBonuses.update(player); LegendaryArmor.update(player);
+		return removed;
+	}
+	private static void putOnArmor(ServerPlayer player, java.util.List<ItemStack> armor) {
+		for (int i = 0; i < ARMOR_TYPES.length; i++) player.setItemSlot(ARMOR_TYPES[i].getSlot(), armor.get(i));
+		ArmorStyleBonuses.update(player); LegendaryArmor.update(player);
 	}
 
 	@GameTest public void mountainSuitAndBootsOnlyProtectWhileEquipped(GameTestHelper helper) {
 		var player = player(helper);
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			helper.assertTrue(player.canFreeze(), "Baseline player can freeze");
 			for (var entry : ExpeditionArmor.MOUNTAINEERING.entrySet()) player.setItemSlot(entry.getKey().getSlot(), new ItemStack(entry.getValue()));
 			helper.assertTrue(!player.canFreeze() && PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Full suit prevents freezing and boots walk on powder snow");
 			player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
 			helper.assertTrue(player.canFreeze() && PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Incomplete suit loses immunity but retains boot function");
 			player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ExpeditionArmor.MOUNTAINEERING.get(ArmorType.CHESTPLATE)));
-			swap(player, 1);
-			helper.assertTrue(ArmorLoadouts.state(player).active == 1 && player.canFreeze() && !PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Stored suit grants no snow or freezing protection");
-			swap(player, 0);
-			helper.assertTrue(!player.canFreeze(), "Switching back restores protection");
+			var suit = takeOffArmor(player);
+			helper.assertTrue(player.canFreeze() && !PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Removed suit grants no snow or freezing protection");
+			putOnArmor(player, suit);
+			helper.assertTrue(!player.canFreeze(), "Wearing the suit again restores protection");
 		} finally { remove(player); }
 		helper.succeed();
 	}
 
-	@GameTest public void headlampDoesNotOverwritePotionsOrMealsAndStopsOnSwap(GameTestHelper helper) {
+	@GameTest public void headlampDoesNotOverwritePotionsOrMealsAndStopsWhenRemoved(GameTestHelper helper) {
 		var player = player(helper);
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 600));
 			MealEffects.apply(player, MealEffects.HERBAL, 1200);
 			player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ExpeditionArmor.SPELUNKING.get(ArmorType.HELMET)));
 			helper.assertTrue(player.getEffect(MobEffects.NIGHT_VISION).isInfiniteDuration(), "Lamp avoids the short-duration night vision flicker");
 			helper.assertTrue(player.getActiveEffectsMap().get(MobEffects.NIGHT_VISION).getDuration() == 600 && player.getEffect(MealEffects.HERBAL).getDuration() == 1200, "Original potion and meal timers remain unchanged");
-			swap(player, 1);
+			var helmet = takeOffArmor(player);
 			helper.assertTrue(player.getEffect(MobEffects.NIGHT_VISION).getDuration() == 1200, "Removing helmet restores longest existing vision source");
 			player.removeAllEffects();
-			helper.assertTrue(!player.hasEffect(MobEffects.NIGHT_VISION), "Stored headlamp grants no vision");
-			swap(player, 0);
+			helper.assertTrue(!player.hasEffect(MobEffects.NIGHT_VISION), "Removed headlamp grants no vision");
+			putOnArmor(player, helmet);
 			helper.assertTrue(player.hasEffect(MobEffects.NIGHT_VISION) && player.getActiveEffectsMap().isEmpty(), "Equipped lamp works without creating persistent potion effects");
 		} finally { remove(player); }
 		helper.succeed();
@@ -218,10 +220,9 @@ public final class ExpeditionArmorGameTest {
 		helper.succeed();
 	}
 
-	@GameTest public void divingHelmetBonusesStopWhenStored(GameTestHelper helper) {
+	@GameTest public void divingHelmetBonusesStopWhenRemoved(GameTestHelper helper) {
 		var player = player(helper);
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			double mining = player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED);
 			player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ExpeditionArmor.DIVER.get(ArmorType.HELMET)));
 			player.doTick();
@@ -232,12 +233,12 @@ public final class ExpeditionArmorGameTest {
 			player.doTick(); player.doTick();
 			helper.assertTrue(player.isUnderWater() && player.hasEffect(MobEffects.NIGHT_VISION), "Submerged helmet supplies vision");
 			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 600));
-			swap(player, 1);
+			takeOffArmor(player);
 			player.doTick();
-			helper.assertTrue(player.getAttributeValue(Attributes.OXYGEN_BONUS) == 0 && Math.abs(player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED) - mining) < .0001, "Stored suit contributes no attributes");
+			helper.assertTrue(player.getAttributeValue(Attributes.OXYGEN_BONUS) == 0 && Math.abs(player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED) - mining) < .0001, "Removed suit contributes no attributes");
 			helper.assertTrue(!player.getEffect(MobEffects.NIGHT_VISION).isInfiniteDuration(), "Removing helmet preserves the original timed potion");
 			player.removeAllEffects();
-			helper.assertTrue(!player.hasEffect(MobEffects.NIGHT_VISION), "Stored diving helmet supplies no vision");
+			helper.assertTrue(!player.hasEffect(MobEffects.NIGHT_VISION), "Removed diving helmet supplies no vision");
 		} finally { remove(player); }
 		helper.succeed();
 	}
@@ -245,7 +246,6 @@ public final class ExpeditionArmorGameTest {
 	@GameTest public void ashwalkerReducesFireButNotOrdinaryDamageOrLavaToZero(GameTestHelper helper) {
 		var player = player(helper);
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			for (var entry : ExpeditionArmor.ASHWALKER.entrySet()) player.setItemSlot(entry.getKey().getSlot(), new ItemStack(entry.getValue()));
 			player.doTick();
 			// Damage Isolation: Remove defense attributes so this fixture measures only fire protection.
@@ -271,10 +271,9 @@ public final class ExpeditionArmorGameTest {
 		helper.succeed();
 	}
 
-	@GameTest public void matchingStyleBonusesStackOnceAndStopWithPartialOrStoredSets(GameTestHelper helper) {
+	@GameTest public void matchingStyleBonusesStackOnceAndStopWithPartialOrRemovedSets(GameTestHelper helper) {
 		var player = player(helper);
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			styleArmor(player, "war_chief"); player.doTick();
 			MealEffects.apply(player, MealEffects.SAVORY, 600);
 			ArmorStyleBonuses.update(player); ArmorStyleBonuses.update(player);
@@ -284,8 +283,8 @@ public final class ExpeditionArmorGameTest {
 			helper.assertTrue(player.getAttributeValue(Attributes.ATTACK_DAMAGE) == 4, "Mixed styles remove only the set bonus");
 			styleArmor(player, "berserker"); player.doTick(); ArmorStyleBonuses.update(player);
 			helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_SPEED) - 4 * 1.10) < .001, "Berserker raises native recharge rate");
-			swap(player, 1); ArmorStyleBonuses.update(player);
-			helper.assertTrue(player.getAttributeValue(Attributes.ATTACK_SPEED) == 4, "Stored armor grants no attack speed");
+			takeOffArmor(player); ArmorStyleBonuses.update(player);
+			helper.assertTrue(player.getAttributeValue(Attributes.ATTACK_SPEED) == 4, "Removed armor grants no attack speed");
 			styleArmor(player, "knight"); player.doTick(); ArmorStyleBonuses.update(player);
 			helper.assertTrue(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS) == 6, "Mixed iron/diamond Knight adds two toughness to diamond chest and boots");
 			player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY); ArmorStyleBonuses.update(player);
@@ -297,7 +296,6 @@ public final class ExpeditionArmorGameTest {
 	@GameTest public void utilityStylesRespectHealthCapsAndRemoveOnlyOwnedBonuses(GameTestHelper helper) {
 		var player = player(helper);
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			var speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
 			var other = Darkspawn.id("test_external_speed");
 			speed.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(other, .02, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE));
@@ -484,15 +482,11 @@ public final class ExpeditionArmorGameTest {
 		helper.succeed();
 	}
 
-	@GameTest public void stylesSurviveLoadoutsAndDoNotReplaceNetheriteOrExpeditionEquipment(GameTestHelper helper) {
+	@GameTest public void stylesDoNotReplaceNetheriteOrExpeditionEquipment(GameTestHelper helper) {
 		var player = player(helper);
 		try {
 			var level = helper.getLevel();
-			ArmorLoadouts.state(player).unlocked = 2;
 			var styled = ArmorStyles.apply(new ItemStack(Items.DIAMOND_HELMET), "spartan");
-			player.setItemSlot(EquipmentSlot.HEAD, styled);
-			swap(player, 1); swap(player, 0);
-			helper.assertTrue(ItemStack.isSameItemSameComponents(styled, player.getItemBySlot(EquipmentSlot.HEAD)), "Loadout round trip preserves the style component");
 			var upgrade = new SmithingRecipeInput(new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), styled, new ItemStack(Items.NETHERITE_INGOT));
 			var netherite = level.recipeAccess().getRecipeFor(RecipeType.SMITHING, upgrade, level).orElseThrow().value().assemble(upgrade);
 			helper.assertTrue(netherite.is(Items.NETHERITE_HELMET) && !ArmorStyles.supports(netherite), "Netherite uses its own rendering and stats");
@@ -567,12 +561,11 @@ public final class ExpeditionArmorGameTest {
 		var player = player(helper);
 		var target = (net.minecraft.world.entity.Mob) helper.spawn(BuiltInRegistries.ENTITY_TYPE.getValue(net.minecraft.resources.Identifier.withDefaultNamespace("iron_golem")), new BlockPos(3, 2, 2));
 		try {
-			ArmorLoadouts.state(player).unlocked = 2;
 			legendaryArmor(player, "titan"); player.doTick(); LegendaryArmor.update(player); LegendaryArmor.update(player);
 			helper.assertTrue(player.getMaxHealth() == 24 && player.getHealth() == 20, "Titan adds two hearts capacity without healing");
 			helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) - .8) < .001, "Titan adds forty points to native netherite resistance");
-			player.setHealth(24); swap(player, 1);
-			helper.assertTrue(player.getMaxHealth() == 20 && player.getHealth() == 20, "Storing Titan immediately removes bonus capacity");
+			player.setHealth(24); takeOffArmor(player);
+			helper.assertTrue(player.getMaxHealth() == 20 && player.getHealth() == 20, "Removing Titan immediately removes bonus capacity");
 			legendaryArmor(player, "voidwalker"); player.doTick(); LegendaryArmor.update(player);
 			helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.FALL_DAMAGE_MULTIPLIER) - .6) < .001, "Voidwalker reduces remaining fall damage forty percent");
 			var pearl = new net.minecraft.world.damagesource.DamageSource(helper.getLevel().registryAccess().getOrThrow(net.minecraft.world.damagesource.DamageTypes.ENDER_PEARL));

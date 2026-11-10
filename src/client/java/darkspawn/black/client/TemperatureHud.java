@@ -17,7 +17,7 @@ public final class TemperatureHud {
 			var state = Temperature.state(context.player());
 			state.restore(payload.exposure(), payload.wetSeconds(), 0); state.target = payload.target();
 		});
-		// Dedicated HUD: Keep climate warnings away from loadout and other action-bar messages.
+		// Dedicated HUD: Keep climate warnings away from other action-bar messages.
 		HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Darkspawn.id("temperature"), (graphics, delta) -> {
 			var client = Minecraft.getInstance(); var player = client.player;
 			if (player == null || player.isCreative() || player.isSpectator()) return;
