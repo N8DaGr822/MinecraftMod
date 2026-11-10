@@ -53,4 +53,6 @@ dependencies {
 	include module('fishing')
 	implementation module('husbandry')
 	include module('husbandry')
+	implementation module('culinary_brewing')
+	include module('culinary_brewing')
 }

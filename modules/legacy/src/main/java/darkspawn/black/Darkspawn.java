@@ -44,7 +44,6 @@ public class Darkspawn implements ModInitializer {
 		BossHearts.initialize();
 		Cooking.initialize();
 		darkspawn.black.cooking.Cuisine.initialize();
-        darkspawn.black.cooking.CulinaryBrewing.initialize();
 		darkspawn.black.cooking.Culinary.initialize();
 		darkspawn.black.cooking.VillageKitchen.initialize();
 		darkspawn.black.boss.EquipmentPowers.initialize();
