@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.BossBolt;
+
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.embedded.EmbeddedChannel;

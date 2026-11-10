@@ -1,6 +1,6 @@
 package darkspawn.black.ecosystem;
 
-import darkspawn.black.boss.BossBolt;
+import darkspawn.black.creaturekit.BossBolt;
 import darkspawn.black.boss.BossEntities;
 import darkspawn.black.boss.BossProfile;
 import java.util.EnumSet;
@@ -58,13 +58,24 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class RegionalMob extends Monster implements RangedAttackMob, darkspawn.black.boss.AnimatedCreature {
+public final class RegionalMob extends Monster implements RangedAttackMob, darkspawn.black.creaturekit.AnimatedCreature, darkspawn.black.creaturekit.CreatureAudio, darkspawn.black.creaturekit.BossBolt.Shooter {
+	@Override public int audioWarning() { return warning(); }
+	@Override public int renderWarning() { return warning(); }
+	@Override public boolean renderActive() { return active() > 0; }
+	@Override public boolean renderHiding() { return hiding(); }
+	@Override public float renderCrest(float partialTicks) {
+		return kind() == RegionalKind.VOID_SENTINEL ? (float) Math.toRadians(shieldAngle())
+			: kind() == RegionalKind.SHARDLING ? (tickCount + partialTicks) * .04F : 0;
+	}
+	@Override public int renderTint() { return warning() > 0 ? 0xFFFFD080 : active() > 0 ? 0xFF90DDFF : hiding() ? 0xFF707070 : 0xFFFFFFFF; }
+	@Override public boolean boltSpares(net.minecraft.world.entity.Entity target) { return target instanceof RegionalMob other && kind().region == other.kind().region; }
+	@Override public void onBoltHit(LivingEntity target) { onProjectileHit(target); }
 	private int audioPreviousWarning;
 	@Override public void baseTick() {
 		super.baseTick();
 		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
-			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
-			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+			int warning = darkspawn.black.creaturekit.CreatureAudio.warning(this);
+			if (!darkspawn.black.creaturekit.CreatureAudio.boss(this) && darkspawn.black.creaturekit.CreatureAudio.startsWarning(audioPreviousWarning, warning))
 				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
 			audioPreviousWarning = warning;
 		}
@@ -73,7 +84,7 @@ public final class RegionalMob extends Monster implements RangedAttackMob, darks
 	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
 	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
 	@Override public int getAmbientSoundInterval() { return 220; }
-	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+	@Override protected float getSoundVolume() { return darkspawn.black.creaturekit.CreatureAudio.boss(this) ? 1.2F : .45F; }
 
 	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
 	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }

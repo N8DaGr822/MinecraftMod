@@ -1,7 +1,7 @@
-package darkspawn.black.client.audio;
+package darkspawn.black.creaturekit.client;
 
-import darkspawn.black.audio.CreatureAudio;
-import darkspawn.black.audio.DarkspawnSounds;
+import darkspawn.black.core.DarkspawnCore;
+import darkspawn.black.creaturekit.CreatureAudio;
 import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
@@ -56,8 +57,9 @@ public final class EncounterMusic {
 				}
 			}
 		}
-		String next = boss == null ? null : "music." + (boss instanceof darkspawn.black.oneblock.AscensionGuardianEntity guardian
-            ? darkspawn.black.oneblock.AscensionGuardianEntity.musicTheme(guardian.chapter()) : BuiltInRegistries.ENTITY_TYPE.getKey(boss.getType()).getPath()) + "." + Math.clamp(CreatureAudio.phase(boss), 1, 3);
+		String next = boss instanceof CreatureAudio audio ? "music." + audio.musicTheme() + "." + Math.clamp(CreatureAudio.phase(boss), 1, 3) : null;
+		// Optional Scores: A boss whose mod ships no score leaves vanilla music alone.
+		if (next != null && sound(next) == null) next = null;
 		boolean changed = !java.util.Objects.equals(next, key);
 		// A resource reload or muted start can discard a channel. Retry only when audible.
 		boolean missing = key != null && client.options.getSoundSourceVolume(SoundSource.MUSIC) > 0
@@ -74,6 +76,7 @@ public final class EncounterMusic {
 			}
 		}
 	}
+	private static SoundEvent sound(String key) { return BuiltInRegistries.SOUND_EVENT.getValue(DarkspawnCore.id(key)); }
 	private static final class Score extends AbstractTickableSoundInstance {
 		private boolean fading;
 		private int fadeTicks;
@@ -82,7 +85,7 @@ public final class EncounterMusic {
 		private float envelope = .001F;
 		void finish() { stop(); }
 		Score(String key) {
-			super(DarkspawnSounds.get(key), SoundSource.MUSIC, RandomSource.create());
+			super(sound(key), SoundSource.MUSIC, RandomSource.create());
 			targetVolume = key.endsWith(".3") ? .56F : key.endsWith(".2") ? .46F : .36F;
 			looping = true; delay = 0; relative = true; attenuation = SoundInstance.Attenuation.NONE;
 			volume = .001F; pitch = 1;

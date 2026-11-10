@@ -27,6 +27,8 @@ tasks.named('fullCheck') {
 dependencies {
 	implementation module('core')
 	include module('core')
+	implementation module('creature_kit')
+	include module('creature_kit')
 	implementation module('storage')
 	include module('storage')
 	implementation module('bonfire')

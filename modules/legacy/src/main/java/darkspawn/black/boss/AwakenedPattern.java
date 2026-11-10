@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.BossBolt;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

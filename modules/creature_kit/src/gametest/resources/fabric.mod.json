@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "darkspawn_creature_kit-gametest",
+  "version": "1.0.0",
+  "name": "Darkspawn Creature Kit Server Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "darkspawn.black.creaturekit.CreatureKitGameTest"
+    ]
+  }
+}

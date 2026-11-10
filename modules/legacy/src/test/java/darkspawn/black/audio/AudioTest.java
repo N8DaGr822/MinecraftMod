@@ -1,5 +1,7 @@
 package darkspawn.black.audio;
 
+import darkspawn.black.creaturekit.CreatureAudio;
+
 import com.google.gson.JsonParser;
 import darkspawn.black.TestBootstrap;
 import darkspawn.black.boss.BossKind;

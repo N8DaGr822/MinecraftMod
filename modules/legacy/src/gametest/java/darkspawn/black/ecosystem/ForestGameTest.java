@@ -3,7 +3,7 @@ package darkspawn.black.ecosystem;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
-import darkspawn.black.boss.BossBolt;
+import darkspawn.black.creaturekit.BossBolt;
 import darkspawn.black.boss.BossItems;
 import darkspawn.black.cooking.Cooking;
 import darkspawn.black.cooking.CookingMenu;

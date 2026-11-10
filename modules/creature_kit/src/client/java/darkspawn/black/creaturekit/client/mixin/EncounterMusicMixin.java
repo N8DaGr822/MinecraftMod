@@ -1,6 +1,6 @@
-package darkspawn.black.client.mixin;
+package darkspawn.black.creaturekit.client.mixin;
 
-import darkspawn.black.client.audio.EncounterMusic;
+import darkspawn.black.creaturekit.client.EncounterMusic;
 import net.minecraft.client.sounds.MusicManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

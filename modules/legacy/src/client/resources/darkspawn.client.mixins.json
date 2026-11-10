@@ -3,8 +3,7 @@
   "package": "darkspawn.black.client.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
-    "ExampleClientMixin",
-    "EncounterMusicMixin"
+    "ExampleClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

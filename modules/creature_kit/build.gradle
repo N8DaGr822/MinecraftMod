@@ -1,0 +1,9 @@
+plugins {
+	id 'darkspawn.fabric-module'
+}
+
+dependencies {
+	implementation module('core')
+	include module('core')
+	implementation "com.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}"
+}

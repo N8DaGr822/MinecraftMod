@@ -1,6 +1,14 @@
-package darkspawn.black.boss;
+package darkspawn.black.creaturekit;
 
+import darkspawn.black.core.DarkspawnCore;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,7 +27,19 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
+/** Shared creature projectile ({@code darkspawn:boss_bolt}); owners customise it through {@link Shooter}. */
 public final class BossBolt extends ThrowableItemProjectile {
+	/** Optional owner behaviour, implemented by the creature that fires the bolt. */
+	public interface Shooter {
+		default float boltDamageScale() { return 1F; }
+		/** The owner's own allies or summons that its bolts pass through. */
+		default boolean boltSpares(Entity target) { return false; }
+		default void onBoltHit(LivingEntity target) { }
+	}
+	private static final List<Predicate<Entity>> IMMUNE = new CopyOnWriteArrayList<>();
+	private static final Identifier FRACTURED_ARMOR = DarkspawnCore.id("fractured_armor");
+	/** Entities no bolt can hit, whoever fired it (for example bosses and their minions). */
+	public static void registerImmune(Predicate<Entity> immune) { IMMUNE.add(immune); }
 	public enum Kind { PHYSICAL, LIGHTNING, POISON, HEX, FROST, INK, WEB, ACID, SPORE, FIRE, SOUL, VOID }
 	private static final EntityDataAccessor<Integer> KIND = SynchedEntityData.defineId(BossBolt.class, EntityDataSerializers.INT);
 	private float damage = 10;
@@ -70,17 +90,30 @@ public final class BossBolt extends ThrowableItemProjectile {
 			case SOUL -> ParticleTypes.SOUL_FIRE_FLAME;
 		};
 	}
+	/** The bolt's on-hit effect. Acid applies {@code darkspawn:fractured_armor} only when a mod registers that effect. */
+	public static void applyEffect(LivingEntity target, Kind kind) {
+		switch (kind) {
+			case POISON, SPORE -> target.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 0));
+			case HEX -> target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
+			case FROST -> target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 2));
+			case INK -> target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0));
+			case WEB -> target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 50, 4));
+			case ACID -> BuiltInRegistries.MOB_EFFECT.get(FRACTURED_ARMOR).ifPresent(effect -> target.addEffect(new MobEffectInstance(effect, 100, 0)));
+			case FIRE -> target.igniteForSeconds(4);
+			case SOUL -> target.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 0));
+			case VOID -> target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 20, 0));
+			default -> { }
+		}
+	}
 	@Override
 	protected double getDefaultGravity() { return 0.001; }
 	@Override
 	protected float getAirDrag() { return 1; }
 	@Override
 	protected boolean canHitEntity(Entity entity) {
-		if (getOwner() instanceof darkspawn.black.ecosystem.RegionalMob owner
-				&& entity instanceof darkspawn.black.ecosystem.RegionalMob other && owner.kind().region == other.kind().region) { return false; }
-		if (getOwner() instanceof BiomeBoss boss && boss.ownsSummon(entity)) { return false; }
-		return !(entity instanceof BiomeBoss) && !(entity instanceof BossMinion) && !(entity instanceof AncientTreeSpirit)
-				&& !(entity instanceof MutantWolf) && super.canHitEntity(entity);
+		if (getOwner() instanceof Shooter owner && owner.boltSpares(entity)) { return false; }
+		for (var immune : IMMUNE) if (immune.test(entity)) return false;
+		return super.canHitEntity(entity);
 	}
 	@Override
 	public void tick() {
@@ -91,9 +124,9 @@ public final class BossBolt extends ThrowableItemProjectile {
 	protected void onHitEntity(EntityHitResult hit) {
 		super.onHitEntity(hit);
 		if (level() instanceof ServerLevel server && hit.getEntity() instanceof LivingEntity target
-				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), damage * (getOwner() instanceof BiomeBoss ? 1.25F : 1F))) {
-			BossEffects.apply(target, kind());
-			if (getOwner() instanceof darkspawn.black.ecosystem.RegionalMob owner) { owner.onProjectileHit(target); }
+				&& target.hurtServer(server, damageSources().thrown(this, getOwner()), damage * (getOwner() instanceof Shooter owner ? owner.boltDamageScale() : 1F))) {
+			applyEffect(target, kind());
+			if (getOwner() instanceof Shooter owner) { owner.onBoltHit(target); }
 		}
 	}
 	@Override

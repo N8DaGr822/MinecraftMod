@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.BossBolt;
+
 import java.util.UUID;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

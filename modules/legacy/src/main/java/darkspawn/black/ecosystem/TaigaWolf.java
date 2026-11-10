@@ -42,13 +42,21 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class TaigaWolf extends Monster implements darkspawn.black.boss.AnimatedCreature {
+public final class TaigaWolf extends Monster implements darkspawn.black.creaturekit.AnimatedCreature, darkspawn.black.creaturekit.CreatureAudio {
+	@Override public int audioWarning() { return windup(); }
+	@Override public int renderWarning() { return windup(); }
+	@Override public boolean renderActive() { return leaping() || frenzy() > 0; }
+	@Override public int renderTint() {
+		return frenzy() > 0 ? 0xFFFF9999 : windup() > 0 ? 0xFFFFDD88
+				: kind() == Kind.FROSTFANG ? 0xFFAADDFF : kind() == Kind.RAVAGED ? 0xFFAB8E7A
+				: kind() == Kind.ALPHA ? 0xFFC9B79B : packed() ? 0xFFD8D3C6 : 0xFFFFFFFF;
+	}
 	private int audioPreviousWarning;
 	@Override public void baseTick() {
 		super.baseTick();
 		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
-			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
-			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+			int warning = darkspawn.black.creaturekit.CreatureAudio.warning(this);
+			if (!darkspawn.black.creaturekit.CreatureAudio.boss(this) && darkspawn.black.creaturekit.CreatureAudio.startsWarning(audioPreviousWarning, warning))
 				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
 			audioPreviousWarning = warning;
 		}
@@ -57,7 +65,7 @@ public final class TaigaWolf extends Monster implements darkspawn.black.boss.Ani
 	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
 	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
 	@Override public int getAmbientSoundInterval() { return 220; }
-	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+	@Override protected float getSoundVolume() { return darkspawn.black.creaturekit.CreatureAudio.boss(this) ? 1.2F : .45F; }
 
 	private final com.geckolib.animatable.instance.AnimatableInstanceCache animationCache = com.geckolib.util.GeckoLibUtil.createInstanceCache(this);
 	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }

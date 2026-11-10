@@ -79,7 +79,7 @@ public final class AscensionChapterGameTest {
                 var guardian=(AscensionGuardianEntity)mob;
                 h.assertTrue(guardian.chapter()==AscensionPhases.IDS.indexOf(phase)&&guardian.intensity()==1,"Chapter and full-health music intensity match");
                 guardian.warning(40);
-                h.assertTrue(darkspawn.black.audio.CreatureAudio.warning(guardian)==40&&darkspawn.black.audio.CreatureAudio.boss(guardian),"Warning is available to encounter music");
+                h.assertTrue(darkspawn.black.creaturekit.CreatureAudio.warning(guardian)==40&&darkspawn.black.creaturekit.CreatureAudio.boss(guardian),"Warning is available to encounter music");
                 var output=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,p.level().registryAccess());
                 guardian.saveWithoutId(output);
                 var restored=AscensionGuardian.TYPE.create(p.level(),net.minecraft.world.entity.EntitySpawnReason.LOAD);

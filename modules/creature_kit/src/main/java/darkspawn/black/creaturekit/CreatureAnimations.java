@@ -1,4 +1,4 @@
-package darkspawn.black.boss;
+package darkspawn.black.creaturekit;
 
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
@@ -13,7 +13,7 @@ public final class CreatureAnimations {
 	public static final DataTicket<Integer> WARNING = DataTicket.create("darkspawn_creature_warning", Integer.class);
 	public static final DataTicket<Boolean> ACTIVE = DataTicket.create("darkspawn_creature_active", Boolean.class);
 	public static final DataTicket<Boolean> HIDING = DataTicket.create("darkspawn_creature_hiding", Boolean.class);
-	public static final DataTicket<Integer> ROLE = DataTicket.create("darkspawn_creature_role", Integer.class);
+	public static final DataTicket<Integer> SHELL = DataTicket.create("darkspawn_creature_shell", Integer.class);
 	public static final DataTicket<Float> DEATH_TIME = DataTicket.create("darkspawn_creature_death", Float.class);
 	public static final DataTicket<Float> SHIELD_ANGLE = DataTicket.create("darkspawn_creature_shield", Float.class);
 	private CreatureAnimations() { }

@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.BossBolt;
+
 import com.geckolib.animatable.GeoEntity;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -54,13 +56,18 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public final class BiomeBoss extends Monster implements GeoEntity {
+public final class BiomeBoss extends Monster implements GeoEntity, darkspawn.black.creaturekit.CreatureAudio, darkspawn.black.creaturekit.BossBolt.Shooter {
+	@Override public int audioWarning() { return windup(); }
+	@Override public boolean audioBoss() { return true; }
+	@Override public int audioPhase() { return phase(); }
+	@Override public float boltDamageScale() { return 1.25F; }
+	@Override public boolean boltSpares(net.minecraft.world.entity.Entity target) { return ownsSummon(target); }
 	private int audioPreviousWarning;
 	@Override public void baseTick() {
 		super.baseTick();
 		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
-			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
-			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+			int warning = darkspawn.black.creaturekit.CreatureAudio.warning(this);
+			if (!darkspawn.black.creaturekit.CreatureAudio.boss(this) && darkspawn.black.creaturekit.CreatureAudio.startsWarning(audioPreviousWarning, warning))
 				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
 			audioPreviousWarning = warning;
 		}
@@ -69,7 +76,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
 	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
 	@Override public int getAmbientSoundInterval() { return 220; }
-	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+	@Override protected float getSoundVolume() { return darkspawn.black.creaturekit.CreatureAudio.boss(this) ? 1.2F : .45F; }
 
 	public static final DataTicket<Integer> ANIMATION_PHASE = DataTicket.create("darkspawn_biome_phase", Integer.class);
 	public static final DataTicket<Integer> ANIMATION_WINDUP = DataTicket.create("darkspawn_biome_windup", Integer.class);
@@ -135,7 +142,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	public AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-		if (CreatureAssets.BOSSES.contains(profile.id())) { BiomeBossAnimations.register(profile, controllers); return; }
+		if (CreatureRoster.BOSSES.contains(profile.id())) { BiomeBossAnimations.register(profile, controllers); return; }
 		// Zombie Assets: Preserve its existing controller and clip names when adding regional rigs.
 		if (profile != BossProfile.MUTANT_ZOMBIE) { return; }
 		controllers.add(new AnimationController<BiomeBoss>("movement", 4, test -> {
@@ -249,7 +256,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 			entityData.set(WINDUP, 0);
 			cooldown = 60;
 			level.playSound(null, blockPosition(), darkspawn.black.audio.DarkspawnSounds.creature(this, "phase"), SoundSource.HOSTILE, 1.8F, 1F);
-			if (profile == BossProfile.MUTANT_ZOMBIE || CreatureAssets.BOSSES.contains(profile.id())) { triggerAnim("action", "phase_change"); }
+			if (profile == BossProfile.MUTANT_ZOMBIE || CreatureRoster.BOSSES.contains(profile.id())) { triggerAnim("action", "phase_change"); }
 		}
 		if (awakenedPattern.tick(level, this, profile.kind(), players)) { return; }
 		if (chargeTicks > 0) { tickCharge(level); return; }
@@ -368,7 +375,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	}
 
 	private void executeAttack(ServerLevel level) {
-		if (CreatureAssets.BOSSES.contains(profile.id()) && attack != BossAttack.CHARGE && attack != BossAttack.POUNCE) {
+		if (CreatureRoster.BOSSES.contains(profile.id()) && attack != BossAttack.CHARGE && attack != BossAttack.POUNCE) {
 			triggerAnim("action", attack.name().toLowerCase(java.util.Locale.ROOT));
 		}
 		// Attack Release: Animation follows the existing server event without delaying damage or projectiles.
@@ -710,7 +717,7 @@ public final class BiomeBoss extends Monster implements GeoEntity {
 	}
 	@Override
 	public void die(DamageSource source) {
-		if (profile == BossProfile.MUTANT_ZOMBIE || CreatureAssets.BOSSES.contains(profile.id())) { stopTriggeredAnim("action", null); }
+		if (profile == BossProfile.MUTANT_ZOMBIE || CreatureRoster.BOSSES.contains(profile.id())) { stopTriggeredAnim("action", null); }
 		if (level() instanceof ServerLevel level) { cleanup(level); }
 		super.die(source);
 	}

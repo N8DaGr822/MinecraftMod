@@ -54,13 +54,16 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
-public final class AncientTreeSpirit extends Monster implements GeoEntity {
+public final class AncientTreeSpirit extends Monster implements GeoEntity, darkspawn.black.creaturekit.CreatureAudio {
+	@Override public int audioWarning() { return windup(); }
+	@Override public boolean audioBoss() { return true; }
+	@Override public int audioPhase() { return phase(); }
 	private int audioPreviousWarning;
 	@Override public void baseTick() {
 		super.baseTick();
 		if (level() instanceof net.minecraft.server.level.ServerLevel && isAlive()) {
-			int warning = darkspawn.black.audio.CreatureAudio.warning(this);
-			if (!darkspawn.black.audio.CreatureAudio.boss(this) && darkspawn.black.audio.CreatureAudio.startsWarning(audioPreviousWarning, warning))
+			int warning = darkspawn.black.creaturekit.CreatureAudio.warning(this);
+			if (!darkspawn.black.creaturekit.CreatureAudio.boss(this) && darkspawn.black.creaturekit.CreatureAudio.startsWarning(audioPreviousWarning, warning))
 				playSound(darkspawn.black.audio.DarkspawnSounds.creature(this, "warning"), .8F, 1F);
 			audioPreviousWarning = warning;
 		}
@@ -69,7 +72,7 @@ public final class AncientTreeSpirit extends Monster implements GeoEntity {
 	@Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource source) { return darkspawn.black.audio.DarkspawnSounds.creature(this, "hurt"); }
 	@Override protected net.minecraft.sounds.SoundEvent getDeathSound() { return darkspawn.black.audio.DarkspawnSounds.creature(this, "death"); }
 	@Override public int getAmbientSoundInterval() { return 220; }
-	@Override protected float getSoundVolume() { return darkspawn.black.audio.CreatureAudio.boss(this) ? 1.2F : .45F; }
+	@Override protected float getSoundVolume() { return darkspawn.black.creaturekit.CreatureAudio.boss(this) ? 1.2F : .45F; }
 
 	// Boss Scale: Keep the authored rig and UVs intact while scaling visuals and combat anchors together.
 	public static final float MODEL_SCALE = 28.0F / 18.0F;

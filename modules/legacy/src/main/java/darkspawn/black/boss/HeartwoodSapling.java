@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.AnimatedCreature;
+
 import java.util.UUID;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

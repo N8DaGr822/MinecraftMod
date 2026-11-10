@@ -353,8 +353,8 @@ class BossRosterTest {
 	@Test
 	void completedRegionalBossAssetsCoverEveryAttackAndBake() throws Exception {
 		var loader = new GeckoLibGsonLoader();
-		assertEquals(java.util.Arrays.stream(BossProfile.values()).filter(profile -> profile != BossProfile.MUTANT_ZOMBIE).map(BossProfile::id).collect(java.util.stream.Collectors.toSet()), CreatureAssets.BOSSES);
-		for (String id : CreatureAssets.BOSSES) { assertNotNull(getClass().getResource("/assets/darkspawn/geckolib/models/entity/" + id + ".geo.json"), id); }
+		assertEquals(java.util.Arrays.stream(BossProfile.values()).filter(profile -> profile != BossProfile.MUTANT_ZOMBIE).map(BossProfile::id).collect(java.util.stream.Collectors.toSet()), CreatureRoster.BOSSES);
+		for (String id : CreatureRoster.BOSSES) { assertNotNull(getClass().getResource("/assets/darkspawn/geckolib/models/entity/" + id + ".geo.json"), id); }
 		for (var profile : BossProfile.values()) {
 			// Staged Artwork: Bake new resources before enabling their renderer in an individual asset commit.
 			if (profile == BossProfile.MUTANT_ZOMBIE || getClass().getResource("/assets/darkspawn/geckolib/models/entity/" + profile.id() + ".geo.json") == null) { continue; }
@@ -399,15 +399,15 @@ class BossRosterTest {
 		var textures = new java.util.LinkedHashMap<String, String>();
 		for (var kind : darkspawn.black.ecosystem.ForestMob.Kind.values()) { textures.put(kind.id, "forest_creatures"); }
 		for (var kind : darkspawn.black.ecosystem.TaigaWolf.Kind.values()) { textures.put(kind.id, "mutant_wolf"); }
-		for (var kind : darkspawn.black.ecosystem.RegionalKind.values()) { textures.put(kind.id(), CreatureAssets.texture(kind.id(), kind.region.id())); }
+		for (var kind : darkspawn.black.ecosystem.RegionalKind.values()) { textures.put(kind.id(), CreatureRoster.texture(kind.id(), kind.region.id())); }
 		for (var profile : BossProfile.values()) { textures.put(profile.id() + "_minion", profile.id()); }
 		textures.put("heartwood_sapling", "forest_creatures"); textures.put("frost_wolf", "mutant_wolf");
-		assertEquals(textures.keySet(), Stream.concat(CreatureAssets.MOBS.stream(), CreatureAssets.MINIONS.stream()).collect(java.util.stream.Collectors.toSet()), "Every registered ecosystem creature and minion needs a completed asset");
+		assertEquals(textures.keySet(), Stream.concat(CreatureRoster.MOBS.stream(), CreatureRoster.MINIONS.stream()).collect(java.util.stream.Collectors.toSet()), "Every registered ecosystem creature and minion needs a completed asset");
 		var loader = new GeckoLibGsonLoader();
 		for (var entry : textures.entrySet()) {
 			String id = entry.getKey(), path = "/assets/darkspawn/";
 			var geometry = getClass().getResource(path + "geckolib/models/entity/" + id + ".geo.json");
-			if (CreatureAssets.MOBS.contains(id) || CreatureAssets.MINIONS.contains(id)) { assertNotNull(geometry, id); }
+			if (CreatureRoster.MOBS.contains(id) || CreatureRoster.MINIONS.contains(id)) { assertNotNull(geometry, id); }
 			if (geometry == null) { continue; } // Bake staged projects before their individual registration commits.
 			var model = loader.bakeGeckoLibModelFile(Darkspawn.id("entity/" + id), resource(path + "geckolib/models/entity/" + id + ".geo.json").getAsJsonObject());
 			var animations = loader.bakeGeckoLibAnimationsFile(Darkspawn.id("entity/" + id), resource(path + "geckolib/animations/entity/" + id + ".animation.json").getAsJsonObject(), MathParser.create());
@@ -435,7 +435,7 @@ class BossRosterTest {
 			}
 			try (var stream = darkspawn.black.MergedResources.open(getClass(), path + "textures/entity/" + entry.getValue() + ".png")) { assertNotNull(stream, id); assertNotNull(javax.imageio.ImageIO.read(stream), id); }
 		}
-		Class.forName("darkspawn.black.client.ecosystem.CreatureGeoRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
+		Class.forName("darkspawn.black.creaturekit.client.CreatureGeoRenderer", false, getClass().getClassLoader()).getDeclaredMethods();
 	}
 
 	@Test
@@ -460,8 +460,8 @@ class BossRosterTest {
 	}
 
 	@Test void animationTimestampsAreChronologicalInSerializedResources() throws Exception {
-		var ids = new java.util.HashSet<>(CreatureAssets.BOSSES);
-		ids.addAll(CreatureAssets.MOBS); ids.addAll(CreatureAssets.MINIONS);
+		var ids = new java.util.HashSet<>(CreatureRoster.BOSSES);
+		ids.addAll(CreatureRoster.MOBS); ids.addAll(CreatureRoster.MINIONS);
 		ids.addAll(List.of("ancient_tree_spirit", "mutant_wolf", "mutant_zombie", "endborn"));
 		for (String id : ids) {
 			var animations = resource("/assets/darkspawn/geckolib/animations/entity/" + id + ".animation.json").getAsJsonObject().getAsJsonObject("animations");

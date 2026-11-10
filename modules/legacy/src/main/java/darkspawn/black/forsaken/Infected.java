@@ -18,7 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public final class Infected extends Monster implements darkspawn.black.boss.AnimatedCreature {
+public final class Infected extends Monster implements darkspawn.black.creaturekit.AnimatedCreature {
+	@Override public int renderWarning() { return warning(); }
 	public enum Kind {
 		WANDERER("infected_wanderer", .65F, 1.9F, 24, .27, 4),
 		CRAWLER("infected_crawler", 1.1F, .65F, 16, .34, 3),
@@ -51,7 +52,7 @@ public final class Infected extends Monster implements darkspawn.black.boss.Anim
 	}
 	@Override public com.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
 	@Override public void registerControllers(com.geckolib.animatable.manager.AnimatableManager.ControllerRegistrar controllers) {
-		darkspawn.black.boss.CreatureAnimations.register(assetId(), controllers);
+		darkspawn.black.creaturekit.CreatureAnimations.register(assetId(), controllers);
 	}
 	@Override public void animateAttack() { triggerAnim("action", "attack"); }
 	@Override protected net.minecraft.sounds.SoundEvent getAmbientSound() { return kind == Kind.CRAWLER ? SoundEvents.SPIDER_AMBIENT : SoundEvents.ZOMBIE_AMBIENT; }

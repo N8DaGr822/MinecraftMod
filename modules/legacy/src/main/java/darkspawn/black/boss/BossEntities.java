@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.BossBolt;
+
 import darkspawn.black.Darkspawn;
 import java.util.EnumMap;
 import java.util.Map;
@@ -43,8 +45,7 @@ public final class BossEntities {
 			EntityType.Builder.of(Endborn::new, MobCategory.MONSTER).sized(1.4F, 4.6F).clientTrackingRange(10).notInPeaceful().noLootTable());
 	public static final Map<BossProfile, EntityType<BiomeBoss>> BIOME_BOSSES = createBosses();
 	public static final Map<BossProfile, EntityType<BossMinion>> MINIONS = createMinions();
-	public static final EntityType<BossBolt> BOSS_BOLT = register("boss_bolt",
-			EntityType.Builder.<BossBolt>of(BossBolt::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(12).updateInterval(2).noLootTable());
+	public static final EntityType<BossBolt> BOSS_BOLT = darkspawn.black.creaturekit.CreatureKit.BOSS_BOLT;
 	public static final EntityType<BossHazard> BOSS_HAZARD = register("boss_hazard",
 			EntityType.Builder.<BossHazard>of(BossHazard::new, MobCategory.MISC).sized(12, 1).clientTrackingRange(12).noLootTable());
 	public static final EntityType<VoidPlatform> VOID_PLATFORM = register("void_platform",
@@ -81,6 +82,9 @@ public final class BossEntities {
 	}
 
 	public static void register() {
+		CreatureRoster.initialize();
+		// Boss Bolts: Bosses and their summons are never hit by any creature's bolt.
+		BossBolt.registerImmune(entity -> entity instanceof BiomeBoss || entity instanceof BossMinion || entity instanceof AncientTreeSpirit || entity instanceof MutantWolf);
 		darkspawn.black.core.hook.WardExemptions.register(entity -> entity instanceof BiomeBoss || entity instanceof AncientTreeSpirit || entity instanceof MutantWolf);
 		FabricDefaultAttributeRegistry.register(TREE_SPIRIT, AncientTreeSpirit.attributes());
 		FabricDefaultAttributeRegistry.register(HEARTWOOD_SAPLING, HeartwoodSapling.attributes());

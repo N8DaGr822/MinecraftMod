@@ -20,6 +20,7 @@ public final class TestBootstrap {
 		SharedConstants.tryDetectVersion();
 		Bootstrap.bootStrap();
 		// Extracted modules are separate mods at runtime; initialize the ones legacy code still uses.
+		new darkspawn.black.creaturekit.CreatureKit().onInitialize();
 		new darkspawn.black.storage.StorageMod().onInitialize();
 		new darkspawn.black.bonfire.BonfireMod().onInitialize();
 		new darkspawn.black.quiver.QuiverMod().onInitialize();

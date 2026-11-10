@@ -10,7 +10,11 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 /** Guardian Presentation: Synchronized chapter and warning state; native golem combat stays intact. */
-public final class AscensionGuardianEntity extends IronGolem {
+public final class AscensionGuardianEntity extends IronGolem implements darkspawn.black.creaturekit.CreatureAudio {
+    @Override public int audioWarning() { return warning(); }
+    @Override public boolean audioBoss() { return true; }
+    @Override public int audioPhase() { return intensity(); }
+    @Override public String musicTheme() { return musicTheme(chapter()); }
     private static final EntityDataAccessor<Integer> CHAPTER=SynchedEntityData.defineId(AscensionGuardianEntity.class,EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> WARNING=SynchedEntityData.defineId(AscensionGuardianEntity.class,EntityDataSerializers.INT);
     public AscensionGuardianEntity(EntityType<? extends AscensionGuardianEntity> type,Level level){super(type,level);}

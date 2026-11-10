@@ -19,6 +19,8 @@ public enum BossKind {
 	VOID_EYE("void_eye");
 
 	private final String id;
+	/** The creature-kit region descriptor named after this boss. */
+	public darkspawn.black.creaturekit.Region region() { return darkspawn.black.creaturekit.Region.valueOf(name()); }
 
 	BossKind(String id) {
 		this.id = id;

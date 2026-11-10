@@ -1,5 +1,7 @@
 package darkspawn.black.boss;
 
+import darkspawn.black.creaturekit.BossBolt;
+
 import darkspawn.black.Darkspawn;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -26,20 +28,7 @@ public final class BossEffects {
 	}
 	public static void initialize() { }
 
-	static void apply(LivingEntity target, BossBolt.Kind kind) {
-		switch (kind) {
-			case POISON, SPORE -> target.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 0));
-			case HEX -> target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
-			case FROST -> target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 2));
-			case INK -> target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0));
-			case WEB -> target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 50, 4));
-			case ACID -> target.addEffect(new MobEffectInstance(FRACTURED_ARMOR, 100, 0));
-			case FIRE -> target.igniteForSeconds(4);
-			case SOUL -> target.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 0));
-			case VOID -> target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 20, 0));
-			default -> { }
-		}
-	}
+	static void apply(LivingEntity target, BossBolt.Kind kind) { BossBolt.applyEffect(target, kind); }
 
 	public static int soulHeartsToSteal(float currentMaximum, int existingHearts) {
 		// Soul Safety: A strike steals one heart, up to five, and always leaves at least one usable heart.
