@@ -53,6 +53,8 @@ public final class OneBlock {
 		darkspawn.black.core.hook.TravelBoundary.register(new darkspawn.black.core.hook.TravelBoundary.Boundary() {
 			@Override public boolean isolated(ServerPlayer player) { var state = state(player); return state.inside || state.ascensionInside || state.travelling; }
 			@Override public String zone(Level level) { return island(level) ? "oneblock" : Ascension.island(level) ? "ascension" : ""; }
+			// Ascension Possessions: Keep outside companion storage out of the new inventory profile.
+			@Override public boolean separatePossessions(Level level) { return Ascension.island(level); }
 		});
 		PayloadTypeRegistry.serverboundPlay().register(OneBlockActionPayload.TYPE, OneBlockActionPayload.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(OneBlockStatusPayload.TYPE, OneBlockStatusPayload.CODEC);

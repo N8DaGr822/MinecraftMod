@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.MountCompanions;
+
 import darkspawn.black.Darkspawn;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;

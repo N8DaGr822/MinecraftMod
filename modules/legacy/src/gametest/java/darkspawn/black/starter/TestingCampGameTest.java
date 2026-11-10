@@ -124,7 +124,7 @@ public final class TestingCampGameTest {
 			darkspawn.black.pirate.PirateDrinks.RUM, darkspawn.black.worldgen.LandmarkCompass.ITEM,
 			darkspawn.black.forsaken.ForsakenContent.BLADE, darkspawn.black.forsaken.ForsakenContent.SCANNER,
 			darkspawn.black.forsaken.ForsakenContent.BEACON_ITEM, darkspawn.black.forsaken.ForsakenContent.CORE,
-			darkspawn.black.mount.MountCompanions.CAPSULE, darkspawn.black.mount.MountCompanions.VET_KIT))
+			darkspawn.black.mountkit.MountCompanions.CAPSULE, darkspawn.black.mountkit.MountCompanions.VET_KIT))
 			helper.assertTrue(all.stream().anyMatch(stack -> stack.is(item)), "Expansion testing item supplied: " + item);
         for (var key : java.util.List.of(darkspawn.black.enchantments.ThematicEnchantments.HUNTER,
             darkspawn.black.enchantments.ThematicEnchantments.BUTCHER, darkspawn.black.enchantments.ThematicEnchantments.FORAGER,

@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.MountCompanions;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;

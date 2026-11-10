@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.PrototypeMount;
+
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -15,13 +17,14 @@ import net.minecraft.world.phys.Vec3;
 
 /** Soul Sand Valley mount with deliberate, server-owned tunnel excavation. */
 public final class GiantMole extends PrototypeMount {
+    @Override public net.minecraft.world.item.Item tamingFood() { return net.minecraft.world.item.Items.BEETROOT; }
     private long nextDig;
     public GiantMole(EntityType<? extends GiantMole> type, Level level) { super(type, level); }
     public static AttributeSupplier.Builder attributes() {
         return PrototypeMount.attributes().add(Attributes.MAX_HEALTH, 48).add(Attributes.MOVEMENT_SPEED, .22);
     }
-    @Override protected boolean canFly() { return false; }
-    @Override protected float groundSpeed() { return .22F; }
+    @Override public boolean canFly() { return false; }
+    @Override public float groundSpeed() { return .22F; }
     @Override protected String mountingMessage() { return "message.darkspawn.mole_mounted"; }
     @Override public void travel(Vec3 input) {
         if (level() instanceof ServerLevel level && getControllingPassenger() instanceof ServerPlayer rider

@@ -49,8 +49,6 @@ public class Darkspawn implements ModInitializer {
         darkspawn.black.ecosystem.WorldVictoryCondition.initialize();
 		darkspawn.black.oneblock.OneBlock.initialize();
 		darkspawn.black.oneblock.Ascension.initialize();
-		// Recovery Inventory: Restore OneBlock profiles before delivering companion tokens on join.
-		darkspawn.black.mount.MountCompanions.initialize();
 		darkspawn.black.forsaken.Forsaken.initialize();
 		darkspawn.black.pirate.Pirate.initialize();
 		darkspawn.black.starter.TestingCamp.initialize();

@@ -58,7 +58,7 @@ public final class AscensionGameTest {
             h.assertTrue(OneBlock.travel(p),"Return from legacy");ready(p);
             travel(h,p,team.id());
             h.assertTrue(p.getInventory().isEmpty()&&p.getEnderChestInventory().isEmpty(),"Ascension starts without either profile's possessions");
-            h.assertTrue(darkspawn.black.mount.MountRegistry.get(p.level())!=darkspawn.black.mount.MountRegistry.get(outside),"Recovery registry is isolated");
+            h.assertTrue(darkspawn.black.mountkit.MountRegistry.get(p.level())!=darkspawn.black.mountkit.MountRegistry.get(outside),"Recovery registry is isolated");
             h.assertTrue(darkspawn.black.legacy.NoahLedger.get(p.level())!=darkspawn.black.legacy.NoahLedger.get(outside),"Stored Thalassar cargo is isolated");
             p.getInventory().setItem(0,new ItemStack(Items.DIRT,5));
             h.assertTrue(!OneBlock.travel(p),"No direct Ascension-to-legacy hop");travel(h,p,null);

@@ -1,7 +1,5 @@
-package darkspawn.black.mount;
+package darkspawn.black.mountkit;
 
-import darkspawn.black.ecosystem.RegionalKind;
-import darkspawn.black.ecosystem.RegionalMob;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +25,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /** Per-mount combat state; only the server decides targets, damage and cooldowns. */
-final class MountCombat {
+/** Rider abilities chosen by {@link PrototypeMount#ability()}. */
+public final class MountCombat {
     private final PrototypeMount mount;
     private long nextUse;
     private int chargeTicks;
@@ -35,18 +34,17 @@ final class MountCombat {
     private final Set<UUID> chargeHits = new HashSet<>();
 
     MountCombat(PrototypeMount mount) { this.mount = mount; }
-    boolean supported() {
-        return mount instanceof DragonMount || mount instanceof WoollyRhino
-            || mount instanceof GiantScorpion || mount instanceof Crocodile;
+    public boolean supported() {
+        return mount.ability() != PrototypeMount.Ability.NONE;
     }
-    boolean charging() { return chargeTicks > 0; }
+    public boolean charging() { return chargeTicks > 0; }
     void stop() { chargeTicks = 0; chargeHits.clear(); previousPosition = null; mount.startAttackAnimation(0); }
     void save(ValueOutput output) { output.putLong("MountNextAbility", nextUse); }
     void load(ValueInput input) {
         nextUse = input.getLongOr("MountNextAbility", 0);
         stop();
     }
-    void tick(ServerLevel level) {
+    public void tick(ServerLevel level) {
         if (!supported()) return;
         if (!mount.isAlive() || !(mount.getControllingPassenger() instanceof Player rider)
                 || !rider.isAlive() || rider.isSpectator()) { stop(); return; }
@@ -61,7 +59,7 @@ final class MountCombat {
         if (!mount.abilityRequested() || level.getGameTime() < nextUse) return;
         int cooldown;
         String ability;
-        if (mount instanceof WoollyRhino) {
+        if (mount.ability() == PrototypeMount.Ability.CHARGE) {
             if (!mount.forwardRequested() || !mount.onGround() || mount.isInWater() || mount.isInLava()) return;
             chargeTicks = 20;
             previousPosition = mount.position();
@@ -70,7 +68,7 @@ final class MountCombat {
             ability = "charge";
             mount.startAttackAnimation(20);
             mount.playSound(SoundEvents.RAVAGER_ROAR, .6F, 1.2F);
-        } else if (mount instanceof DragonMount) {
+        } else if (mount.ability() == PrototypeMount.Ability.BREATH) {
             mount.startAttackAnimation(12);
             breath(level, rider);
             cooldown = 80;
@@ -78,8 +76,8 @@ final class MountCombat {
         } else {
             mount.startAttackAnimation(8);
             melee(level, rider);
-            cooldown = mount instanceof GiantScorpion ? 60 : 40;
-            ability = mount instanceof GiantScorpion ? "sting" : "bite";
+            cooldown = mount.ability() == PrototypeMount.Ability.STING ? 60 : 40;
+            ability = mount.ability() == PrototypeMount.Ability.STING ? "sting" : "bite";
         }
         nextUse = level.getGameTime() + cooldown;
         rider.sendOverlayMessage(Component.translatable("message.darkspawn.mount_ability_used",
@@ -91,7 +89,8 @@ final class MountCombat {
                 || mount.isAlliedTo(target) || target.isPassengerOfSameVehicle(mount)) return false;
         if (target instanceof OwnableEntity owned && owned.getOwnerReference() != null) return false;
         // Regional Wildlife: Monster inheritance alone includes peaceful and neutral Darkspawn creatures.
-        if (target instanceof RegionalMob regional) return regional.kind().temper == RegionalKind.Temper.HOSTILE;
+        var verdict = darkspawn.black.core.hook.Temperament.hostile(target);
+        if (verdict != null) return verdict;
         if (!(target instanceof Enemy) || target.getType().getCategory() != MobCategory.MONSTER) return false;
         if (target instanceof NeutralMob && target instanceof Mob mob)
             return mob.getTarget() == rider || mob.getTarget() == mount;
@@ -128,7 +127,7 @@ final class MountCombat {
         var target = level.getEntitiesOfClass(LivingEntity.class, mount.getBoundingBox().inflate(3.5),
                 candidate -> hostile(candidate, rider) && inCone(candidate, origin, direction, 3.5, .5))
             .stream().min(Comparator.comparingDouble(mount::distanceToSqr)).orElse(null);
-        boolean sting = mount instanceof GiantScorpion;
+        boolean sting = mount.ability() == PrototypeMount.Ability.STING;
         Vec3 point = origin.add(direction.scale(1.4));
         level.sendParticles(ParticleTypes.CRIT, point.x, point.y, point.z, 8, .3, .2, .3, .1);
         mount.playSound(sting ? SoundEvents.SPIDER_HURT : SoundEvents.PLAYER_ATTACK_STRONG, .6F, .8F);

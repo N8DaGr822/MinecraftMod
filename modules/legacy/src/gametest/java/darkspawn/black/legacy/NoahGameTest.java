@@ -3,6 +3,7 @@ package darkspawn.black.legacy;
 import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.JsonOps;
 import darkspawn.black.mount.*;
+import darkspawn.black.mountkit.*;
 import io.netty.channel.embedded.EmbeddedChannel;
 import java.util.UUID;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;

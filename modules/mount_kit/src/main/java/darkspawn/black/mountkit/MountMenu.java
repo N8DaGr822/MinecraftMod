@@ -1,4 +1,4 @@
-package darkspawn.black.mount;
+package darkspawn.black.mountkit;
 
 import java.util.Comparator;
 import java.util.UUID;
@@ -38,13 +38,13 @@ public final class MountMenu extends AbstractContainerMenu {
     private void refresh() {
         if (mount == null) return;
         data.set(0, mount.isOwnedBy(viewer) ? 1 : 0); data.set(1, mount.care.following ? 1 : 0);
-        data.set(7, mount instanceof MagicCarpet || mount instanceof Aircraft || mount instanceof GroundWalker ? 1 : 0); data.set(2, mount.isBaby() ? 1 : 0); data.set(3, mount.care.breeding() ? 1 : 0);
+        data.set(7, mount.machine() ? 1 : 0); data.set(2, mount.isBaby() ? 1 : 0); data.set(3, mount.care.breeding() ? 1 : 0);
         data.set(4, mount.care.offerPending() ? 1 : 0);
         var player = selected == null ? null : mount.level().getPlayerByUUID(selected);
         int entityId = player == null ? -1 : player.getId(); data.set(5, entityId & 65535); data.set(6, entityId >>> 16);
     }
     @Override public void broadcastChanges() { refresh(); super.broadcastChanges(); }
-    @Override public boolean stillValid(Player player) { return mount == null || !(mount instanceof Thalassar) && !(mount instanceof Aircraft) && !(mount instanceof GroundWalker) && mount.care.accessible(player) && !mount.isVehicle(); }
+    @Override public boolean stillValid(Player player) { return mount == null || mount.careMenu() && mount.care.accessible(player) && !mount.isVehicle(); }
     @Override public boolean clickMenuButton(Player player, int action) {
         if (!(player instanceof ServerPlayer server) || mount == null || !stillValid(player) || !getCarried().isEmpty()) return false;
         boolean ok = false;

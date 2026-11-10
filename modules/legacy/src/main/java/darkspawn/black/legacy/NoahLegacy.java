@@ -1,7 +1,7 @@
 package darkspawn.black.legacy;
 
 import darkspawn.black.Darkspawn;
-import darkspawn.black.mount.MountCompanions;
+import darkspawn.black.mountkit.MountCompanions;
 import darkspawn.black.mount.Mounts;
 import darkspawn.black.mount.Thalassar;
 import java.util.*;

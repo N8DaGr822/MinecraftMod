@@ -1,8 +1,8 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.PrototypeMount;
+
 import darkspawn.black.Darkspawn;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -55,6 +55,7 @@ public final class Mounts {
 			!source.is(net.minecraft.tags.DamageTypeTags.IS_FIRE)
 				|| source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)
 				|| !(entity.getVehicle() instanceof Cerberus mount && mount.isAlive() && mount.getControllingPassenger() == entity));
+		darkspawn.black.mountkit.MountKit.initialize();
 		SkyCatSpawning.initialize();
 		MountSpawning.initialize();
 		FabricDefaultAttributeRegistry.register(GRIFFIN, Griffin.attributes());
@@ -78,11 +79,5 @@ public final class Mounts {
         FabricDefaultAttributeRegistry.register(SEAHORSE, Seahorse.attributes());
         FabricDefaultAttributeRegistry.register(GIANT_MOLE, GiantMole.attributes());
         FabricDefaultAttributeRegistry.register(THALASSAR, Thalassar.attributes());
-		PayloadTypeRegistry.serverboundPlay().register(GriffinControlsPayload.TYPE, GriffinControlsPayload.CODEC);
-		ServerPlayNetworking.registerGlobalReceiver(GriffinControlsPayload.TYPE, (payload, context) -> {
-			if (context.player().getVehicle() instanceof PrototypeMount mount && mount.getId() == payload.entityId()) {
-				mount.acceptControls(context.player(), payload.buttons());
-			}
-		});
 	}
 }

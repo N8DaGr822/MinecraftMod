@@ -62,6 +62,8 @@ public final class RegionalEcosystems {
 	}
 
 	public static void initialize() {
+		// Regional Wildlife: Monster inheritance alone includes peaceful and neutral Darkspawn creatures.
+		darkspawn.black.core.hook.Temperament.register(entity -> entity instanceof RegionalMob mob ? mob.kind().temper == RegionalKind.Temper.HOSTILE : null);
 		MOBS.forEach((kind, type) -> {
 			FabricDefaultAttributeRegistry.register(type, RegionalMob.attributes(kind));
 			var placement = kind.movement == RegionalKind.Move.WATER ? SpawnPlacementTypes.IN_WATER

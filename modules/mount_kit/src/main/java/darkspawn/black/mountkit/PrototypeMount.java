@@ -1,4 +1,4 @@
-package darkspawn.black.mount;
+package darkspawn.black.mountkit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
@@ -38,7 +38,7 @@ import net.minecraft.world.phys.Vec3;
 /** Tamed, owner-ridden mount with persistent companion care. */
 public abstract class PrototypeMount extends PathfinderMob implements OwnableEntity {
 	public static final int FORWARD = 1, BACK = 2, LEFT = 4, RIGHT = 8, ASCEND = 16, DESCEND = 32, DIG = 64, ABILITY = 128;
-	final MountCombat combat = new MountCombat(this);
+	public final MountCombat combat = new MountCombat(this);
 	public final MountCare care = new MountCare(this);
 	private static final EntityDataAccessor<Boolean> BABY = SynchedEntityData.defineId(PrototypeMount.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(PrototypeMount.class, EntityDataSerializers.BOOLEAN);
@@ -70,7 +70,7 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 	@Override public EntityReference<LivingEntity> getOwnerReference() { return entityData.get(OWNER).orElse(null); }
 	public boolean isTamed() { return getOwnerReference() != null; }
 	public boolean isOwnedBy(Player player) { return isTamed() && getOwnerReference().matches(player); }
-	void assignOwner(UUID owner) {
+	public void assignOwner(UUID owner) {
 		entityData.set(OWNER, Optional.of(EntityReference.of(owner)));
 		wildMount = false; trustingPlayer = null; trust = 0;
 		clearControls(); combat.stop();
@@ -86,22 +86,8 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 		if (level() instanceof ServerLevel && isTamed() && !isRemoved()) MountCompanions.defeated(this);
 		else super.die(source);
 	}
-	public Item tamingFood() {
-		if (this instanceof WoollyRhino) return Items.WHEAT;
-		if (this instanceof FlyingSquirrel) return Items.SWEET_BERRIES;
-		if (this instanceof PoptartCat) return Items.COOKIE;
-		if (this instanceof DragonMount) return Items.COOKED_BEEF;
-		if (this instanceof WingedUnicorn) return Items.GOLDEN_APPLE;
-		if (this instanceof RidingGolem) return Items.IRON_INGOT;
-		if (this instanceof Sasquatch) return Items.APPLE;
-		if (this instanceof Cerberus) return Items.BONE;
-		if (this instanceof Leopard) return Items.CHICKEN;
-		if (this instanceof Seahorse) return Items.KELP;
-		if (this instanceof GiantScorpion) return Items.SPIDER_EYE;
-		if (this instanceof Crocodile) return Items.COD;
-		if (this instanceof GiantMole) return Items.BEETROOT;
-		return Items.RABBIT;
-	}
+	/** Three feedings of this item tame a wild mount; owners heal it with the same item. */
+	public Item tamingFood() { return Items.RABBIT; }
 	private InteractionResult feed(Player player, InteractionHand hand, ServerLevel level) {
 		long now = level.getGameTime();
 		if (now < nextFeeding) {
@@ -137,42 +123,34 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 			getX(), getY() + getBbHeight(), getZ(), 6, .35, .2, .35, 0);
 		return InteractionResult.SUCCESS;
 	}
+	/** The rider ability on the ability key; {@link Ability#NONE} for none. */
+	public enum Ability { NONE, CHARGE, BREATH, BITE, STING }
+	protected Ability ability() { return Ability.NONE; }
+	/** Ticks over which the attack pose eases out. */
+	protected float attackPoseTicks() { return 8F; }
+	/** Built vehicles (carpets, aircraft, walkers): no breeding, and they travel only between the vanilla dimensions. */
+	protected boolean machine() { return false; }
+	/** Whether the follow command applies. */
+	protected boolean canFollow() { return true; }
+	/** Aquatic-only companions follow only a swimming owner and are released only fully submerged. */
+	protected boolean waterBound() { return false; }
+	/** Whether a Companion Capsule may store this mount right now. */
+	protected boolean capsuleStorable() { return true; }
+	/** Whether the shift-use care menu is available. */
+	protected boolean careMenu() { return true; }
+	/** The dimensions a {@link #machine()} may be released in or travel to: the overworld, the Nether and the End. */
+	public static boolean vehicleLevel(Level level) { return level.dimension() == Level.OVERWORLD || level.dimension() == Level.NETHER || level.dimension() == Level.END; }
+	/** A {@link Ability#CHARGE} burst is running. */
+	protected boolean charging() { return combat.charging(); }
 	protected String mountingMessage() { return "message.darkspawn.griffin_mounted"; }
-	protected boolean canFly() { return true; }
-	protected boolean canGlide() { return false; }
+	public boolean canFly() { return true; }
+	public boolean canGlide() { return false; }
 	protected boolean canSwim() { return false; }
 	protected double swimmingSpeed() { return .3; }
-	protected float groundSpeed() { return .25F; }
+	public float groundSpeed() { return .25F; }
 	// Mount Voices: Native animal/material cues respect resource packs and avoid another overlapping music track.
-	private SoundEvent voice(int cue) {
-		if (this instanceof Leopard) return switch (cue) {
-			case 1 -> SoundEvents.OCELOT_HURT; case 2 -> SoundEvents.OCELOT_DEATH; default -> SoundEvents.OCELOT_AMBIENT;
-		};
-		if (this instanceof Seahorse) return switch (cue) {
-			case 1 -> SoundEvents.TROPICAL_FISH_HURT; case 2 -> SoundEvents.TROPICAL_FISH_DEATH; default -> SoundEvents.TROPICAL_FISH_AMBIENT;
-		};
-		if (this instanceof GiantScorpion) return switch (cue) {
-			case 1 -> SoundEvents.SPIDER_HURT; case 2 -> SoundEvents.SPIDER_DEATH; default -> SoundEvents.SPIDER_AMBIENT;
-		};
-		if (this instanceof Crocodile) return switch (cue) {
-			case 1 -> SoundEvents.TURTLE_HURT; case 2 -> SoundEvents.TURTLE_DEATH; default -> SoundEvents.TURTLE_AMBIENT_LAND;
-		};
-		if (this instanceof PoptartCat) return switch (cue) {
-			case 1 -> SoundEvents.CAT_HURT_BABY.value(); case 2 -> SoundEvents.CAT_DEATH_BABY.value(); default -> SoundEvents.CAT_PURR_BABY.value();
-		};
-		if (this instanceof WingedUnicorn) return switch (cue) {
-			case 1 -> SoundEvents.HORSE_HURT; case 2 -> SoundEvents.HORSE_DEATH; default -> SoundEvents.HORSE_AMBIENT;
-		};
-		if (this instanceof RidingGolem) return switch (cue) {
-			case 1 -> SoundEvents.IRON_GOLEM_HURT; case 2 -> SoundEvents.IRON_GOLEM_DEATH; default -> SoundEvents.IRON_GOLEM_REPAIR;
-		};
-		if (this instanceof DragonMount) return cue == 0 ? SoundEvents.ENDER_DRAGON_GROWL : SoundEvents.ENDER_DRAGON_HURT;
-		if (this instanceof Sasquatch) return switch (cue) {
-			case 1 -> SoundEvents.POLAR_BEAR_HURT; case 2 -> SoundEvents.POLAR_BEAR_DEATH; default -> SoundEvents.POLAR_BEAR_AMBIENT;
-		};
-		if (this instanceof WoollyRhino || this instanceof Cerberus) return switch (cue) {
-			case 1 -> SoundEvents.RAVAGER_HURT; case 2 -> SoundEvents.RAVAGER_DEATH; default -> SoundEvents.RAVAGER_AMBIENT;
-		};
+	/** Cue 0 ambient, 1 hurt, 2 death. */
+	protected SoundEvent voice(int cue) {
 		return switch (cue) {
 			case 1 -> SoundEvents.FOX_HURT; case 2 -> SoundEvents.FOX_DEATH; default -> SoundEvents.FOX_AMBIENT;
 		};
@@ -180,7 +158,7 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 	@Override protected SoundEvent getAmbientSound() { return voice(0); }
 	@Override protected SoundEvent getHurtSound(DamageSource source) { return voice(1); }
 	@Override protected SoundEvent getDeathSound() { return voice(2); }
-	@Override protected float getSoundVolume() { return this instanceof DragonMount ? .25F : .45F; }
+	@Override protected float getSoundVolume() { return .45F; }
 	@Override public int getAmbientSoundInterval() { return 300; }
 	public boolean flying() { return entityData.get(FLYING); }
 	// Flight Presentation: Blend on entity ticks, never on render calls or shared model instances.
@@ -198,10 +176,10 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 	}
 	public float flightPose(float partialTick) { return net.minecraft.util.Mth.lerp(partialTick, previousFlightPose, flightPose); }
 	// Attack Presentation: Synced remaining ticks let riders and newly tracking observers see the same recovery.
-	void startAttackAnimation(int ticks) { entityData.set(ATTACK_TICKS, ticks); }
+	protected void startAttackAnimation(int ticks) { entityData.set(ATTACK_TICKS, ticks); }
 	public float attackPose(float partialTick) {
 		float remaining = Math.max(0, entityData.get(ATTACK_TICKS) - partialTick);
-		float amount = Math.clamp(remaining / (this instanceof WoollyRhino ? 3F : this instanceof DragonMount ? 12F : 8F), 0F, 1F);
+		float amount = Math.clamp(remaining / attackPoseTicks(), 0F, 1F);
 		return amount * amount * (3F - 2F * amount);
 	}
 	protected Vec3 unoccupiedInput() { return new Vec3(0, -.4, 0); }
@@ -221,7 +199,7 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 	// One server simulation drives both the rider and observers; clients send buttons, never positions.
 	@Override public boolean isClientAuthoritative() { return false; }
 	// Mount Authority: The rider must also accept server positions instead of sending vehicle positions back.
-	@Override protected boolean isLocalClientAuthoritative() { return false; }
+	@Override public boolean isLocalClientAuthoritative() { return false; }
 	@Override public LivingEntity getControllingPassenger() {
 		return getFirstPassenger() instanceof Player player && isOwnedBy(player) ? player : null;
 	}
@@ -229,7 +207,7 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 		return passenger instanceof Player player && isOwnedBy(player) && getPassengers().isEmpty() && isAlive()
 			&& !isBaby() && !care.breeding() && !care.offerPending();
 	}
-	@Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+	@Override public InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (!isAlive() || player.isSpectator()) return InteractionResult.PASS;
 		var held = player.getItemInHand(hand);
 		if (!held.isEmpty() && !held.is(tamingFood())) return InteractionResult.PASS;
@@ -277,8 +255,8 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 		return lastControls != Long.MIN_VALUE && level().getGameTime() - lastControls <= 10;
 	}
 	protected boolean diggingRequested() { return freshControls() && (buttons & DIG) != 0; }
-	boolean abilityRequested() { return freshControls() && (buttons & ABILITY) != 0; }
-	boolean forwardRequested() { return freshControls() && (buttons & FORWARD) != 0 && (buttons & BACK) == 0; }
+	protected boolean abilityRequested() { return freshControls() && (buttons & ABILITY) != 0; }
+	protected boolean forwardRequested() { return freshControls() && (buttons & FORWARD) != 0 && (buttons & BACK) == 0; }
 	public static Vec3 inputVector(int buttons) {
 		int x = ((buttons & LEFT) != 0 ? 1 : 0) - ((buttons & RIGHT) != 0 ? 1 : 0);
 		int z = ((buttons & FORWARD) != 0 ? 1 : 0) - ((buttons & BACK) != 0 ? 1 : 0);
@@ -287,7 +265,7 @@ public abstract class PrototypeMount extends PathfinderMob implements OwnableEnt
 		if (horizontal.lengthSqr() > 1) horizontal = horizontal.normalize();
 		return new Vec3(horizontal.x, y, horizontal.z);
 	}
-	@Override protected Vec3 getRiddenInput(Player player, Vec3 ignored) {
+	@Override public Vec3 getRiddenInput(Player player, Vec3 ignored) {
 		return freshControls() ? inputVector(buttons) : new Vec3(0, flying() ? -1 : 0, 0);
 	}
 	@Override protected void tickRidden(Player player, Vec3 input) {

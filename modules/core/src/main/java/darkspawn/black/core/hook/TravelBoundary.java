@@ -2,6 +2,7 @@ package darkspawn.black.core.hook;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
@@ -15,6 +16,8 @@ public final class TravelBoundary {
 		boolean isolated(ServerPlayer player);
 		/** A stable zone key for {@code level}: levels with different keys are on opposite sides of this boundary. */
 		String zone(Level level);
+		/** {@code level} keeps its own possessions (saved companions and ledgers) instead of sharing the overworld's. */
+		default boolean separatePossessions(Level level) { return false; }
 	}
 	private static final List<Boundary> BOUNDARIES = new CopyOnWriteArrayList<>();
 	private TravelBoundary() { }
@@ -27,5 +30,15 @@ public final class TravelBoundary {
 	public static boolean sameZone(Level from, Level to) {
 		for (var boundary : BOUNDARIES) if (!boundary.zone(from).equals(boundary.zone(to))) return false;
 		return true;
+	}
+	/** Where possessions saved from {@code level} live: the level itself if a boundary isolates them, else the overworld. */
+	public static ServerLevel possessionsLevel(ServerLevel level) {
+		for (var boundary : BOUNDARIES) if (boundary.separatePossessions(level)) return level;
+		return level.getServer().overworld();
+	}
+	/** {@code level} is inside a boundary zone that still shares the overworld's possessions (for example a shared island). */
+	public static boolean sharedIsland(Level level) {
+		for (var boundary : BOUNDARIES) if (!boundary.zone(level).isEmpty() && !boundary.separatePossessions(level)) return true;
+		return false;
 	}
 }

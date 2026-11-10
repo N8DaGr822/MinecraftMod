@@ -1,8 +1,8 @@
-package darkspawn.black.mount;
+package darkspawn.black.mountkit;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,11 +22,11 @@ public final class MountRegistry extends SavedData {
         ).apply(i, Entry::new));
     }
     public static final Codec<MountRegistry> CODEC = Codec.unboundedMap(Codec.STRING, Entry.CODEC).xmap(MountRegistry::new, r -> r.entries);
-    public static final SavedDataType<MountRegistry> TYPE = new SavedDataType<>(Darkspawn.id("mount_registry"), () -> new MountRegistry(Map.of()), CODEC, null);
+    public static final SavedDataType<MountRegistry> TYPE = new SavedDataType<>(DarkspawnCore.id("mount_registry"), () -> new MountRegistry(Map.of()), CODEC, null);
     private final Map<String, Entry> entries;
     private MountRegistry(Map<String, Entry> entries) { this.entries = new HashMap<>(entries); }
     // Ascension Possessions: Keep outside companion storage out of the new inventory profile.
-    public static MountRegistry get(ServerLevel level) { return (darkspawn.black.oneblock.Ascension.island(level)?level:level.getServer().overworld()).getDataStorage().computeIfAbsent(TYPE); }
+    public static MountRegistry get(ServerLevel level) { return darkspawn.black.core.hook.TravelBoundary.possessionsLevel(level).getDataStorage().computeIfAbsent(TYPE); }
     public String store(Entry entry) {
         String token = UUID.randomUUID().toString(); entries.put(token, entry); setDirty(); return token;
     }

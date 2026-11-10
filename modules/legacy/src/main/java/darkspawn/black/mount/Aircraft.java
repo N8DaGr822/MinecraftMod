@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.PrototypeMount;
+
 import java.util.List;
 import java.util.ArrayList;
 import net.minecraft.core.BlockPos;
@@ -21,6 +23,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 /** One pilot and at most nine ordinary blocks; existing server mount controls drive flight. */
 public final class Aircraft extends PrototypeMount {
+    @Override protected boolean machine() { return true; }
+    @Override protected boolean careMenu() { return false; }
     private static final EntityDataAccessor<String> BUILD = SynchedEntityData.defineId(Aircraft.class, EntityDataSerializers.STRING);
     private List<AirframeBlock> blocks = List.of();
     private String renderedBuild = "";
@@ -58,7 +62,7 @@ public final class Aircraft extends PrototypeMount {
         setBuild(AircraftCoreItem.validBuild(saved) ? saved : List.of());
         care.setFollowing(false);
     }
-    @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+    @Override public InteractionResult mobInteract(Player player, InteractionHand hand) {
         // Aircraft Editing: Sneak-use restores the captured blocks instead of exposing animal cargo/care.
         if (player.isSecondaryUseActive()) {
             if (player instanceof ServerPlayer server && player.getItemInHand(hand).isEmpty()) {

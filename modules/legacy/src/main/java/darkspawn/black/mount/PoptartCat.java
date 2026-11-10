@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.PrototypeMount;
+
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -11,6 +13,10 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 /** Nyan-inspired flying mount; rare wild cats hover in the upper Overworld. */
 public final class PoptartCat extends PrototypeMount {
+    @Override public net.minecraft.world.item.Item tamingFood() { return net.minecraft.world.item.Items.COOKIE; }
+    @Override protected net.minecraft.sounds.SoundEvent voice(int cue) {
+        return switch (cue) { case 1 -> net.minecraft.sounds.SoundEvents.CAT_HURT_BABY.value(); case 2 -> net.minecraft.sounds.SoundEvents.CAT_DEATH_BABY.value(); default -> net.minecraft.sounds.SoundEvents.CAT_PURR_BABY.value(); };
+    }
     private static final DustParticleOptions[] RAINBOW = java.util.stream.IntStream.of(
         0xFF3030, 0xFF9820, 0xFFE838, 0x40E858, 0x3498FF, 0xAD55FF)
         .mapToObj(color -> new DustParticleOptions(color, .8F)).toArray(DustParticleOptions[]::new);
@@ -46,7 +52,7 @@ public final class PoptartCat extends PrototypeMount {
     public static AttributeSupplier.Builder attributes() {
         return PrototypeMount.attributes().add(Attributes.MAX_HEALTH, 28).add(Attributes.MOVEMENT_SPEED, .28F);
     }
-    @Override protected boolean canFly() { return true; }
-    @Override protected float groundSpeed() { return .28F; }
+    @Override public boolean canFly() { return true; }
+    @Override public float groundSpeed() { return .28F; }
     @Override protected String mountingMessage() { return "message.darkspawn.mount_flying_mounted"; }
 }

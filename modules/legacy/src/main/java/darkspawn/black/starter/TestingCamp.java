@@ -9,7 +9,7 @@ import darkspawn.black.expeditiongear.ExpeditionArmor;
 import darkspawn.black.boss.BossItems;
 import darkspawn.black.boss.BossProfile;
 import darkspawn.black.forsaken.ForsakenContent;
-import darkspawn.black.mount.MountCompanions;
+import darkspawn.black.mountkit.MountCompanions;
 import darkspawn.black.pirate.*;
 import darkspawn.black.worldgen.LandmarkCompass;
 import java.util.*;

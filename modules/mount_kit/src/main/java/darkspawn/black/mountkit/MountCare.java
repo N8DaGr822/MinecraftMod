@@ -1,4 +1,4 @@
-package darkspawn.black.mount;
+package darkspawn.black.mountkit;
 
 import java.util.Comparator;
 import java.util.UUID;
@@ -35,7 +35,7 @@ public final class MountCare {
             && (mount.isOwnedBy(player) || offeredTo(player));
     }
     public void setFollowing(boolean value) {
-        following = value && !(mount instanceof GroundWalker); loveUntil = 0;
+        following = value && mount.canFollow(); loveUntil = 0;
         mount.getNavigation().stop();
         // Stay Command: Clear the movement controller's last waypoint as well as the path.
         mount.getMoveControl().setWantedPosition(mount.getX(), mount.getY(), mount.getZ(), 0);
@@ -77,17 +77,17 @@ public final class MountCare {
             if (mate != null) breed(level, mate);
         }
     }
-    Vec3 followInput() {
+    public Vec3 followInput() {
         if (!following || mount.isLeashed() || !(mount.level() instanceof ServerLevel level) || !mount.isTamed()) return Vec3.ZERO;
         var owner = level.getPlayerByUUID(mount.getOwnerReference().getUUID());
         if (owner == null || !owner.isAlive() || owner.isSpectator() || owner.isPassenger()) return Vec3.ZERO;
         Vec3 delta = owner.position().subtract(mount.position());
-        if (delta.lengthSqr() <= 9 || delta.lengthSqr() >= 1024 || mount instanceof Seahorse && !owner.isInWater()) return Vec3.ZERO;
+        if (delta.lengthSqr() <= 9 || delta.lengthSqr() >= 1024 || mount.waterBound() && !owner.isInWater()) return Vec3.ZERO;
         if (mount.canFly()) delta = delta.add(0, 2, 0);
         return delta.normalize().scale(.65).yRot(mount.getYRot() * (float)(Math.PI / 180));
     }
     private boolean readyParent() {
-        return !(mount instanceof MagicCarpet) && !(mount instanceof Aircraft) && !(mount instanceof GroundWalker) && mount.isTamed() && !mount.isBaby() && !following && !mount.isVehicle() && !mount.isPassenger()
+        return !mount.machine() && mount.isTamed() && !mount.isBaby() && !following && !mount.isVehicle() && !mount.isPassenger()
             && !offerPending() && mount.isAlive() && mount.getHealth() >= mount.getMaxHealth()
             && mount.level().getGameTime() >= breedAfter;
     }

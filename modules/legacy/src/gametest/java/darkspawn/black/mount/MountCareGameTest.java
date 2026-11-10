@@ -1,5 +1,10 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.PrototypeMount;
+import darkspawn.black.mountkit.MountCompanions;
+import darkspawn.black.mountkit.MountMenu;
+import darkspawn.black.mountkit.MountRegistry;
+
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.embedded.EmbeddedChannel;
 import java.util.UUID;

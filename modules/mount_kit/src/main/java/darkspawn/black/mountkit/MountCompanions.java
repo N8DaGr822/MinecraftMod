@@ -1,7 +1,6 @@
-package darkspawn.black.mount;
+package darkspawn.black.mountkit;
 
-import darkspawn.black.Darkspawn;
-import darkspawn.black.oneblock.OneBlock;
+import darkspawn.black.core.DarkspawnCore;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.BlockPos;
@@ -35,13 +34,14 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public final class MountCompanions {
-    public static final MenuType<MountMenu> MENU = Registry.register(BuiltInRegistries.MENU, Darkspawn.id("mount_care"),
+    public static final MenuType<MountMenu> MENU = Registry.register(BuiltInRegistries.MENU, DarkspawnCore.id("mount_care"),
         new MenuType<>(MountMenu::new, FeatureFlags.VANILLA_SET));
     public static final Item CAPSULE = register("companion_capsule", false);
     public static final Item VET_KIT = register("veterinary_kit", true);
+    private static final Identifier RECLAIM_PHASE = DarkspawnCore.id("mount_reclaim");
     private MountCompanions() { }
     private static Item register(String name, boolean kit) {
-        var key = ResourceKey.create(Registries.ITEM, Darkspawn.id(name));
+        var key = ResourceKey.create(Registries.ITEM, DarkspawnCore.id(name));
         return Registry.register(BuiltInRegistries.ITEM, key, new Item(new Item.Properties().setId(key).stacksTo(1).component(DataComponents.LORE,
             new net.minecraft.world.item.component.ItemLore(java.util.List.of(
                 Component.translatable("tooltip.darkspawn." + name + ".use"),
@@ -71,10 +71,12 @@ public final class MountCompanions {
     }
     public static void initialize() {
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(e -> { e.accept(CAPSULE); e.accept(VET_KIT); });
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> reclaim(handler.player));
+        // Recovery Inventory: Deliver tokens after every default-phase join listener (for example profile restores).
+        ServerPlayConnectionEvents.JOIN.addPhaseOrdering(net.fabricmc.fabric.api.event.Event.DEFAULT_PHASE, RECLAIM_PHASE);
+        ServerPlayConnectionEvents.JOIN.register(RECLAIM_PHASE, (handler, sender, server) -> reclaim(handler.player));
     }
-    static void message(Player player, String key) { player.sendOverlayMessage(Component.translatable("message.darkspawn." + key)); }
-    static boolean consume(Player player, Item item) {
+    public static void message(Player player, String key) { player.sendOverlayMessage(Component.translatable("message.darkspawn." + key)); }
+    public static boolean consume(Player player, Item item) {
         for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
             var stack = player.getInventory().getItem(slot);
             if (stack.is(item)) { stack.consume(1, player); player.getInventory().setChanged(); return true; }
@@ -83,7 +85,12 @@ public final class MountCompanions {
     }
     public static boolean cargoAllowed(ItemStack stack) {
         return !stack.is(CAPSULE) && !stack.is(ItemTags.SHULKER_BOXES) && stack.getItem().canFitInsideContainerItems()
-            && !stack.has(darkspawn.black.storage.Storage.BANK_CONTENTS) && !stack.has(DataComponents.CONTAINER) && !stack.has(DataComponents.BUNDLE_CONTENTS);
+            && !bankContents(stack) && !stack.has(DataComponents.CONTAINER) && !stack.has(DataComponents.BUNDLE_CONTENTS);
+    }
+    // Storage Compat: Bank chest contents are refused when the storage mod is installed, without a class dependency on it.
+    private static boolean bankContents(ItemStack stack) {
+        var type = BuiltInRegistries.DATA_COMPONENT_TYPE.getValue(DarkspawnCore.id("bank_contents"));
+        return type != null && stack.has(type);
     }
     public static String token(ItemStack stack) {
         return stack.is(CAPSULE) ? stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("MountToken", "") : "";
@@ -98,15 +105,14 @@ public final class MountCompanions {
         var output = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
         mount.saveWithoutId(output);
         return MountRegistry.get(level).store(new MountRegistry.Entry(mount.getOwnerReference().getUUID(), mount.getUUID(),
-            BuiltInRegistries.ENTITY_TYPE.getKey(mount.getType()).toString(), output.buildResult(), recovery, OneBlock.island(level)));
+            BuiltInRegistries.ENTITY_TYPE.getKey(mount.getType()).toString(), output.buildResult(), recovery, darkspawn.black.core.hook.TravelBoundary.sharedIsland(level)));
     }
     private static void closeMenus(PrototypeMount mount) {
         for (var player : ((ServerLevel) mount.level()).players())
             if (player.containerMenu instanceof MountMenu menu && menu.mount == mount) player.closeContainer();
     }
     public static boolean capture(ServerPlayer player, PrototypeMount mount, ItemStack capsule) {
-        if (mount instanceof GroundWalker && !mount.onGround()) return false;
-        if (mount instanceof Thalassar) return false; // Unique Bond: Only the conch may store this companion.
+        if (!mount.capsuleStorable()) return false;
         if (!capsule.is(CAPSULE) || !token(capsule).isEmpty() || !mount.isOwnedBy(player) || !mount.care.accessible(player)
                 || !mount.care.available() || mount.isLeashed()) return false;
         closeMenus(mount);
@@ -133,14 +139,14 @@ public final class MountCompanions {
         // Lost Tickets: Reissuing a recovery token is safe because its server record can be redeemed only once.
         for (var saved : MountRegistry.get(player.level()).entries().entrySet()) {
             var entry = saved.getValue();
-            if (!entry.recovery() || !entry.owner().equals(player.getUUID()) || entry.island() != OneBlock.island(player.level())) continue;
+            if (!entry.recovery() || !entry.owner().equals(player.getUUID()) || entry.island() != darkspawn.black.core.hook.TravelBoundary.sharedIsland(player.level())) continue;
             boolean hasToken = false;
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) if (token(player.getInventory().getItem(i)).equals(saved.getKey())) hasToken = true;
             if (!hasToken) { giveToken(player, saved.getKey(), Component.translatable("entity." + entry.type().replace(':', '.')), true); return; }
         }
     }
     public static boolean safePlacement(ServerLevel level, PrototypeMount mount) {
-        if ((mount instanceof MagicCarpet || mount instanceof Aircraft || mount instanceof GroundWalker) && !MagicCarpet.allowedLevel(level)) return false;
+        if (mount.machine() && !PrototypeMount.vehicleLevel(level)) return false;
         var bounds = mount.getBoundingBox(); var pos = mount.blockPosition();
         if (!level.hasChunkAt(pos) || !level.getWorldBorder().isWithinBounds(bounds) || bounds.minY < level.getMinY()
                 || bounds.maxY > level.getMaxY() || !level.noCollision(mount)) return false;
@@ -156,7 +162,7 @@ public final class MountCompanions {
             water |= fluid.is(net.minecraft.tags.FluidTags.WATER);
             submerged &= fluid.is(net.minecraft.tags.FluidTags.WATER);
         }
-        if (mount instanceof Seahorse) return submerged;
+        if (mount.waterBound()) return submerged;
         if (water) return mount.canSwim();
         var floor = level.getBlockState(pos.below());
         if (floor.is(net.minecraft.world.level.block.Blocks.MAGMA_BLOCK) || floor.is(net.minecraft.world.level.block.Blocks.CACTUS)) return false;
@@ -165,7 +171,7 @@ public final class MountCompanions {
     public static boolean release(ServerPlayer player, ItemStack capsule, BlockPos pos) {
         var level = player.level(); var registry = MountRegistry.get(level); String id = token(capsule);
         var entry = registry.get(id);
-        if (entry == null || !entry.owner().equals(player.getUUID()) || entry.island() != OneBlock.island(level)
+        if (entry == null || !entry.owner().equals(player.getUUID()) || entry.island() != darkspawn.black.core.hook.TravelBoundary.sharedIsland(level)
                 || !player.isAlive() || player.isSpectator() || !player.mayBuild() || player.distanceToSqr(Vec3.atCenterOf(pos)) > 64
                 || !level.hasChunkAt(pos) || !level.mayInteract(player, pos)) return false;
         for (var world : level.getServer().getAllLevels()) if (world.getEntity(entry.mountId()) != null) return false;

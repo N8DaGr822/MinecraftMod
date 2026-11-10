@@ -1,7 +1,7 @@
-package darkspawn.black.client.mount;
+package darkspawn.black.mountkit.client;
 
 import darkspawn.black.core.client.UiTheme;
-import darkspawn.black.mount.MountMenu;
+import darkspawn.black.mountkit.MountMenu;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

@@ -1,5 +1,7 @@
 package darkspawn.black.mount;
 
+import darkspawn.black.mountkit.PrototypeMount;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -14,21 +16,25 @@ import net.minecraft.world.level.Level;
 
 /** Crafted ground machine; ownership and recovery use the existing companion registry. */
 public final class GroundWalker extends PrototypeMount {
+    @Override protected boolean machine() { return true; }
+    @Override protected boolean careMenu() { return false; }
+    @Override protected boolean canFollow() { return false; }
+    @Override protected boolean capsuleStorable() { return onGround(); }
     private long nextRepair;
     public GroundWalker(EntityType<? extends GroundWalker> type, Level level) { super(type, level); }
     public static AttributeSupplier.Builder attributes() {
         return PrototypeMount.attributes().add(Attributes.MAX_HEALTH, 80).add(Attributes.MOVEMENT_SPEED, .18F)
             .add(Attributes.STEP_HEIGHT, 1);
     }
-    @Override protected boolean canFly() { return false; }
-    @Override protected float groundSpeed() { return .18F; }
+    @Override public boolean canFly() { return false; }
+    @Override public float groundSpeed() { return .18F; }
     @Override public Item tamingFood() { return Items.IRON_INGOT; }
     @Override protected String mountingMessage() { return "message.darkspawn.ground_walker_mounted"; }
     @Override public boolean canTeleport(Level from, Level to) { return MagicCarpet.allowedLevel(to) && super.canTeleport(from, to); }
     @Override public net.minecraft.world.entity.Entity teleport(net.minecraft.world.level.portal.TeleportTransition transition) {
         return MagicCarpet.allowedLevel(transition.newLevel()) ? super.teleport(transition) : null;
     }
-    @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+    @Override public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!isAlive() || player.isSpectator()) return InteractionResult.PASS;
         var held = player.getItemInHand(hand);
         if (!held.isEmpty() && !held.is(Items.IRON_INGOT)) return InteractionResult.PASS;

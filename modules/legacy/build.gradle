@@ -29,6 +29,8 @@ dependencies {
 	include module('core')
 	implementation module('creature_kit')
 	include module('creature_kit')
+	implementation module('mount_kit')
+	include module('mount_kit')
 	implementation module('storage')
 	include module('storage')
 	implementation module('bonfire')
