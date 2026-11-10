@@ -49,4 +49,6 @@ dependencies {
 	include module('legendary_armor')
 	implementation module('farming')
 	include module('farming')
+	implementation module('fishing')
+	include module('fishing')
 }

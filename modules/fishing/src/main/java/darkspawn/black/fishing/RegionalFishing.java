@@ -1,6 +1,6 @@
-package darkspawn.black.cooking;
+package darkspawn.black.fishing;
 
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
 import java.util.*;
 import net.fabricmc.fabric.api.biome.v1.*;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -22,6 +22,10 @@ public final class RegionalFishing {
     public static final List<Item> RAW=new ArrayList<>(),COOKED=new ArrayList<>(),BUCKETS=new ArrayList<>();
     public static final List<EntityType<RegionalFish>> TYPES=new ArrayList<>();
     private RegionalFishing() { }
+    private static <T extends Item> T register(String name,java.util.function.Function<Item.Properties,T> factory){
+        var key=ResourceKey.create(Registries.ITEM,DarkspawnCore.id(name));
+        return Registry.register(BuiltInRegistries.ITEM,key,factory.apply(new Item.Properties().setId(key)));
+    }
     public static int region(Level level,BlockPos pos){
         var biome=level.getBiome(pos);
         if(pos.getY()<0&&!level.canSeeSky(pos))return 5;
@@ -41,12 +45,12 @@ public final class RegionalFishing {
     public static void initialize(){
         for(int i=0;i<IDS.length;i++){
             final int kind=i;String id=IDS[i];
-            RAW.add(Cuisine.register(id,p->new Item(p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(.1F).build()))));
-            COOKED.add(Cuisine.register("cooked_"+id,p->new Item(p.food(new FoodProperties.Builder().nutrition(6).saturationModifier(.6F).build()))));
-            var key=ResourceKey.create(Registries.ENTITY_TYPE,Darkspawn.id(id));
+            RAW.add(register(id,p->new Item(p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(.1F).build()))));
+            COOKED.add(register("cooked_"+id,p->new Item(p.food(new FoodProperties.Builder().nutrition(6).saturationModifier(.6F).build()))));
+            var key=ResourceKey.create(Registries.ENTITY_TYPE,DarkspawnCore.id(id));
             var type=Registry.register(BuiltInRegistries.ENTITY_TYPE,key,EntityType.Builder.<RegionalFish>of((t,l)->new RegionalFish(t,l,kind),MobCategory.WATER_AMBIENT).sized(i==1?.8F:.5F,.35F).clientTrackingRange(6).noLootTable().build(key));TYPES.add(type);
             FabricDefaultAttributeRegistry.register(type,AbstractFish.createAttributes());
-            BUCKETS.add(Cuisine.register(id+"_bucket",p->new MobBucketItem(type,net.minecraft.world.level.material.Fluids.WATER,net.minecraft.sounds.SoundEvents.BUCKET_EMPTY_FISH,p.stacksTo(1))));
+            BUCKETS.add(register(id+"_bucket",p->new MobBucketItem(type,net.minecraft.world.level.material.Fluids.WATER,net.minecraft.sounds.SoundEvents.BUCKET_EMPTY_FISH,p.stacksTo(1))));
             SpawnPlacements.register(type,SpawnPlacementTypes.IN_WATER,Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,(t,l,reason,pos,random)->canSpawn(kind,l,pos));
             BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),MobCategory.WATER_AMBIENT,type,2,1,3);
         }

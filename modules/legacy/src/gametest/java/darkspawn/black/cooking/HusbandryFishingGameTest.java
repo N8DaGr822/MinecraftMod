@@ -41,14 +41,6 @@ public final class HusbandryFishingGameTest {
 	}
 	private static void remove(ServerPlayer player) { player.level().getServer().getPlayerList().remove(player); player.discard(); }
 
-    @GameTest public void fishBucketsPreserveSpeciesAndFishingKeepsSpecialLoot(GameTestHelper h){
-        for(int i=0;i<6;i++){
-            var fish=RegionalFishing.TYPES.get(i).create(h.getLevel(),EntitySpawnReason.COMMAND);fish.setFromBucket(true);fish.setCustomName(Component.literal("Fish "+i));
-            h.assertTrue(fish.getBucketItemStack().is(RegionalFishing.BUCKETS.get(i)),"Each swimming species has its own bucket");
-            var out=TagValueOutput.createWithContext(ProblemReporter.DISCARDING,h.getLevel().registryAccess());fish.saveWithoutId(out);var copy=RegionalFishing.TYPES.get(i).create(h.getLevel(),EntitySpawnReason.LOAD);copy.load(TagValueInput.create(ProblemReporter.DISCARDING,h.getLevel().registryAccess(),out.buildResult()));h.assertTrue(copy.fromBucket()&&copy.getName().getString().equals("Fish "+i),"Bucket persistence and custom name survive");
-        }
-        var book=new ItemStack(Items.ENCHANTED_BOOK);var named=new ItemStack(Items.COD);named.set(DataComponents.CUSTOM_NAME,Component.literal("Other mod's fish"));var result=RegionalFishing.catches(h.getLevel(),h.absolutePos(BlockPos.ZERO),List.of(book,named));h.assertTrue(ItemStack.matches(result.get(0),book)&&ItemStack.matches(result.get(1),named),"Treasure and customized catches remain untouched");h.succeed();
-    }
     @GameTest public void animalHarvestCostsCooldownsAndNextEggPersist(GameTestHelper h){
         var p=player(h);try{
             var goat=EntityTypes.GOAT.create(h.getLevel(),EntitySpawnReason.COMMAND);goat.setPos(p.position());p.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.GLASS_BOTTLE,2));

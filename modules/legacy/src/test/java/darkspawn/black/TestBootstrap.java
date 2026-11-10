@@ -31,6 +31,7 @@ public final class TestBootstrap {
 		new darkspawn.black.climate.ClimateMod().onInitialize();
 		new darkspawn.black.legendaryarmor.LegendaryArmorMod().onInitialize();
 		new darkspawn.black.farming.FarmingMod().onInitialize();
+		new darkspawn.black.fishing.FishingMod().onInitialize();
 		new Darkspawn().onInitialize();
 		// Minecraft 26.3: Bind defaults after registering all mod items and components.
 		var registries = VanillaRegistries.createWorldLookup();

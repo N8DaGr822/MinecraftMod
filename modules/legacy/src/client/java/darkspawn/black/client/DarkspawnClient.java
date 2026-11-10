@@ -16,12 +16,6 @@ import net.minecraft.network.chat.Component;
 public class DarkspawnClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-        for(int i=0;i<darkspawn.black.cooking.RegionalFishing.TYPES.size();i++){
-            String id=darkspawn.black.cooking.RegionalFishing.IDS[i];
-            net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.cooking.RegionalFishing.TYPES.get(i),context->new net.minecraft.client.renderer.entity.CodRenderer(context){
-                @Override public net.minecraft.resources.Identifier getTextureLocation(net.minecraft.client.renderer.entity.state.LivingEntityRenderState state){return Darkspawn.id("textures/entity/fish/"+id+".png");}
-            });
-        }
 		OneBlockControls.initialize();
         net.minecraft.client.renderer.entity.EntityRenderers.register(darkspawn.black.oneblock.AscensionGuardian.TYPE,AscensionGuardianRenderer::new);
 		JournalControls.initialize();

@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "darkspawn.black.fishing.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"RegionalFishingMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
