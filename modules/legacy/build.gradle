@@ -1,0 +1,25 @@
+plugins {
+	id 'darkspawn.fabric-module'
+}
+
+fabricApi {
+	configureDataGeneration {
+		client = true
+		modId = 'darkspawn'
+	}
+}
+
+dependencies {
+	implementation "com.geckolib:geckolib-fabric-${project.minecraft_version}:${project.geckolib_version}"
+}
+
+tasks.register('checkCuisineArt', Exec) {
+	group = 'verification'
+	description = 'Check cuisine models, textures and item references without starting Minecraft.'
+	commandLine providers.gradleProperty('pythonExecutable').getOrElse('python'), rootProject.file('tools/assets/verify-cuisine-art.py').absolutePath
+}
+
+tasks.named('fullCheck') {
+	description = 'Pre-push checks without packaging: all unit tests, server GameTests and cuisine assets.'
+	dependsOn tasks.named('checkCuisineArt')
+}

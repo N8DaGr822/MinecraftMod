@@ -43,3 +43,8 @@ replay_*.log
 # Python asset generators
 __pycache__/
 *.pyc
+
+# Unit test and GameTest droppings in module directories
+modules/*/config/
+modules/*/logs/
+modules/*/run/

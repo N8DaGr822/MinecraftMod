@@ -1,0 +1,20 @@
+plugins {
+	id 'groovy-gradle-plugin'
+}
+
+repositories {
+	maven {
+		name = 'Fabric'
+		url = 'https://maven.fabricmc.net/'
+	}
+	mavenCentral()
+	gradlePluginPortal()
+}
+
+// The root gradle.properties stays the single source of versions.
+def rootProperties = new Properties()
+file('../gradle.properties').withInputStream { rootProperties.load(it) }
+
+dependencies {
+	implementation "net.fabricmc.fabric-loom:net.fabricmc.fabric-loom.gradle.plugin:${rootProperties.loom_version}"
+}

@@ -9,5 +9,11 @@ pluginManagement {
 	}
 }
 
-// Should match your modid
 rootProject.name = 'darkspawn'
+
+// Each module lives in modules/<name> and builds its own mod jar (see buildSrc darkspawn.fabric-module).
+// `legacy` is the remaining monomod (mod id `darkspawn`) while features are extracted from it.
+['legacy'].each { name ->
+	include ":${name}"
+	project(":${name}").projectDir = file("modules/${name}")
+}

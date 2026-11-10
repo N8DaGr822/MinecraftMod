@@ -1,0 +1,143 @@
+// Shared build for every Darkspawn module in modules/<name>.
+// A module's mod id defaults to darkspawn_<project name>; modules/<name>/gradle.properties may set mod_id and archives_name.
+plugins {
+	id 'net.fabricmc.fabric-loom'
+}
+
+def moduleId = (findProperty('mod_id') ?: "darkspawn_${project.name.replace('-', '_')}") as String
+def hasGameTests = file('src/gametest').exists()
+ext.modId = moduleId
+
+base {
+	archivesName = (findProperty('archives_name') ?: moduleId) as String
+}
+
+repositories {
+	exclusiveContent {
+		forRepository {
+			maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+		}
+		filter { includeGroupAndSubgroups('com.geckolib') }
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		register(moduleId) {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+if (hasGameTests) {
+	fabricApi {
+		configureTests {
+			createSourceSet = true
+			modId = "${moduleId}-gametest"
+			enableGameTests = true
+			enableClientGameTests = false
+		}
+	}
+}
+
+// Other modules are consumed as their finished jar (main and client classes plus resources), the same shape
+// Fabric Loader sees in production. Use `implementation module('core')` and `include module('core')`.
+configurations {
+	modJar {
+		canBeConsumed = true
+		canBeResolved = false
+	}
+}
+artifacts {
+	modJar tasks.named('jar')
+}
+ext.module = { String name -> project.dependencies.project(path: ":${name}", configuration: 'modJar') }
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+test {
+	useJUnitPlatform()
+	// Model tests load client classes as well as the common mod classes.
+	classpath += sourceSets.client.output
+	systemProperty 'fabric.classPathGroups', (sourceSets.main.output.files + sourceSets.client.output.files).collect { it.absolutePath }.join(File.pathSeparator)
+	maxParallelForks = 1
+	jvmArgs '-XX:ActiveProcessorCount=2'
+}
+
+def gameTestFilter = providers.gradleProperty('gameTestFilter')
+def gameTestRunDir = providers.gradleProperty('gameTestRunDir')
+def operationsDrill = providers.gradleProperty('operationsDrill')
+if (hasGameTests) {
+	// Loom supplies the process working directory from its run configuration at execution time.
+	if (gameTestRunDir.isPresent()) loom.runs.named('gameTest') { runDir(gameTestRunDir.get()) }
+	tasks.named('runGameTest') {
+		// Avoid competing Minecraft/JUnit processes on development machines.
+		mustRunAfter tasks.named('test')
+		jvmArgs '-XX:ActiveProcessorCount=2'
+		// Recovery drills use an isolated runtime world while retaining the normal incremental compilation output.
+		if (operationsDrill.isPresent()) {
+			if (!gameTestRunDir.isPresent() || !(operationsDrill.get() in ['seed', 'restore'])) throw new GradleException('operationsDrill requires an isolated gameTestRunDir and seed or restore.')
+			systemProperty 'darkspawn.operationsDrill', operationsDrill.get()
+		}
+		if (gameTestFilter.isPresent()) {
+			if (gameTestFilter.get().isBlank()) throw new GradleException('gameTestFilter must not be blank')
+			systemProperty 'fabric-api.gametest.filter', gameTestFilter.get()
+		}
+	}
+}
+
+tasks.register('playBuild') {
+	group = 'build'
+	description = 'Build the playable JAR without starting unit tests or a GameTest server.'
+	dependsOn tasks.named('assemble')
+}
+
+tasks.register('fullCheck') {
+	group = 'verification'
+	description = 'Pre-push checks without packaging: unit tests and server GameTests.'
+	dependsOn tasks.named('check'), tasks.named('test')
+	if (hasGameTests) dependsOn tasks.named('runGameTest')
+}
+
+// A pre-push run must not accidentally inherit a narrowed server-test selection.
+if (gameTestFilter.isPresent() && gradle.startParameter.taskNames.any { it.tokenize(':').last() in ['fullCheck', 'build', 'check'] }) {
+	throw new GradleException('Use runGameTest with -PgameTestFilter for targeted checks; fullCheck/build/check must be unfiltered.')
+}
+
+processResources {
+	def version = project.version
+	inputs.property 'version', version
+
+	filesMatching('fabric.mod.json') {
+		expand 'version': version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	def projectName = project.name
+	inputs.property 'projectName', projectName
+
+	from(rootProject.file('LICENSE')) {
+		rename { "${it}_$projectName" }
+	}
+}

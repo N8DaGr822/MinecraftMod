@@ -6,13 +6,13 @@ from pathlib import Path
 from cuisine import MEALS, BOSSES, FEASTS
 
 root=Path(__file__).resolve().parents[2]
-assets=root/'src/main/resources/assets/darkspawn'
+assets=root/'modules/legacy/src/main/resources/assets/darkspawn'
 for file,size in [('textures/block/cuisine_atlas.png',512),('icon.png',256)]:
     raw=(assets/file).read_bytes()
     assert raw[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',raw[16:24])==(size,size),file
 models=[]
 ingredients=[row.split('|')[1] for row in BOSSES.splitlines()]
-source=(root/'src/main/java/darkspawn/black/cooking/Cuisine.java').read_text()
+source=(root/'modules/legacy/src/main/java/darkspawn/black/cooking/Cuisine.java').read_text()
 registered=set(re.findall(r'INGREDIENTS.put\(BossKind\.[A-Z_]+, register\("([^"]+)"',source))
 assert registered==set(ingredients),'Boss ingredient artwork catalog differs from runtime registrations'
 signatures=[]
