@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:thunder_bird_essence",
+        "darkspawn:netherborn_essence"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "darkspawn:thunder_bird_essence",
+    "darkspawn:netherborn_essence",
+    "minecraft:netherite_ingot"
+  ],
+  "result": {
+    "id": "darkspawn:phoenix_core",
+    "count": 1
+  }
+}

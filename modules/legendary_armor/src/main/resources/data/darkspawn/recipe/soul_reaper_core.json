@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "darkspawn:soulbound_colossus_essence",
+        "darkspawn:baba_yaga_essence"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "darkspawn:soulbound_colossus_essence",
+    "darkspawn:baba_yaga_essence",
+    "minecraft:netherite_ingot"
+  ],
+  "result": {
+    "id": "darkspawn:soul_reaper_core",
+    "count": 1
+  }
+}

@@ -52,8 +52,6 @@ public class DarkspawnClient implements ClientModInitializer {
 			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("message.darkspawn.forsaken_scan_mode", Component.translatable("scanner.darkspawn.mode_" + darkspawn.black.forsaken.NestScannerItem.mode(stack))).withStyle(ChatFormatting.AQUA));
 			if (darkspawn.black.forsaken.ForsakenContent.ARMOR.containsValue(stack.getItem())) lines.add(Component.translatable("tooltip.darkspawn.quarantine").withStyle(ChatFormatting.GREEN));
 			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("tooltip.darkspawn.bio_scanner").withStyle(ChatFormatting.GREEN));
-			String legendary = darkspawn.black.equipment.LegendaryArmor.family(stack);
-			if (!legendary.isEmpty()) lines.add(Component.translatable("tooltip.darkspawn.legendary." + legendary).withStyle(ChatFormatting.GOLD));
 			if (stack.getItem() instanceof MealItem meal) {
 				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));
 				lines.add(meal.effectDescription().copy().withStyle(ChatFormatting.GREEN));
