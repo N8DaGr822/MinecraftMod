@@ -55,24 +55,6 @@ public class DarkspawnClient implements ClientModInitializer {
 			if (stack.is(darkspawn.black.forsaken.ForsakenContent.SCANNER)) lines.add(Component.translatable("tooltip.darkspawn.bio_scanner").withStyle(ChatFormatting.GREEN));
 			String legendary = darkspawn.black.equipment.LegendaryArmor.family(stack);
 			if (!legendary.isEmpty()) lines.add(Component.translatable("tooltip.darkspawn.legendary." + legendary).withStyle(ChatFormatting.GOLD));
-			if (stack.is(darkspawn.black.equipment.ExpeditionArmor.DIVER.get(net.minecraft.world.item.equipment.ArmorType.HELMET))) {
-				lines.add(Component.translatable("tooltip.darkspawn.diver_helmet").withStyle(ChatFormatting.GRAY));
-			}
-			if (darkspawn.black.equipment.ExpeditionArmor.DESERT_WANDERER.containsValue(stack.getItem())) {
-				lines.add(Component.translatable("tooltip.darkspawn.desert_wanderer_armor").withStyle(ChatFormatting.GRAY));
-			}
-			if (darkspawn.black.equipment.ExpeditionArmor.ASHWALKER.containsValue(stack.getItem())) {
-				lines.add(Component.translatable("tooltip.darkspawn.ashwalker_armor").withStyle(ChatFormatting.GRAY));
-			}
-			if (darkspawn.black.equipment.ExpeditionArmor.MOUNTAINEERING.containsValue(stack.getItem())) {
-				lines.add(Component.translatable("tooltip.darkspawn.mountaineering_armor").withStyle(ChatFormatting.GRAY));
-			}
-			if (stack.is(darkspawn.black.equipment.ExpeditionArmor.SPELUNKING.get(net.minecraft.world.item.equipment.ArmorType.HELMET))) {
-				lines.add(Component.translatable("tooltip.darkspawn.spelunking_helmet").withStyle(ChatFormatting.GRAY));
-			}
-			if (stack.is(darkspawn.black.equipment.ExpeditionArmor.SPELUNKING.get(net.minecraft.world.item.equipment.ArmorType.BOOTS))) {
-				lines.add(Component.translatable("tooltip.darkspawn.spelunking_boots").withStyle(ChatFormatting.GRAY));
-			}
 			if (stack.getItem() instanceof MealItem meal) {
 				lines.add(MealItem.nutritionDescription(stack).copy().withStyle(ChatFormatting.GRAY));
 				lines.add(meal.effectDescription().copy().withStyle(ChatFormatting.GREEN));

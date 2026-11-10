@@ -28,9 +28,9 @@ class CoreHooksTest {
 
 	@Test
 	void providersAreSummedAndCollected() {
-		ClimateProtection.register(player -> new ClimateProtection.Protection(15, 0));
-		ClimateProtection.register(player -> new ClimateProtection.Protection(5, 20));
-		assertEquals(new ClimateProtection.Protection(20, 20), ClimateProtection.total(null));
+		ClimateProtection.register((player, wet) -> new ClimateProtection.Protection(15, 0));
+		ClimateProtection.register((player, wet) -> new ClimateProtection.Protection(wet ? 5 : 0, 20));
+		assertEquals(new ClimateProtection.Protection(20, 20), ClimateProtection.total(null, true));
 		JournalSections.register((player, out) -> { out.accept(new JournalSections.Entry("a", "overview", "A", "", true)); out.accept(new JournalSections.Entry("b", "landmarks", "B", "", false)); });
 		assertEquals(2, JournalSections.entries(null).size());
 	}

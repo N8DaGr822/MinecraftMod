@@ -1,6 +1,6 @@
-package darkspawn.black.mixin;
+package darkspawn.black.expeditiongear.mixin;
 
-import darkspawn.black.equipment.ExpeditionArmor;
+import darkspawn.black.expeditiongear.ExpeditionArmor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,6 +1,7 @@
 package darkspawn.black.equipment;
 
 import darkspawn.black.Darkspawn;
+import darkspawn.black.core.hook.ClimateProtection;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -97,23 +98,19 @@ public final class Temperature {
 	}
 
 	public static float protectedClimate(ServerPlayer player, float climate) {
-		int cold = 0, heat = 0, warmth = 0, cooling = 0, mountain = 0, diver = 0;
+		int cold = 0, heat = 0, warmth = 0, cooling = 0;
 		var warmEnchant = player.registryAccess().getOrThrow(WARMTH);
 		var coolEnchant = player.registryAccess().getOrThrow(COOLING);
 		for (ArmorType slot : SLOTS) {
 			var item = player.getItemBySlot(slot.getSlot());
-			if (item.is(ExpeditionArmor.MOUNTAINEERING.get(slot))) { cold += 20; mountain++; }
-			if (item.is(ExpeditionArmor.DESERT_WANDERER.get(slot))) heat += 20;
-			if (item.is(ExpeditionArmor.ASHWALKER.get(slot))) heat += player.level().dimension() == Level.NETHER ? 25 : 15;
-			if (item.is(ExpeditionArmor.DIVER.get(slot))) diver++;
 			warmth += Math.clamp(EnchantmentHelper.getItemEnchantmentLevel(warmEnchant, item), 0, 2) * 3;
 			cooling += Math.clamp(EnchantmentHelper.getItemEnchantmentLevel(coolEnchant, item), 0, 2) * 3;
 		}
-		if (state(player).wetSeconds > 0) cold += diver * 10;
-		var provided = darkspawn.black.core.hook.ClimateProtection.total(player); cold += provided.cold(); heat += provided.heat();
+		// Worn Gear: Other mods (expedition clothing, meals) contribute through the core provider hook.
+		var provided = ClimateProtection.total(player, state(player).wetSeconds > 0); cold += provided.cold(); heat += provided.heat();
 		if (player.hasEffect(MobEffects.FIRE_RESISTANCE)) heat += 20;
 		// Specialist Gear: Enchantments contribute at most 24 points; insulation has a cost in hot regions.
-		if (climate > 0) return Math.max(0, climate + mountain * 5 - heat - cooling);
+		if (climate > 0) return Math.max(0, climate - heat - cooling);
 		return Math.min(0, climate + cold + warmth);
 	}
 

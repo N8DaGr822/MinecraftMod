@@ -1,6 +1,7 @@
-package darkspawn.black.equipment;
+package darkspawn.black.expeditiongear;
 
-import darkspawn.black.Darkspawn;
+import darkspawn.black.core.DarkspawnCore;
+import darkspawn.black.core.hook.ClimateProtection;
 import java.util.EnumMap;
 import java.util.Map;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.level.Level;
 
 public final class ExpeditionArmor {
 	public static final Map<ArmorType, Item> MOUNTAINEERING = new EnumMap<>(ArmorType.class);
@@ -46,24 +48,38 @@ public final class ExpeditionArmor {
 
 	private static void register(String family, Map<ArmorType, Item> items, int durability, Map<ArmorType, Integer> defense) {
 		var material = new ArmorMaterial(durability, defense, 12, SoundEvents.ARMOR_EQUIP_IRON, 0, 0,
-			ItemTags.REPAIRS_IRON_ARMOR, ResourceKey.create(EquipmentAssets.ROOT_ID, Darkspawn.id(family)));
+			ItemTags.REPAIRS_IRON_ARMOR, ResourceKey.create(EquipmentAssets.ROOT_ID, DarkspawnCore.id(family)));
 		for (ArmorType type : new ArmorType[] { ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS }) {
-			var key = ResourceKey.create(Registries.ITEM, Darkspawn.id(family + "_" + type.getName()));
+			var key = ResourceKey.create(Registries.ITEM, DarkspawnCore.id(family + "_" + type.getName()));
 			var properties = new Item.Properties().setId(key).humanoidArmor(material, type);
 			if (family.equals("spelunking") && type == ArmorType.BOOTS) {
 				// Fall Protection: Multiply remaining fall damage so meals and boss powers retain their own modifiers.
 				properties.attributes(material.createAttributes(type).withModifierAdded(Attributes.FALL_DAMAGE_MULTIPLIER,
-					new AttributeModifier(Darkspawn.id("spelunking_boots"), -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.FEET));
+					new AttributeModifier(DarkspawnCore.id("spelunking_boots"), -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.FEET));
 			}
 			if (family.equals("diver") && type == ArmorType.HELMET) {
 				// Diving Air: Native oxygen bonus extends air probabilistically without granting water breathing.
 				properties.attributes(material.createAttributes(type).withModifierAdded(Attributes.OXYGEN_BONUS,
-					new AttributeModifier(Darkspawn.id("diver_air"), 2, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD)
+					new AttributeModifier(DarkspawnCore.id("diver_air"), 2, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HEAD)
 					.withModifierAdded(Attributes.SUBMERGED_MINING_SPEED,
-						new AttributeModifier(Darkspawn.id("diver_mining"), 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.HEAD));
+						new AttributeModifier(DarkspawnCore.id("diver_mining"), 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.HEAD));
 			}
 			items.put(type, Registry.register(BuiltInRegistries.ITEM, key, new Item(properties)));
 		}
+	}
+
+	/** Climate values for worn pieces; read by the climate mod through {@link ClimateProtection}. */
+	public static ClimateProtection.Protection climateProtection(net.minecraft.world.entity.player.Player player, boolean wet) {
+		int cold = 0, heat = 0;
+		for (ArmorType type : new ArmorType[] { ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS }) {
+			var item = player.getItemBySlot(type.getSlot());
+			// Insulation Cost: Mountain clothing protects 20 cold per piece but adds 5 heat in hot regions.
+			if (item.is(MOUNTAINEERING.get(type))) { cold += 20; heat -= 5; }
+			if (item.is(DESERT_WANDERER.get(type))) heat += 20;
+			if (item.is(ASHWALKER.get(type))) heat += player.level().dimension() == Level.NETHER ? 25 : 15;
+			if (wet && item.is(DIVER.get(type))) cold += 10;
+		}
+		return cold == 0 && heat == 0 ? ClimateProtection.Protection.NONE : new ClimateProtection.Protection(cold, heat);
 	}
 
 	public static boolean wearsFullMountaineering(LivingEntity entity) {

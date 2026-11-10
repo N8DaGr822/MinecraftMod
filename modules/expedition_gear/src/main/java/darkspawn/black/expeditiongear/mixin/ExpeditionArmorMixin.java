@@ -1,6 +1,6 @@
-package darkspawn.black.mixin;
+package darkspawn.black.expeditiongear.mixin;
 
-import darkspawn.black.equipment.ExpeditionArmor;
+import darkspawn.black.expeditiongear.ExpeditionArmor;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -15,7 +15,9 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(LivingEntity.class)
+// Injection Order: Apply before the default priority so the headlamp's cancellable getEffect/hasEffect returns run
+// ahead of other mods' RETURN injectors (for example meal vision), as they did when both lived in one mixin config.
+@Mixin(value = LivingEntity.class, priority = 900)
 public abstract class ExpeditionArmorMixin {
 	// Fire Protection: Worn plates reduce fire damage, including lava, but never grant immunity.
 	@ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true)

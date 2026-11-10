@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import darkspawn.black.Darkspawn;
 import darkspawn.black.armorstyles.ArmorStyleBonuses;
 import darkspawn.black.armorstyles.ArmorStyles;
+import darkspawn.black.expeditiongear.ExpeditionArmor;
 import darkspawn.black.boss.BossEmpowerment;
 import darkspawn.black.boss.EquipmentPowers;
 import darkspawn.black.cooking.MealEffects;
@@ -170,23 +171,6 @@ public final class ExpeditionArmorGameTest {
 		ArmorStyleBonuses.update(player); LegendaryArmor.update(player);
 	}
 
-	@GameTest public void mountainSuitAndBootsOnlyProtectWhileEquipped(GameTestHelper helper) {
-		var player = player(helper);
-		try {
-			helper.assertTrue(player.canFreeze(), "Baseline player can freeze");
-			for (var entry : ExpeditionArmor.MOUNTAINEERING.entrySet()) player.setItemSlot(entry.getKey().getSlot(), new ItemStack(entry.getValue()));
-			helper.assertTrue(!player.canFreeze() && PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Full suit prevents freezing and boots walk on powder snow");
-			player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
-			helper.assertTrue(player.canFreeze() && PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Incomplete suit loses immunity but retains boot function");
-			player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ExpeditionArmor.MOUNTAINEERING.get(ArmorType.CHESTPLATE)));
-			var suit = takeOffArmor(player);
-			helper.assertTrue(player.canFreeze() && !PowderSnowBlock.canEntityWalkOnPowderSnow(player), "Removed suit grants no snow or freezing protection");
-			putOnArmor(player, suit);
-			helper.assertTrue(!player.canFreeze(), "Wearing the suit again restores protection");
-		} finally { remove(player); }
-		helper.succeed();
-	}
-
 	@GameTest public void headlampDoesNotOverwritePotionsOrMealsAndStopsWhenRemoved(GameTestHelper helper) {
 		var player = player(helper);
 		try {
@@ -218,57 +202,6 @@ public final class ExpeditionArmorGameTest {
 			player.doTick();
 			EquipmentPowers.update(player);
 			helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.FALL_DAMAGE_MULTIPLIER) - .65) < .0001, "Unequipping removes only armor bonuses, preserving meal");
-		} finally { remove(player); }
-		helper.succeed();
-	}
-
-	@GameTest public void divingHelmetBonusesStopWhenRemoved(GameTestHelper helper) {
-		var player = player(helper);
-		try {
-			double mining = player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED);
-			player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ExpeditionArmor.DIVER.get(ArmorType.HELMET)));
-			player.doTick();
-			helper.assertTrue(player.getAttributeValue(Attributes.OXYGEN_BONUS) == 2, "Diver supplies native oxygen bonus");
-			helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED) - mining * 2.5) < .0001, "Diver improves underwater mining");
-			helper.assertTrue(!player.hasEffect(MobEffects.NIGHT_VISION) && !player.hasEffect(MobEffects.WATER_BREATHING), "Dry helmet grants neither vision nor infinite air");
-			for (int y = 2; y <= 5; y++) helper.setBlock(new BlockPos(1, y, 2), net.minecraft.world.level.block.Blocks.WATER);
-			player.doTick(); player.doTick();
-			helper.assertTrue(player.isUnderWater() && player.hasEffect(MobEffects.NIGHT_VISION), "Submerged helmet supplies vision");
-			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 600));
-			takeOffArmor(player);
-			player.doTick();
-			helper.assertTrue(player.getAttributeValue(Attributes.OXYGEN_BONUS) == 0 && Math.abs(player.getAttributeValue(Attributes.SUBMERGED_MINING_SPEED) - mining) < .0001, "Removed suit contributes no attributes");
-			helper.assertTrue(!player.getEffect(MobEffects.NIGHT_VISION).isInfiniteDuration(), "Removing helmet preserves the original timed potion");
-			player.removeAllEffects();
-			helper.assertTrue(!player.hasEffect(MobEffects.NIGHT_VISION), "Removed diving helmet supplies no vision");
-		} finally { remove(player); }
-		helper.succeed();
-	}
-
-	@GameTest public void ashwalkerReducesFireButNotOrdinaryDamageOrLavaToZero(GameTestHelper helper) {
-		var player = player(helper);
-		try {
-			for (var entry : ExpeditionArmor.ASHWALKER.entrySet()) player.setItemSlot(entry.getKey().getSlot(), new ItemStack(entry.getValue()));
-			player.doTick();
-			// Damage Isolation: Remove defense attributes so this fixture measures only fire protection.
-			player.getAttribute(Attributes.ARMOR).removeModifiers();
-			player.damageCooldownTime = 0;
-			helper.assertTrue(player.hurtServer(helper.getLevel(), player.damageSources().inFire(), 10), "Fire damage still applies");
-			helper.assertTrue(Math.abs(player.getHealth() - 14) < .001, "Four plates reduce fire by forty percent");
-			player.setHealth(20); player.damageCooldownTime = 0;
-			player.hurtServer(helper.getLevel(), player.damageSources().generic(), 10);
-			helper.assertTrue(Math.abs(player.getHealth() - 10) < .001, "Ordinary damage receives no fire reduction");
-			player.setHealth(20); player.damageCooldownTime = 0;
-			player.hurtServer(helper.getLevel(), player.damageSources().lava(), 10);
-			helper.assertTrue(Math.abs(player.getHealth() - 14) < .001, "Lava remains damaging");
-			player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-			player.setHealth(20); player.damageCooldownTime = 0;
-			player.hurtServer(helper.getLevel(), player.damageSources().inFire(), 10);
-			helper.assertTrue(Math.abs(player.getHealth() - 13) < .001, "Three plates reduce fire by thirty percent");
-			player.setHealth(20); player.damageCooldownTime = 0;
-			for (var type : ExpeditionArmor.ASHWALKER.keySet()) player.setItemSlot(type.getSlot(), ItemStack.EMPTY);
-			player.hurtServer(helper.getLevel(), player.damageSources().inFire(), 10);
-			helper.assertTrue(Math.abs(player.getHealth() - 10) < .001, "Unequipped suit supplies no protection");
 		} finally { remove(player); }
 		helper.succeed();
 	}

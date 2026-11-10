@@ -41,4 +41,6 @@ dependencies {
 	include module('enchantments')
 	implementation module('armor_styles')
 	include module('armor_styles')
+	implementation module('expedition_gear')
+	include module('expedition_gear')
 }

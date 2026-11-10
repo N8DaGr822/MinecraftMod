@@ -1,10 +1,8 @@
-package darkspawn.black.equipment;
+package darkspawn.black.expeditiongear;
 
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
-import darkspawn.black.Darkspawn;
-import darkspawn.black.TestBootstrap;
-import darkspawn.black.boss.BossEmpowerment;
+import darkspawn.black.core.DarkspawnCore;
 import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 import net.minecraft.core.component.DataComponents;
@@ -25,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExpeditionArmorTest {
-	@BeforeAll static void initialize() { TestBootstrap.initialize(); }
+	@BeforeAll static void initialize() { ExpeditionGearTestBootstrap.initialize(); }
 	private com.google.gson.JsonObject json(String path) throws Exception {
 		try (var stream = getClass().getResourceAsStream(path)) {
 			assertNotNull(stream, path);
@@ -41,7 +39,6 @@ class ExpeditionArmorTest {
 				var recipe = assertInstanceOf(SmithingTransformRecipe.class, Recipe.DIRECT_CODEC.parse(lookup.createSerializationContext(JsonOps.INSTANCE), json("/data/darkspawn/recipe/" + id + ".json")).getOrThrow());
 				var original = new ItemStack(BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.withDefaultNamespace("iron_" + type.getName())));
 				original.set(DataComponents.CUSTOM_NAME, Component.literal("Family Expedition"));
-				original.set(BossEmpowerment.POWER, "armor_highland");
 				original.setDamageValue(17);
 				original.enchant(lookup.getOrThrow(Enchantments.PROTECTION), 2);
 				var addition = switch (family) {
@@ -52,13 +49,12 @@ class ExpeditionArmorTest {
 					default -> type == ArmorType.HELMET ? Items.GLOWSTONE_DUST : type == ArmorType.BOOTS ? Items.SLIME_BALL : Items.COPPER_INGOT;
 				};
 				ItemStack result = recipe.assemble(new SmithingRecipeInput(new ItemStack(Items.LEATHER), original, new ItemStack(addition)));
-				assertTrue(result.is(BuiltInRegistries.ITEM.getValue(Darkspawn.id(id))));
+				assertTrue(result.is(BuiltInRegistries.ITEM.getValue(DarkspawnCore.id(id))));
 				assertEquals(17, result.getDamageValue());
 				assertEquals(original.get(DataComponents.CUSTOM_NAME), result.get(DataComponents.CUSTOM_NAME));
 				assertEquals(original.get(DataComponents.ENCHANTMENTS), result.get(DataComponents.ENCHANTMENTS));
-				assertEquals("armor_highland", result.get(BossEmpowerment.POWER));
 				assertEquals(type.getSlot(), result.get(DataComponents.EQUIPPABLE).slot());
-				assertEquals(Darkspawn.id(family), result.get(DataComponents.EQUIPPABLE).assetId().orElseThrow().identifier());
+				assertEquals(DarkspawnCore.id(family), result.get(DataComponents.EQUIPPABLE).assetId().orElseThrow().identifier());
 			}
 		}
 	}
